@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui" xmlns:e="http://edreams.deloitte.com/outlook/ribbon" onLoad="Ribbon_Load">
+  <commands>
+    <command idMso="FileOpen" onAction="GetOpen"/>
+  </commands>
+  <ribbon>
+    <tabs>
+      <tab idMso="TabMail">
+        <group idQ="e:edreams" label="e-DReaMS">
+          <button id="btnEdreams" getLabel="GetEdreamsLabel"
+             screentip="Outlook Middleware Test" onAction="SaveExistingMailToEdreams"
+             getSupertip="GetEdreamsSuperTip" getImage="GetEdreamsIcon" size="large" />
+        </group>
+      </tab>
+      <tab idMso="TabReadMessage">
+        <group idQ="e:edreams" label="e-DReaMS">
+          <button id="btnEdreamsMailReadMessage" getLabel="GetEdreamsLabel"
+             screentip="Save to e-DReaMS" onAction="SaveExistingMailDetailsToEdreams"
+             getSupertip="GetEdreamsSupertip" getImage="GetEdreamsIcon" size="large" />
+        </group>
+      </tab>
+    </tabs>
+  </ribbon>
+  <contextMenus>
+    <contextMenu idMso="ContextMenuMailItem">
+      <button id="btnEdreamsSingle" getLabel="GetEdreamsLabel"
+              onAction="SaveSelectedMailToEdreams" getImage="GetEdreamsIcon" />
+    </contextMenu>
+    <contextMenu idMso="ContextMenuMultipleItems">
+      <button id="btnEdreamsMultiple" getLabel="GetEdreamsLabel"
+          onAction="SaveSelectedMailsToEdreams" getImage="GetEdreamsIcon" />
+    </contextMenu>
+  </contextMenus>
+</customUI>
