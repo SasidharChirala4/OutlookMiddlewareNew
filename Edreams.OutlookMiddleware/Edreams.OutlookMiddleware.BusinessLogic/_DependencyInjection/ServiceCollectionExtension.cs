@@ -16,6 +16,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection
             services.AddTransient<IBatchLogic, BatchLogic>();
             services.AddTransient<IEmailLogic, EmailLogic>();
             services.AddTransient<IFileLogic, FileLogic>();
+
+            services.AddTransient<ICleanupLogic, CleanupLogic>();
         }
     }
 }

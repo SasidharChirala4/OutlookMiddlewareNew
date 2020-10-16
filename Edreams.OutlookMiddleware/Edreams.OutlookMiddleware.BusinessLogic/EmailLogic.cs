@@ -31,6 +31,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             FilePreload preloadedFile = _createEmailRequestToFilePreloadMapper.Map(request);
             preloadedFile.EmailId = Guid.NewGuid();
             preloadedFile.Kind = FileKind.Email;
+            preloadedFile.PreloadedOn = DateTime.UtcNow;
             preloadedFile.Status = EmailPreloadStatus.Pending;
             preloadedFile = await _preloadedFilesRepository.Create(preloadedFile);
 
@@ -46,6 +47,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 preloadedAttachment.EmailId = preloadedFile.EmailId;
                 preloadedAttachment.Kind = FileKind.Attachment;
                 preloadedAttachment.AttachmentId = attachment.Id;
+                preloadedAttachment.PreloadedOn = DateTime.UtcNow;
                 preloadedAttachment.Status = EmailPreloadStatus.Pending;
                 preloadedAttachment = await _preloadedFilesRepository.Create(preloadedAttachment);
 

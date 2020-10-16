@@ -66,50 +66,56 @@ namespace Edreams.Outlook.TestPlugin.Views
 
             foreach (MailItem mail in _selection)
             {
-                currentSelected++;
-
-                string ewsId = await ExchangeHelper.ConvertEntryIdToEwsId(mail.EntryID);
-
-                var ewsEmail = await ExchangeHelper.DownloadEmail(ewsId);
-
-                var createMailRequest = new CreateMailRequest
+                try
                 {
-                    BatchId = batchId,
-                    CorrelationId = correlationId,
-                    MailEntryId = mail.EntryID,
-                    MailEwsId = ewsId,
-                    MailSubject = ewsEmail.Subject
-                };
+                    currentSelected++;
 
-                foreach (var attachment in ewsEmail.Attachments)
-                {
-                    createMailRequest.Attachments.Add(
-                        new OutlookMiddleware.DataTransferObjects.Api.Specific.Attachment
-                        {
-                            Id = attachment.Id,
-                            Name = attachment.Name
-                        });
-                }
+                    string ewsId = await ExchangeHelper.ConvertEntryIdToEwsId(mail.EntryID);
 
-                var createMailResponse = await HttpHelper.CreateMail(createMailRequest);
-                using (var memoryStream = new MemoryStream(ewsEmail.Data))
-                {
-                    await HttpHelper.UploadAsync(memoryStream, mail.Subject, createMailResponse.FileId);
-                }
+                    var ewsEmail = await ExchangeHelper.DownloadEmail(ewsId);
 
-                foreach (var attachment in createMailResponse.Attachments)
-                {
-                    var binary = ewsEmail.Attachments.Single(x => x.Id == attachment.AttachmentId);
-                    using (var memoryStream = new MemoryStream(binary.Data))
+                    var createMailRequest = new CreateMailRequest
                     {
-                        await HttpHelper.UploadAsync(memoryStream, binary.Name, attachment.FileId);
+                        BatchId = batchId,
+                        CorrelationId = correlationId,
+                        MailEntryId = mail.EntryID,
+                        MailEwsId = ewsId,
+                        MailSubject = ewsEmail.Subject
+                    };
+
+                    foreach (var attachment in ewsEmail.Attachments)
+                    {
+                        createMailRequest.Attachments.Add(
+                            new OutlookMiddleware.DataTransferObjects.Api.Specific.Attachment
+                            {
+                                Id = attachment.Id,
+                                Name = attachment.Name
+                            });
+                    }
+
+                    var createMailResponse = await HttpHelper.CreateMail(createMailRequest);
+                    using (var memoryStream = new MemoryStream(ewsEmail.Data))
+                    {
+                        await HttpHelper.UploadAsync(memoryStream, mail.Subject, createMailResponse.FileId);
+                    }
+
+                    foreach (var attachment in createMailResponse.Attachments)
+                    {
+                        var binary = ewsEmail.Attachments.Single(x => x.Id == attachment.AttachmentId);
+                        using (var memoryStream = new MemoryStream(binary.Data))
+                        {
+                            await HttpHelper.UploadAsync(memoryStream, binary.Name, attachment.FileId);
+                        }
                     }
                 }
-
-                _synchronizationContext.Send(value =>
+                catch
                 {
-                    progressBar.Value = (int)value;
-                }, currentSelected);
+                    // Nothing we can do...
+                }
+                finally
+                {
+                    _synchronizationContext.Send(value => { progressBar.Value = (int)value; }, currentSelected);
+                }
             }
 
             _batchId = batchId;

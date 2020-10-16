@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
@@ -24,6 +25,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             preloadedFile.TempPath = request.TempPath;
             preloadedFile.FileName = request.FileName;
             preloadedFile.Size = request.FileSize;
+            preloadedFile.PreloadedOn = DateTime.UtcNow;
             preloadedFile.FileStatus = FilePreloadStatus.Ready;
 
             await _preloadedFilesRepository.Update(preloadedFile);
