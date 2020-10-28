@@ -13,11 +13,12 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection
             services.AddMapping();
             services.AddDataAccess();
 
-            services.AddTransient<IBatchLogic, BatchLogic>();
-            services.AddTransient<IEmailLogic, EmailLogic>();
-            services.AddTransient<IFileLogic, FileLogic>();
+            services.AddTransient<IStatusManager, StatusManager>();
+            services.AddTransient<IBatchManager, BatchManager>();
+            services.AddTransient<IEmailManager, EmailManager>();
+            services.AddTransient<IFileManager, FileManager>();
 
-            services.AddTransient<ICleanupLogic, CleanupLogic>();
+            services.AddTransient<ICleanupManager, CleanupManager>();
         }
     }
 }

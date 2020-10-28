@@ -1,27 +1,22 @@
-﻿using System;
+﻿using Edreams.OutlookMiddleware.Api.Helpers;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class StatusController : ControllerBase
+    public class StatusController : ApiController<IStatusManager>
     {
-        private readonly ILogger<StatusController> _logger;
-
-        public StatusController(ILogger<StatusController> logger)
-        {
-            _logger = logger;
-        }
+        public StatusController(ILogger<StatusController> logger, IStatusManager statusManager)
+            : base(statusManager, logger) { }
 
         [HttpGet]
-        public IActionResult Status()
+        public Task<IActionResult> Status()
         {
-            _logger.LogTrace("[API] File uploading...");
-
-            return Ok();
+            return ExecuteManager(manager => manager.GetStatus());
         }
-
     }
 }

@@ -3,7 +3,7 @@ using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
 {
-    public interface IFileLogic
+    public interface IFileManager
     {
         Task<UpdateFileResponse> UpdateFile(UpdateFileRequest request);
     }

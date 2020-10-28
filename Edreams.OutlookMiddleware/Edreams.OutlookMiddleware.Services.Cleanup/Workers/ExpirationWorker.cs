@@ -26,7 +26,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
             {
                 using IServiceScope scope = _serviceScopeFactory.CreateScope();
 
-                ICleanupLogic cleanupLogic = scope.ServiceProvider.GetService<ICleanupLogic>();
+                ICleanupManager cleanupLogic = scope.ServiceProvider.GetService<ICleanupManager>();
                 int workDone = await cleanupLogic.VerifyExpiration();
 
                 _logger.LogInformation($"ExpirationWorker: {workDone} records are expired!");
