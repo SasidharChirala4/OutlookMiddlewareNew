@@ -29,7 +29,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
             {
                 using IServiceScope scope = _serviceScopeFactory.CreateScope();
 
-                ICleanupLogic cleanupLogic = scope.ServiceProvider.GetService<ICleanupLogic>();
+                ICleanupManager cleanupLogic = scope.ServiceProvider.GetService<ICleanupManager>();
 
                 Stopwatch sw = Stopwatch.StartNew();
                 int workDone = await cleanupLogic.Cleanup();

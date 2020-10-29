@@ -2,7 +2,7 @@
 
 namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
 {
-    public interface ICleanupLogic
+    public interface ICleanupManager
     {
         Task<int> VerifyExpiration();
 

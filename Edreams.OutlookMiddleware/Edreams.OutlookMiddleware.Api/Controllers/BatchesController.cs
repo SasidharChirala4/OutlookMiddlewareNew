@@ -11,11 +11,11 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     [Route("[controller]")]
     public class BatchesController : ControllerBase
     {
-        private readonly IBatchLogic _batchLogic;
+        private readonly IBatchManager _batchLogic;
         private readonly ILogger<BatchesController> _logger;
 
         public BatchesController(
-            IBatchLogic batchLogic,
+            IBatchManager batchLogic,
             ILogger<BatchesController> logger)
         {
             _batchLogic = batchLogic;

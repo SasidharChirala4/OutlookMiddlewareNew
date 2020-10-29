@@ -10,14 +10,14 @@ using Edreams.OutlookMiddleware.Model.Enums;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
-    public class BatchLogic : IBatchLogic
+    public class BatchManager : IBatchManager
     {
         private readonly IRepository<FilePreload> _preloadedFilesRepository;
         private readonly IRepository<Batch> _batchRepository;
         private readonly IRepository<Email> _emailRepository;
         private readonly IRepository<File> _fileRepository;
 
-        public BatchLogic(
+        public BatchManager(
             IRepository<FilePreload> preloadedFilesRepository,
             IRepository<Batch> batchRepository,
             IRepository<Email> emailRepository,
