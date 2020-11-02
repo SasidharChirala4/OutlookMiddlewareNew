@@ -11,4 +11,8 @@
     <ProjectReference Include="..\Edreams.OutlookMiddleware.Model\Edreams.OutlookMiddleware.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
+
 </Project>
