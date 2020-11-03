@@ -8,11 +8,11 @@ using Edreams.OutlookMiddleware.Model.Enums;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
-    public class CleanupLogic : ICleanupLogic
+    public class CleanupManager : ICleanupManager
     {
         private readonly IRepository<FilePreload> _preloadedFilesRepository;
 
-        public CleanupLogic(
+        public CleanupManager(
             IRepository<FilePreload> preloadedFilesRepository)
         {
             _preloadedFilesRepository = preloadedFilesRepository;

@@ -12,11 +12,11 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     [Route("[controller]")]
     public class FilesController : ControllerBase
     {
-        private readonly IFileLogic _fileLogic;
+        private readonly IFileManager _fileLogic;
         private readonly ILogger<FilesController> _logger;
 
         public FilesController(
-            IFileLogic fileLogic,
+            IFileManager fileLogic,
             ILogger<FilesController> logger)
         {
             _fileLogic = fileLogic;

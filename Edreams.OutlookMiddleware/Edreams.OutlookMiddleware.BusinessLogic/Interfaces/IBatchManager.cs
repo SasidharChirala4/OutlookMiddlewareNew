@@ -3,7 +3,7 @@ using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
 {
-    public interface IBatchLogic
+    public interface IBatchManager
     {
         Task<CommitBatchResponse> CommitBatch(CommitBatchRequest request);
 

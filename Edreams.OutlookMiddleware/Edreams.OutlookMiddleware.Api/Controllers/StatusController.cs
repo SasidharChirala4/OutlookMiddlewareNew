@@ -1,27 +1,49 @@
-﻿using System;
+﻿using System.Diagnostics;
+using Edreams.OutlookMiddleware.Api.Helpers;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.DataTransferObjects;
+using Edreams.OutlookMiddleware.DataTransferObjects.Api;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
+    /// <summary>
+    /// Group of endpoints that are related to getting the status for this e-DReaMS Outlook Middleware HTTP API.
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class StatusController : ControllerBase
+    public class StatusController : ApiController<IStatusManager>
     {
-        private readonly ILogger<StatusController> _logger;
+        private readonly IEdreamsConfiguration _configuration;
 
-        public StatusController(ILogger<StatusController> logger)
+        /// <summary>Initializes a new instance of the <see cref="StatusController" /> class.</summary>
+        /// <param name="statusManager">The status manager.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        public StatusController(
+            IStatusManager statusManager,
+            ILogger<StatusController> logger,
+            IEdreamsConfiguration configuration)
+            : base(statusManager, logger)
         {
-            _logger = logger;
+            _configuration = configuration;
         }
 
+        /// <summary>
+        /// Get the status for this e-DReaMS Outlook Middleware HTTP API.
+        /// </summary>
+        /// <returns>This endpoint should always return an HTTP 200 OK. If it doesn't, there is something wrong.</returns>
         [HttpGet]
-        public IActionResult Status()
+        [SwaggerResponse(200, "Successfully returns a GetStatusResponse object.", typeof(ApiResult<GetStatusResponse>))]
+        public Task<IActionResult> Status()
         {
-            _logger.LogTrace("[API] File uploading...");
+            Debug.WriteLine(_configuration.EdreamsExtensibilityUrl);
 
-            return Ok();
+            return ExecuteManager(manager => manager.GetStatus());
         }
-
     }
 }

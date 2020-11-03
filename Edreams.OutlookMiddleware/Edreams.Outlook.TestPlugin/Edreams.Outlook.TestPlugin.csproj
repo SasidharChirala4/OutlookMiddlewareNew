@@ -261,7 +261,7 @@
     <ManifestKeyFile>Edreams.Outlook.TestPlugin_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>D722B462DC3FD1B54A5270088F1D8F9BF57F35DA</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>39DEC2ACDBA7A7031A720546CDC38C476932229E</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

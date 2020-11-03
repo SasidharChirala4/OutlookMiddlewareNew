@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Edreams.OutlookMiddleware.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.StatusController">
+            <summary>
+            Group of endpoints that are related to getting the status for this e-DReaMS Outlook Middleware HTTP API.
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IStatusManager,Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.StatusController},Edreams.OutlookMiddleware.Common.Configuration.Interfaces.IEdreamsConfiguration)">
+            <summary>Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.StatusController" /> class.</summary>
+            <param name="statusManager">The status manager.</param>
+            <param name="logger">The logger.</param>
+            <param name="configuration">The configuration.</param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.Status">
+            <summary>
+            Get the status for this e-DReaMS Outlook Middleware HTTP API.
+            </summary>
+            <returns>This endpoint should always return an HTTP 200 OK. If it doesn't, there is something wrong.</returns>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Helpers.ApiController`1.ExecuteManager``1(System.Func{`0,System.Threading.Tasks.Task{``0}})">
+            <summary>
+            This method executes a method on the Manager that is associated with this ApiController<typeparamref name="TManager"/>.
+            Based on the response from the Manager, it will return an IActionResult that is an HTTP status code like 200, 404, 500, ...
+            </summary>
+            <typeparam name="TResponse">The type of the response. This can be inferred from the <paramref name="managerCall"/></typeparam>
+            <param name="managerCall">A delegate to the method on the Manager that needs to be called.</param>
+            <returns>An IActionResult that contains the response data and the appropriate HTTP status code.</returns>
+        </member>
+    </members>
+</doc>

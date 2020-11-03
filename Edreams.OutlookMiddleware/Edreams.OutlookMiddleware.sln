@@ -33,13 +33,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.Services.Cleanup", "Edreams.OutlookMiddleware.Services.Cleanup\Edreams.OutlookMiddleware.Services.Cleanup.csproj", "{68A8D917-DA79-47DD-B5A4-40EF73065418}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edreams.OutlookMiddleware.Services.Notification", "Edreams.OutlookMiddleware.Services.Notification\Edreams.OutlookMiddleware.Services.Notification.csproj", "{1AA7DE7C-1E62-44C9-A9CB-AEF195486207}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.Services.Notification", "Edreams.OutlookMiddleware.Services.Notification\Edreams.OutlookMiddleware.Services.Notification.csproj", "{1AA7DE7C-1E62-44C9-A9CB-AEF195486207}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edreams.OutlookMiddleware.Services.Categorization", "Edreams.OutlookMiddleware.Services.Categorization\Edreams.OutlookMiddleware.Services.Categorization.csproj", "{3FD3E0CD-228F-4685-8FDA-EF473754CF47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.Services.Categorization", "Edreams.OutlookMiddleware.Services.Categorization\Edreams.OutlookMiddleware.Services.Categorization.csproj", "{3FD3E0CD-228F-4685-8FDA-EF473754CF47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edreams.OutlookMiddleware.Services.Upload.Scheduler", "Edreams.OutlookMiddleware.Services.Upload.Scheduler\Edreams.OutlookMiddleware.Services.Upload.Scheduler.csproj", "{AB906181-22D3-4145-AA43-1A1CDAEAD838}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.Services.Upload.Scheduler", "Edreams.OutlookMiddleware.Services.Upload.Scheduler\Edreams.OutlookMiddleware.Services.Upload.Scheduler.csproj", "{AB906181-22D3-4145-AA43-1A1CDAEAD838}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edreams.OutlookMiddleware.Services.Upload.Engine", "Edreams.OutlookMiddleware.Services.Upload.Engine\Edreams.OutlookMiddleware.Services.Upload.Engine.csproj", "{2EBA4C7A-A9DA-44F7-8BF6-1927AF6A8AD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.Services.Upload.Engine", "Edreams.OutlookMiddleware.Services.Upload.Engine\Edreams.OutlookMiddleware.Services.Upload.Engine.csproj", "{2EBA4C7A-A9DA-44F7-8BF6-1927AF6A8AD2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5. Tests", "5. Tests", "{FAC21692-03EE-42C2-81C7-7E2ACD3AA395}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edreams.OutlookMiddleware.Tests", "Edreams.OutlookMiddleware.Tests\Edreams.OutlookMiddleware.Tests.csproj", "{AC3AA331-2518-45A2-8244-CA7498F23B72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +103,10 @@ Global
 		{2EBA4C7A-A9DA-44F7-8BF6-1927AF6A8AD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EBA4C7A-A9DA-44F7-8BF6-1927AF6A8AD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EBA4C7A-A9DA-44F7-8BF6-1927AF6A8AD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC3AA331-2518-45A2-8244-CA7498F23B72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC3AA331-2518-45A2-8244-CA7498F23B72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC3AA331-2518-45A2-8244-CA7498F23B72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC3AA331-2518-45A2-8244-CA7498F23B72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,6 +125,7 @@ Global
 		{3FD3E0CD-228F-4685-8FDA-EF473754CF47} = {435724F9-0E1D-4A3A-AAFB-BF431D024805}
 		{AB906181-22D3-4145-AA43-1A1CDAEAD838} = {435724F9-0E1D-4A3A-AAFB-BF431D024805}
 		{2EBA4C7A-A9DA-44F7-8BF6-1927AF6A8AD2} = {435724F9-0E1D-4A3A-AAFB-BF431D024805}
+		{AC3AA331-2518-45A2-8244-CA7498F23B72} = {FAC21692-03EE-42C2-81C7-7E2ACD3AA395}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {435DC40D-8E75-47A2-AB30-CFC3A9F47946}

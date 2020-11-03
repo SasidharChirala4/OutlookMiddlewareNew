@@ -11,12 +11,12 @@ using Edreams.OutlookMiddleware.Model.Enums;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
-    public class EmailLogic : IEmailLogic
+    public class EmailManager : IEmailManager
     {
         private readonly IRepository<FilePreload> _preloadedFilesRepository;
         private readonly IMapper<CreateMailRequest, FilePreload> _createEmailRequestToFilePreloadMapper;
 
-        public EmailLogic(
+        public EmailManager(
             IRepository<FilePreload> preloadedFilesRepository,
             IMapper<CreateMailRequest, FilePreload> createEmailRequestToFilePreloadMapper)
         {

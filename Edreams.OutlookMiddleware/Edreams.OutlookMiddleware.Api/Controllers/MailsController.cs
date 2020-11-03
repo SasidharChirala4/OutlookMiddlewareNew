@@ -11,11 +11,11 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     [Route("[controller]")]
     public class MailsController : ControllerBase
     {
-        private readonly IEmailLogic _emailLogic;
+        private readonly IEmailManager _emailLogic;
         private readonly ILogger<MailsController> _logger;
 
         public MailsController(
-            IEmailLogic emailLogic,
+            IEmailManager emailLogic,
             ILogger<MailsController> logger)
         {
             _emailLogic = emailLogic;

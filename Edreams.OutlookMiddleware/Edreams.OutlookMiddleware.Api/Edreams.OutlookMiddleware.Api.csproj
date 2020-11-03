@@ -4,16 +4,32 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\_DSI_\GIT\DSI.Edreams.OutlookMiddleware\Edreams.OutlookMiddleware\Edreams.OutlookMiddleware.Api\Edreams.OutlookMiddleware.Api.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\_DSI_\GIT\DSI.Edreams.OutlookMiddleware\Edreams.OutlookMiddleware\Edreams.OutlookMiddleware.Api\Edreams.OutlookMiddleware.Api.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Negotiate" Version="3.1.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.6.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Edreams.OutlookMiddleware.BusinessLogic\Edreams.OutlookMiddleware.BusinessLogic.csproj" />
     <ProjectReference Include="..\Edreams.OutlookMiddleware.DataTransferObjects\Edreams.OutlookMiddleware.DataTransferObjects.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Edreams.OutlookMiddleware.Api.xml" />
   </ItemGroup>
 
 
