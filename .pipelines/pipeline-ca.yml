@@ -32,7 +32,7 @@ steps:
   - task: NuGetCommand@2
     inputs:
       command: 'restore'
-      restoreSolution: '**/*.sln'
+      restoreSolution: '**/Edreams.OutlookMiddleware.sln'
       nugetConfigPath: '$(Build.SourcesDirectory)/.nuget/nuget.config'
 
   # Run a Visual Studio build on all solution files.
