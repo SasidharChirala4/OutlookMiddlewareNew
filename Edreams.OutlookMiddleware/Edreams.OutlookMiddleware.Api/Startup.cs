@@ -1,6 +1,8 @@
 using System.IO;
 using System.Security.Principal;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
+using Edreams.OutlookMiddleware.Common.Configuration;
+using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Security;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -14,12 +16,12 @@ namespace Edreams.OutlookMiddleware.Api
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -27,6 +29,14 @@ namespace Edreams.OutlookMiddleware.Api
             ISecurityContext securityContext = new SecurityContext();
             securityContext.RefreshCorrelationId();
             securityContext.SetUserIdentity(WindowsIdentity.GetCurrent());
+
+            services.AddSingleton<IEdreamsConfiguration>(_ => new EdreamsConfiguration
+            {
+                StoragePath = _configuration.GetValue<string>("StoragePath"),
+                EdreamsExtensibilityUrl = _configuration.GetValue<string>("EdreamsExtensibilityUrl"),
+                EdreamsTokenKey = _configuration.GetValue<string>("EdreamsTokenKey"),
+                EdreamsTokenValue = _configuration.GetValue<string>("EdreamsTokenValue"),
+            });
 
             services.AddSingleton(_ => securityContext);
             services.AddControllers();

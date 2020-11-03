@@ -1,8 +1,10 @@
-﻿using Edreams.OutlookMiddleware.Api.Helpers;
+﻿using System.Diagnostics;
+using Edreams.OutlookMiddleware.Api.Helpers;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Swashbuckle.AspNetCore.Annotations;
@@ -16,13 +18,20 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     [Route("[controller]")]
     public class StatusController : ApiController<IStatusManager>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StatusController" /> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
+        private readonly IEdreamsConfiguration _configuration;
+
+        /// <summary>Initializes a new instance of the <see cref="StatusController" /> class.</summary>
         /// <param name="statusManager">The status manager.</param>
-        public StatusController(ILogger<StatusController> logger, IStatusManager statusManager)
-            : base(statusManager, logger) { }
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        public StatusController(
+            IStatusManager statusManager,
+            ILogger<StatusController> logger,
+            IEdreamsConfiguration configuration)
+            : base(statusManager, logger)
+        {
+            _configuration = configuration;
+        }
 
         /// <summary>
         /// Get the status for this e-DReaMS Outlook Middleware HTTP API.
@@ -32,6 +41,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [SwaggerResponse(200, "Successfully returns a GetStatusResponse object.", typeof(ApiResult<GetStatusResponse>))]
         public Task<IActionResult> Status()
         {
+            Debug.WriteLine(_configuration.EdreamsExtensibilityUrl);
+
             return ExecuteManager(manager => manager.GetStatus());
         }
     }
