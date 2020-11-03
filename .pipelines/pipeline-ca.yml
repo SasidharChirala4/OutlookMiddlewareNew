@@ -1,0 +1,71 @@
+# This build pipeline will only be triggered by changes on the 'master, dev and feature branches'.
+trigger:
+  - master
+  - dev
+  - feature-*
+  
+# This build pipeline will run on agents from the 'default' build agent pool
+# and will specifically target build agents that have the custom 'Build.Server'
+# capability set to the value 'BEDAC0552'.
+pool: 
+  name: default
+  demands: Build.Server -equals BEDAC0552
+
+# This build pipeline will run the following build steps...
+steps:
+
+  # Prepare for SonarQube analysis.
+  - task: SonarSource.sonarqube.15B84CA1-B62F-4A2A-A403-89B77A063157.SonarQubePrepare@4
+    displayName: 'Prepare analysis on SonarQube'
+    inputs:
+      SonarQube: 'SonarQube Deloitte'
+      projectKey: DSI.EDR2016.OutlookMiddleware
+      projectName: DSI.EDR2016.OutlookMiddleware
+
+  # Install the latest NuGet tool for compatibility (the default one throws
+  # a parse exception on our solution files).
+  - task: NuGetToolInstaller@1
+    inputs:
+      versionSpec: '5.x'
+
+  # Run a NuGet restore on all the solution files.
+  - task: NuGetCommand@2
+    inputs:
+      command: 'restore'
+      restoreSolution: '**/*.sln'
+      nugetConfigPath: '$(Build.SourcesDirectory)/.nuget/nuget.config'
+
+  # Run a Visual Studio build on all solution files.
+  - task: VSBuild@1
+    inputs:
+      solution: '**\*.sln'
+      configuration: Release
+
+  # Run SonarQube code analysis.
+  - task: SonarSource.sonarqube.6D01813A-9589-4B15-8491-8164AEB38055.SonarQubeAnalyze@4
+    displayName: 'Run Code Analysis'
+
+  # Publish SonarQube code analysis.
+  - task: SonarSource.sonarqube.291ed61f-1ee4-45d3-b1b0-bf822d9095ef.SonarQubePublish@4
+    displayName: 'Publish Quality Gate Result'
+  
+  # Make build fail if SonarQube quality gate failed!
+  - task: PowerShell@2
+    displayName: 'SonarQube Quality Gate check'
+    inputs:
+      targetType: 'inline'
+      script: |
+        $token = [System.Text.Encoding]::UTF8.GetBytes("$(SonarToken)" + ":")
+        $base64 = [System.Convert]::ToBase64String($token)
+        $basicAuth = [string]::Format("Basic {0}", $base64)
+        $headers = @{ Authorization = $basicAuth }
+        $sourceBranchName = [System.Net.WebUtility]::UrlEncode("$(Build.SourceBranchName)")
+        Write-Host $sourceBranchName
+        $url = "http://sonar.be.deloitte.com:9000/api/qualitygates/project_status?projectKey=DSI.EDR2016.OutlookMiddleware&branch=$sourceBranchName"
+        $result = Invoke-RestMethod -Method Get -Uri $url -Headers $headers
+        $result | ConvertTo-Json | Write-Host
+        if ($result.projectStatus.status -eq "OK") {
+          Write-Host "Quality Gate Succeeded"
+        } else {
+          throw "Quality gate failed: " + $result.projectStatus.status
+        }
