@@ -9,12 +9,11 @@
             Group of endpoints that are related to getting the status for this e-DReaMS Outlook Middleware HTTP API.
             </summary>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.#ctor(Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.StatusController},Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IStatusManager)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.StatusController" /> class.
-            </summary>
-            <param name="logger">The logger.</param>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IStatusManager,Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.StatusController},Edreams.OutlookMiddleware.Common.Configuration.Interfaces.IEdreamsConfiguration)">
+            <summary>Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.StatusController" /> class.</summary>
             <param name="statusManager">The status manager.</param>
+            <param name="logger">The logger.</param>
+            <param name="configuration">The configuration.</param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.Status">
             <summary>
