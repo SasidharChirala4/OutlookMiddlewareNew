@@ -19,6 +19,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     public class FilesController : ApiController<IFileManager>
     {
         private readonly IEdreamsConfiguration _configuration;
+        private readonly ILogger<FilesController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FilesController" /> class.
@@ -33,6 +34,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
             : base(fileManager, logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
 
         /// <summary>
@@ -44,8 +46,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [DisableRequestSizeLimit]
         public async Task<IActionResult> UploadFile(Guid fileId)
         {
+            _logger.LogTrace("[API] File uploading...");
             string storagePath = _configuration.StoragePath;
-
             UpdateFileRequest request = new UpdateFileRequest()
             {
                 FileId = fileId
