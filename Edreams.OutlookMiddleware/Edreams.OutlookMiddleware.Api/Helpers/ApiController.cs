@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Edreams.OutlookMiddleware.Api.Helpers
 {
+    /// <summary>
+    /// Base class for all the Controllers
+    /// </summary>
     public class ApiController : ControllerBase
     {
         protected Task<IActionResult> Success()
