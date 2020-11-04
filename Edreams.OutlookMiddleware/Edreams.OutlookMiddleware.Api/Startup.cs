@@ -1,5 +1,4 @@
 using System.IO;
-using System.Security.Principal;
 using Edreams.OutlookMiddleware.Api.Middleware;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common.Configuration;
@@ -29,9 +28,16 @@ namespace Edreams.OutlookMiddleware.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
-
             services.AddScoped<SecurityContextMiddleware>();
             services.AddScoped<ISecurityContext, SecurityContext>();
+
+            services.AddSingleton<IEdreamsConfiguration>(_ => new EdreamsConfiguration
+            {
+                StoragePath = _configuration.GetValue<string>("StoragePath"),
+                EdreamsExtensibilityUrl = _configuration.GetValue<string>("EdreamsExtensibilityUrl"),
+                EdreamsTokenKey = _configuration.GetValue<string>("EdreamsTokenKey"),
+                EdreamsTokenValue = _configuration.GetValue<string>("EdreamsTokenValue"),
+            });
 
             services.AddControllers();
             services.AddBusinessLogic();
