@@ -36,6 +36,8 @@ namespace Edreams.OutlookMiddleware.Api.Helpers
         /// <returns>An IActionResult that contains the response data and the appropriate HTTP status code.</returns>
         protected async Task<IActionResult> ExecuteManager<TResponse>(Func<TManager, Task<TResponse>> managerCall) where TResponse : Response
         {
+            _logger.LogTrace($"Executing business logic: {managerCall}");
+
             // Call into the Manager class that is associated with this ApiController<TManager>
             // and record the time it takes in milliseconds using the .NET Stopwatch.
             Stopwatch stopwatch = Stopwatch.StartNew();

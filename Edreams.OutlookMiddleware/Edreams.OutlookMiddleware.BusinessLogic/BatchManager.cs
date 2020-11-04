@@ -14,18 +14,15 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
     {
         private readonly IRepository<FilePreload> _preloadedFilesRepository;
         private readonly IRepository<Batch> _batchRepository;
-        private readonly IRepository<Email> _emailRepository;
         private readonly IRepository<File> _fileRepository;
 
         public BatchManager(
             IRepository<FilePreload> preloadedFilesRepository,
             IRepository<Batch> batchRepository,
-            IRepository<Email> emailRepository,
             IRepository<File> fileRepository)
         {
             _preloadedFilesRepository = preloadedFilesRepository;
             _batchRepository = batchRepository;
-            _emailRepository = emailRepository;
             _fileRepository = fileRepository;
         }
 
