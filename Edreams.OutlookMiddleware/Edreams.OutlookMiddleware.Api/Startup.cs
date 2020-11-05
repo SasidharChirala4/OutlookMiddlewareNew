@@ -22,7 +22,10 @@ namespace Edreams.OutlookMiddleware.Api
         {
             _configuration = configuration;
         }
-
+        /// <summary>
+        /// ConfigureServices
+        /// </summary>
+        /// <param name="services"></param>
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -36,6 +39,7 @@ namespace Edreams.OutlookMiddleware.Api
                 EdreamsExtensibilityUrl = _configuration.GetValue<string>("EdreamsExtensibilityUrl"),
                 EdreamsTokenKey = _configuration.GetValue<string>("EdreamsTokenKey"),
                 EdreamsTokenValue = _configuration.GetValue<string>("EdreamsTokenValue"),
+                MaxNumberPendingCategories = _configuration.GetValue<string>("MaxNumberPendingCategories")
             });
 
             services.AddSingleton(_ => securityContext);

@@ -30,21 +30,10 @@
         /// </summary>
         /// <param name="skip">A number of elements to bypass in a sequence.</param>
         /// <param name="take">A number of contiguous elements.</param>
-        private Limit(int skip, int take)
+        public Limit(int skip, int take)
         {
             Skip = skip;
             Take = take;
-        }
-
-        /// <summary>
-        /// Creates a new limit object.
-        /// </summary>
-        /// <param name="skip">A number of elements to bypass in a sequence.</param>
-        /// <param name="take">A number of contiguous elements.</param>
-        /// <returns>The requested limit object.</returns>
-        public static Limit From(int skip, int take)
-        {
-            return new Limit(skip, take);
         }
 
         /// <summary>
