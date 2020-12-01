@@ -42,17 +42,10 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 throw new EdreamsException("A valid fileId is required!");            
             #endregion
 
-            string tempPath = Path.Combine(storagePath, $"{request.FileId}");
-            //Store the file in the temporary location
-            using (FileStream fs = new FileStream(tempPath, FileMode.CreateNew))
-            {
-               // Add the content from the request and save to the tempPath
-            }
-
             //Update the File details in the database
             FilePreload preloadedFile = await _preloadedFilesRepository.GetSingle(x => x.Id == request.FileId);
 
-            preloadedFile.TempPath = storagePath;
+            preloadedFile.TempPath = request.TempPath;
             preloadedFile.FileName = request.FileId.ToString();
             preloadedFile.PreloadedOn = DateTime.UtcNow;
             preloadedFile.FileStatus = FilePreloadStatus.Ready;

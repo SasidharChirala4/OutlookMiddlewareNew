@@ -48,10 +48,18 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         {
             _logger.LogTrace("[API] File uploading...");
             string storagePath = _configuration.StoragePath;
+            string tempPath = Path.Combine(storagePath, $"{fileId}");
             UpdateFileRequest request = new UpdateFileRequest()
             {
-                FileId = fileId
+                FileId = fileId,
+                TempPath = tempPath,
             };
+
+            //Store the file in the temporary location
+            using (FileStream fs = new FileStream(tempPath, FileMode.CreateNew))
+            {
+                // Add the content from the request and save to the tempPath
+            }
             return await ExecuteManager(manager => manager.UpdateFile(request, storagePath));
         }
     }
