@@ -17,8 +17,26 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         /// <summary>
         /// The time needed to execute the actual business logic and generate the response.
         /// </summary>
-        /// <example>42</example>
+        /// <example>4271</example>
         public long ElapsedMilliseconds { get; set; }
+
+        /// <summary>
+        /// The version of the API used.
+        /// </summary>
+        /// <example>1.0.7599.26874</example>
+        public string ApiVersion { get; set; }
+
+        /// <summary>
+        /// Timestamp when the request finished.
+        /// </summary>
+        /// <example>2020-12-04T13:03:59.346006Z</example>
+        public DateTime TimeStamp { get; set; }
+
+        /// <summary>
+        /// HTTP response status code.
+        /// </summary>
+        /// <example>200</example>
+        public string StatusCode { get; set; }
     }
 
     /// <summary>

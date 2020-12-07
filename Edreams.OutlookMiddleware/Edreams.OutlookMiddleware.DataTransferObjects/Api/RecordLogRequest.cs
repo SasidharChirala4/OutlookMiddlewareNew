@@ -1,102 +1,52 @@
-﻿using System;
+﻿using Edreams.OutlookMiddleware.DataTransferObjects.Api.Base;
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
 {
     /// <summary>
     /// DataRequest object for the RecordLog endpoint.
     /// </summary>
-    public class RecordLogRequest
+    public class RecordLogRequest : Request
     {
         /// <summary>
-        /// Public identifier; Primary Key
-        /// </summary> 
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Creation date and timestamp; Default = GETUTCDATE(); 
-        /// </summary>
-        public DateTime InsertedOn { get; set; }
-
-        /// <summary>
-        /// Level
+        /// Source
         /// </summary>
         /// <example>Info</example>
         public string Level { get; set; }
 
         /// <summary>
-        /// Host
+        /// Component Name
         /// </summary>
-        /// <example>BE-PC0FP4E4</example>
-        public string Host { get; set; }
-
-        /// <summary>
-        /// Logger
-        /// </summary>
-        /// <example>Edreams.Web.OutlookMiddlewareWebApi.Swagger</example>
+        /// <example>Edreams.Web.Api.Outlook.Middleware</example>
         public string Component { get; set; }
 
         /// <summary>
-        /// Message
+        /// log message
         /// </summary>
-        /// <example>(Testing) Inserting Informative error with Swagger (can be ignored)</example>
+        /// <example>Log Message</example>
         public string Message { get; set; }
 
         /// <summary>
-        /// Resolve Message
+        /// exception details
         /// </summary>
-        /// <example>Clean User Cache and try again</example>
-        public string ResolveMessage { get; set; }
-
-        /// <summary>
-        /// Exception Type
-        /// </summary>
-        /// <example>System.NotImplementedException</example>
-        public string ExceptionType { get; set; }
-
-        /// <summary>
-        /// Exception Details
-        /// </summary>
-        /// <example>String representation of the Exception, with full StackTrace</example>
+        /// <example>Complete exception details</example>
         public string ExceptionDetails { get; set; }
 
         /// <summary>
-        /// Method Path
+        /// exception type
         /// </summary>
-        /// <example>SomeController.GetNextActionToProcess</example>
-        public string MethodPath { get; set; }
+        /// <example>System.Exception</example>
+        public string ExceptionType { get; set; }
 
         /// <summary>
-        /// Method Path
+        /// execution step details
         /// </summary>
-        /// <example>Testing Response with Swagger</example>
+        /// <example>SetCategorization</example>
         public string ExecutionStep { get; set; }
 
         /// <summary>
-        /// UserName
+        /// Method path of log raised
         /// </summary>
-        /// <example>be\\saschirala</example>
-        public string Username { get; set; }
-
-        /// <summary>
-        /// SharePoint Correlation
-        /// </summary>
-        public Guid? SharePointCorrelation { get; set; }
-
-        /// <summary>
-        /// Product Correlation
-        /// </summary>
-        public Guid? ProductCorrelation { get; set; }
-
-        /// <summary>
-        /// Object Identifier
-        /// </summary>
-        /// <example>Mail Conversation</example>
-        public string ObjectIdentifier { get; set; }
-
-        /// <summary>
-        /// Object Value
-        /// </summary>
-        /// <example>CE407CAD6A9348B39DB2DC253D0429A4</example>
-        public string ObjectValue { get; set; }
+        /// <example>Edreams.Plugin.Outlook.Services.MailCategoryService</example>
+        public string MethodPath { get; set; }
     }
 }

@@ -1,8 +1,11 @@
-﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Edreams.OutlookMiddleware.Common.Helpers;
+﻿using Edreams.Contracts.Data.Common;
+using Edreams.Contracts.Data.Logging;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+using Edreams.OutlookMiddleware.Common.Constants;
+using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
+using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
-using System;
+using Edreams.OutlookMiddleware.Mapping.Interfaces;
 using System.Threading.Tasks;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
@@ -14,15 +17,21 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
     {
         #region <| Private Members |>
 
-        private readonly IEdreamsConfiguration _configuration;
+        private readonly IRestHelper<LogEntry> _restHelper;
+        private readonly IMapper<RecordLogRequest, LogEntry> _recordLogRequestToLogEntryMapper;
+        private readonly IValidator _validator;
 
         #endregion
 
         #region <| Construction |>
 
-        public LoggingManager(IEdreamsConfiguration configuration)
+        public LoggingManager(IRestHelper<LogEntry> restHelper,
+            IMapper<RecordLogRequest, LogEntry> recordLogRequestToLogEntryMapper,
+            IValidator validator)
         {
-            _configuration = configuration;
+            _restHelper = restHelper;
+            _recordLogRequestToLogEntryMapper = recordLogRequestToLogEntryMapper;
+            _validator = validator;
         }
 
         #endregion
@@ -34,14 +43,22 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// </summary>
         /// <param name="log"></param>
         /// <returns></returns>
-        public async Task<RecordLogResponse> RecordLog(RecordLogRequest log)
+        public async Task<RecordLogResponse> RecordLog(RecordLogRequest recordLogRequest)
         {
-            string logEntryEndpoint = string.Format($"{_configuration.EdreamsExtensibilityUrl}/logEntry");
-            RestHelper<RecordLogRequest> request = new RestHelper<RecordLogRequest>(logEntryEndpoint, _configuration.EdreamsTokenValue, true);
-            await request.CreateNew(log);
+            //Validations
+            _validator.ValidateString(recordLogRequest.Level, ValidationMessages.WebApi.LevelRequired);
+            _validator.ValidateString(recordLogRequest.Message, ValidationMessages.WebApi.MessageRequired);
+
+            // Map recordLogRequest to LogEntry
+            LogEntry logEntry = _recordLogRequestToLogEntryMapper.Map(recordLogRequest);
+            // Record log using Rest call
+            ApiResult<LogEntry> response = await _restHelper.CreateNew("logEntry", logEntry, true);
+            
+            //TODO: Need to write a better logic to validate the response properly
+
             return new RecordLogResponse()
             {
-                CorrelationId = Guid.NewGuid()
+                CorrelationId = recordLogRequest.CorrelationId
             };
         }
 
