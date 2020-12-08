@@ -41,7 +41,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// <summary>
         /// Logs a specified message or error 
         /// </summary>
-        /// <param name="log"></param>
+        /// <param name="recordLogRequest"></param>
         /// <returns></returns>
         public async Task<RecordLogResponse> RecordLog(RecordLogRequest recordLogRequest)
         {
@@ -52,9 +52,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // Map recordLogRequest to LogEntry
             LogEntry logEntry = _recordLogRequestToLogEntryMapper.Map(recordLogRequest);
             // Record log using Rest call
-            ApiResult<LogEntry> response = await _restHelper.CreateNew("logEntry", logEntry, true);
-            
-            //TODO: Need to write a better logic to validate the response properly
+            _ = await _restHelper.CreateNew("logEntry", logEntry);
 
             return new RecordLogResponse()
             {

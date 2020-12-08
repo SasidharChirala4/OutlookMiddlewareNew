@@ -61,8 +61,10 @@ namespace Edreams.OutlookMiddleware.Api.Helpers
 
                 // Wrap the response inside an ApiResult<TResponse> that also contains data like
                 // the time it takes to execute the business logic and a correlationId.
-                ApiResult result = new ApiResult<TResponse>(response);
-                result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+                ApiResult result = new ApiResult<TResponse>(response)
+                {
+                    ElapsedMilliseconds = stopwatch.ElapsedMilliseconds
+                };
 
                 // Return the result, wrapped in an HTTP 200 OK, or HTTP 404 Not Found if the response is null.
                 return response != null ? Ok(result) : (IActionResult)NotFound();
@@ -78,6 +80,10 @@ namespace Edreams.OutlookMiddleware.Api.Helpers
             catch (EdreamsValidationException ex)
             {
                 return BadRequest(ex.ValidationErrors);
+            }
+            catch (EdreamsException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

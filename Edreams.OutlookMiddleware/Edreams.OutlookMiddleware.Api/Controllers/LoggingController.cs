@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
     /// <summary>
-    /// Group of endpoints that are helpfull to Logs a specified message or error..
+    /// Group of endpoints that are helpful to Logs a specified message or error..
     /// </summary>
     [ApiController]
     [Route("[controller]")]
