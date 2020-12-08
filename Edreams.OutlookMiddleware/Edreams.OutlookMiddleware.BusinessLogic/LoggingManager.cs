@@ -1,5 +1,4 @@
-﻿using Edreams.Contracts.Data.Common;
-using Edreams.Contracts.Data.Logging;
+﻿using Edreams.Contracts.Data.Logging;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Constants;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;

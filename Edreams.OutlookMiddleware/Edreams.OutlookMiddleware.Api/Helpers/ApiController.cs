@@ -92,18 +92,6 @@ namespace Edreams.OutlookMiddleware.Api.Helpers
             }
         }
 
-        private IActionResult ActionResult<T>(int status, Response value, long elapsedMilliseconds)
-        {
-            return StatusCode(status, new ApiResult<Response>(value)
-            {
-                CorrelationId = Guid.NewGuid(),
-                StatusCode = $"{status}",
-                TimeStamp = DateTime.UtcNow,
-                ApiVersion = $"{Assembly.GetEntryAssembly()?.GetName().Version}",
-                ElapsedMilliseconds = elapsedMilliseconds
-            });
-        }
-
         private IActionResult ActionResult(int status, long elapsedMilliseconds)
         {
             return StatusCode(status, new ApiResult

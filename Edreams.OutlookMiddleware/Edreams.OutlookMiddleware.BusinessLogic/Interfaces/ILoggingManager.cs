@@ -8,6 +8,6 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
     /// </summary>
     public interface ILoggingManager
     {
-        Task<RecordLogResponse> RecordLog(RecordLogRequest log);
+        Task<RecordLogResponse> RecordLog(RecordLogRequest recordLogRequest);
     }
 }

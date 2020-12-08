@@ -8,6 +8,7 @@ using Edreams.Contracts.Data.Common;
 using System.Threading.Tasks;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
+using Edreams.OutlookMiddleware.Common.Exceptions;
 
 namespace Edreams.OutlookMiddleware.Common.Helpers
 {
@@ -24,7 +25,7 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
         #endregion
 
         #region <| Construction |>
-        
+
         public RestHelper(IEdreamsConfiguration configuration)
         {
             _configuration = configuration;
@@ -74,6 +75,53 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             if (roughResult.StatusCode.Equals(HttpStatusCode.OK))
             {
                 return roughResult.Content;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Method to get data
+        /// </summary>
+        /// <param name="resourceUrl"></param>
+        /// <param name="rsParameter"></param>
+        /// <param name="skipResponseCheck"></param>
+        /// <returns></returns>
+        public async Task<List<T>> GetData(string resourceUrl, RestParameter rsParameter, bool skipResponseCheck = false)
+        {
+            return await GetData(resourceUrl, new List<RestParameter> { rsParameter }, skipResponseCheck);
+        }
+
+        /// <summary>
+        /// Method to get data with the following parameters
+        /// </summary>
+        /// <param name="resourceUrl"></param>
+        /// <param name="parameters"></param>
+        /// <param name="skipResponseCheck"></param>
+        /// <returns></returns>
+        public async Task<List<T>> GetData(string resourceUrl, List<RestParameter> parameters, bool skipResponseCheck = false)
+        {
+            string webServiceEndPoint = string.Format($"{_configuration.EdreamsExtensibilityUrl}/{resourceUrl}");
+            var webApiClient = new RestClient(webServiceEndPoint)
+            {
+                Authenticator = new NtlmAuthenticator()
+            };
+            var webApiRequest = new RestRequest(Method.GET);
+
+            if ((parameters.FirstOrDefault(x => x.Name.Equals(_configuration.EdreamsTokenKey, System.StringComparison.OrdinalIgnoreCase)) == null))
+            {
+                webApiRequest.AddHeader(_configuration.EdreamsTokenKey, _configuration.EdreamsTokenValue);
+            }
+            foreach (RestParameter parameter in parameters)
+            {
+                webApiRequest.AddParameter(parameter.Name, parameter.Value, parameter.Type);
+            }
+            var roughResult = await webApiClient.ExecuteAsync<ApiResult<List<T>>>(webApiRequest);
+            GoodResponse(webApiRequest.Method, roughResult, skipResponseCheck);
+
+            if (roughResult.StatusCode.Equals(HttpStatusCode.OK))
+            {
+                var queryResult = roughResult.Data;
+                return queryResult.Content;
             }
             return null;
         }
@@ -133,54 +181,6 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
         }
 
         /// <summary>
-        /// Method to get data
-        /// </summary>
-        /// <param name="resourceUrl"></param>
-        /// <param name="rsParameter"></param>
-        /// <param name="skipResponseCheck"></param>
-        /// <returns></returns>
-        public async Task<List<T>> GetData(string resourceUrl, RestParameter rsParameter, bool skipResponseCheck = false)
-        {
-            return await GetData(resourceUrl, new List<RestParameter> { rsParameter }, skipResponseCheck);
-        }
-
-        /// <summary>
-        /// Method to get data with the following parameters
-        /// </summary>
-        /// <param name="resourceUrl"></param>
-        /// <param name="parameters"></param>
-        /// <param name="skipResponseCheck"></param>
-        /// <returns></returns>
-        public async Task<List<T>> GetData(string resourceUrl, List<RestParameter> parameters, bool skipResponseCheck = false)
-        {
-            string webServiceEndPoint = string.Format($"{_configuration.EdreamsExtensibilityUrl}/{resourceUrl}");
-            var webApiClient = new RestClient(webServiceEndPoint)
-            {
-                Authenticator = new NtlmAuthenticator()
-            };
-            var webApiRequest = new RestRequest(Method.GET);
-
-            if ((parameters.FirstOrDefault(x => x.Name.Equals(_configuration.EdreamsTokenKey, System.StringComparison.OrdinalIgnoreCase)) == null))
-            {
-                webApiRequest.AddHeader(_configuration.EdreamsTokenKey, _configuration.EdreamsTokenValue);
-            }
-            foreach (RestParameter parameter in parameters)
-            {
-                webApiRequest.AddParameter(parameter.Name, parameter.Value, parameter.Type);
-            }
-            var roughResult = await webApiClient.ExecuteAsync<ApiResult<List<T>>>(webApiRequest);
-            //System.Diagnostics.Trace.WriteLine($"Environment.[{Environment.UserName}] WindowsIdentity[{System.Security.Principal.WindowsIdentity.GetCurrent().Name}]");
-            GoodResponse(webApiRequest.Method, roughResult, skipResponseCheck);
-
-            if (roughResult.StatusCode.Equals(HttpStatusCode.OK))
-            {
-                var queryResult = roughResult.Data;
-                return queryResult.Content;
-            }
-            return null;
-        }
-
-        /// <summary>
         /// Method to create new object
         /// </summary>
         /// <param name="resourceUrl"></param>
@@ -196,24 +196,6 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             };
             List<RestParameter> parameter = new List<RestParameter>();
             return await CreateNew(webApiClient, objectToCreate, parameter, skipResponseCheck);
-        }
-
-        /// <summary>
-        /// Method to create bulk objects
-        /// </summary>
-        /// <param name="resourceUrl"></param>
-        /// <param name="objectsToCreate"></param>
-        /// <param name="skipResponseCheck"></param>
-        /// <returns></returns>
-        public async Task<ApiResult<T>> CreateBulkNew(string resourceUrl, List<T> objectsToCreate, bool skipResponseCheck = false)
-        {
-            string webServiceEndPoint = string.Format($"{_configuration.EdreamsExtensibilityUrl}/{resourceUrl}");
-            var webApiClient = new RestClient(webServiceEndPoint)
-            {
-                Authenticator = new NtlmAuthenticator()
-            };
-            List<RestParameter> parameter = new List<RestParameter>();
-            return await CreateBulkNew(webApiClient, objectsToCreate, parameter, skipResponseCheck);
         }
 
         /// <summary>
@@ -261,6 +243,23 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             }
             return queryResult.Content;
         }
+        /// <summary>
+        /// Method to create bulk objects
+        /// </summary>
+        /// <param name="resourceUrl"></param>
+        /// <param name="objectsToCreate"></param>
+        /// <param name="skipResponseCheck"></param>
+        /// <returns></returns>
+        public async Task<ApiResult<T>> CreateBulkNew(string resourceUrl, List<T> objectsToCreate, bool skipResponseCheck = false)
+        {
+            string webServiceEndPoint = string.Format($"{_configuration.EdreamsExtensibilityUrl}/{resourceUrl}");
+            var webApiClient = new RestClient(webServiceEndPoint)
+            {
+                Authenticator = new NtlmAuthenticator()
+            };
+            List<RestParameter> parameter = new List<RestParameter>();
+            return await CreateBulkNew(webApiClient, objectsToCreate, parameter, skipResponseCheck);
+        }
 
         /// <summary>
         /// Method to create a transaction
@@ -277,27 +276,14 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             webApiRequest.AddHeader(_configuration.EdreamsTokenKey, _configuration.EdreamsTokenValue);
             var roughResult = await webApiClient.ExecuteAsync<ApiResult<List<T>>>(webApiRequest);
             GoodResponse(webApiRequest.Method, roughResult, skipResponseCheck);
-
-            var queryResult = roughResult.Data;
+            
             if (roughResult.StatusCode.Equals(HttpStatusCode.OK))
             {
                 return roughResult.Content;
             }
             return null;
         }
-
-        /// <summary>
-        /// With TLS 1.0 and 1.1 being depricated,
-        /// need to force your .NET websites / services to run over TLS 1.2
-        /// </summary>
-        public void ForceServiceToRunOverTls12()
-        {
-            if (ServicePointManager.SecurityProtocol.HasFlag(SecurityProtocolType.Tls12) == false)
-            {
-                ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
-            }
-        }
-
+               
         /// <summary>
         /// Method to update object
         /// </summary>
@@ -317,24 +303,6 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
         }
 
         /// <summary>
-        /// Method to patch object
-        /// </summary>
-        /// <param name="resourceUrl"></param>
-        /// <param name="parameter"></param>
-        /// <param name="objectToUpdate"></param>
-        /// <param name="skipResponseCheck"></param>
-        /// <returns></returns>
-        public async Task<ApiResult<T>> Patch(string resourceUrl, RestParameter parameter, T objectToUpdate, bool skipResponseCheck = false)
-        {
-            string webServiceEndPoint = string.Format($"{_configuration.EdreamsExtensibilityUrl}/{resourceUrl}");
-            var webApiClient = new RestClient(webServiceEndPoint)
-            {
-                Authenticator = new NtlmAuthenticator()
-            };
-            return await Patch(webApiClient, new List<RestParameter> { parameter }, objectToUpdate, skipResponseCheck);
-        }
-
-        /// <summary>
         /// Method to update object
         /// </summary>
         /// <param name="resourceUrl"></param>
@@ -350,6 +318,24 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
                 Authenticator = new NtlmAuthenticator()
             };
             return await Update(webApiClient, parameters, objectToUpdate, skipResponseCheck);
+        }
+
+        /// <summary>
+        /// Method to patch object
+        /// </summary>
+        /// <param name="resourceUrl"></param>
+        /// <param name="parameter"></param>
+        /// <param name="objectToUpdate"></param>
+        /// <param name="skipResponseCheck"></param>
+        /// <returns></returns>
+        public async Task<ApiResult<T>> Patch(string resourceUrl, RestParameter parameter, T objectToUpdate, bool skipResponseCheck = false)
+        {
+            string webServiceEndPoint = string.Format($"{_configuration.EdreamsExtensibilityUrl}/{resourceUrl}");
+            var webApiClient = new RestClient(webServiceEndPoint)
+            {
+                Authenticator = new NtlmAuthenticator()
+            };
+            return await Patch(webApiClient, new List<RestParameter> { parameter }, objectToUpdate, skipResponseCheck);
         }
 
         /// <summary>
@@ -496,7 +482,6 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             {
                 webApiRequest.AddParameter(parameter.Name, parameter.Value, parameter.Type);
             }
-            //webApiRequest. = "";
             var roughResult = await restClient.ExecuteAsync<ApiResult<T>>(webApiRequest);
 
             GoodResponse(webApiRequest.Method, roughResult, skipResponseCheck);
@@ -510,7 +495,7 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             {
                 if (!skipResponseCheck)
                 {
-                    throw new Exception($"Error in RestResponse Method[{method}] StatusCode[{result.StatusCode}] Message[{result.ErrorMessage}] Exception[{result.ErrorException}]");
+                    throw new EdreamsException($"Error in RestResponse Method[{method}] StatusCode[{result.StatusCode}] Message[{result.ErrorMessage}] Exception[{result.ErrorException}]");
                 }
                 return false;
             }
@@ -518,7 +503,7 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             {
                 if (!skipResponseCheck)
                 {
-                    throw new Exception($"[{result.StatusCode}] in RestResponse Method[{method}] StatusCode[{result.StatusCode}] Content[{result.Content}]");
+                    throw new EdreamsException($"[{result.StatusCode}] in RestResponse Method[{method}] StatusCode[{result.StatusCode}] Content[{result.Content}]");
                 }
                 return false;
             }
@@ -528,6 +513,18 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
         public RestParameter GetParam(string name, string value, ParameterType paramType)
         {
             return new RestParameter() { Name = name, Value = value, Type = paramType };
+        }
+
+        /// <summary>
+        /// With TLS 1.0 and 1.1 being depricated,
+        /// need to force your .NET websites / services to run over TLS 1.2
+        /// </summary>
+        private void ForceServiceToRunOverTls12()
+        {
+            if (!ServicePointManager.SecurityProtocol.HasFlag(SecurityProtocolType.Tls12))
+            {
+                ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+            }
         }
 
         #endregion

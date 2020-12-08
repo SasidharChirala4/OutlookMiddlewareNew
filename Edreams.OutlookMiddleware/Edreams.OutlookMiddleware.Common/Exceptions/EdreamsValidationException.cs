@@ -7,6 +7,7 @@ namespace Edreams.OutlookMiddleware.Common.Exceptions
     /// Exception class used for validation related exceptions.
     /// </summary>
     /// <seealso cref="Edreams.Common.Exceptions.EdreamsException" />
+    [Serializable]
     public class EdreamsValidationException : EdreamsException
     {
         /// <summary>

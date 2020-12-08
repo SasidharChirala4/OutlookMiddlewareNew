@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Edreams.OutlookMiddleware.Common.Constants
+﻿namespace Edreams.OutlookMiddleware.Common.Constants
 {
     /// <summary>
     /// Class containing constants for validation messages.
