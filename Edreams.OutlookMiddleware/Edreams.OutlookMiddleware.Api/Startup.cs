@@ -3,8 +3,12 @@ using Edreams.OutlookMiddleware.Api.Middleware;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common.Configuration;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Common.Helpers;
+using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.Common.Security;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
+using Edreams.OutlookMiddleware.Common.Validation;
+using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,6 +34,8 @@ namespace Edreams.OutlookMiddleware.Api
             services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
             services.AddScoped<SecurityContextMiddleware>();
             services.AddScoped<ISecurityContext, SecurityContext>();
+            services.AddTransient(typeof(IRestHelper<>), typeof(RestHelper<>));
+            services.AddSingleton<IValidator, Validator>();
 
             services.AddSingleton<IEdreamsConfiguration>(_ => new EdreamsConfiguration
             {
