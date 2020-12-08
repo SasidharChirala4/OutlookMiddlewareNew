@@ -1,0 +1,62 @@
+# This build pipeline will only be triggered by changes on the 'master branch'.
+trigger:
+  - master
+
+# This build pipeline will run on agents from the 'default' build agent pool
+# and will specifically target build agents that have the custom 'Build.Server'
+# capability set to the value 'BEDAC0552'.
+pool: 
+  name: default
+  demands: Build.Server -equals BEDAC0552
+
+# This variable will make sure that automatic Azure DevOps code coverage generation is disabled.
+# For this build we are using a custom code coverage tool that generates a more extensive output.
+variables:
+  - name: disable.coverage.autogenerate
+    value: 'true'
+
+# This build pipeline will run the following build steps...
+steps:
+  # Install the latest NuGet tool for compatibility (the default one throws
+  # a parse exception on our solution files).
+  - task: NuGetToolInstaller@1
+    inputs:
+      versionSpec: '5.x'
+
+  # Run a NuGet restore on all the solution files.
+  - task: NuGetCommand@2
+    inputs:
+      command: 'restore'
+      restoreSolution: '**/Edreams.OutlookMiddleware.sln'
+      nugetConfigPath: '$(Build.SourcesDirectory)/.nuget/nuget.config'
+
+  # Run a Visual Studio build on all solution files.
+  - task: VSBuild@1
+    inputs:
+      solution: '**\*.sln'
+      configuration: Release
+
+  # Run UnitTests
+  - task: DotNetCoreCLI@2
+    displayName: Run UnitTests
+    inputs:
+      command: 'test'
+      projects: '**/*Tests.csproj'
+      arguments: '--configuration Release --no-build /p:CollectCoverage=true /p:IncludeTestAssembly=true /p:CoverletOutputFormat=opencover%2ccobertura /p:CoverletOutput=coverage/'
+
+  # Run the custom report generator tool to generate a nice and extensive code coverage report.
+  #- task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
+  #  displayName: ReportGenerator
+  #  inputs:
+  #    reports: '$(Build.SourcesDirectory)/EdreamsAdaptor.Index.Tests/coverage/coverage.opencover.xml'
+  #    targetdir: '$(Build.SourcesDirectory)/EdreamsAdaptor.Index.Tests/coverage/results'
+  #    reporttypes: 'HtmlInline_AzurePipelines;Cobertura;Badges'
+  #    assemblyfilters: '-xunit*'
+
+  # Publish the code coverage report to as an Azure DevOps artifact.
+  #- task: PublishCodeCoverageResults@1
+  #  displayName: Publish code coverage results
+  #  inputs:
+  #    summaryFileLocation: $(Build.SourcesDirectory)/EdreamsAdaptor.Index.Tests/coverage/coverage.cobertura.xml
+  #    reportDirectory: $(Build.SourcesDirectory)/EdreamsAdaptor.Index.Tests/coverage/results
+  #    codeCoverageTool: Cobertura
