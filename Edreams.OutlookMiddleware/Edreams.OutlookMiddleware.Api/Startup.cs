@@ -1,11 +1,14 @@
 using System.IO;
-using System.Security.Principal;
 using Edreams.OutlookMiddleware.Api.Middleware;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common.Configuration;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Common.Helpers;
+using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.Common.Security;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
+using Edreams.OutlookMiddleware.Common.Validation;
+using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,9 +32,18 @@ namespace Edreams.OutlookMiddleware.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
-
             services.AddScoped<SecurityContextMiddleware>();
             services.AddScoped<ISecurityContext, SecurityContext>();
+            services.AddTransient(typeof(IRestHelper<>), typeof(RestHelper<>));
+            services.AddSingleton<IValidator, Validator>();
+
+            services.AddSingleton<IEdreamsConfiguration>(_ => new EdreamsConfiguration
+            {
+                StoragePath = _configuration.GetValue<string>("StoragePath"),
+                EdreamsExtensibilityUrl = _configuration.GetValue<string>("EdreamsExtensibilityUrl"),
+                EdreamsTokenKey = _configuration.GetValue<string>("EdreamsTokenKey"),
+                EdreamsTokenValue = _configuration.GetValue<string>("EdreamsTokenValue"),
+            });
 
             services.AddControllers();
             services.AddBusinessLogic();

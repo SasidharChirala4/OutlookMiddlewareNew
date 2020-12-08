@@ -1,4 +1,5 @@
-﻿using Edreams.OutlookMiddleware.DataTransferObjects.Api;
+﻿using Edreams.Contracts.Data.Logging;
+using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Mapping.Interfaces;
 using Edreams.OutlookMiddleware.Model;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ namespace Edreams.OutlookMiddleware.Mapping.DependencyInjection
         public static void AddMapping(this IServiceCollection services)
         {
             services.AddTransient<IMapper<CreateMailRequest, FilePreload>, CreateEmailRequestToFilePreloadMapper>();
+            services.AddTransient<IMapper<RecordLogRequest, LogEntry>, RecordLogRequestToLogEntryMapper>();
         }
     }
 }
