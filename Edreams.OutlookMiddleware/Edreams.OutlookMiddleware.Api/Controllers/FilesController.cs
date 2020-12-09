@@ -53,13 +53,15 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
             {
                 FileId = fileId,
                 TempPath = tempPath,
+                FileName = Request.Form.Files[0].FileName,
+                FileSize = Request.Form.Files[0].Length
             };
 
             //Store the file in the temporary location
-            using (FileStream fs = new FileStream(tempPath, FileMode.CreateNew))
-            {
-                // Add the content from the request and save to the tempPath
-            }
+            FileStream fs = new FileStream(tempPath, FileMode.CreateNew);
+            await Request.Form.Files[0].CopyToAsync(fs);
+            fs.Close();
+            
             return await ExecuteManager(manager => manager.UpdateFile(request, storagePath));
         }
     }
