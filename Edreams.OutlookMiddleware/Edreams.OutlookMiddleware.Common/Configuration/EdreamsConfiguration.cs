@@ -8,6 +8,6 @@ namespace Edreams.OutlookMiddleware.Common.Configuration
         public string EdreamsExtensibilityUrl { get; set; }
         public string EdreamsTokenKey { get; set; }
         public string EdreamsTokenValue { get; set; }
-        public string MaxNumberPendingCategories { get; set; }
+        public int MaxNumberPendingCategories { get; set; }
     }
 }

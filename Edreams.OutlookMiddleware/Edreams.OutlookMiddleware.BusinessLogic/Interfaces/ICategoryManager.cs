@@ -1,5 +1,4 @@
 ﻿using Edreams.OutlookMiddleware.DataTransferObjects.Api;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
@@ -9,16 +8,15 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         /// <summary>
         /// Method to get the pending categories for a given user.
         /// </summary>
-        /// <param name="user">The UserName for whom the pending categories needs to be fetched.</param>
+        /// <param name="userPrincipalName">The UserName for whom the pending categories needs to be fetched.</param>
         /// <returns></returns>
-        Task<GetCategoryResponse> GetPendingCategories(string user);
+        Task<GetPendingCategoriesResponse> GetPendingCategories(string userPrincipalName);
 
         /// <summary>
-        /// Method to set the processed categories for a given user.
+        /// Method to update the pending categories for a given user.
         /// </summary>
-        /// <param name="categories">The list of categories to be processed.</param>
-        /// <param name="user">The UserName for whom the categories should be processed.</param>
+        /// <param name="updatePendingCategoriesRequest"></param>
         /// <returns></returns>
-        Task<ProcessedCategoriesResponse> SetProcessedCategories(List<ProcessedCategoriesRequest> categories, string user);
+        Task<UpdatePendingCategoriesResponse> UpdatePendingCategories(UpdatePendingCategoriesRequest updatePendingCategoriesRequest);
     }
 }

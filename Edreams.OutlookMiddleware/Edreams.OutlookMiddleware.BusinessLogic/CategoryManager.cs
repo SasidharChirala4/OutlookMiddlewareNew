@@ -2,7 +2,6 @@
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Helpers;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
-using CategorizationModel = Edreams.OutlookMiddleware.Model.CategorizationRequest;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -10,6 +9,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.DataAccess;
+using Edreams.OutlookMiddleware.Mapping.Interfaces;
+using CategorizationRequestEntity = Edreams.OutlookMiddleware.Model.CategorizationRequest;
+using CategorizationRequestContract = Edreams.OutlookMiddleware.DataTransferObjects.Api.CategorizationRequest;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
@@ -18,9 +21,15 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
     /// </summary>
     public class CategoryManager : ICategoryManager
     {
+        #region <| Private Members |>
+
+        private readonly OutlookMiddlewareDbContext _outlookMiddlewareDbContext;
+        private readonly IRepository<CategorizationRequestEntity> _categorizationRequestRepository;
+        private readonly IMapper<CategorizationRequestEntity, CategorizationRequestContract> _categorizationRequestMapper;
         private readonly IEdreamsConfiguration _configuration;
         private readonly ILogger _logger;
-        private readonly IRepository<CategorizationModel> _categorizationRequestRepository;
+
+        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CategoryManager" /> class.
@@ -28,75 +37,70 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// <param name="dbContext"></param>
         /// <param name="configurationManager"></param>
         /// <param name="logger"></param>
-        public CategoryManager(IRepository<CategorizationModel> categorizationRequestsRepository,
-            IEdreamsConfiguration configuration, ILogger logger)
+        public CategoryManager(OutlookMiddlewareDbContext outlookMiddlewareDbContext,
+            IRepository<CategorizationRequestEntity> categorizationRequestsRepository,
+            IMapper<CategorizationRequestEntity, CategorizationRequestContract> categorizationRequestMapper,
+        IEdreamsConfiguration configuration, ILogger logger)
         {
+            _outlookMiddlewareDbContext = outlookMiddlewareDbContext;
             _categorizationRequestRepository = categorizationRequestsRepository;
+            _categorizationRequestMapper = categorizationRequestMapper;
             _configuration = configuration;
             _logger = logger;
         }
 
         /// <summary>
-        /// Method to get the pending categories for a given user.
+        /// Method to get the pending categories for the specified user.
         /// </summary>
-        /// <param name="user">The UserName for whom the pending categories needs to be fetched.</param>
+        /// <param name="userPrincipalName">The UserPricipalName for whom the pending categories needs to be fetched.</param>
         /// <returns></returns>
-        public async Task<GetCategoryResponse> GetPendingCategories(string user)
+        public async Task<GetPendingCategoriesResponse> GetPendingCategories(string userPrincipalName)
         {
             try
             {
-                int maxNumberEmails = Convert.ToInt32(_configuration.MaxNumberPendingCategories);
-                Limit limit = new Limit(0, maxNumberEmails);
+                GetPendingCategoriesResponse getPendingCategoriesResponse = new GetPendingCategoriesResponse();
+                Limit limit = new Limit(0, _configuration.MaxNumberPendingCategories);
 
-                List<CategorizationRequest> categorizations = (List<CategorizationRequest>)await _categorizationRequestRepository.FindDescending(x => x.UserPrincipalName.Equals(user) && !x.Sent,
-                    order => order.SysId, limit);
-               
-                return new GetCategoryResponse
+                IList<CategorizationRequestEntity> categorizations = await _categorizationRequestRepository.FindDescending(x =>
+                                                                        x.UserPrincipalName.Equals(userPrincipalName) && !x.Sent, order => order.SysId, limit);
+                if (categorizations.Count() > 0)
                 {
-                    CategorizationRequests =
-                        categorizations.Select(x => new CategorizationRequest
-                        {
-                            InternetMessageId = x.InternetMessageId,
-                            IsCompose = x.IsCompose,
-                            CategorizationRequestType = x.CategorizationRequestType
-                        }).ToList()
-                };
+                    getPendingCategoriesResponse.CategorizationRequests = _categorizationRequestMapper.Map(categorizations).ToList();
+                }
+                return getPendingCategoriesResponse;
             }
             catch (Exception ex)
             {
-                // TODO : Need to Implement custom logger -  after Completing Task # 41044   
-                _logger.LogError(ex.Message);
+                _logger.LogError(ex, "Error at getting pending categories");
+                throw;
             }
-
-            return new GetCategoryResponse();
         }
+
         /// <summary>
-        /// Method to set the processed categories for a given user.
+        /// Method to update the pending categories for the specified user.
         /// </summary>
-        /// <param name="categories">The list of categories to be processed.</param>
-        /// <param name="user">The UserName for whom the categories should be processed.</param>
+        /// <param name="updatePendingCategoriesRequest"></param>
         /// <returns></returns>
-        public async Task<ProcessedCategoriesResponse> SetProcessedCategories(List<ProcessedCategoriesRequest> categories, string user)
+        public async Task<UpdatePendingCategoriesResponse> UpdatePendingCategories(UpdatePendingCategoriesRequest updatePendingCategoriesRequest)
         {
             try
             {
-                IEnumerable<string> internetMessageIds = categories.Select(y => y.InternetMessageId).Distinct();
+                IEnumerable<string> internetMessageIds = updatePendingCategoriesRequest.CategorizationRequests.Select(y => y.InternetMessageId).Distinct();
 
-                List<CategorizationModel> categorizationRequests = (List<CategorizationModel>)await _categorizationRequestRepository.Find(x =>
-                    internetMessageIds.Contains(x.InternetMessageId) && x.UserPrincipalName.Equals(user) && !x.Sent);
+                List<CategorizationRequestEntity> categorizationRequests = await _outlookMiddlewareDbContext.CategorizationRequests.Where(x =>
+                    internetMessageIds.Contains(x.InternetMessageId) && x.UserPrincipalName.Equals(updatePendingCategoriesRequest.UserPrincipalName) && !x.Sent).ToListAsync();
 
                 categorizationRequests.ForEach(x => x.Sent = true);
 
-                await _categorizationRequestRepository.Create(categorizationRequests);
+                await _outlookMiddlewareDbContext.SaveChangesAsync();
 
-                return new ProcessedCategoriesResponse { Success = true };
+                return new UpdatePendingCategoriesResponse { Success = true };
             }
             catch (Exception ex)
             {
-                // TODO : Need to Implement custom logger -  after Completing Task # 41044 
-                _logger.LogError(ex.Message);
+                _logger.LogError(ex, "Error at update pending categories");
+                throw;
             }
-            return new ProcessedCategoriesResponse { Success = false };
         }
     }
 }

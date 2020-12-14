@@ -2,7 +2,6 @@
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.Model;
 using Microsoft.Extensions.DependencyInjection;
-using System.ComponentModel;
 
 // ReSharper disable once CheckNamespace
 namespace Edreams.OutlookMiddleware.DataAccess.DependencyInjection

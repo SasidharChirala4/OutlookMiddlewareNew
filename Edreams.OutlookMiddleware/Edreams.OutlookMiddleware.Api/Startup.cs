@@ -46,7 +46,7 @@ namespace Edreams.OutlookMiddleware.Api
                 EdreamsExtensibilityUrl = _configuration.GetValue<string>("EdreamsExtensibilityUrl"),
                 EdreamsTokenKey = _configuration.GetValue<string>("EdreamsTokenKey"),
                 EdreamsTokenValue = _configuration.GetValue<string>("EdreamsTokenValue"),
-                MaxNumberPendingCategories = _configuration.GetValue<string>("MaxNumberPendingCategories")
+                MaxNumberPendingCategories = _configuration.GetValue<int>("MaxNumberPendingCategories")
             });
 
             services.AddControllers();

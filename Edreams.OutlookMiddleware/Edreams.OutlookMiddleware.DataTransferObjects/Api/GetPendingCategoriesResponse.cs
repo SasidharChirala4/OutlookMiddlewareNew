@@ -1,18 +1,17 @@
 ﻿using Edreams.OutlookMiddleware.DataTransferObjects.Api.Base;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
 {
+
     /// <summary>
-    /// Response class for Categories
+    /// Response class for GetCategories
     /// </summary>
-    public class ProcessedCategoriesResponse : Response
+    public class GetPendingCategoriesResponse : Response
     {
         /// <summary>
-        /// Response status of the set categeroies
+        ///  List of Categories Request
         /// </summary>
-        public bool Success { get; set; }
+        public List<CategorizationRequest> CategorizationRequests { get; set; }
     }
 }

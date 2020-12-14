@@ -70,7 +70,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
             modelBuilder.Entity<CategorizationRequest>(e =>
             {
                 e.ToTable("CategorizationRequest");
-                e.HasKey(x => x.Id);
+                e.HasKey(x => x.Id).IsClustered(false);
                 e.HasIndex(x => x.SysId).IsUnique().IsClustered();
                 e.Property(x => x.UserPrincipalName).IsRequired();
                 e.Property(x => x.UserPrincipalName).HasMaxLength(200);
