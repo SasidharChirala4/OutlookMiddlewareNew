@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Edreams.OutlookMiddleware.DataAccess;
 using Edreams.OutlookMiddleware.Mapping.Interfaces;
 using CategorizationRequestEntity = Edreams.OutlookMiddleware.Model.CategorizationRequest;
 using CategorizationRequestContract = Edreams.OutlookMiddleware.DataTransferObjects.Api.CategorizationRequest;
@@ -23,7 +22,6 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
     {
         #region <| Private Members |>
 
-        private readonly OutlookMiddlewareDbContext _outlookMiddlewareDbContext;
         private readonly IRepository<CategorizationRequestEntity> _categorizationRequestRepository;
         private readonly IMapper<CategorizationRequestEntity, CategorizationRequestContract> _categorizationRequestMapper;
         private readonly IEdreamsConfiguration _configuration;
@@ -33,16 +31,13 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CategoryManager" /> class.
-        /// </summary>
-        /// <param name="dbContext"></param>
+        /// </summary>        
         /// <param name="configurationManager"></param>
         /// <param name="logger"></param>
-        public CategoryManager(OutlookMiddlewareDbContext outlookMiddlewareDbContext,
-            IRepository<CategorizationRequestEntity> categorizationRequestsRepository,
+        public CategoryManager(IRepository<CategorizationRequestEntity> categorizationRequestsRepository,
             IMapper<CategorizationRequestEntity, CategorizationRequestContract> categorizationRequestMapper,
         IEdreamsConfiguration configuration, ILogger logger)
         {
-            _outlookMiddlewareDbContext = outlookMiddlewareDbContext;
             _categorizationRequestRepository = categorizationRequestsRepository;
             _categorizationRequestMapper = categorizationRequestMapper;
             _configuration = configuration;

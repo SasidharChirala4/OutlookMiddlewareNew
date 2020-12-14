@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Edreams.OutlookMiddleware.Model.Enums
+﻿namespace Edreams.OutlookMiddleware.Model.Enums
 {
     /// <summary>
     /// Categorization Request Type Enum
