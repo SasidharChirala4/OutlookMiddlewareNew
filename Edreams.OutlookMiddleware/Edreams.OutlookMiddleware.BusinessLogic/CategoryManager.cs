@@ -63,7 +63,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
                 IList<CategorizationRequestEntity> categorizations = await _categorizationRequestRepository.FindDescending(x =>
                                                                         x.UserPrincipalName.Equals(userPrincipalName) && !x.Sent, order => order.SysId, limit);
-                if (categorizations.Count() > 0)
+                if (categorizations.Count > 0)
                 {
                     getPendingCategoriesResponse.CategorizationRequests = _categorizationRequestMapper.Map(categorizations).ToList();
                 }
@@ -87,12 +87,15 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             {
                 IEnumerable<string> internetMessageIds = updatePendingCategoriesRequest.CategorizationRequests.Select(y => y.InternetMessageId).Distinct();
 
-                List<CategorizationRequestEntity> categorizationRequests = await _outlookMiddlewareDbContext.CategorizationRequests.Where(x =>
-                    internetMessageIds.Contains(x.InternetMessageId) && x.UserPrincipalName.Equals(updatePendingCategoriesRequest.UserPrincipalName) && !x.Sent).ToListAsync();
+                IList<CategorizationRequestEntity> categorizationRequests = await _categorizationRequestRepository.Find(x =>
+                 internetMessageIds.Contains(x.InternetMessageId) && x.UserPrincipalName.Equals(updatePendingCategoriesRequest.UserPrincipalName) && !x.Sent);
 
-                categorizationRequests.ForEach(x => x.Sent = true);
+                foreach (CategorizationRequestEntity categorizationRequest in categorizationRequests)
+                {
+                    categorizationRequest.Sent = true;
+                }
 
-                await _outlookMiddlewareDbContext.SaveChangesAsync();
+                await _categorizationRequestRepository.Update(categorizationRequests);
 
                 return new UpdatePendingCategoriesResponse { Success = true };
             }
