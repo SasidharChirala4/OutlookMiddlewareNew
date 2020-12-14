@@ -58,10 +58,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                     TempPath = preloadedFile.TempPath
                 };
             }
-            else
-            {
-                throw new EdreamsException("Preloaded file not found!");
-            }
+
+            throw new EdreamsException("Preloaded file not found!");
+
         }
     }
 }

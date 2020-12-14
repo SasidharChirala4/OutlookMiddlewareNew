@@ -58,9 +58,10 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
             };
 
             //Store the file in the temporary location
-            FileStream fs = new FileStream(tempPath, FileMode.CreateNew);
-            await Request.Form.Files[0].CopyToAsync(fs);
-            fs.Close();
+            await using (FileStream fs = new FileStream(tempPath, FileMode.CreateNew))
+            {
+                await Request.Form.Files[0].CopyToAsync(fs);
+            }
             
             return await ExecuteManager(manager => manager.UpdateFile(request, storagePath));
         }
