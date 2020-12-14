@@ -16,4 +16,8 @@
     <None Remove="Edreams.OutlookMiddleware.DataTransferObjects.xml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Edreams.OutlookMiddleware.Model\Edreams.OutlookMiddleware.Model.csproj" />
+  </ItemGroup>
+
 </Project>
