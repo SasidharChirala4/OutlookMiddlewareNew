@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\_DSI_\GIT\DSI.Edreams.OutlookMiddleware\Edreams.OutlookMiddleware\Edreams.OutlookMiddleware.Api\Edreams.OutlookMiddleware.Api.xml</DocumentationFile>
+    <DocumentationFile>Edreams.OutlookMiddleware.Api.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\_DSI_\GIT\DSI.Edreams.OutlookMiddleware\Edreams.OutlookMiddleware\Edreams.OutlookMiddleware.Api\Edreams.OutlookMiddleware.Api.xml</DocumentationFile>
+    <DocumentationFile>Edreams.OutlookMiddleware.Api.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
