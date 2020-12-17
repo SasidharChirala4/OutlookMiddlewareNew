@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Edreams.OutlookMiddleware.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.CategoryController">
+            <summary>
+            HTTP API Controller containing all mail category related operations.
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategoryController.#ctor(Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.CategoryController},Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ICategoryManager)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.CategoryController" /> class.
+            </summary>
+            <param name="categoryManager">T</param>
+            <param name="logger"></param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategoryController.GetPendingCategories(System.String)">
+            <summary>
+            Gets the pending email categories for the specified user.
+            </summary>
+            <param name="userPrincipalName">The UserPricipalName for whom the pending categories needs to be fetched.</param>
+            <returns>An ApiResult containing the pending categories.</returns>
+            <remarks>This HTTP GET operation lists all pending categories for the specified mail address.</remarks>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategoryController.UpdatePendingCategories(Edreams.OutlookMiddleware.DataTransferObjects.Api.UpdatePendingCategoriesRequest)">
+            <summary>
+            Method to update the pending categories for the specified user.
+            </summary>
+            <param name="updatePendingCategoriesRequest">Request of UpdatePendingCategories</param>
+            <returns></returns>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.FilesController">
+            <summary>
+            Group of endpoints to handle different operations related to File(s) 
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.FilesController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IFileManager,Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.FilesController},Edreams.OutlookMiddleware.Common.Configuration.Interfaces.IEdreamsConfiguration)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.FilesController" /> class.
+            </summary>
+            <param name="fileManager"></param>
+            <param name="logger"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.FilesController.UploadFile(System.Guid)">
+            <summary>
+            Method to upload file to temporary location
+            </summary>
+            <param name="fileId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.LoggingController">
+            <summary>
+            Group of endpoints that are helpful to Logs a specified message or error..
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.LoggingController.#ctor(Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.LoggingController},Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ILoggingManager)">
+            <summary>Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.LoggingController" /> class.</summary>
+            <param name="loggingManager">The logging manager.</param>
+            <param name="logger">The logger.</param>        
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.LoggingController.RecordLog(Edreams.OutlookMiddleware.DataTransferObjects.Api.RecordLogRequest)">
+            <summary>
+            Logs a specified message or error.
+            </summary>
+            <remarks>This HTTP POST operation records an informational message or error to the logging infrastructure.</remarks>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.StatusController">
+            <summary>
+            Group of endpoints that are related to getting the status for this e-DReaMS Outlook Middleware HTTP API.
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IStatusManager,Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.StatusController},Edreams.OutlookMiddleware.Common.Configuration.Interfaces.IEdreamsConfiguration)">
+            <summary>Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.StatusController" /> class.</summary>
+            <param name="statusManager">The status manager.</param>
+            <param name="logger">The logger.</param>
+            <param name="configuration">The configuration.</param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.Status">
+            <summary>
+            Get the status for this e-DReaMS Outlook Middleware HTTP API.
+            </summary>
+            <returns>This endpoint should always return an HTTP 200 OK. If it doesn't, there is something wrong.</returns>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Helpers.ApiController">
+            <summary>
+            Base class for all the Controllers
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Helpers.ApiController.Success">
+            <summary>
+            Success Method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Helpers.ApiController`1">
+            <summary>
+            Base Api controller with TManager
+            </summary>
+            <typeparam name="TManager"></typeparam>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Helpers.ApiController`1.ExecuteManager``1(System.Func{`0,System.Threading.Tasks.Task{``0}})">
+            <summary>
+            This method executes a method on the Manager that is associated with this ApiController<typeparamref name="TManager"/>.
+            Based on the response from the Manager, it will return an IActionResult that is an HTTP status code like 200, 404, 500, ...
+            </summary>
+            <typeparam name="TResponse">The type of the response. This can be inferred from the <paramref name="managerCall"/></typeparam>
+            <param name="managerCall">A delegate to the method on the Manager that needs to be called.</param>
+            <returns>An IActionResult that contains the response data and the appropriate HTTP status code.</returns>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            ConfigureServices
+            </summary>
+            <param name="services"></param>
+        </member>
+    </members>
+</doc>
