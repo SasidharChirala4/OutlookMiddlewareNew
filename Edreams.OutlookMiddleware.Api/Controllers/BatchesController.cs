@@ -1,55 +1,92 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Edreams.OutlookMiddleware.Api.Helpers;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
+    /// <summary>
+    /// Group of endpoints that work with batches.
+    /// </summary>
+    /// <remarks>
+    /// Batches of emails to be processed are introduced to make sure that the production database is not
+    /// polluted with partial uploads from the e-DReaMS Outlook Plugin. The Outlook Plugin needs multiple
+    /// calls to the Outlook Middleware API to set emails metadata and upload the actual binary files.
+    /// In this process, multiple things can go wrong or the user can stop the process in the middle. All
+    /// this partially uploaded email data will be stored in the pre-load database and will therefore not
+    /// cause a negative effect on the production database that does the actual processing.
+    /// </remarks>
     [ApiController]
     [Route("[controller]")]
-    public class BatchesController : ControllerBase
+    public class BatchesController : ApiController<IBatchManager>
     {
-        private readonly IBatchManager _batchLogic;
-        private readonly ILogger<BatchesController> _logger;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BatchesController"/> class.
+        /// </summary>
+        /// <param name="batchManager">The batch manager.</param>
+        /// <param name="logger">The logger.</param>
         public BatchesController(
-            IBatchManager batchLogic,
-            ILogger<BatchesController> logger)
-        {
-            _batchLogic = batchLogic;
-            _logger = logger;
-        }
+            IBatchManager batchManager,
+            ILogger<BatchesController> logger) : base(batchManager, logger) { }
 
+        /// <summary>
+        /// Commits the specified batch of files to be processed by the Outlook Middleware.
+        /// </summary>
+        /// <param name="batchId">
+        /// The unique batch identifier that is shared by file-records that have previously been prepared by calling
+        /// the 'mails' and 'files' endpoints.
+        /// </param>
+        /// <remarks>
+        /// This HTTP POST endpoint commits an open batch of files to be processed by the Outlook Middleware.
+        /// A batch exists in the pre-load database if there are file-records available that share the same batch-id.
+        /// Committing a batch moves all related file-records from the pre-load database to the production database
+        /// and marks them ready for processing.
+        /// </remarks>
         [HttpPost("{batchId}/commit")]
-        public async Task<IActionResult> CommitBatch(Guid batchId)
+        [SwaggerResponse(200, "Successfully committed the specified batch of files to be processed by the Outlook Middleware.", typeof(ApiResult<CommitBatchResponse>))]
+        [SwaggerResponse(404, "The specified batch does not exist and cannot be committed.", typeof(ApiResult))]
+        [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiResult))]
+        public Task<IActionResult> CommitBatch(Guid batchId)
         {
-            _logger.LogTrace("[API] CommitBatch...");
-
             CommitBatchRequest request = new CommitBatchRequest
             {
+                CorrelationId = Guid.NewGuid(),
                 BatchId = batchId
             };
 
-            CommitBatchResponse response = await _batchLogic.CommitBatch(request);
-
-            return Ok(response);
+            return ExecuteManager(x => x.CommitBatch(request));
         }
 
+        /// <summary>
+        /// Cancels the specified batch of files to be cleaned by the Outlook Middleware.
+        /// </summary>
+        /// <param name="batchId">
+        /// The unique batch identifier that is shared by file-records that have previously been prepared by calling
+        /// the 'mails' and 'files' endpoints.
+        /// </param>
+        /// <remarks>
+        /// This HTTP DELETE endpoint cancels an open batch of files to be cleaned by the Outlook Middleware.
+        /// A batch exists in the pre-load database if there are file-records available that share the same batch-id.
+        /// Cancelling a batch changes the state of all related file-records and marks them ready for cleanup.
+        /// </remarks>
         [HttpDelete("{batchId}/cancel")]
-        public async Task<IActionResult> CancelBatch(Guid batchId)
+        [SwaggerResponse(200, "Successfully cancelled the specified batch of emails to be processed by the Outlook Middleware.", typeof(ApiResult<CommitBatchResponse>))]
+        [SwaggerResponse(404, "The specified batch does not exist and cannot be cancelled.", typeof(ApiResult))]
+        [SwaggerResponse(500, "An internal server error has occurred, this is not your fault.", typeof(ApiResult))]
+        public Task<IActionResult> CancelBatch(Guid batchId)
         {
-            _logger.LogTrace("[API] CommitBatch...");
-
             CancelBatchRequest request = new CancelBatchRequest
             {
+                CorrelationId = Guid.NewGuid(),
                 BatchId = batchId
             };
 
-            CancelBatchResponse response = await _batchLogic.CancelBatch(request);
-
-            return Ok(response);
+            return ExecuteManager(x => x.CancelBatch(request));
         }
     }
 }
