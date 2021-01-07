@@ -25,7 +25,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         }
 
         /// <summary>
-        /// Method to create an Email entry in the Preloaded Files
+        /// Method to create a Mail/ Attachment record in PreloadedFiles table
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -33,7 +33,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             using TransactionScope dbScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
-            //Extract the EWSId, EntryId and MailSUbject from the request and create the Mail
+            //Extract the EwsId, EntryId and MailSubject from the request and create the Mail
             FilePreload preloadedFile = _createEmailRequestToFilePreloadMapper.Map(request);
             preloadedFile.EmailId = Guid.NewGuid();
             preloadedFile.Kind = FileKind.Email;
@@ -47,7 +47,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 FileId = preloadedFile.Id
             };
 
-            //Extract the Attachment details of the Mail from the request
+            //Extract the Attachment details of the Mail and insert in DB
             foreach (var attachment in request.Attachments)
             {
                 FilePreload preloadedAttachment = _createEmailRequestToFilePreloadMapper.Map(request);

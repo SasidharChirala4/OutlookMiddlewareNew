@@ -10,7 +10,7 @@ using Edreams.OutlookMiddleware.DataTransferObjects;
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
     /// <summary>
-    /// Group of endpoints that work with emails.
+    /// Group of endpoints that work with Emails.
     /// </summary>
     /// <remarks>
     /// Emails need to be uploaded from the e-DReaMS Outlook Plugin to the Outlook Middleware. To optimize
@@ -48,7 +48,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// Each resulting file-record has a relation to a single batch and a single email.
         /// </remarks>
         [HttpPost]
-        [SwaggerResponse(200, "Successfully created mail by the Outlook Middleware.", typeof(ApiResult<CommitBatchResponse>))]
+        [SwaggerResponse(200, "Successfully created mail by Outlook Middleware.", typeof(ApiResult<CommitBatchResponse>))]
         [SwaggerResponse(404, "The specified batch does not exist and cannot be committed.", typeof(ApiResult))]
         [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiResult))]
         public Task<IActionResult> CreateMail(CreateMailRequest request)
