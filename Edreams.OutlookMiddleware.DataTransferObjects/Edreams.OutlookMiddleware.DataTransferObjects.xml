@@ -92,6 +92,26 @@
             Request type of the Categorization
             </summary>
         </member>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse">
+            <summary>
+            Response for Created Mail
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse.#ctor">
+            <summary>
+            Constructor for CreateMail response
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse.FileId">
+            <summary>
+            Unique Id of Mail
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse.Attachments">
+            <summary>
+            List of attachments in the Mail
+            </summary>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.GetPendingCategoriesResponse">
             <summary>
             Response class for GetCategories
