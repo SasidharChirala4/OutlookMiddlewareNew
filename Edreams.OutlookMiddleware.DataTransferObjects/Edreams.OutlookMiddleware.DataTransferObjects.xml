@@ -102,6 +102,16 @@
              List of Categories Request
             </summary>
         </member>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.GetSharedMailBoxResponse">
+            <summary>
+            Response object for the GetSharedMailBox endpoint.
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.GetSharedMailBoxResponse.Email">
+            <summary>
+            SharedMailBox EMail
+            </summary>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.GetStatusResponse">
             <summary>
             Response object for the GetStatus endpoint.

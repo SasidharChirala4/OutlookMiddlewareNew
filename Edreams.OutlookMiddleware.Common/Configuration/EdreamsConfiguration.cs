@@ -9,5 +9,10 @@ namespace Edreams.OutlookMiddleware.Common.Configuration
         public string EdreamsTokenKey { get; set; }
         public string EdreamsTokenValue { get; set; }
         public int MaxNumberPendingCategories { get; set; }
+        public string ExchangeAuthority { get; set; }
+        public string ExchangeClientId { get; set; }
+        public string ExchangeOnlineServer { get; set; }
+        public string ExchangeResourceId { get; set; }
+        public string SharedMailBoxCredentials { get; set; }
     }
 }

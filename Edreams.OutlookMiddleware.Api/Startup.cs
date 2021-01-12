@@ -46,7 +46,12 @@ namespace Edreams.OutlookMiddleware.Api
                 EdreamsExtensibilityUrl = _configuration.GetValue<string>("EdreamsExtensibilityUrl"),
                 EdreamsTokenKey = _configuration.GetValue<string>("EdreamsTokenKey"),
                 EdreamsTokenValue = _configuration.GetValue<string>("EdreamsTokenValue"),
-                MaxNumberPendingCategories = _configuration.GetValue<int>("MaxNumberPendingCategories")
+                MaxNumberPendingCategories = _configuration.GetValue<int>("MaxNumberPendingCategories"),
+                ExchangeAuthority = _configuration.GetValue<string>("ExchangeAuthority"),
+                ExchangeClientId=_configuration.GetValue<string>("ExchangeClientId"),
+                ExchangeOnlineServer=_configuration.GetValue<string>("ExchangeOnlineServer"),
+                ExchangeResourceId=_configuration.GetValue<string>("ExchangeResourceId"),
+                SharedMailBoxCredentials=_configuration.GetValue<string>("SharedMailBoxCredentials")
             });
 
             services.AddControllers();
