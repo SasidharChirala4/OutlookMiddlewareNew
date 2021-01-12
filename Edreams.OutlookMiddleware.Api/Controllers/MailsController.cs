@@ -10,11 +10,11 @@ using Edreams.OutlookMiddleware.DataTransferObjects;
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
     /// <summary>
-    /// Group of endpoints that work with Emails.
+    /// Group of endpoints that work with emails.
     /// </summary>
     /// <remarks>
     /// Emails need to be uploaded from the e-DReaMS Outlook Plugin to the Outlook Middleware. To optimize
-    /// the flow and performance of the Outlook Middleware processing: Emails are uploaded as files using
+    /// the flow and performance of the Outlook Middleware processing: emails are uploaded as files using
     /// a flat table in a pre-load database.
     /// Binary files need to be uploaded from the Outlook Plugin to the Outlook Middleware by using HTTP
     /// and binary data streaming. Because of this, email and file metadata cannot be sent as part of the
@@ -29,14 +29,13 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="MailsController"/> class.
         /// </summary>
-        /// <param name="emailManager">The Email manager.</param>
+        /// <param name="emailManager">The email manager.</param>
         /// <param name="logger">The logger.</param>
         public MailsController(
             IEmailManager emailManager,
             ILogger<MailsController> logger)
             : base(emailManager, logger) { }
         
-
         /// <summary>
         /// Creates an email to prepare for uploading binary data.
         /// </summary>

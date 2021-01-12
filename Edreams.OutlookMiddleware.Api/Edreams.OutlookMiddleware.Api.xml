@@ -4,6 +4,57 @@
         <name>Edreams.OutlookMiddleware.Api</name>
     </assembly>
     <members>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.BatchesController">
+            <summary>
+            Group of endpoints that work with batches.
+            </summary>
+            <remarks>
+            Batches of emails to be processed are introduced to make sure that the production database is not
+            polluted with partial uploads from the e-DReaMS Outlook Plugin. The Outlook Plugin needs multiple
+            calls to the Outlook Middleware API to set emails metadata and upload the actual binary files.
+            In this process, multiple things can go wrong or the user can stop the process in the middle. All
+            this partially uploaded email data will be stored in the pre-load database and will therefore not
+            cause a negative effect on the production database that does the actual processing.
+            </remarks>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.BatchesController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IBatchManager,Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.BatchesController})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.BatchesController"/> class.
+            </summary>
+            <param name="batchManager">The batch manager.</param>
+            <param name="logger">The logger.</param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.BatchesController.CommitBatch(System.Guid,Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest)">
+            <summary>
+            Commits the specified batch of files to be processed by the Outlook Middleware.
+            </summary>
+            <param name="batchId">
+            The unique batch identifier that is shared by file-records that have previously been prepared by calling
+            the 'mails' and 'files' endpoints.
+            </param>
+            <param name="request">Request body.</param>
+            <remarks>
+            This HTTP POST endpoint commits an open batch of files to be processed by the Outlook Middleware.
+            A batch exists in the pre-load database if there are file-records available that share the same batch-id.
+            Committing a batch moves all related file-records from the pre-load database to the production database
+            and marks them ready for processing.
+            </remarks>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.BatchesController.CancelBatch(System.Guid,Edreams.OutlookMiddleware.DataTransferObjects.Api.CancelBatchRequest)">
+            <summary>
+            Cancels the specified batch of files to be cleaned by the Outlook Middleware.
+            </summary>
+            <param name="batchId">
+            The unique batch identifier that is shared by file-records that have previously been prepared by calling
+            the 'mails' and 'files' endpoints.
+            </param>
+            <param name="request">Request body.</param>
+            <remarks>
+            This HTTP DELETE endpoint cancels an open batch of files to be cleaned by the Outlook Middleware.
+            A batch exists in the pre-load database if there are file-records available that share the same batch-id.
+            Cancelling a batch changes the state of all related file-records and marks them ready for cleanup.
+            </remarks>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.Api.Controllers.CategoryController">
             <summary>
             HTTP API Controller containing all mail category related operations.
@@ -73,7 +124,7 @@
             </summary>
             <remarks>
             Emails need to be uploaded from the e-DReaMS Outlook Plugin to the Outlook Middleware. To optimize
-            the flow and performance of the Outlook Middleware processing: Emails are uploaded as files using
+            the flow and performance of the Outlook Middleware processing: emails are uploaded as files using
             a flat table in a pre-load database.
             Binary files need to be uploaded from the Outlook Plugin to the Outlook Middleware by using HTTP
             and binary data streaming. Because of this, email and file metadata cannot be sent as part of the
@@ -86,7 +137,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.MailsController"/> class.
             </summary>
-            <param name="emailManager">The Email manager.</param>
+            <param name="emailManager">The email manager.</param>
             <param name="logger">The logger.</param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.MailsController.CreateMail(Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailRequest)">
