@@ -39,50 +39,52 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         public async Task<CommitBatchResponse> CommitBatch(CommitBatchRequest request)
         {
-            //using ITransactionScope transactionScope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
-            using ITransactionScope transactionScope = _transactionHelper.CreateScope();
-
-            // Find all the file records that have been preloaded for the specified batch.
-            var preloadedFiles = await _preloadedFilesRepository.Find(
+            // Force a database transaction scope to make sure multiple
+            // operations are combined as a single atomic operation.
+            using (ITransactionScope transactionScope = _transactionHelper.CreateScope())
+            {
+                // Find all the file records that have been preloaded for the specified batch.
+                var preloadedFiles = await _preloadedFilesRepository.Find(
                     x => x.BatchId == request.BatchId);
 
-            // If there were no file records found for the specified batch, that batch
-            // is not found and 'null' should be returned to force an HTTP 404.
-            if (preloadedFiles.Count == 0)
-            {
-                return null;
+                // If there were no file records found for the specified batch, that batch
+                // is not found and 'null' should be returned to force an HTTP 404.
+                if (preloadedFiles.Count == 0)
+                {
+                    return null;
+                }
+
+                // Build a new batch and create it in the database.
+                Batch batch = _batchFactory.CreatePendingBatch();
+                batch = await _batchRepository.Create(batch);
+
+                // Map the preloaded files to a list of files with relation to email and batch.
+                // Afterwards, create the files in the database. EF will automatically create
+                // the email references with that.
+                IList<File> files = _preloadedFilesToFilesMapper.Map(batch, preloadedFiles);
+                await _fileRepository.Create(files);
+
+                // All file records for the specified batch should be marked for cleanup
+                // by setting their status to 'Committed'.
+                foreach (var preloadedFile in preloadedFiles)
+                {
+                    preloadedFile.Status = EmailPreloadStatus.Committed;
+                }
+
+                // Update all file records in the pre-load database.
+                await _preloadedFilesRepository.Update(preloadedFiles);
+
+                transactionScope.Commit();
+
+                // Return a response containing some information about the committed batch.
+                return new CommitBatchResponse
+                {
+                    CorrelationId = request.CorrelationId,
+                    BatchId = batch.Id,
+                    NumberOfEmails = files.Select(x => x.Email).Distinct().Count(),
+                    NumberOfFiles = preloadedFiles.Count
+                };
             }
-
-            // Build a new batch and create it in the database.
-            Batch batch = _batchFactory.CreatePendingBatch();
-            batch = await _batchRepository.Create(batch);
-
-            // Map the preloaded files to a list of files with relation to email and batch.
-            // Afterwards, create the files in the database. EF will automatically create
-            // the email references with that.
-            IList<File> files = _preloadedFilesToFilesMapper.Map(batch, preloadedFiles);
-            await _fileRepository.Create(files);
-
-            // All file records for the specified batch should be marked for cleanup
-            // by setting their status to 'Committed'.
-            foreach (var preloadedFile in preloadedFiles)
-            {
-                preloadedFile.Status = EmailPreloadStatus.Committed;
-            }
-
-            // Update all file records in the pre-load database.
-            await _preloadedFilesRepository.Update(preloadedFiles);
-
-            transactionScope.Commit();
-
-            // Return a response containing some information about the committed batch.
-            return new CommitBatchResponse
-            {
-                CorrelationId = request.CorrelationId,
-                BatchId = batch.Id,
-                NumberOfEmails = files.Select(x => x.Email).Distinct().Count(),
-                NumberOfFiles = preloadedFiles.Count
-            };
         }
 
         public async Task<CancelBatchResponse> CancelBatch(CancelBatchRequest request)
