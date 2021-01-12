@@ -3,6 +3,9 @@ using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Edreams.OutlookMiddleware.Api.Helpers;
+using Swashbuckle.AspNetCore.Annotations;
+using Edreams.OutlookMiddleware.DataTransferObjects;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
@@ -21,24 +24,18 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     /// </remarks>
     [ApiController]
     [Route("[controller]")]
-    public class MailsController : ControllerBase
+    public class MailsController : ApiController<IEmailManager>
     {
-        private readonly IEmailManager _emailLogic;
-        private readonly ILogger<MailsController> _logger;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MailsController"/> class.
         /// </summary>
-        /// <param name="emailLogic">The email logic.</param>
+        /// <param name="emailManager">The email manager.</param>
         /// <param name="logger">The logger.</param>
         public MailsController(
-            IEmailManager emailLogic,
+            IEmailManager emailManager,
             ILogger<MailsController> logger)
-        {
-            _emailLogic = emailLogic;
-            _logger = logger;
-        }
-
+            : base(emailManager, logger) { }
+        
         /// <summary>
         /// Creates an email to prepare for uploading binary data.
         /// </summary>
@@ -50,13 +47,12 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// Each resulting file-record has a relation to a single batch and a single email.
         /// </remarks>
         [HttpPost]
-        public async Task<IActionResult> CreateMail(CreateMailRequest request)
+        [SwaggerResponse(200, "Successfully created mail by Outlook Middleware.", typeof(ApiResult<CommitBatchResponse>))]
+        [SwaggerResponse(404, "The specified batch does not exist and cannot be committed.", typeof(ApiResult))]
+        [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiResult))]
+        public Task<IActionResult> CreateMail(CreateMailRequest request)
         {
-            _logger.LogTrace("[API] File uploading...");
-
-            var response = await _emailLogic.CreateMail(request);
-
-            return Ok(response);
+            return ExecuteManager(x => x.CreateMail(request));
         }
     }
 }

@@ -137,7 +137,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.MailsController"/> class.
             </summary>
-            <param name="emailLogic">The email logic.</param>
+            <param name="emailManager">The email manager.</param>
             <param name="logger">The logger.</param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.MailsController.CreateMail(Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailRequest)">
