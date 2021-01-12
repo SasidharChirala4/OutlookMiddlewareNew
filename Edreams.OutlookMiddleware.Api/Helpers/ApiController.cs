@@ -71,6 +71,19 @@ namespace Edreams.OutlookMiddleware.Api.Helpers
             });
         }
 
+        protected void Validate<T>(T routeParam, T requestParam, string validationMessage) where T : struct
+        {
+            if (!routeParam.Equals(requestParam))
+            {
+                EdreamsValidationException validationException = new EdreamsValidationException
+                {
+                    ValidationErrors = { validationMessage }
+                };
+
+                throw validationException;
+            }
+        }
+
         private async Task<IActionResult> Try(Func<Task<IActionResult>> action)
         {
             try
