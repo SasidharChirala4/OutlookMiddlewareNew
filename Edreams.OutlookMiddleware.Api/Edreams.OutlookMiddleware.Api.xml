@@ -24,7 +24,7 @@
             <param name="batchManager">The batch manager.</param>
             <param name="logger">The logger.</param>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.BatchesController.CommitBatch(System.Guid)">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.BatchesController.CommitBatch(System.Guid,Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest)">
             <summary>
             Commits the specified batch of files to be processed by the Outlook Middleware.
             </summary>
@@ -32,6 +32,7 @@
             The unique batch identifier that is shared by file-records that have previously been prepared by calling
             the 'mails' and 'files' endpoints.
             </param>
+            <param name="request">Request body.</param>
             <remarks>
             This HTTP POST endpoint commits an open batch of files to be processed by the Outlook Middleware.
             A batch exists in the pre-load database if there are file-records available that share the same batch-id.
@@ -39,7 +40,7 @@
             and marks them ready for processing.
             </remarks>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.BatchesController.CancelBatch(System.Guid)">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.BatchesController.CancelBatch(System.Guid,Edreams.OutlookMiddleware.DataTransferObjects.Api.CancelBatchRequest)">
             <summary>
             Cancels the specified batch of files to be cleaned by the Outlook Middleware.
             </summary>
@@ -47,6 +48,7 @@
             The unique batch identifier that is shared by file-records that have previously been prepared by calling
             the 'mails' and 'files' endpoints.
             </param>
+            <param name="request">Request body.</param>
             <remarks>
             This HTTP DELETE endpoint cancels an open batch of files to be cleaned by the Outlook Middleware.
             A batch exists in the pre-load database if there are file-records available that share the same batch-id.

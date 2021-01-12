@@ -41,6 +41,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// The unique batch identifier that is shared by file-records that have previously been prepared by calling
         /// the 'mails' and 'files' endpoints.
         /// </param>
+        /// <param name="request">Request body.</param>
         /// <remarks>
         /// This HTTP POST endpoint commits an open batch of files to be processed by the Outlook Middleware.
         /// A batch exists in the pre-load database if there are file-records available that share the same batch-id.
@@ -51,15 +52,13 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [SwaggerResponse(200, "Successfully committed the specified batch of files to be processed by the Outlook Middleware.", typeof(ApiResult<CommitBatchResponse>))]
         [SwaggerResponse(404, "The specified batch does not exist and cannot be committed.", typeof(ApiResult))]
         [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiResult))]
-        public Task<IActionResult> CommitBatch(Guid batchId)
+        public Task<IActionResult> CommitBatch(Guid batchId, CommitBatchRequest request)
         {
-            CommitBatchRequest request = new CommitBatchRequest
+            return ExecuteManager(x =>
             {
-                CorrelationId = Guid.NewGuid(),
-                BatchId = batchId
-            };
-
-            return ExecuteManager(x => x.CommitBatch(request));
+                Validate(batchId, request.BatchId, "There is a 'BatchId' mismatch for route and request.");
+                return x.CommitBatch(request);
+            });
         }
 
         /// <summary>
@@ -69,6 +68,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// The unique batch identifier that is shared by file-records that have previously been prepared by calling
         /// the 'mails' and 'files' endpoints.
         /// </param>
+        /// <param name="request">Request body.</param>
         /// <remarks>
         /// This HTTP DELETE endpoint cancels an open batch of files to be cleaned by the Outlook Middleware.
         /// A batch exists in the pre-load database if there are file-records available that share the same batch-id.
@@ -78,15 +78,13 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [SwaggerResponse(200, "Successfully cancelled the specified batch of emails to be processed by the Outlook Middleware.", typeof(ApiResult<CommitBatchResponse>))]
         [SwaggerResponse(404, "The specified batch does not exist and cannot be cancelled.", typeof(ApiResult))]
         [SwaggerResponse(500, "An internal server error has occurred, this is not your fault.", typeof(ApiResult))]
-        public Task<IActionResult> CancelBatch(Guid batchId)
+        public Task<IActionResult> CancelBatch(Guid batchId, CancelBatchRequest request)
         {
-            CancelBatchRequest request = new CancelBatchRequest
+            return ExecuteManager(x =>
             {
-                CorrelationId = Guid.NewGuid(),
-                BatchId = batchId
-            };
-
-            return ExecuteManager(x => x.CancelBatch(request));
+                Validate(batchId, request.BatchId, "There is a 'BatchId' mismatch for route and request.");
+                return x.CancelBatch(request);
+            });
         }
     }
 }
