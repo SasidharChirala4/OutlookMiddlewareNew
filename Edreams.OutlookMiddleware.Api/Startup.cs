@@ -1,8 +1,7 @@
 using System.IO;
 using Edreams.OutlookMiddleware.Api.Middleware;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
-using Edreams.OutlookMiddleware.Common.Configuration;
-using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Common._DependencyInjection;
 using Edreams.OutlookMiddleware.Common.Helpers;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.Common.Security;
@@ -40,15 +39,7 @@ namespace Edreams.OutlookMiddleware.Api
             services.AddTransient(typeof(IRestHelper<>), typeof(RestHelper<>));
             services.AddSingleton<IValidator, Validator>();
 
-            services.AddSingleton<IEdreamsConfiguration>(_ => new EdreamsConfiguration
-            {
-                StoragePath = _configuration.GetValue<string>("StoragePath"),
-                EdreamsExtensibilityUrl = _configuration.GetValue<string>("EdreamsExtensibilityUrl"),
-                EdreamsTokenKey = _configuration.GetValue<string>("EdreamsTokenKey"),
-                EdreamsTokenValue = _configuration.GetValue<string>("EdreamsTokenValue"),
-                MaxNumberPendingCategories = _configuration.GetValue<int>("MaxNumberPendingCategories")
-            });
-
+            services.AddConfiguration(_configuration);
             services.AddControllers();
             services.AddBusinessLogic();
 

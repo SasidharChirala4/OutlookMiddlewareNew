@@ -9,5 +9,7 @@ namespace Edreams.OutlookMiddleware.Common.Configuration
         public string EdreamsTokenKey { get; set; }
         public string EdreamsTokenValue { get; set; }
         public int MaxNumberPendingCategories { get; set; }
+        public string ServiceBusConnectionString { get; set; }
+        public string ServiceBusQueueName { get; set; }
     }
 }
