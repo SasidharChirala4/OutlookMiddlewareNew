@@ -1,10 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Edreams.OutlookMiddleware.Model
+namespace Edreams.OutlookMiddleware.Common.Exchange
 {
-   public class ExchangeAuthenticationTokenResponse
+    public class ExchangeClientToken
     {
-       
         [JsonPropertyName("access_token")]
         public string AccessToken { get; set; }
     }

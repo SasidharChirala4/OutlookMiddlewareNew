@@ -127,7 +127,7 @@
             Response object for the GetSharedMailBox endpoint.
             </summary>
         </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.GetSharedMailBoxResponse.Email">
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.GetSharedMailBoxResponse.EmailAddress">
             <summary>
             SharedMailBox EMail
             </summary>

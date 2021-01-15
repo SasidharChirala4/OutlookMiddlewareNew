@@ -1,11 +1,10 @@
-﻿using Edreams.OutlookMiddleware.Api.Helpers;
+﻿using System.Threading.Tasks;
+using Edreams.OutlookMiddleware.Api.Helpers;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
-using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Threading.Tasks;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
@@ -28,7 +27,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// Gets the Outlook Middleware shared mailbox.
         /// </summary>
         /// <returns>
-        /// The Outlook Middleware shared mailbox, if available. <see cref="System.String.Empty"/> otherwise.
+        /// The Outlook Middleware shared mailbox, if available. <see cref="string.Empty"/> otherwise.
         /// This endpoint should always return an HTTP 200 OK. If it doesn't, there is something wrong.
         /// </returns>
         /// <remarks>
@@ -36,7 +35,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// The Outlook Middleware Web API will run using a service account
         /// and this endpoint will return the corresponding mailbox identifier.
         /// </remarks>
-        [HttpGet]
+        [HttpGet("sharedmailbox")]
         [SwaggerResponse(200, Type = typeof(ApiResult), Description = "Successfully returns a GetSharedMailBox object.")]
         public async Task<IActionResult> GetSharedMailBox()
         {

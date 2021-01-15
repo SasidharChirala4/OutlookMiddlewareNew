@@ -1,5 +1,4 @@
-﻿
-using Edreams.OutlookMiddleware.DataTransferObjects.Api.Base;
+﻿using Edreams.OutlookMiddleware.DataTransferObjects.Api.Base;
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
 {
@@ -11,6 +10,6 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
         /// <summary>
         /// SharedMailBox EMail
         /// </summary>
-        public string Email { get; set; }
+        public string EmailAddress { get; set; }
     }
 }

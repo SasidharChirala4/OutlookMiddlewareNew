@@ -13,6 +13,11 @@ namespace Edreams.OutlookMiddleware.Common.Configuration
         public string ExchangeClientId { get; set; }
         public string ExchangeOnlineServer { get; set; }
         public string ExchangeResourceId { get; set; }
-        public string SharedMailBoxCredentials { get; set; }
+        public string SharedMailBoxUserNameSecret { get; set; }
+        public string SharedMailBoxPasswordSecret { get; set; }
+        public string KeyVaultUri { get; set; }
+        public string KeyVaultTenantId { get; set; }
+        public string KeyVaultClientId { get; set; }
+        public string KeyVaultClientSecret { get; set; }
     }
 }
