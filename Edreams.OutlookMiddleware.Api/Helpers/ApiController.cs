@@ -96,13 +96,26 @@ namespace Edreams.OutlookMiddleware.Api.Helpers
             }
             catch (EdreamsException ex)
             {
-                return BadRequest(ex.Message);
+                return InternalServerError(ex);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
                 return ActionResult(500, 0);
             }
+        }
+
+        private IActionResult InternalServerError(EdreamsException ex)
+        {
+            return StatusCode(500, new ApiErrorResult
+            {
+                CorrelationId = Guid.NewGuid(),
+                StatusCode = "500",
+                TimeStamp = DateTime.UtcNow,
+                ApiVersion = $"{Assembly.GetEntryAssembly()?.GetName().Version}",
+                ErrorCode = $"{ex.Code}",
+                ErrorMessage = ex.Message
+            });
         }
 
         private IActionResult ActionResult(int status, long elapsedMilliseconds)

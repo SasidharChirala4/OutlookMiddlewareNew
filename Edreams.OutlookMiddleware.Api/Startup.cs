@@ -3,6 +3,8 @@ using Edreams.OutlookMiddleware.Api.Middleware;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common.Configuration;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Common.Exceptions;
+using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Edreams.OutlookMiddleware.Common.Exchange;
 using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
 using Edreams.OutlookMiddleware.Common.Helpers;
@@ -46,6 +48,7 @@ namespace Edreams.OutlookMiddleware.Api
 
             services.AddSingleton<IExchangeClientFactory, ExchangeClientFactory>();
             services.AddSingleton<IKeyVaultClientFactory, KeyVaultClientFactory>();
+            services.AddSingleton<IExceptionFactory, ExceptionFactory>();
 
             services.AddSingleton<IEdreamsConfiguration>(_ => new EdreamsConfiguration
             {
