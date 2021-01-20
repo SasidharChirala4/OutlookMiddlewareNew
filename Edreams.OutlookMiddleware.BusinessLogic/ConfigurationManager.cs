@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Azure;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Exceptions;
@@ -78,6 +80,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             try
             {
+                // Prepare the Azure KeyVault client options from the application configuration.
                 KeyVaultClientOptions keyVaultClientOptions = new KeyVaultClientOptions
                 {
                     VaultUri = _configuration.KeyVaultUri,
@@ -86,6 +89,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                     ClientSecret = _configuration.KeyVaultClientSecret
                 };
 
+                // Use the client options to authenticate and create the Azure KeyVault client.
                 return _keyVaultClientFactory.AuthenticateAndCreateClient(keyVaultClientOptions);
             }
             catch (Exception ex)
@@ -109,6 +113,18 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 };
 
                 return await _exchangeClientFactory.AuthenticateAndCreateClient(exchangeClientOptions);
+            }
+            catch (AggregateException aggregateException)
+            {
+                aggregateException.Handle(ex =>
+                {
+                    if (ex is RequestFailedException)
+                    {
+                        return true;
+                    }
+
+                    return false;
+                });
             }
             catch (Exception ex)
             {
