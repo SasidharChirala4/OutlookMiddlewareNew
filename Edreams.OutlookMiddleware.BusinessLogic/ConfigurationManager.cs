@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Azure;
+using Azure.Identity;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Exceptions;
@@ -120,11 +120,17 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 {
                     if (ex is RequestFailedException)
                     {
-                        return true;
+                        throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.KEYVAULT_REQUEST_FAULT, ex);
                     }
 
                     return false;
                 });
+
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, aggregateException);
+            }
+            catch (AuthenticationFailedException ex)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.KEYVAULT_AUTHENTICATION_FAULT, ex);
             }
             catch (Exception ex)
             {
