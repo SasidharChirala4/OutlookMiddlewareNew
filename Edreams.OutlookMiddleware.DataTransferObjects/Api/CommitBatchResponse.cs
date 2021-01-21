@@ -7,5 +7,6 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
     {
         public Guid BatchId { get; set; }
         public int NumberOfEmails { get; set; }
+        public int NumberOfFiles { get; set; }
     }
 }

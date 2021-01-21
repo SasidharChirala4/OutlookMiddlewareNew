@@ -71,6 +71,19 @@ namespace Edreams.OutlookMiddleware.Api.Helpers
             });
         }
 
+        protected void Validate<T>(T routeParam, T requestParam, string validationMessage) where T : struct
+        {
+            if (!routeParam.Equals(requestParam))
+            {
+                EdreamsValidationException validationException = new EdreamsValidationException
+                {
+                    ValidationErrors = { validationMessage }
+                };
+
+                throw validationException;
+            }
+        }
+
         private async Task<IActionResult> Try(Func<Task<IActionResult>> action)
         {
             try
@@ -83,13 +96,26 @@ namespace Edreams.OutlookMiddleware.Api.Helpers
             }
             catch (EdreamsException ex)
             {
-                return BadRequest(ex.Message);
+                return InternalServerError(ex);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
                 return ActionResult(500, 0);
             }
+        }
+
+        private IActionResult InternalServerError(EdreamsException ex)
+        {
+            return StatusCode(500, new ApiErrorResult
+            {
+                CorrelationId = Guid.NewGuid(),
+                StatusCode = "500",
+                TimeStamp = DateTime.UtcNow,
+                ApiVersion = $"{Assembly.GetEntryAssembly()?.GetName().Version}",
+                ErrorCode = $"{ex.Code}",
+                ErrorMessage = ex.Message
+            });
         }
 
         private IActionResult ActionResult(int status, long elapsedMilliseconds)

@@ -276,14 +276,14 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             webApiRequest.AddHeader(_configuration.EdreamsTokenKey, _configuration.EdreamsTokenValue);
             var roughResult = await webApiClient.ExecuteAsync<ApiResult<List<T>>>(webApiRequest);
             GoodResponse(webApiRequest.Method, roughResult, skipResponseCheck);
-            
+
             if (roughResult.StatusCode.Equals(HttpStatusCode.OK))
             {
                 return roughResult.Content;
             }
             return null;
         }
-               
+
         /// <summary>
         /// Method to update object
         /// </summary>
@@ -495,7 +495,7 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             {
                 if (!skipResponseCheck)
                 {
-                    throw new EdreamsException($"Error in RestResponse Method[{method}] StatusCode[{result.StatusCode}] Message[{result.ErrorMessage}] Exception[{result.ErrorException}]");
+                    throw new EdreamsException(EdreamsExceptionCode.UNKNOWN_FAULT, $"Error in RestResponse Method[{method}] StatusCode[{result.StatusCode}] Message[{result.ErrorMessage}] Exception[{result.ErrorException}]");
                 }
                 return false;
             }
@@ -503,7 +503,7 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             {
                 if (!skipResponseCheck)
                 {
-                    throw new EdreamsException($"[{result.StatusCode}] in RestResponse Method[{method}] StatusCode[{result.StatusCode}] Content[{result.Content}]");
+                    throw new EdreamsException(EdreamsExceptionCode.UNKNOWN_FAULT, $"[{result.StatusCode}] in RestResponse Method[{method}] StatusCode[{result.StatusCode}] Content[{result.Content}]");
                 }
                 return false;
             }
