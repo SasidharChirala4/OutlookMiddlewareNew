@@ -3,8 +3,14 @@ using Edreams.OutlookMiddleware.Api.Middleware;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common.Configuration;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Common.Exceptions;
+using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
+using Edreams.OutlookMiddleware.Common.Exchange;
+using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
 using Edreams.OutlookMiddleware.Common.Helpers;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
+using Edreams.OutlookMiddleware.Common.KeyVault;
+using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
 using Edreams.OutlookMiddleware.Common.Security;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.Common.Validation;
@@ -40,13 +46,27 @@ namespace Edreams.OutlookMiddleware.Api
             services.AddTransient(typeof(IRestHelper<>), typeof(RestHelper<>));
             services.AddSingleton<IValidator, Validator>();
 
+            services.AddSingleton<IExchangeClientFactory, ExchangeClientFactory>();
+            services.AddSingleton<IKeyVaultClientFactory, KeyVaultClientFactory>();
+            services.AddSingleton<IExceptionFactory, ExceptionFactory>();
+
             services.AddSingleton<IEdreamsConfiguration>(_ => new EdreamsConfiguration
             {
                 StoragePath = _configuration.GetValue<string>("StoragePath"),
                 EdreamsExtensibilityUrl = _configuration.GetValue<string>("EdreamsExtensibilityUrl"),
                 EdreamsTokenKey = _configuration.GetValue<string>("EdreamsTokenKey"),
                 EdreamsTokenValue = _configuration.GetValue<string>("EdreamsTokenValue"),
-                MaxNumberPendingCategories = _configuration.GetValue<int>("MaxNumberPendingCategories")
+                MaxNumberPendingCategories = _configuration.GetValue<int>("MaxNumberPendingCategories"),
+                ExchangeAuthority = _configuration.GetValue<string>("ExchangeAuthority"),
+                ExchangeClientId = _configuration.GetValue<string>("ExchangeClientId"),
+                ExchangeOnlineServer = _configuration.GetValue<string>("ExchangeOnlineServer"),
+                ExchangeResourceId = _configuration.GetValue<string>("ExchangeResourceId"),
+                SharedMailBoxUserNameSecret = _configuration.GetValue<string>("SharedMailBoxUserNameSecret"),
+                SharedMailBoxPasswordSecret = _configuration.GetValue<string>("SharedMailBoxPasswordSecret"),
+                KeyVaultUri = _configuration.GetValue<string>("KeyVaultUri"),
+                KeyVaultTenantId = _configuration.GetValue<string>("KeyVaultTenantId"),
+                KeyVaultClientId = _configuration.GetValue<string>("KeyVaultClientId"),
+                KeyVaultClientSecret = _configuration.GetValue<string>("KeyVaultClientSecret")
             });
 
             services.AddControllers();

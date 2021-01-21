@@ -61,6 +61,22 @@
             </summary>
             <param name="responseData">The response data that should be wrapped by this object.</param>
         </member>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.ApiErrorResult">
+            <summary>
+            Wrapper object used as common response type for all endpoints which return an HTTP 500 Internal Server Error.
+            </summary>
+            <seealso cref="T:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult" />
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.ApiErrorResult.ErrorCode">
+            <summary>
+            The error code.
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.ApiErrorResult.ErrorMessage">
+            <summary>
+            The error message.
+            </summary>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.Base.Response">
             <summary>
             Base class for response objects.
@@ -120,6 +136,16 @@
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.GetPendingCategoriesResponse.CategorizationRequests">
             <summary>
              List of Categories Request
+            </summary>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.GetSharedMailBoxResponse">
+            <summary>
+            Response object for the GetSharedMailBox endpoint.
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.GetSharedMailBoxResponse.EmailAddress">
+            <summary>
+            SharedMailBox EMail
             </summary>
         </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.GetStatusResponse">
