@@ -8,6 +8,8 @@ namespace Edreams.OutlookMiddleware.Model
     {
         public Guid BatchId { get; set; }
 
+        public DateTime? ReleaseDate { get; set; }
+
         public TransactionStatus Status { get; set; }
 
         public DateTime? Scheduled { get; set; }
