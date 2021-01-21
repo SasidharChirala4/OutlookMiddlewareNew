@@ -68,4 +68,21 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
             }
         }
     }
+
+    /// <summary>
+    /// Wrapper object used as common response type for all endpoints which return an HTTP 500 Internal Server Error.
+    /// </summary>
+    /// <seealso cref="ApiResult" />
+    public class ApiErrorResult : ApiResult
+    {
+        /// <summary>
+        /// The error code.
+        /// </summary>
+        public string ErrorCode { get; set; }
+
+        /// <summary>
+        /// The error message.
+        /// </summary>
+        public string ErrorMessage { get; set; }
+    }
 }

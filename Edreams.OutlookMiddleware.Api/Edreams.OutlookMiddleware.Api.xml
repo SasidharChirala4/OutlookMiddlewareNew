@@ -82,6 +82,32 @@
             <param name="updatePendingCategoriesRequest">Request of UpdatePendingCategories</param>
             <returns></returns>
         </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController">
+            <summary>
+            API controller containing Get operation of the mail resource
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IConfigurationManager,Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController" /> class.
+            </summary>
+            <param name="configurationManager">The configuration service.</param>
+            <param name="logger">The logger.</param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController.GetSharedMailBox">
+            <summary>
+            Gets the Outlook Middleware shared mailbox.
+            </summary>
+            <returns>
+            The Outlook Middleware shared mailbox, if available. <see cref="F:System.String.Empty"/> otherwise.
+            This endpoint should always return an HTTP 200 OK. If it doesn't, there is something wrong.
+            </returns>
+            <remarks>
+            This endpoint will return the Outlook Middleware mailbox.
+            The Outlook Middleware Web API will run using a service account
+            and this endpoint will return the corresponding mailbox identifier.
+            </remarks>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.Api.Controllers.FilesController">
             <summary>
             Group of endpoints to handle different operations related to File(s) 
