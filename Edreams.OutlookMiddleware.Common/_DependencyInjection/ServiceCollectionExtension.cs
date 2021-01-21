@@ -16,8 +16,16 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
                 EdreamsTokenKey = configuration.GetValue<string>("EdreamsTokenKey"),
                 EdreamsTokenValue = configuration.GetValue<string>("EdreamsTokenValue"),
                 MaxNumberPendingCategories = configuration.GetValue<int>("MaxNumberPendingCategories"),
-                ServiceBusConnectionString = configuration.GetValue<string>("ServiceBusConnectionString"),
-                ServiceBusQueueName = configuration.GetValue<string>("ServiceBusQueueName")
+                ExchangeAuthority = configuration.GetValue<string>("ExchangeAuthority"),
+                ExchangeClientId = configuration.GetValue<string>("ExchangeClientId"),
+                ExchangeOnlineServer = configuration.GetValue<string>("ExchangeOnlineServer"),
+                ExchangeResourceId = configuration.GetValue<string>("ExchangeResourceId"),
+                SharedMailBoxUserNameSecret = configuration.GetValue<string>("SharedMailBoxUserNameSecret"),
+                SharedMailBoxPasswordSecret = configuration.GetValue<string>("SharedMailBoxPasswordSecret"),
+                KeyVaultUri = configuration.GetValue<string>("KeyVaultUri"),
+                KeyVaultTenantId = configuration.GetValue<string>("KeyVaultTenantId"),
+                KeyVaultClientId = configuration.GetValue<string>("KeyVaultClientId"),
+                KeyVaultClientSecret = configuration.GetValue<string>("KeyVaultClientSecret")
             });
         }
     }

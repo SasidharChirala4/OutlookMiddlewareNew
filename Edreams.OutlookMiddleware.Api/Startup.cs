@@ -51,25 +51,6 @@ namespace Edreams.OutlookMiddleware.Api
             services.AddSingleton<IKeyVaultClientFactory, KeyVaultClientFactory>();
             services.AddSingleton<IExceptionFactory, ExceptionFactory>();
 
-            services.AddSingleton<IEdreamsConfiguration>(_ => new EdreamsConfiguration
-            {
-                StoragePath = _configuration.GetValue<string>("StoragePath"),
-                EdreamsExtensibilityUrl = _configuration.GetValue<string>("EdreamsExtensibilityUrl"),
-                EdreamsTokenKey = _configuration.GetValue<string>("EdreamsTokenKey"),
-                EdreamsTokenValue = _configuration.GetValue<string>("EdreamsTokenValue"),
-                MaxNumberPendingCategories = _configuration.GetValue<int>("MaxNumberPendingCategories"),
-                ExchangeAuthority = _configuration.GetValue<string>("ExchangeAuthority"),
-                ExchangeClientId = _configuration.GetValue<string>("ExchangeClientId"),
-                ExchangeOnlineServer = _configuration.GetValue<string>("ExchangeOnlineServer"),
-                ExchangeResourceId = _configuration.GetValue<string>("ExchangeResourceId"),
-                SharedMailBoxUserNameSecret = _configuration.GetValue<string>("SharedMailBoxUserNameSecret"),
-                SharedMailBoxPasswordSecret = _configuration.GetValue<string>("SharedMailBoxPasswordSecret"),
-                KeyVaultUri = _configuration.GetValue<string>("KeyVaultUri"),
-                KeyVaultTenantId = _configuration.GetValue<string>("KeyVaultTenantId"),
-                KeyVaultClientId = _configuration.GetValue<string>("KeyVaultClientId"),
-                KeyVaultClientSecret = _configuration.GetValue<string>("KeyVaultClientSecret")
-            });
-
             services.AddConfiguration(_configuration);
             services.AddControllers();
             services.AddBusinessLogic();
