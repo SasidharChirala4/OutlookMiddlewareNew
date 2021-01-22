@@ -7,7 +7,7 @@ namespace Edreams.OutlookMiddleware.DataAccess.Repositories
     {
         public TransactionsRepository(
             OutlookMiddlewareDbContext dbContext, ISecurityContext securityContext)
-            : base(dbContext, dbContext.Transactions, securityContext)
+            : base(dbContext, dbContext.TransactionQueue, securityContext)
         {
 
         }

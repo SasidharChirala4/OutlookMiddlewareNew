@@ -11,7 +11,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<Email> Emails { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<CategorizationRequest> CategorizationRequests { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Transaction> TransactionQueue { get; set; }
         public DbSet<HistoricTransaction> TransactionHistory { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -90,7 +90,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
 
             modelBuilder.Entity<Transaction>(e =>
             {
-                e.ToTable("Transactions");
+                e.ToTable("TransactionQueue");
                 e.HasKey(x => x.Id).IsClustered(false);
                 e.HasIndex(x => x.SysId).IsUnique().IsClustered();
                 e.Property(x => x.SysId).ValueGeneratedOnAdd();
