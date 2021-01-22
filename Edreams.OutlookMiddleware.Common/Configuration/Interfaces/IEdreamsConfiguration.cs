@@ -17,5 +17,7 @@
         string KeyVaultTenantId { get; set; }
         string KeyVaultClientId { get; set; }
         string KeyVaultClientSecret { get; set; }
+        string ServiceBusConnectionString { get; set; }
+        string ServiceBusQueueName { get; set; }
     }
 }

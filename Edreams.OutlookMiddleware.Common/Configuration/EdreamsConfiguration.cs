@@ -19,5 +19,7 @@ namespace Edreams.OutlookMiddleware.Common.Configuration
         public string KeyVaultTenantId { get; set; }
         public string KeyVaultClientId { get; set; }
         public string KeyVaultClientSecret { get; set; }
+        public string ServiceBusConnectionString { get; set; }
+        public string ServiceBusQueueName { get; set; }
     }
 }
