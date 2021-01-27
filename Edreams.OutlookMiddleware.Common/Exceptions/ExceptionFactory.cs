@@ -8,6 +8,11 @@ namespace Edreams.OutlookMiddleware.Common.Exceptions
 {
     public class ExceptionFactory : IExceptionFactory
     {
+        public Exception CreateFromCode(EdreamsExceptionCode code, params object[] args)
+        {
+            return CreateFromCode(code, null, args);
+        }
+
         public Exception CreateFromCode(EdreamsExceptionCode code, Exception innerException, params object[] args)
         {
             string message = string.Empty;

@@ -16,8 +16,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Edreams.OutlookMiddleware.Common.ServiceBus\Edreams.OutlookMiddleware.Common.ServiceBus.csproj" />
+    <ProjectReference Include="..\Edreams.OutlookMiddleware.Common\Edreams.OutlookMiddleware.Common.csproj" />
     <ProjectReference Include="..\Edreams.OutlookMiddleware.DataAccess\Edreams.OutlookMiddleware.DataAccess.csproj" />
     <ProjectReference Include="..\Edreams.OutlookMiddleware.DataTransferObjects\Edreams.OutlookMiddleware.DataTransferObjects.csproj" />
+    <ProjectReference Include="..\Edreams.OutlookMiddleware.Enums\Edreams.OutlookMiddleware.Enums.csproj" />
     <ProjectReference Include="..\Edreams.OutlookMiddleware.Mapping\Edreams.OutlookMiddleware.Mapping.csproj" />
     <ProjectReference Include="..\Edreams.OutlookMiddleware.Model\Edreams.OutlookMiddleware.Model.csproj" />
   </ItemGroup>

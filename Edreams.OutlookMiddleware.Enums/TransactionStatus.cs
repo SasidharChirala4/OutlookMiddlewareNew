@@ -1,4 +1,4 @@
-﻿namespace Edreams.OutlookMiddleware.Model.Enums
+﻿namespace Edreams.OutlookMiddleware.Enums
 {
     /// <summary>
     /// Possible statuses for a transaction.

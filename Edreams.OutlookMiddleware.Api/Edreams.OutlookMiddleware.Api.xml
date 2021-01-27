@@ -195,6 +195,34 @@
             </summary>
             <returns>This endpoint should always return an HTTP 200 OK. If it doesn't, there is something wrong.</returns>
         </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.TransactionsController">
+            <summary>
+            Group of endpoints that work with asynchronous transactions.
+            </summary>
+            <remarks>
+            Asynchronous transactions are used by the Outlook Middleware to process long-running tasks
+            in the background. The Outlook Middleware uses Worker Services installed as Windows Services
+            to perform these long-running processes. Transactions represent these long-running processes
+            and information about those transactions can be retrieved using these endpoints.
+            </remarks>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.TransactionsController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ITransactionQueueManager,Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.TransactionsController" /> class.
+            </summary>
+            <param name="transactionQueueManager">The transaction queue manager.</param>
+            <param name="logger">The logger.</param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.TransactionsController.GetTransactionQueueStatistics">
+            <summary>
+            Gets some statistics about the Azure ServiceBus transaction queue.
+            </summary>
+            <remarks>
+            This HTTP GET endpoint connects to the configured Azure ServiceBus transaction queue and
+            retrieves statistics like number of active messages, number of scheduled messages and
+            number of dead lettered messages.
+            </remarks>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.Api.Helpers.ApiController">
             <summary>
             Base class for all the Controllers
