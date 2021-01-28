@@ -4,8 +4,12 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
 {
     public interface ICleanupManager
     {
-        Task<int> VerifyExpiration();
+        Task<int> ExpirePreloadedFiles();
 
-        Task<int> Cleanup();
+        Task<int> ExpireTransactionHistory();
+
+        Task<int> CleanupPreloadedFiles();
+
+        Task<int> CleanupTransactions();
     }
 }

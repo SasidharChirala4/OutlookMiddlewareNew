@@ -48,6 +48,11 @@
         /// <summary>
         /// Skipped the transactions
         /// </summary>
-        Skipped
+        Skipped,
+
+        /// <summary>
+        /// The transaction has expired and is marked for cleanup.
+        /// </summary>
+        Expired
     }
 }
