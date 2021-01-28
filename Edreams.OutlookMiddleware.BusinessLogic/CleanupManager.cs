@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
@@ -94,12 +95,15 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // If an expired preloaded file was found...
             if (preloadedFile != null)
             {
-                // Remove all preloaded files that are related to the same batch from the database.
-                int preloadedFileCount = await _preloadedFilesRepository.RawSql(
-                    "DELETE FROM PreloadedFiles WHERE BatchId = {0}", preloadedFile.BatchId);
+                // Get a list of all related preloaded files based on the batch ID.
+                IList<Guid> preloadedFileIds = await _preloadedFilesRepository.FindAndProject(
+                    x => x.BatchId == preloadedFile.BatchId, proj => proj.Id);
+
+                // Remove the expired preloaded files for the one specific batch.
+                await _preloadedFilesRepository.Delete(preloadedFileIds);
 
                 // Return the number of preloaded files that have been removed.
-                return preloadedFileCount;
+                return preloadedFileIds.Count;
             }
 
             // Return zero if no expired preloaded files were found.
@@ -139,7 +143,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
                 // Commit the transaction.
                 transactionScope.Commit();
-                
+
                 // Return the total count of records removed from the database.
                 // Number of files + number of emails + batch + transaction.
                 return fileIds.Count + emailIds.Count + 2;

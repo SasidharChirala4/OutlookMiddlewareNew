@@ -32,7 +32,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
                 ICleanupManager cleanupLogic = scope.ServiceProvider.GetService<ICleanupManager>();
 
                 Stopwatch sw = Stopwatch.StartNew();
-                int workDone = await cleanupLogic.Cleanup();
+                int workDone = await cleanupLogic.CleanupPreloadedFiles();
                 sw.Stop();
 
                 _logger.LogInformation($"CleanupWorker: {workDone} records are cleaned in {sw.ElapsedMilliseconds}ms!");
