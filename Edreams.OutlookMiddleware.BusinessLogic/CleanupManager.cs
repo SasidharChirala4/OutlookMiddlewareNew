@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
@@ -62,7 +61,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             return preloadedFiles.Count;
         }
 
-        public async Task<int> ExpireTransactionHistory()
+        public async Task<int> ExpireTransactions()
         {
             // Read the time in minutes for expiry from configuration and calculate the datetime offset.
             int expiry = _configuration.TransactionHistoryExpiry;
