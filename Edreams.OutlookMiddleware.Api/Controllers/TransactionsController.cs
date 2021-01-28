@@ -2,6 +2,7 @@
 using Edreams.OutlookMiddleware.Api.Helpers;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
+using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
@@ -39,7 +40,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// number of dead lettered messages.
         /// </remarks>
         [HttpGet("queue/statistics")]
-        [SwaggerResponse(200, "Successfully returns a GetTransactionQueueStatisticsResponse object.", typeof(ApiResult))]
+        [SwaggerResponse(200, "Successfully returns a GetTransactionQueueStatisticsResponse object.", typeof(ApiResult<GetTransactionQueueStatisticsResponse>))]
         [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
         public async Task<IActionResult> GetTransactionQueueStatistics()
         {

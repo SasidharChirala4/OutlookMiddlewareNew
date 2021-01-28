@@ -43,6 +43,13 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         /// <returns>The updated transaction.</returns>
         Task<TransactionDto> UpdateTransactionStatus(Guid transactionId, TransactionStatus status);
 
+        /// <summary>
+        /// Updates the status of an existing transaction.
+        /// </summary>
+        /// <param name="transactionId">The unique identifier for the transaction.</param>
+        /// <param name="status">The new transaction status.</param>
+        /// <param name="engine">The name of the engine changing the status.</param>
+        /// <returns>The updated transaction.</returns>
         Task<TransactionDto> UpdateTransactionStatus(Guid transactionId, TransactionStatus status, string engine);
 
         /// <summary>
