@@ -20,7 +20,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="configurationManager">The configuration service.</param>
         /// <param name="logger">The logger.</param>
-        public ConfigurationController(IConfigurationManager configurationManager, ILogger<ConfigurationController> logger)
+        public ConfigurationController(
+            IConfigurationManager configurationManager, ILogger<ConfigurationController> logger)
             : base(configurationManager, logger) { }
 
         /// <summary>
@@ -37,11 +38,10 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </remarks>
         [HttpGet("sharedmailbox")]
         [SwaggerResponse(200, "Successfully returns a GetSharedMailBox object.", typeof(ApiResult))]
-        [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiResult))]
+        [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
         public async Task<IActionResult> GetSharedMailBox()
         {
             return await ExecuteManager(manager => manager.GetSharedMailBox());
         }
-
     }
 }

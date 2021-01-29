@@ -2,8 +2,8 @@
 using Edreams.OutlookMiddleware.BusinessLogic.Factories;
 using Edreams.OutlookMiddleware.BusinessLogic.Factories.Interfaces;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
+using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Model;
-using Edreams.OutlookMiddleware.Model.Enums;
 using FluentAssertions;
 using Moq;
 using Xunit;

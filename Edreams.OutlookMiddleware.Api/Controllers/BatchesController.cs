@@ -51,7 +51,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [HttpPost("{batchId}/commit")]
         [SwaggerResponse(200, "Successfully committed the specified batch of files to be processed by the Outlook Middleware.", typeof(ApiResult<CommitBatchResponse>))]
         [SwaggerResponse(404, "The specified batch does not exist and cannot be committed.", typeof(ApiResult))]
-        [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiResult))]
+        [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
         public Task<IActionResult> CommitBatch(Guid batchId, CommitBatchRequest request)
         {
             return ExecuteManager(x =>
@@ -77,7 +77,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [HttpDelete("{batchId}/cancel")]
         [SwaggerResponse(200, "Successfully cancelled the specified batch of emails to be processed by the Outlook Middleware.", typeof(ApiResult<CommitBatchResponse>))]
         [SwaggerResponse(404, "The specified batch does not exist and cannot be cancelled.", typeof(ApiResult))]
-        [SwaggerResponse(500, "An internal server error has occurred, this is not your fault.", typeof(ApiResult))]
+        [SwaggerResponse(500, "An internal server error has occurred, this is not your fault.", typeof(ApiErrorResult))]
         public Task<IActionResult> CancelBatch(Guid batchId, CancelBatchRequest request)
         {
             return ExecuteManager(x =>

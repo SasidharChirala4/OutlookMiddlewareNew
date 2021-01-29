@@ -72,7 +72,7 @@ namespace Edreams.OutlookMiddleware.Common.ServiceBus
                 {
                     // Deserialize the message data from the Azure ServiceBus 
                     ServiceBusMessage<T> message = serviceBusMessage.Body.ToObjectFromJson<ServiceBusMessage<T>>();
-                    
+
                     // Call the asynchronous method delegate to process the deserialized message, but
                     // don't await its result right now. We need to keep an eye on its locking timeout.
                     Task processingTask = onProcessing(message, cancellationToken);
@@ -113,12 +113,13 @@ namespace Edreams.OutlookMiddleware.Common.ServiceBus
         /// <summary>
         /// Gets some messaging statistics for the specified Azure ServiceBus Queue.
         /// </summary>
+        /// <param name="connectionString">The Azure Service Bus connection string.</param>
         /// <param name="queueName">Name of the Azure Service Bus queue to get the statistics for.</param>
         /// <param name="cancellationToken">A cancellation token that can cancel the request to Azure ServiceBus.</param>
         /// <returns>A <see cref="ServiceBusQueueStatistics" /> object containing messaging statistics.</returns>
-        public async Task<ServiceBusQueueStatistics> GetQueueStatistics(string queueName, CancellationToken cancellationToken = default)
+        public async Task<ServiceBusQueueStatistics> GetQueueStatistics(string connectionString, string queueName, CancellationToken cancellationToken = default)
         {
-            ManagementClient managementClient = new ManagementClient(_configuration.ServiceBusConnectionString);
+            ManagementClient managementClient = new ManagementClient(connectionString);
             QueueRuntimeInfo queueRuntimeInfo = await managementClient.GetQueueRuntimeInfoAsync(queueName, cancellationToken);
             return new ServiceBusQueueStatistics
             {

@@ -1,6 +1,6 @@
 ﻿using System;
+using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Model.Base;
-using Edreams.OutlookMiddleware.Model.Enums;
 
 namespace Edreams.OutlookMiddleware.Model
 {

@@ -30,9 +30,10 @@ namespace Edreams.OutlookMiddleware.Common.ServiceBus.Interfaces
         /// <summary>
         /// Gets some messaging statistics for the specified Azure ServiceBus Queue.
         /// </summary>
+        /// <param name="connectionString">The Azure Service Bus connection string.</param>
         /// <param name="queueName">Name of the Azure Service Bus queue to get the statistics for.</param>
         /// <param name="cancellationToken">A cancellation token that can cancel the request to Azure ServiceBus.</param>
         /// <returns>A <see cref="ServiceBusQueueStatistics" /> object containing messaging statistics.</returns>
-        Task<ServiceBusQueueStatistics> GetQueueStatistics(string queueName, CancellationToken cancellationToken = default);
+        Task<ServiceBusQueueStatistics> GetQueueStatistics(string connectionString, string queueName, CancellationToken cancellationToken = default);
     }
 }

@@ -49,7 +49,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [HttpPost]
         [SwaggerResponse(200, "Successfully created mail by Outlook Middleware.", typeof(ApiResult<CommitBatchResponse>))]
         [SwaggerResponse(404, "The specified batch does not exist and cannot be committed.", typeof(ApiResult))]
-        [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiResult))]
+        [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
         public Task<IActionResult> CreateMail(CreateMailRequest request)
         {
             return ExecuteManager(x => x.CreateMail(request));
