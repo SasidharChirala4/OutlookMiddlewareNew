@@ -19,7 +19,7 @@
         string KeyVaultClientSecret { get; set; }
         string ServiceBusConnectionString { get; set; }
         string ServiceBusQueueName { get; set; }
-        int PreloadedFilesExpiry { get; set; }
-        int TransactionHistoryExpiry { get; set; }
+        int PreloadedFilesExpiryInMinutes { get; set; }
+        int TransactionHistoryExpiryInMinutes { get; set; }
     }
 }

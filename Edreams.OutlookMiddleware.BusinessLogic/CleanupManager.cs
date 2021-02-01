@@ -41,7 +41,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         public async Task<int> ExpirePreloadedFiles()
         {
             // Read the time in minutes for expiry from configuration and calculate the datetime offset.
-            int expiry = _configuration.PreloadedFilesExpiry;
+            int expiry = _configuration.PreloadedFilesExpiryInMinutes;
             DateTime expirationDateTime = DateTime.UtcNow.AddMinutes(-expiry);
 
             // Search for pending preloaded files that are older than the expiry offset.
@@ -64,7 +64,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         public async Task<int> ExpireTransactions()
         {
             // Read the time in minutes for expiry from configuration and calculate the datetime offset.
-            int expiry = _configuration.TransactionHistoryExpiry;
+            int expiry = _configuration.TransactionHistoryExpiryInMinutes;
             DateTime expirationDateTime = DateTime.UtcNow.AddMinutes(-expiry);
 
             // Search for succeeded transactions that are older than the expiry offset.
@@ -87,9 +87,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         public async Task<int> CleanupPreloadedFiles()
         {
-            // Find the oldest expired preloaded file in the database.
+            // Find the oldest expired or cancelled preloaded file in the database.
             FilePreload preloadedFile = await _preloadedFilesRepository.GetFirstAscending(
-                x => x.Status == EmailPreloadStatus.Expired, o => o.PreloadedOn);
+                x => x.Status == EmailPreloadStatus.Expired || x.Status == EmailPreloadStatus.Cancelled, o => o.PreloadedOn);
 
             // If an expired preloaded file was found...
             if (preloadedFile != null)

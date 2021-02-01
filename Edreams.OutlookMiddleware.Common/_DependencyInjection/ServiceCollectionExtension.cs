@@ -26,8 +26,8 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
                 KeyVaultTenantId = configuration.GetValue<string>("KeyVaultTenantId"),
                 KeyVaultClientId = configuration.GetValue<string>("KeyVaultClientId"),
                 KeyVaultClientSecret = configuration.GetValue<string>("KeyVaultClientSecret"),
-                PreloadedFilesExpiry = configuration.GetValue<int>("PreloadedFilesExpiry"),
-                TransactionHistoryExpiry = configuration.GetValue<int>("TransactionHistoryExpiry")
+                PreloadedFilesExpiryInMinutes = configuration.GetValue<int>("PreloadedFilesExpiryInMinutes"),
+                TransactionHistoryExpiryInMinutes = configuration.GetValue<int>("TransactionHistoryExpiryInMinutes")
             });
         }
     }
