@@ -19,5 +19,6 @@
         string KeyVaultClientSecret { get; set; }
         string ServiceBusConnectionString { get; set; }
         string ServiceBusQueueName { get; set; }
+        int TransactionSchedulingIntervalInSeconds { get; set; }
     }
 }

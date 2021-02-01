@@ -1,5 +1,7 @@
 ﻿using Edreams.OutlookMiddleware.Common.Configuration;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Common.Exceptions;
+using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,8 +29,15 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
                 KeyVaultClientId = configuration.GetValue<string>("KeyVaultClientId"),
                 KeyVaultClientSecret = configuration.GetValue<string>("KeyVaultClientSecret"),
                 ServiceBusConnectionString = configuration.GetValue<string>("ServiceBusConnectionString"),
-                ServiceBusQueueName = configuration.GetValue<string>("ServiceBusQueueName")
+                ServiceBusQueueName = configuration.GetValue<string>("ServiceBusQueueName"),
+                TransactionSchedulingIntervalInSeconds =
+                    configuration.GetValue<int>("TransactionSchedulingIntervalInSeconds")
             });
+        }
+
+        public static void AddCommon(this IServiceCollection services)
+        {
+            services.AddSingleton<IExceptionFactory, ExceptionFactory>();
         }
     }
 }

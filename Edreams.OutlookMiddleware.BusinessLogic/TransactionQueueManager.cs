@@ -15,6 +15,7 @@ using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Mapping.Interfaces;
 using Edreams.OutlookMiddleware.Model;
+using Edreams.OutlookMiddleware.Model.Interfaces;
 using Microsoft.Azure.ServiceBus;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
@@ -77,6 +78,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         public async Task<TransactionDto> GetNextTransaction()
         {
+            await _transactionRepository.RawSql("WAITFOR DELAY '01:00:00'");
+            
             // Build the predicate that searches for all queued transactions that have a release date in the past.
             Expression<Func<Transaction, bool>> predicate = x => x.Status == TransactionStatus.Queued && x.ReleaseDate.HasValue && x.ReleaseDate < DateTime.UtcNow;
 
@@ -216,7 +219,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
         }
 
-        private void UpdateTransactionStatus(Transaction transaction, TransactionStatus status)
+        private void UpdateTransactionStatus(ITransaction transaction, TransactionStatus status)
         {
             // Update the transaction status.
             transaction.Status = status;
