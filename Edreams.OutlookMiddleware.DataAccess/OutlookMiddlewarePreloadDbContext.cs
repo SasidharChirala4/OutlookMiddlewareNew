@@ -1,5 +1,5 @@
-﻿using Edreams.OutlookMiddleware.Model;
-using Edreams.OutlookMiddleware.Model.Enums;
+﻿using Edreams.OutlookMiddleware.Enums;
+using Edreams.OutlookMiddleware.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 

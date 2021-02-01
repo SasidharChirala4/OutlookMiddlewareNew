@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Mapping.Custom.Interfaces;
 using Edreams.OutlookMiddleware.Model;
-using Edreams.OutlookMiddleware.Model.Enums;
 
 namespace Edreams.OutlookMiddleware.Mapping.Custom
 {

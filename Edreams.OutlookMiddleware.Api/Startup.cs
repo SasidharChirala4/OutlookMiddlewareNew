@@ -2,8 +2,6 @@ using System.IO;
 using Edreams.OutlookMiddleware.Api.Middleware;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common._DependencyInjection;
-using Edreams.OutlookMiddleware.Common.Configuration;
-using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Edreams.OutlookMiddleware.Common.Exchange;
@@ -14,6 +12,7 @@ using Edreams.OutlookMiddleware.Common.KeyVault;
 using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
 using Edreams.OutlookMiddleware.Common.Security;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
+using Edreams.OutlookMiddleware.Common.ServiceBus._DependencyInjection;
 using Edreams.OutlookMiddleware.Common.Validation;
 using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Microsoft.AspNetCore.Authentication.Negotiate;
@@ -51,6 +50,7 @@ namespace Edreams.OutlookMiddleware.Api
             services.AddSingleton<IKeyVaultClientFactory, KeyVaultClientFactory>();
             services.AddSingleton<IExceptionFactory, ExceptionFactory>();
 
+            services.AddServiceBus();
             services.AddConfiguration(_configuration);
             services.AddControllers();
             services.AddBusinessLogic();

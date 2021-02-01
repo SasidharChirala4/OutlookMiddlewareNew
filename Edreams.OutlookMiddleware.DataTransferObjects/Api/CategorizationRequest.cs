@@ -1,4 +1,4 @@
-﻿using Edreams.OutlookMiddleware.Model.Enums;
+﻿using Edreams.OutlookMiddleware.Enums;
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
 {

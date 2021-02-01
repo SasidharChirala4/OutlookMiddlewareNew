@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading.Tasks;
 using Edreams.OutlookMiddleware.Api.Helpers;
-using Edreams.OutlookMiddleware.BusinessLogic;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;

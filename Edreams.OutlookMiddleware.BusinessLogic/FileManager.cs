@@ -4,8 +4,8 @@ using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
+using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Model;
-using Edreams.OutlookMiddleware.Model.Enums;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
@@ -60,7 +60,6 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
 
             throw new EdreamsException("Preloaded file not found!");
-
         }
     }
 }
