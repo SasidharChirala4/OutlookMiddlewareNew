@@ -250,5 +250,25 @@
             Response status of the set categeroies
             </summary>
         </member>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.TransactionDto">
+            <summary>
+            Contract that represents a transaction.
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.TransactionDto.Id">
+            <summary>
+            The unique transaction ID.
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.TransactionDto.BatchId">
+            <summary>
+            The unique batch ID related to this transaction.
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.TransactionDto.Status">
+            <summary>
+            The status for this transaction.
+            </summary>
+        </member>
     </members>
 </doc>
