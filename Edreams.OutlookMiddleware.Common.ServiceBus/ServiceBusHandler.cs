@@ -20,11 +20,9 @@ namespace Edreams.OutlookMiddleware.Common.ServiceBus
         /// <param name="configuration">The configuration.</param>
         /// <param name="logger">The logger.</param>
         public ServiceBusHandler(
-            IEdreamsConfiguration configuration,
-            ILogger<ServiceBusHandler> logger)
+            IEdreamsConfiguration configuration)
         {
             _configuration = configuration;
-            _logger = logger;
         }
 
         /// <summary>
