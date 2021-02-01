@@ -25,13 +25,13 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
             _logger = logger;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             // TODO: Replace current testing code with actual implementation.
-            while (!stoppingToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(10000, stoppingToken);
+                await Task.Delay(10000, cancellationToken);
 
                 ServiceBusMessage<Guid> serviceBusMessage = new ServiceBusMessage<Guid>
                 {
@@ -40,7 +40,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
                     QueuedOn = DateTime.UtcNow
                 };
 
-                await _serviceBusHandler.PostMessage(_configuration.ServiceBusQueueName, serviceBusMessage, stoppingToken);
+                await _serviceBusHandler.PostMessage(_configuration.ServiceBusQueueName, serviceBusMessage, cancellationToken);
             }
         }
     }

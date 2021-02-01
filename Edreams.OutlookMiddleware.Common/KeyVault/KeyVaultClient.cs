@@ -7,11 +7,14 @@ namespace Edreams.OutlookMiddleware.Common.KeyVault
     public class KeyVaultClient : IKeyVaultClient
     {
         private readonly SecretClient _secretClient;
+        private readonly KeyVaultClientOptions _clientOptions;
 
         public KeyVaultClient(
-            SecretClient secretClient)
+            SecretClient secretClient,
+            KeyVaultClientOptions clientOptions)
         {
             _secretClient = secretClient;
+            _clientOptions = clientOptions;
         }
 
         public async Task<string> GetSecret(string key)
