@@ -13,7 +13,6 @@ namespace Edreams.OutlookMiddleware.Common.ServiceBus
     public class ServiceBusHandler : IServiceBusHandler
     {
         private readonly IEdreamsConfiguration _configuration;
-        private readonly ILogger<ServiceBusHandler> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceBusHandler" /> class.

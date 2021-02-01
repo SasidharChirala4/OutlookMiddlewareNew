@@ -8,16 +8,13 @@ namespace Edreams.OutlookMiddleware.Common.Exchange
     public class ExchangeClient : IExchangeClient
     {
         private readonly ExchangeService _exchangeService;
-        private readonly ExchangeClientToken _exchangeClientToken;
         private readonly ExchangeClientOptions _exchangeClientOptions;
 
         public ExchangeClient(
             ExchangeService exchangeService,
-            ExchangeClientToken exchangeClientToken,
             ExchangeClientOptions exchangeClientOptions)
         {
             _exchangeService = exchangeService;
-            _exchangeClientToken = exchangeClientToken;
             _exchangeClientOptions = exchangeClientOptions;
         }
 
