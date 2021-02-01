@@ -13,6 +13,7 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
         {
             services.AddSingleton<IEdreamsConfiguration>(_ => new EdreamsConfiguration
             {
+                ServiceName = configuration.GetValue<string>("ServiceName"),
                 StoragePath = configuration.GetValue<string>("StoragePath"),
                 EdreamsExtensibilityUrl = configuration.GetValue<string>("EdreamsExtensibilityUrl"),
                 EdreamsTokenKey = configuration.GetValue<string>("EdreamsTokenKey"),

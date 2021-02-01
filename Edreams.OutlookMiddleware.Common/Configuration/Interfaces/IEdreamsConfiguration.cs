@@ -2,6 +2,7 @@
 {
     public interface IEdreamsConfiguration
     {
+        string ServiceName { get; set; }
         string StoragePath { get; set; }
         string EdreamsExtensibilityUrl { get; set; }
         string EdreamsTokenKey { get; set; }

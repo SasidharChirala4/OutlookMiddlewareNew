@@ -4,6 +4,7 @@ namespace Edreams.OutlookMiddleware.Common.Configuration
 {
     public class EdreamsConfiguration : IEdreamsConfiguration
     {
+        public string ServiceName { get; set; }
         public string StoragePath { get; set; }
         public string EdreamsExtensibilityUrl { get; set; }
         public string EdreamsTokenKey { get; set; }

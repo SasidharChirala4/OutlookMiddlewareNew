@@ -10,6 +10,8 @@ using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.Common.ServiceBus.Contracts;
 using Edreams.OutlookMiddleware.Common.ServiceBus.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
+using Edreams.OutlookMiddleware.Enums;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -113,7 +115,12 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
                     };
 
                     // Post the prepared message to the ServiceBus queue so that it can be processed by the upload engine.
-                    await _serviceBusHandler.PostMessage(_configuration.ServiceBusQueueName, serviceBusMessage, cancellationToken);
+                    await _serviceBusHandler.PostMessage(
+                        _configuration.ServiceBusQueueName, serviceBusMessage, cancellationToken);
+
+                    // Change the transaction status to scheduled.
+                    await _transactionQueueManager.UpdateTransactionStatus(
+                        nextTransaction.Id, TransactionStatus.Scheduled, _configuration.ServiceName);
                 }
             }
             catch (SqlException ex) when (ex.Number == -1)
@@ -131,6 +138,18 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
             catch (SqlException ex)
             {
                 throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SQLCLIENT_UNKNOWN_FAULT, ex);
+            }
+            catch (MessagingEntityNotFoundException ex)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_QUEUE_NOT_FOUND, ex);
+            }
+            catch (UnauthorizedException ex)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_UNAUTHORIZED, ex);
+            }
+            catch (ServiceBusException ex)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_CONNECTION_ERROR, ex);
             }
             catch (Exception ex)
             {
