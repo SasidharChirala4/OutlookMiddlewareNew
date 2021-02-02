@@ -17,6 +17,7 @@ namespace Edreams.OutlookMiddleware.Mapping.DependencyInjection
             services.AddTransient<IMapper<CreateMailRequest, FilePreload>, CreateEmailRequestToFilePreloadMapper>();
             services.AddTransient<IMapper<RecordLogRequest, LogEntry>, RecordLogRequestToLogEntryMapper>();
             services.AddTransient<IMapper<Transaction, TransactionDto>, TransactionToTransactionDtoMapper>();
+            services.AddTransient<IMapper<Transaction, HistoricTransaction>, TransactionToHistoricTransactionMapper>();
 
             services.AddSingleton<IPreloadedFilesToFilesMapper, PreloadedFilesToFilesMapper>();
         }

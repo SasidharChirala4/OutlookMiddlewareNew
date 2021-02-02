@@ -1,10 +1,11 @@
 ﻿using System;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Model.Base;
+using Edreams.OutlookMiddleware.Model.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Model
 {
-    public class Transaction : ModelBase, ILongSysId
+    public class Transaction : ModelBase, ILongSysId, ITransaction
     {
         public Guid BatchId { get; set; }
 

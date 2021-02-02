@@ -15,6 +15,7 @@ using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Mapping.Interfaces;
 using Edreams.OutlookMiddleware.Model;
+using Edreams.OutlookMiddleware.Model.Interfaces;
 using Microsoft.Azure.ServiceBus;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
@@ -216,7 +217,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
         }
 
-        private void UpdateTransactionStatus(Transaction transaction, TransactionStatus status)
+        private void UpdateTransactionStatus(ITransaction transaction, TransactionStatus status)
         {
             // Update the transaction status.
             transaction.Status = status;

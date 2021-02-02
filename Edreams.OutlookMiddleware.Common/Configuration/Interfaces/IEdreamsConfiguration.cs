@@ -2,6 +2,7 @@
 {
     public interface IEdreamsConfiguration
     {
+        string ServiceName { get; set; }
         string StoragePath { get; set; }
         string EdreamsExtensibilityUrl { get; set; }
         string EdreamsTokenKey { get; set; }
@@ -21,5 +22,6 @@
         string ServiceBusQueueName { get; set; }
         int PreloadedFilesExpiryInMinutes { get; set; }
         int TransactionHistoryExpiryInMinutes { get; set; }
+        int TransactionSchedulingIntervalInSeconds { get; set; }
     }
 }
