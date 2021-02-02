@@ -31,8 +31,9 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
                 KeyVaultClientSecret = configuration.GetValue<string>("KeyVaultClientSecret"),
                 ServiceBusConnectionString = configuration.GetValue<string>("ServiceBusConnectionString"),
                 ServiceBusQueueName = configuration.GetValue<string>("ServiceBusQueueName"),
-                TransactionSchedulingIntervalInSeconds =
-                    configuration.GetValue<int>("TransactionSchedulingIntervalInSeconds")
+                PreloadedFilesExpiryInMinutes = configuration.GetValue<int>("PreloadedFilesExpiryInMinutes"),
+                TransactionHistoryExpiryInMinutes = configuration.GetValue<int>("TransactionHistoryExpiryInMinutes"),
+                TransactionSchedulingIntervalInSeconds = configuration.GetValue<int>("TransactionSchedulingIntervalInSeconds")
             });
         }
 
