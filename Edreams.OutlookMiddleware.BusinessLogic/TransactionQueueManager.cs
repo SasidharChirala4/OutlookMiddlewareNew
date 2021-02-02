@@ -78,8 +78,6 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         public async Task<TransactionDto> GetNextTransaction()
         {
-            await _transactionRepository.RawSql("WAITFOR DELAY '01:00:00'");
-            
             // Build the predicate that searches for all queued transactions that have a release date in the past.
             Expression<Func<Transaction, bool>> predicate = x => x.Status == TransactionStatus.Queued && x.ReleaseDate.HasValue && x.ReleaseDate < DateTime.UtcNow;
 
