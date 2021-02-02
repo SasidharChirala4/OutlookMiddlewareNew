@@ -32,6 +32,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <remarks>This HTTP GET operation lists all pending categories for the specified mail address.</remarks>
         [HttpGet]
         [SwaggerResponse(200, Type = typeof(ApiResult), Description = "Successfully returns a GetPendingCategories object.")]
+        [SwaggerResponse(404, "Categories for the specified user does not exist.", typeof(ApiResult))]
+        [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
         public Task<IActionResult> GetPendingCategories(string userPrincipalName)
         {
             return ExecuteManager(manager => manager.GetPendingCategories(userPrincipalName));
@@ -42,8 +44,11 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="updatePendingCategoriesRequest">Request of UpdatePendingCategories</param>
         /// <returns></returns>
+        /// <remarks>This HTTP POST operation updates the pending categories for the specified user.</remarks>
         [HttpPost]
         [SwaggerResponse(200, Type = typeof(ApiResult), Description = "Successfully categories have been processed.")]
+        [SwaggerResponse(404, "Specified categories could not be found.", typeof(ApiResult))]
+        [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
         public async Task<IActionResult> UpdatePendingCategories([FromBody] UpdatePendingCategoriesRequest updatePendingCategoriesRequest)
         {
             return await ExecuteManager(manager => manager.UpdatePendingCategories(updatePendingCategoriesRequest));
