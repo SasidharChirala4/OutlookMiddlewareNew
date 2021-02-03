@@ -1,5 +1,6 @@
 using System.Security.Principal;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
+using Edreams.OutlookMiddleware.Common._DependencyInjection;
 using Edreams.OutlookMiddleware.Common.Security;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.Services.Cleanup.Workers;
@@ -17,16 +18,17 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices((hostContext, services) =>
+                .ConfigureServices((hostBuilder, services) =>
                 {
                     ISecurityContext securityContext = new SecurityContext();
                     securityContext.RefreshCorrelationId();
                     securityContext.SetUserIdentity(WindowsIdentity.GetCurrent());
 
                     services.AddSingleton(_ => securityContext);
+                    services.AddConfiguration(hostBuilder.Configuration);
                     services.AddBusinessLogic();
-                    services.AddHostedService<ExpirationWorker>();
-                    services.AddHostedService<CleanupWorker>();
+                    services.AddHostedService<PreloadedFilesCleanupWorker>();
+                    services.AddHostedService<PreloadedFilesExpirationWorker>();
                 });
     }
 }

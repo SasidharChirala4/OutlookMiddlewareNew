@@ -4,6 +4,7 @@ using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Edreams.OutlookMiddleware.Common._DependencyInjection
 {
@@ -33,8 +34,12 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
                 ServiceBusQueueName = configuration.GetValue<string>("ServiceBusQueueName"),
                 PreloadedFilesExpiryInMinutes = configuration.GetValue<int>("PreloadedFilesExpiryInMinutes"),
                 TransactionHistoryExpiryInMinutes = configuration.GetValue<int>("TransactionHistoryExpiryInMinutes"),
-                TransactionSchedulingIntervalInSeconds = configuration.GetValue<int>("TransactionSchedulingIntervalInSeconds")
-            });
+                TransactionSchedulingIntervalInSeconds = configuration.GetValue<int>("TransactionSchedulingIntervalInSeconds"),
+                ExpirationWorkerIntervalInSeconds = configuration.GetValue<int>("ExpirationWorkerIntervalInSeconds"),
+                PreloadedFilesWorkerScheduleStartTime = configuration.GetValue<TimeSpan>("PreloadedFilesWorkerScheduleStartTime"),
+                PreloadedFilesWorkerScheduleEndTime = configuration.GetValue<TimeSpan>("PreloadedFilesWorkerScheduleEndTime"),
+                CleanupWorkerIntervalInSeconds = configuration.GetValue<int>("CleanupWorkerIntervalInSeconds")
+            }); 
         }
 
         public static void AddCommon(this IServiceCollection services)

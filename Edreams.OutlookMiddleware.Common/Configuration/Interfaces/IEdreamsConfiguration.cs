@@ -1,4 +1,6 @@
-﻿namespace Edreams.OutlookMiddleware.Common.Configuration.Interfaces
+﻿using System;
+
+namespace Edreams.OutlookMiddleware.Common.Configuration.Interfaces
 {
     public interface IEdreamsConfiguration
     {
@@ -23,5 +25,9 @@
         int PreloadedFilesExpiryInMinutes { get; set; }
         int TransactionHistoryExpiryInMinutes { get; set; }
         int TransactionSchedulingIntervalInSeconds { get; set; }
+        int ExpirationWorkerIntervalInSeconds { get; set; }
+        TimeSpan PreloadedFilesWorkerScheduleStartTime { get; set; }
+        TimeSpan PreloadedFilesWorkerScheduleEndTime { get; set; }
+        int CleanupWorkerIntervalInSeconds { get; set; }
     }
 }
