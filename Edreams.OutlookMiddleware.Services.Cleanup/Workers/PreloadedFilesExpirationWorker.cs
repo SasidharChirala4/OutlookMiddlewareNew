@@ -28,6 +28,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
+            _logger.LogInformation("PreloadedFiles-ExpirationWorker STARTED");
             // Run continuously as long as the Windows Service is running. If the Windows Service
             // is stopped, the cancellation token will be cancelled and this loop will be stopped.
             while (!cancellationToken.IsCancellationRequested)
@@ -45,7 +46,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
                     ICleanupManager cleanupLogic = scope.ServiceProvider.GetService<ICleanupManager>();
                     int workDone =  await cleanupLogic.ExpirePreloadedFiles();
 
-                    _logger.LogInformation($"PreloadedFilesExpirationWorker: {workDone} records are expired!{DateTime.Now}");
+                    _logger.LogInformation($"PreloadedFilesExpirationWorker: {workDone} records are expired!");
                 }
                 catch (Exception ex)
                 {
@@ -62,6 +63,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
                     }
                 }
             }
+            _logger.LogInformation("PreloadedFiles-ExpirationWorker STOPPED");
         }
     }
 }

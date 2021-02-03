@@ -28,7 +28,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("PreloadedFiles Expiration Worker STARTED");
+            _logger.LogInformation("PreloadedFiles-CleanupWorker STARTED");
             while (!cancellationToken.IsCancellationRequested)
             {
                 //Cleanup worker needs to be executed in non-working hours only, 
@@ -49,7 +49,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
                     ICleanupManager cleanupLogic = scope.ServiceProvider.GetService<ICleanupManager>();
 
                     int workDone = await cleanupLogic.CleanupPreloadedFiles();
-                    _logger.LogInformation($"PreloadedFilesExpirationWorker: {workDone} records are expired!{DateTime.Now}");
+                    _logger.LogInformation($"PreloadedFilesExpirationWorker: {workDone} records are cleaned in {stopwatch.ElapsedMilliseconds}ms!");
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +66,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
                     }
                 }
             }
-            _logger.LogInformation("PreloadedFiles Expiration Worker STOPPED");
+            _logger.LogInformation("PreloadedFiles-CleanupWorker STOPPED");
         }
 
         /// <summary>
