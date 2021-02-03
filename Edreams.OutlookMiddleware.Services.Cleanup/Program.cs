@@ -26,6 +26,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup
 
                     services.AddSingleton(_ => securityContext);
                     services.AddConfiguration(hostBuilder.Configuration);
+                    services.AddCommon();
                     services.AddBusinessLogic();
                     services.AddHostedService<PreloadedFilesCleanupWorker>();
                     services.AddHostedService<PreloadedFilesExpirationWorker>();

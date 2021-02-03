@@ -2,6 +2,8 @@
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
+using Edreams.OutlookMiddleware.Common.Helpers;
+using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -45,6 +47,7 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
         public static void AddCommon(this IServiceCollection services)
         {
             services.AddSingleton<IExceptionFactory, ExceptionFactory>();
+            services.AddSingleton<ITimeHelper, TimeHelper>();
         }
     }
 }
