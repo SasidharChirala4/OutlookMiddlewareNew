@@ -1,4 +1,5 @@
 ﻿using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using System;
 
 namespace Edreams.OutlookMiddleware.Common.Configuration
 {
@@ -25,5 +26,9 @@ namespace Edreams.OutlookMiddleware.Common.Configuration
         public int PreloadedFilesExpiryInMinutes { get; set; }
         public int TransactionHistoryExpiryInMinutes { get; set; }
         public int TransactionSchedulingIntervalInSeconds { get; set; }
+        public int ExpirationWorkerIntervalInSeconds { get; set; }
+        public TimeSpan PreloadedFilesWorkerScheduleStartTime { get; set; }
+        public TimeSpan PreloadedFilesWorkerScheduleEndTime { get; set; }
+        public int CleanupWorkerIntervalInSeconds { get; set; }
     }
 }
