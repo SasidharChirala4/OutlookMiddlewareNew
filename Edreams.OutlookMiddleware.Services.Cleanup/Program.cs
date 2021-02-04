@@ -30,6 +30,8 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup
                     services.AddBusinessLogic();
                     services.AddHostedService<PreloadedFilesCleanupWorker>();
                     services.AddHostedService<PreloadedFilesExpirationWorker>();
+                    services.AddHostedService<TransactionsCleanupWorker>();
+                    services.AddHostedService<TransactionsExpirationWorker>();
                 });
     }
 }

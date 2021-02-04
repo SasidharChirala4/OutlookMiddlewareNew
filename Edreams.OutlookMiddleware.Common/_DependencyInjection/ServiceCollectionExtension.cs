@@ -39,8 +39,10 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
                 TransactionSchedulingIntervalInSeconds = configuration.GetValue<int>("TransactionSchedulingIntervalInSeconds"),
                 ExpirationWorkerIntervalInSeconds = configuration.GetValue<int>("ExpirationWorkerIntervalInSeconds"),
                 PreloadedFilesWorkerScheduleStartTime = configuration.GetValue<TimeSpan>("PreloadedFilesWorkerScheduleStartTime"),
-                PreloadedFilesWorkerScheduleEndTime = configuration.GetValue<TimeSpan>("PreloadedFilesWorkerScheduleEndTime"),
-                CleanupWorkerIntervalInSeconds = configuration.GetValue<int>("CleanupWorkerIntervalInSeconds")
+                PreloadedFilesWorkerScheduleStopTime = configuration.GetValue<TimeSpan>("PreloadedFilesWorkerScheduleStopTime"),
+                CleanupWorkerIntervalInSeconds = configuration.GetValue<int>("CleanupWorkerIntervalInSeconds"),
+                TransactionsWorkerScheduleStartTime = configuration.GetValue<TimeSpan>("TransactionsWorkerScheduleStartTime"),
+                TransactionsWorkerScheduleStopTime = configuration.GetValue<TimeSpan>("TransactionsWorkerScheduleStopTime")
             }); 
         }
 

@@ -11,18 +11,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 {
-    public class PreloadedFilesCleanupWorker : BackgroundService
+    public class TransactionsCleanupWorker : BackgroundService
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IEdreamsConfiguration _configuration;
         private readonly ITimeHelper _timeHelper;
-        private readonly ILogger<PreloadedFilesCleanupWorker> _logger;
+        private readonly ILogger<TransactionsCleanupWorker> _logger;
 
-        public PreloadedFilesCleanupWorker(
+        public TransactionsCleanupWorker(
             IServiceScopeFactory serviceScopeFactory,
             IEdreamsConfiguration configuration,
             ITimeHelper timeHelper,
-            ILogger<PreloadedFilesCleanupWorker> logger)
+            ILogger<TransactionsCleanupWorker> logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _configuration = configuration;
@@ -32,13 +32,13 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("PreloadedFiles-CleanupWorker STARTED");
+            _logger.LogInformation("Transactions-CleanupWorker STARTED");
             while (!cancellationToken.IsCancellationRequested)
             {
                 // Cleanup worker needs to be executed in non-working hours only, 
                 // Start and End Time for the worker needs to be taken from the configuration
-                TimeSpan startTime = _configuration.PreloadedFilesWorkerScheduleStartTime;
-                TimeSpan stopTime = _configuration.PreloadedFilesWorkerScheduleStopTime;
+                TimeSpan startTime = _configuration.TransactionsWorkerScheduleStartTime;
+                TimeSpan stopTime = _configuration.TransactionsWorkerScheduleStopTime;
                 if (!_timeHelper.IsGivenTimeWithinTimeSpan(DateTime.UtcNow, startTime, stopTime))
                 {
                     continue;
@@ -52,10 +52,10 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
                 try
                 {
                     using IServiceScope scope = _serviceScopeFactory.CreateScope();
-                    ICleanupManager cleanupLogic = scope.ServiceProvider.GetService<ICleanupManager>();
-
-                    int workDone = await cleanupLogic.CleanupPreloadedFiles();
-                   _logger.LogInformation($"PreloadedCleanupWorker: {workDone} records are cleaned in {stopwatch.ElapsedMilliseconds}ms!");
+                    ICleanupManager cleanupLogic = scope.ServiceProvider.GetService<ICleanupManager>();                    
+                     int workDone = await cleanupLogic.CleanupTransactions();
+                     
+                    _logger.LogInformation($"TransactionsCleanupWorker: {workDone} records are cleaned in {stopwatch.ElapsedMilliseconds}ms!");
                 }
                 catch (Exception ex)
                 {
@@ -72,7 +72,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
                     }
                 }
             }
-            _logger.LogInformation("PreloadedFiles-CleanupWorker STOPPED");
+            _logger.LogInformation("Transactions-CleanupWorker STOPPED");
         }
     }
 }
