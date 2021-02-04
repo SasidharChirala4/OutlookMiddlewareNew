@@ -7,6 +7,8 @@ using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Annotations;
+using Edreams.OutlookMiddleware.DataTransferObjects;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
@@ -40,9 +42,14 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// Method to upload file to temporary location
         /// </summary>
         /// <param name="fileId"></param>
-        /// <returns></returns>
+        /// <returns>An ApiResult containing uploaded file details.</returns>
+        /// <remarks>This HTTP POST operation uploads file to a temporary location.</remarks>
         [HttpPost("{fileId}")]
         [DisableRequestSizeLimit]
+        [SwaggerResponse(200, "Successfully uploads the file to temporary location and return the uploaded object.", typeof(ApiResult<UpdateFileResponse>))]
+        [SwaggerResponse(400, "There were validation errors while uplaoding file.", typeof(ApiErrorResult))]
+        [SwaggerResponse(404, "File with specified Id does not exist.", typeof(ApiResult))]
+        [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
         public async Task<IActionResult> UploadFile(Guid fileId)
         {
             _logger.LogTrace("[API] File uploading...");

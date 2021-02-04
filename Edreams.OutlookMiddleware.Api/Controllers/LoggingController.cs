@@ -28,6 +28,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <remarks>This HTTP POST operation records an informational message or error to the logging infrastructure.</remarks>
         [HttpPost]
         [SwaggerResponse(200, "Successfully returns a RecordLogResponse object.", typeof(ApiResult<RecordLogResponse>))]
+        [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
         public Task<IActionResult> RecordLog(RecordLogRequest log)
         {
             return ExecuteManager(manager => manager.RecordLog(log));

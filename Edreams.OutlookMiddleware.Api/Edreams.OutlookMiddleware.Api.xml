@@ -81,6 +81,7 @@
             </summary>
             <param name="updatePendingCategoriesRequest">Request of UpdatePendingCategories</param>
             <returns></returns>
+            <remarks>This HTTP POST operation updates the pending categories for the specified user.</remarks>
         </member>
         <member name="T:Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController">
             <summary>
@@ -126,7 +127,8 @@
             Method to upload file to temporary location
             </summary>
             <param name="fileId"></param>
-            <returns></returns>
+            <returns>An ApiResult containing uploaded file details.</returns>
+            <remarks>This HTTP POST operation uploads file to a temporary location.</remarks>
         </member>
         <member name="T:Edreams.OutlookMiddleware.Api.Controllers.LoggingController">
             <summary>
