@@ -32,30 +32,32 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Transactions-CleanupWorker STARTED");
+            TimeSpan startTime = _configuration.TransactionsWorkerScheduleStartTime;
+            TimeSpan stopTime = _configuration.TransactionsWorkerScheduleStopTime;
+
+            // Get the scheduling interval in seconds from the application
+            // configuration and convert to milliseconds.
+            int schedulingInterval = _configuration.CleanupWorkerIntervalInSeconds * 1000;
+
+            _logger.LogInformation("TransactionsCleanupWorker STARTED");
             while (!cancellationToken.IsCancellationRequested)
             {
-                // Cleanup worker needs to be executed in non-working hours only, 
-                // Start and End Time for the worker needs to be taken from the configuration
-                TimeSpan startTime = _configuration.TransactionsWorkerScheduleStartTime;
-                TimeSpan stopTime = _configuration.TransactionsWorkerScheduleStopTime;
-                if (!_timeHelper.IsGivenTimeWithinTimeSpan(DateTime.UtcNow, startTime, stopTime))
-                {
-                    continue;
-                }
-                // Get the scheduling interval in seconds from the application
-                // configuration and convert to milliseconds.
-                int schedulingInterval = _configuration.CleanupWorkerIntervalInSeconds * 1000;
-
                 // Start a stopwatch for future reference when calculating the time we need to delay.
                 Stopwatch stopwatch = Stopwatch.StartNew();
+
                 try
                 {
-                    using IServiceScope scope = _serviceScopeFactory.CreateScope();
-                    ICleanupManager cleanupLogic = scope.ServiceProvider.GetService<ICleanupManager>();                    
-                     int workDone = await cleanupLogic.CleanupTransactions();
-                     
-                    _logger.LogInformation($"TransactionsCleanupWorker: {workDone} records are cleaned in {stopwatch.ElapsedMilliseconds}ms!");
+
+                    // Cleanup worker needs to be executed in non-working hours only, 
+                    // This is based on the configured timespan and the current execution time
+                    if (_timeHelper.IsGivenTimeWithinTimeSpan(DateTime.UtcNow, startTime, stopTime))
+                    {
+                        using IServiceScope scope = _serviceScopeFactory.CreateScope();
+                        ICleanupManager cleanupLogic = scope.ServiceProvider.GetService<ICleanupManager>();
+                        int workDone = await cleanupLogic.CleanupTransactions();
+
+                        _logger.LogInformation($"TransactionsCleanupWorker: {workDone} records are cleaned in {stopwatch.ElapsedMilliseconds}ms!");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -72,7 +74,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
                     }
                 }
             }
-            _logger.LogInformation("Transactions-CleanupWorker STOPPED");
+            _logger.LogInformation("TransactionsCleanupWorker STOPPED");
         }
     }
 }

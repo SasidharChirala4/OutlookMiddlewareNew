@@ -32,30 +32,32 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("PreloadedFiles-CleanupWorker STARTED");
+            TimeSpan startTime = _configuration.PreloadedFilesWorkerScheduleStartTime;
+            TimeSpan stopTime = _configuration.PreloadedFilesWorkerScheduleStopTime;
+
+            // Get the scheduling interval in seconds from the application
+            // configuration and convert to milliseconds.
+            int schedulingInterval = _configuration.CleanupWorkerIntervalInSeconds * 1000;
+
+            _logger.LogInformation("PreloadedFilesCleanupWorker STARTED");
             while (!cancellationToken.IsCancellationRequested)
             {
-                // Cleanup worker needs to be executed in non-working hours only, 
-                // Start and End Time for the worker needs to be taken from the configuration
-                TimeSpan startTime = _configuration.PreloadedFilesWorkerScheduleStartTime;
-                TimeSpan stopTime = _configuration.PreloadedFilesWorkerScheduleStopTime;
-                if (!_timeHelper.IsGivenTimeWithinTimeSpan(DateTime.UtcNow, startTime, stopTime))
-                {
-                    continue;
-                }
-                // Get the scheduling interval in seconds from the application
-                // configuration and convert to milliseconds.
-                int schedulingInterval = _configuration.CleanupWorkerIntervalInSeconds * 1000;
-
                 // Start a stopwatch for future reference when calculating the time we need to delay.
                 Stopwatch stopwatch = Stopwatch.StartNew();
+             
                 try
                 {
-                    using IServiceScope scope = _serviceScopeFactory.CreateScope();
-                    ICleanupManager cleanupLogic = scope.ServiceProvider.GetService<ICleanupManager>();
 
-                    int workDone = await cleanupLogic.CleanupPreloadedFiles();
-                   _logger.LogInformation($"PreloadedCleanupWorker: {workDone} records are cleaned in {stopwatch.ElapsedMilliseconds}ms!");
+                    // Cleanup worker needs to be executed in non-working hours only, 
+                    // This is based on the configured timespan and the current execution time
+                    if (_timeHelper.IsGivenTimeWithinTimeSpan(DateTime.UtcNow, startTime, stopTime))
+                    {
+                        using IServiceScope scope = _serviceScopeFactory.CreateScope();
+                        ICleanupManager cleanupLogic = scope.ServiceProvider.GetService<ICleanupManager>(); 
+                        int workDone = await cleanupLogic.CleanupPreloadedFiles();
+
+                       _logger.LogInformation($"PreloadedFilesCleanupWorker: {workDone} records are cleaned in {stopwatch.ElapsedMilliseconds}ms!");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -72,7 +74,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
                     }
                 }
             }
-            _logger.LogInformation("PreloadedFiles-CleanupWorker STOPPED");
+            _logger.LogInformation("PreloadedFilesCleanupWorker STOPPED");
         }
     }
 }
