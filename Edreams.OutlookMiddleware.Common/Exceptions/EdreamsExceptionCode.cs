@@ -7,7 +7,23 @@ namespace Edreams.OutlookMiddleware.Common.Exceptions
         #region <| Common |>
 
         [Description("An unknown fault has occurred. Please contact support for further assistance.")]
-        UNKNOWN_FAULT = 0,
+        UNKNOWN_FAULT = -1,
+
+        #endregion
+
+        #region <| SqlClient |>
+
+        [Description("An unknown database error has occured. Please contact support for further assistance.")]
+        SQLCLIENT_UNKNOWN_FAULT = 2001,
+
+        [Description("Communication with database server is not possible. Please check your configuration or contact support for further assistance.")]
+        SQLCLIENT_SERVER_NOT_FOUND_FAULT = 2002,
+
+        [Description("A database timeout has occured. Please try again or contact support for further assistance.")]
+        SQLCLIENT_TIMEOUT_FAULT = 2003,
+
+        [Description("Communication with database is not possible. Please check your configuration or contact support for further assistance.")]
+        SQLCLIENT_DATABASE_NOT_FOUND_FAULT = 2004,
 
         #endregion
 

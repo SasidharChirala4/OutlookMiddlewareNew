@@ -1,7 +1,12 @@
 ﻿using Edreams.OutlookMiddleware.Common.Configuration;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Common.Exceptions;
+using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
+using Edreams.OutlookMiddleware.Common.Helpers;
+using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Edreams.OutlookMiddleware.Common._DependencyInjection
 {
@@ -11,6 +16,7 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
         {
             services.AddSingleton<IEdreamsConfiguration>(_ => new EdreamsConfiguration
             {
+                ServiceName = configuration.GetValue<string>("ServiceName"),
                 StoragePath = configuration.GetValue<string>("StoragePath"),
                 EdreamsExtensibilityUrl = configuration.GetValue<string>("EdreamsExtensibilityUrl"),
                 EdreamsTokenKey = configuration.GetValue<string>("EdreamsTokenKey"),
@@ -29,8 +35,19 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
                 ServiceBusConnectionString = configuration.GetValue<string>("ServiceBusConnectionString"),
                 ServiceBusQueueName = configuration.GetValue<string>("ServiceBusQueueName"),
                 PreloadedFilesExpiryInMinutes = configuration.GetValue<int>("PreloadedFilesExpiryInMinutes"),
-                TransactionHistoryExpiryInMinutes = configuration.GetValue<int>("TransactionHistoryExpiryInMinutes")
-            });
+                TransactionHistoryExpiryInMinutes = configuration.GetValue<int>("TransactionHistoryExpiryInMinutes"),
+                TransactionSchedulingIntervalInSeconds = configuration.GetValue<int>("TransactionSchedulingIntervalInSeconds"),
+                ExpirationWorkerIntervalInSeconds = configuration.GetValue<int>("ExpirationWorkerIntervalInSeconds"),
+                PreloadedFilesWorkerScheduleStartTime = configuration.GetValue<TimeSpan>("PreloadedFilesWorkerScheduleStartTime"),
+                PreloadedFilesWorkerScheduleEndTime = configuration.GetValue<TimeSpan>("PreloadedFilesWorkerScheduleEndTime"),
+                CleanupWorkerIntervalInSeconds = configuration.GetValue<int>("CleanupWorkerIntervalInSeconds")
+            }); 
+        }
+
+        public static void AddCommon(this IServiceCollection services)
+        {
+            services.AddSingleton<IExceptionFactory, ExceptionFactory>();
+            services.AddSingleton<ITimeHelper, TimeHelper>();
         }
     }
 }

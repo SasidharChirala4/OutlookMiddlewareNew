@@ -26,16 +26,16 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             _logger = logger;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // TODO: Replace current testing code with actual implementation.
-            while (!cancellationToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 await _serviceBusHandler.ProcessMessagesAsync<Guid>(
-                    _configuration.ServiceBusQueueName, OnProcessing, OnError, cancellationToken);
+                    _configuration.ServiceBusQueueName, OnProcessing, OnError, stoppingToken);
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, cancellationToken);
+                await Task.Delay(1000, stoppingToken);
             }
         }
 

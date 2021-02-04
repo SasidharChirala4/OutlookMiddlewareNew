@@ -19,6 +19,11 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         public Guid BatchId { get; set; }
 
         /// <summary>
+        /// The unique correlation ID for this transaction.
+        /// </summary>
+        public Guid CorrelationId { get; set; }
+
+        /// <summary>
         /// The status for this transaction.
         /// </summary>
         public TransactionStatus Status { get; set; }

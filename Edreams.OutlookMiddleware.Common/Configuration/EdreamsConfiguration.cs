@@ -1,9 +1,11 @@
 ﻿using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using System;
 
 namespace Edreams.OutlookMiddleware.Common.Configuration
 {
     public class EdreamsConfiguration : IEdreamsConfiguration
     {
+        public string ServiceName { get; set; }
         public string StoragePath { get; set; }
         public string EdreamsExtensibilityUrl { get; set; }
         public string EdreamsTokenKey { get; set; }
@@ -23,5 +25,10 @@ namespace Edreams.OutlookMiddleware.Common.Configuration
         public string ServiceBusQueueName { get; set; }
         public int PreloadedFilesExpiryInMinutes { get; set; }
         public int TransactionHistoryExpiryInMinutes { get; set; }
+        public int TransactionSchedulingIntervalInSeconds { get; set; }
+        public int ExpirationWorkerIntervalInSeconds { get; set; }
+        public TimeSpan PreloadedFilesWorkerScheduleStartTime { get; set; }
+        public TimeSpan PreloadedFilesWorkerScheduleEndTime { get; set; }
+        public int CleanupWorkerIntervalInSeconds { get; set; }
     }
 }

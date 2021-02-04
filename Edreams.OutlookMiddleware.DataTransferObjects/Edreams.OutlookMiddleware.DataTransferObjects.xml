@@ -265,9 +265,34 @@
             The unique batch ID related to this transaction.
             </summary>
         </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.TransactionDto.CorrelationId">
+            <summary>
+            The unique correlation ID for this transaction.
+            </summary>
+        </member>
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.TransactionDto.Status">
             <summary>
             The status for this transaction.
+            </summary>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.TransactionMessage">
+            <summary>
+            Contract that represents a transaction, packaged within a ServiceBus message.
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.TransactionMessage.TransctionId">
+            <summary>
+            The unique identifier for the transaction.
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.TransactionMessage.BatchId">
+            <summary>
+            The unique identifier for the batch.
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.TransactionMessage.CorrelationId">
+            <summary>
+            The unique correlation identifier.
             </summary>
         </member>
     </members>
