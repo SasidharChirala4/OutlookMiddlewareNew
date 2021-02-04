@@ -39,7 +39,6 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <returns>This endpoint should always return an HTTP 200 OK. If it doesn't, there is something wrong.</returns>
         [HttpGet]
         [SwaggerResponse(200, "Successfully returns a GetStatusResponse object.", typeof(ApiResult<GetStatusResponse>))]
-        [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
         public Task<IActionResult> Status()
         {
             Debug.WriteLine(_configuration.EdreamsExtensibilityUrl);

@@ -47,8 +47,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [HttpPost("{fileId}")]
         [DisableRequestSizeLimit]
         [SwaggerResponse(200, "Successfully uploads the file to temporary location and return the uploaded object.", typeof(ApiResult<UpdateFileResponse>))]
-        [SwaggerResponse(404, "File with specified Id does not exist.", typeof(ApiResult))]
         [SwaggerResponse(400, "There were validation errors while uplaoding file.", typeof(ApiErrorResult))]
+        [SwaggerResponse(404, "File with specified Id does not exist.", typeof(ApiResult))]
         [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
         public async Task<IActionResult> UploadFile(Guid fileId)
         {
