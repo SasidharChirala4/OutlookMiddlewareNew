@@ -27,7 +27,9 @@ namespace Edreams.OutlookMiddleware.Common.Configuration.Interfaces
         int TransactionSchedulingIntervalInSeconds { get; set; }
         int ExpirationWorkerIntervalInSeconds { get; set; }
         TimeSpan PreloadedFilesWorkerScheduleStartTime { get; set; }
-        TimeSpan PreloadedFilesWorkerScheduleEndTime { get; set; }
+        TimeSpan PreloadedFilesWorkerScheduleStopTime { get; set; }
         int CleanupWorkerIntervalInSeconds { get; set; }
+        TimeSpan TransactionsWorkerScheduleStartTime { get; set; }
+        TimeSpan TransactionsWorkerScheduleStopTime { get; set; }
     }
 }
