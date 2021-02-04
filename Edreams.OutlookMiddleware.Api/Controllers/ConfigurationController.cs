@@ -38,7 +38,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// and this endpoint will return the corresponding mailbox identifier.
         /// </remarks>
         [HttpGet("sharedmailbox")]
-        [SwaggerResponse(200, "Successfully returns a GetSharedMailBox object.", typeof(GetSharedMailBoxResponse))]
+        [SwaggerResponse(200, "Successfully returns a GetSharedMailBox object.", typeof(ApiResult<GetSharedMailBoxResponse>))]
         [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
         public async Task<IActionResult> GetSharedMailBox()
         {
