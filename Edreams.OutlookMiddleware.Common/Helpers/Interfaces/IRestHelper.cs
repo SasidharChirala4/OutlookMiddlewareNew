@@ -1,4 +1,5 @@
 ﻿using Edreams.Contracts.Data.Common;
+using RestSharp;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -20,6 +21,8 @@ namespace Edreams.OutlookMiddleware.Common.Helpers.Interfaces
         Task<int> CountData(string resourceUrl, bool skipResponseCheck=false);
 
         Task<List<T>> CreateNew(string resourceUrl, bool skipResponseCheck = false);
+
+        Task<ApiResult<T>> CreateNew(string resourceUrl, FileParameter fileParamter, bool skipResponseCheck = false);
 
         Task<ApiResult<T>> CreateNew(string resourceUrl, T objectToCreate, bool skipResponseCheck=false);
 
