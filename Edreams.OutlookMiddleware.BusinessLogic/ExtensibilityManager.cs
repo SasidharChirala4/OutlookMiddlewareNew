@@ -17,7 +17,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
     {
         #region <| Private Members |>
 
-        private readonly IRestHelper<SuggestedSite> _suggestSiteRestHelper;
+        private readonly IRestHelper<SuggestedSite> _suggestedSiteRestHelper;
         private readonly IRestHelper<SharePointFile> _sharePointFileRestHelper;
         private readonly IValidator _validator;
         private readonly ILogger _logger;
@@ -25,9 +25,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         #endregion
 
         #region <| Construction |>
-        public ExtensibilityManager(IRestHelper<SuggestedSite> suggestSiteRestHelper,IRestHelper<SharePointFile> sharePointFileRestHelper, IValidator validator, ILogger logger)
+        public ExtensibilityManager(IRestHelper<SuggestedSite> suggestedSiteRestHelper, IRestHelper<SharePointFile> sharePointFileRestHelper, IValidator validator, ILogger logger)
         {
-            _suggestSiteRestHelper = suggestSiteRestHelper;
+            _suggestedSiteRestHelper = suggestedSiteRestHelper;
             _sharePointFileRestHelper = sharePointFileRestHelper;
             _validator = validator;
             _logger = logger;
@@ -59,7 +59,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             try
             {
                 // Set SuggestedSites using rest helper 
-                _ = await _suggestSiteRestHelper.CreateNew("sites/suggested", suggestedSite);
+                _ = await _suggestedSiteRestHelper.CreateNew("sites/suggested", suggestedSite);
             }
             catch (EdreamsException ex)
             {
@@ -83,7 +83,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// <param name="itemName">Email/ Attachment Name.</param>
         /// <param name="ext">Email/ Attachment extension.</param>
         /// <param name="overwrite">Flag to overwrite the file.</param>
-        /// <returns></returns>
+        /// <returns>Uploaded file url</returns>
         public async Task<string> UploadFile(byte[] itemBytes, string siteUrl, string folder, string itemName, string ext, bool overwrite)
         {
             // Validations
@@ -105,7 +105,17 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
                 // upload files from rest helper .
                 var response = await _sharePointFileRestHelper.CreateNew($"/file/content?siteUrl={siteUrl}&folderUrl={folder}&overWrite={overwrite}", fileParameter);
-                return response.Content.AbsoluteUrl;
+                if (response.Content != null)
+                {
+                    _logger.LogInformation($"File [{fileParameter.FileName}] uploaded to site [{siteUrl}] successfully.");
+                    return response.Content.AbsoluteUrl;
+                }
+                else
+                {
+                    // this scenario won't occur mostly, because we are handling all kind of exceptions in rest helper
+                    _logger.LogInformation($"File [{fileParameter.FileName}] uploaded failed to site [{siteUrl}] with out any error.");
+                    return null;
+                }
             }
             catch (EdreamsException ex)
             {
