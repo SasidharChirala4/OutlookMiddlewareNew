@@ -235,7 +235,6 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             var webApiRequest = new RestRequest(Method.POST);
             webApiRequest.AddHeader(_configuration.EdreamsTokenKey, _configuration.EdreamsTokenValue);
             webApiRequest.Files.Add(fileParameter);
-            webApiRequest.Files.Add(fileParameter);
             var roughResult = await webApiClient.ExecuteAsync<ApiResult<T>>(webApiRequest);
             GoodResponse(webApiRequest.Method, roughResult, skipResponseCheck);
 

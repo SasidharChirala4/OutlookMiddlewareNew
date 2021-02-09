@@ -58,7 +58,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             };
             try
             {
-                // Set SuggestedSites from rest helper 
+                // Set SuggestedSites using rest helper 
                 _ = await _suggestSiteRestHelper.CreateNew("sites/suggested", suggestedSite);
             }
             catch (EdreamsException ex)
@@ -116,7 +116,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             catch (Exception ex)
             {
                 // TODO : Need to check with johnny/sasi about proper log message and return value
-                _logger.LogError("Unexpected error occured while upload file.", ex);
+                _logger.LogError("Unexpected error occured while uploading file.", ex);
                 return null;
             }
         }
