@@ -225,7 +225,7 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
         /// <param name="skipResponseCheck"></param>
         /// <param name="fileParameter"></param>
         /// <returns></returns>
-        public async Task<ApiResult<T>> CreateNew(string resourceUrl, FileParameter fileParameter, bool skipResponseCheck = false)
+        public async Task<ApiResult<T>> CreateFile(string resourceUrl, FileParameter fileParameter, bool skipResponseCheck = false)
         {
             string webServiceEndPoint = string.Format($"{_configuration.EdreamsExtensibilityUrl}/{resourceUrl}");
             var webApiClient = new RestClient(webServiceEndPoint)

@@ -104,7 +104,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 };
 
                 // upload files from rest helper .
-                var response = await _sharePointFileRestHelper.CreateNew($"/file/content?siteUrl={siteUrl}&folderUrl={folder}&overWrite={overwrite}", fileParameter);
+                var response = await _sharePointFileRestHelper.CreateFile($"/file/content?siteUrl={siteUrl}&folderUrl={folder}&overWrite={overwrite}", fileParameter);
                 if (response.Content != null)
                 {
                     _logger.LogInformation($"File [{fileParameter.FileName}] uploaded to site [{siteUrl}] successfully.");
