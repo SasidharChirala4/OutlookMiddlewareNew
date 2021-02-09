@@ -7,7 +7,6 @@ using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System;
-using System.Net;
 using Edreams.OutlookMiddleware.Common.Exceptions;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
@@ -16,16 +15,16 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
     {
         #region <| Private Members |>
 
-        private readonly IRestHelper<SuggestedSite> _restHelper;
+        private readonly IRestHelper<SuggestedSite> _suggestedSiteRestHelper;
         private readonly IValidator _validator;
         private readonly ILogger _logger;
 
         #endregion
 
         #region <| Construction |>
-        public ExtensibilityManager(IRestHelper<SuggestedSite> restHelper, IValidator validator, ILogger logger)
+        public ExtensibilityManager(IRestHelper<SuggestedSite> suggestedSiteRestHelper, IValidator validator, ILogger logger)
         {
-            _restHelper = restHelper;
+            _suggestedSiteRestHelper = suggestedSiteRestHelper;
             _validator = validator;
             _logger = logger;
         }
@@ -55,15 +54,17 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             };
             try
             {
-                // Set SuggestedSites from rest helper 
-                _ = await _restHelper.CreateNew("sites/suggested", suggestedSite);
+                // Set SuggestedSites using rest helper 
+                _ = await _suggestedSiteRestHelper.CreateNew("sites/suggested", suggestedSite);
             }
             catch (EdreamsException ex)
             {
-                _logger.LogError("error at setting suggested sites.", ex);
+                // TODO : Need to check with johnny/sasi about proper log message 
+                _logger.LogError("Error at setting suggested sites.", ex);
             }
             catch (Exception ex)
             {
+                // TODO : Need to check with johnny/sasi about proper log message
                 // This handles all remaining exceptions.
                 _logger.LogError("Unexpected error occured while setting suggested sites.", ex);
             }
