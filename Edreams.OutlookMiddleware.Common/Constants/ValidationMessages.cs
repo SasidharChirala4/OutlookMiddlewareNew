@@ -20,6 +20,10 @@
                "SiteUrl is required!";
             public const string PrincipalNameRequired =
                "PrincipalName is required!";
+            public const string FolderRequired =
+                "Folder is required!";
+            public const string ItemNameRequired =
+                "ItemName is required!";
 
         }
     }

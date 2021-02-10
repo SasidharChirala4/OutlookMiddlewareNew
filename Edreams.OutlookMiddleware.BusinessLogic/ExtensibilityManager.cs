@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System;
 using Edreams.OutlookMiddleware.Common.Exceptions;
+using RestSharp;
+using Edreams.Contracts.Data.Common;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
@@ -16,6 +18,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         #region <| Private Members |>
 
         private readonly IRestHelper<SuggestedSite> _suggestedSiteRestHelper;
+        private readonly IRestHelper<SharePointFile> _sharePointFileRestHelper;
         private readonly IValidator _validator;
         private readonly ILogger _logger;
 
@@ -25,10 +28,12 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         public ExtensibilityManager(
             IRestHelper<SuggestedSite> suggestedSiteRestHelper, 
+            IRestHelper<SharePointFile> sharePointFileRestHelper, 
             IValidator validator, 
             ILogger logger)
         {
             _suggestedSiteRestHelper = suggestedSiteRestHelper;
+            _sharePointFileRestHelper = sharePointFileRestHelper;
             _validator = validator;
             _logger = logger;
         }
@@ -65,14 +70,71 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
             catch (EdreamsException ex)
             {
-                // TODO: Need to check with johnny/sasi about proper log message 
+                // TODO : Need to check with johnny/sasi about proper log message 
                 _logger.LogError("Error at setting suggested sites.", ex);
             }
             catch (Exception ex)
             {
-                // TODO: Need to check with johnny/sasi about proper log message
+                // TODO : Need to check with johnny/sasi about proper log message
                 // This handles all remaining exceptions.
                 _logger.LogError("Unexpected error occured while setting suggested sites.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Method to upload the Email/ Attachment through WebAPI to SharePoint.
+        /// </summary>
+        /// <param name="itemBytes">The binary item data to upload.</param>
+        /// <param name="siteUrl">Url of the site where Email/ Attachment should be uploaded.</param>
+        /// <param name="folder">Url of the folder where Email/ Attachment should be uploaded.</param>
+        /// <param name="itemName">Email/ Attachment Name.</param>
+        /// <param name="ext">Email/ Attachment extension.</param>
+        /// <param name="overwrite">Flag to overwrite the file.</param>
+        /// <returns>Uploaded file url</returns>
+        public async Task<string> UploadFile(byte[] itemBytes, string siteUrl, string folder, string itemName, string ext, bool overwrite)
+        {
+            // Validations
+            _validator.ValidateString(siteUrl, ValidationMessages.WebApi.SiteUrlRequired);
+            _validator.ValidateString(folder, ValidationMessages.WebApi.FolderRequired);
+            _validator.ValidateString(itemName, ValidationMessages.WebApi.ItemNameRequired);
+
+            try
+            {
+                // Assign values to file parameter header
+                FileParameter fileParameter = new FileParameter()
+                {
+                    Name = "file",
+                    Writer = s => s.Write(itemBytes, 0, itemBytes.Length),
+                    FileName = itemName + (string.IsNullOrEmpty(ext) ? "" : "." + ext),
+                    ContentLength = itemBytes.Length,
+                    ContentType = "multipart/form-data"
+                };
+
+                // upload files from rest helper .
+                var response = await _sharePointFileRestHelper.CreateFile($"/file/content?siteUrl={siteUrl}&folderUrl={folder}&overWrite={overwrite}", fileParameter);
+                if (response.Content != null)
+                {
+                    _logger.LogInformation($"File [{fileParameter.FileName}] uploaded to site [{siteUrl}] successfully.");
+                    return response.Content.AbsoluteUrl;
+                }
+                else
+                {
+                    // this scenario won't occur mostly, because we are handling all kind of exceptions in rest helper
+                    _logger.LogInformation($"File [{fileParameter.FileName}] uploaded failed to site [{siteUrl}] with out any error.");
+                    return null;
+                }
+            }
+            catch (EdreamsException ex)
+            {
+                // TODO : Need to check with johnny/sasi about proper log message and return value
+                _logger.LogError("Error at upload file.", ex);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                // TODO : Need to check with johnny/sasi about proper log message and return value
+                _logger.LogError("Unexpected error occured while uploading file.", ex);
+                return null;
             }
         }
     }

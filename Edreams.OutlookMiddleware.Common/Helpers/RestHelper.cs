@@ -216,6 +216,32 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             return await CreateNew(webApiClient, objectToCreate, new List<RestParameter> { parameter }, skipResponseCheck);
         }
 
+        // TODO : Need to check with Johnny/Sasi wheather this method required / customize existing method.   
+
+        /// <summary>
+        /// Method to create new object
+        /// </summary>
+        /// <param name="resourceUrl"></param>
+        /// <param name="skipResponseCheck"></param>
+        /// <param name="fileParameter"></param>
+        /// <returns></returns>
+        public async Task<ApiResult<T>> CreateFile(string resourceUrl, FileParameter fileParameter, bool skipResponseCheck = false)
+        {
+            string webServiceEndPoint = string.Format($"{_configuration.EdreamsExtensibilityUrl}/{resourceUrl}");
+            var webApiClient = new RestClient(webServiceEndPoint)
+            {
+                Authenticator = new NtlmAuthenticator()
+            };
+            var webApiRequest = new RestRequest(Method.POST);
+            webApiRequest.AddHeader(_configuration.EdreamsTokenKey, _configuration.EdreamsTokenValue);
+            webApiRequest.Files.Add(fileParameter);
+            var roughResult = await webApiClient.ExecuteAsync<ApiResult<T>>(webApiRequest);
+            GoodResponse(webApiRequest.Method, roughResult, skipResponseCheck);
+
+            var queryResult = roughResult.Data;
+            return queryResult;
+        }
+
         /// <summary>
         /// Method to create new object
         /// </summary>
