@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 
-
 namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
 {
     public interface IExtensibilityManager
@@ -25,7 +24,5 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         /// <param name="ext">Email/ Attachment extension.</param>
         /// <param name="overwrite">Flag to overwrite the file.</param>
         Task<string> UploadFile(byte[] itemBytes, string siteUrl, string folder, string itemName, string ext, bool overwrite);
-
-
     }
 }

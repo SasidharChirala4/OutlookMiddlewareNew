@@ -25,13 +25,19 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         #endregion
 
         #region <| Construction |>
-        public ExtensibilityManager(IRestHelper<SuggestedSite> suggestedSiteRestHelper, IRestHelper<SharePointFile> sharePointFileRestHelper, IValidator validator, ILogger logger)
+
+        public ExtensibilityManager(
+            IRestHelper<SuggestedSite> suggestedSiteRestHelper, 
+            IRestHelper<SharePointFile> sharePointFileRestHelper, 
+            IValidator validator, 
+            ILogger logger)
         {
             _suggestedSiteRestHelper = suggestedSiteRestHelper;
             _sharePointFileRestHelper = sharePointFileRestHelper;
             _validator = validator;
             _logger = logger;
         }
+
         #endregion
 
         /// <summary>
@@ -56,6 +62,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 Type = SiteType.ProjectSite,
                 PrincipalName = principalName
             };
+
             try
             {
                 // Set SuggestedSites using rest helper 
