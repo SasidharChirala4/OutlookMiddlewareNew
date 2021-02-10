@@ -22,12 +22,17 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         #endregion
 
         #region <| Construction |>
-        public ExtensibilityManager(IRestHelper<SuggestedSite> suggestedSiteRestHelper, IValidator validator, ILogger logger)
+
+        public ExtensibilityManager(
+            IRestHelper<SuggestedSite> suggestedSiteRestHelper, 
+            IValidator validator, 
+            ILogger logger)
         {
             _suggestedSiteRestHelper = suggestedSiteRestHelper;
             _validator = validator;
             _logger = logger;
         }
+
         #endregion
 
         /// <summary>
@@ -52,6 +57,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 Type = SiteType.ProjectSite,
                 PrincipalName = principalName
             };
+
             try
             {
                 // Set SuggestedSites using rest helper 
@@ -59,12 +65,12 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
             catch (EdreamsException ex)
             {
-                // TODO : Need to check with johnny/sasi about proper log message 
+                // TODO: Need to check with johnny/sasi about proper log message 
                 _logger.LogError("Error at setting suggested sites.", ex);
             }
             catch (Exception ex)
             {
-                // TODO : Need to check with johnny/sasi about proper log message
+                // TODO: Need to check with johnny/sasi about proper log message
                 // This handles all remaining exceptions.
                 _logger.LogError("Unexpected error occured while setting suggested sites.", ex);
             }

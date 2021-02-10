@@ -13,6 +13,5 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         /// <param name="principalName">PrincipalName of the user.</param>
         /// <returns></returns>
         Task SetSuggestedSites(string from, string siteUrl, string principalName);
-
     }
 }
