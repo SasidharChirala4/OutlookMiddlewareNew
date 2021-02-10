@@ -14,6 +14,13 @@
                  "Level is required!";
             public const string MessageRequired =
                  "Message is required!";
+            public const string FromRequired =
+                "From is required!";
+            public const string SiteUrlRequired =
+               "SiteUrl is required!";
+            public const string PrincipalNameRequired =
+               "PrincipalName is required!";
+
         }
     }
 }
