@@ -12,7 +12,7 @@ using Edreams.OutlookMiddleware.Common.KeyVault;
 using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
 using Edreams.OutlookMiddleware.Common.Security;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
-using Edreams.OutlookMiddleware.Common.ServiceBus._DependencyInjection;
+using Edreams.Common.AzureServiceBus._DependencyInjection;
 using Edreams.OutlookMiddleware.Common.Validation;
 using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Microsoft.AspNetCore.Authentication.Negotiate;
