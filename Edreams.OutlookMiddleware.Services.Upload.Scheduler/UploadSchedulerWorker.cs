@@ -7,14 +7,14 @@ using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
-using Edreams.OutlookMiddleware.Common.ServiceBus.Contracts;
-using Edreams.OutlookMiddleware.Common.ServiceBus.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Enums;
-using Microsoft.Azure.ServiceBus;
+using Edreams.Common.AzureServiceBus.Contracts;
+using Edreams.Common.AzureServiceBus.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Azure.ServiceBus;
 
 namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
 {
@@ -115,8 +115,8 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
                     };
 
                     // Post the prepared message to the ServiceBus queue so that it can be processed by the upload engine.
-                    await _serviceBusHandler.PostMessage(
-                        _configuration.ServiceBusQueueName, serviceBusMessage, cancellationToken);
+                    await _serviceBusHandler.PostMessage(_configuration.ServiceBusQueueName,
+                        _configuration.ServiceBusConnectionString, serviceBusMessage, cancellationToken);
 
                     // Change the transaction status to scheduled.
                     await _transactionQueueManager.UpdateTransactionStatus(

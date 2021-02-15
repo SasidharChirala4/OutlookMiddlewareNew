@@ -7,7 +7,7 @@ using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
-using Edreams.OutlookMiddleware.Common.ServiceBus.Interfaces;
+using Edreams.Common.AzureServiceBus.Interfaces;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Mapping.Interfaces;

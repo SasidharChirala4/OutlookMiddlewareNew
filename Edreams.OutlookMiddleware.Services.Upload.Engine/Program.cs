@@ -1,6 +1,6 @@
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common._DependencyInjection;
-using Edreams.OutlookMiddleware.Common.ServiceBus._DependencyInjection;
+using Edreams.Common.AzureServiceBus._DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 

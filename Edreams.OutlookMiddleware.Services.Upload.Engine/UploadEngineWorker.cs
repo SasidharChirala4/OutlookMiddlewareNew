@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Edreams.OutlookMiddleware.Common.ServiceBus.Contracts;
-using Edreams.OutlookMiddleware.Common.ServiceBus.Interfaces;
+using Edreams.Common.AzureServiceBus.Contracts;
+using Edreams.Common.AzureServiceBus.Interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -31,8 +31,8 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             // TODO: Replace current testing code with actual implementation.
             while (!stoppingToken.IsCancellationRequested)
             {
-                await _serviceBusHandler.ProcessMessagesAsync<Guid>(
-                    _configuration.ServiceBusQueueName, OnProcessing, OnError, stoppingToken);
+                await _serviceBusHandler.ProcessMessagesAsync<Guid>(_configuration.ServiceBusQueueName,
+                    _configuration.ServiceBusConnectionString, OnProcessing, OnError, stoppingToken);
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(1000, stoppingToken);
