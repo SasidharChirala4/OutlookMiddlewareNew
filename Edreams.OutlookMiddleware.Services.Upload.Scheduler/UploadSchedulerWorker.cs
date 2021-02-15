@@ -14,6 +14,7 @@ using Edreams.Common.AzureServiceBus.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Azure.ServiceBus;
 
 namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
 {
@@ -138,18 +139,18 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
             {
                 throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SQLCLIENT_UNKNOWN_FAULT, ex);
             }
-            //catch (MessagingEntityNotFoundException ex)
-            //{
-            //    throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_QUEUE_NOT_FOUND, ex);
-            //}
-            //catch (UnauthorizedException ex)
-            //{
-            //    throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_UNAUTHORIZED, ex);
-            //}
-            //catch (ServiceBusException ex)
-            //{
-            //    throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_CONNECTION_ERROR, ex);
-            //}
+            catch (MessagingEntityNotFoundException ex)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_QUEUE_NOT_FOUND, ex);
+            }
+            catch (UnauthorizedException ex)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_UNAUTHORIZED, ex);
+            }
+            catch (ServiceBusException ex)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_CONNECTION_ERROR, ex);
+            }
             catch (Exception ex)
             {
                 throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, ex);
