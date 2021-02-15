@@ -35,7 +35,21 @@ The e-DReaMS Outlook Middleware will use two separate databases. The first one, 
 
 The decision for a separate database for preloaded data came from earlier experience with much data being preloaded from the Outlook plugin without being confirmed and polluting the already busy database.
 
-![Architecture](.documentation/databases.drawio.png)
+## PreloadedFiles, Batches, Emails and Files
+
+![Architecture](.documentation/databases-1.drawio.png)
+
+## Metadata
+
+Metadata for emails that need to be uploaded to e-DReaMS is organized into relational data, linked to the emails and files records.
+
+First of all, the recipients for an email will be extracted and sent as part of committing a batch. The recipient (email-address or distribution group name) will be stored with 
+
+![Architecture](.documentation/databases-2.drawio.png)
+
+## CategorizationRequests
+
+![Architecture](.documentation/databases-3.drawio.png)
 
 # Repository
 
