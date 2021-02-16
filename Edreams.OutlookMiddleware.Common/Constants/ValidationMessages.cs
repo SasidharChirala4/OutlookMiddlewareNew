@@ -24,7 +24,10 @@
                 "Folder is required!";
             public const string ItemNameRequired =
                 "ItemName is required!";
-
+            public const string InternetMessageIdRequired =
+                "InternetMessageId is required!";
+            public const string RecipientsListRequired =
+                "RecipientsList is required!";
         }
     }
 }

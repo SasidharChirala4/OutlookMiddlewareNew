@@ -5,9 +5,11 @@ namespace Edreams.OutlookMiddleware.Model
 {
     public class Email : ModelBase, ILongSysId
     {
+        public string InternetMessageId { get; set; }
         public string EntryId { get; set; }
         public string EwsId { get; set; }
         public EmailStatus Status { get; set; }
         public Batch Batch { get; set; }
+        public EmailRecipient EmailRecipient { get; set; }
     }
 }
