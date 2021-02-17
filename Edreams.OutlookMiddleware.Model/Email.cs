@@ -10,6 +10,5 @@ namespace Edreams.OutlookMiddleware.Model
         public string EwsId { get; set; }
         public EmailStatus Status { get; set; }
         public Batch Batch { get; set; }
-        public EmailRecipient EmailRecipient { get; set; }
     }
 }
