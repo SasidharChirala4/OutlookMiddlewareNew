@@ -20,6 +20,7 @@ namespace Edreams.OutlookMiddleware.Mapping.DependencyInjection
             services.AddTransient<IMapper<Transaction, HistoricTransaction>, TransactionToHistoricTransactionMapper>();
 
             services.AddSingleton<IPreloadedFilesToFilesMapper, PreloadedFilesToFilesMapper>();
+            services.AddSingleton<IEmailsToEmailDetailsMapper, EmailsToEmailDetailsMapper>();
         }
     }
 }

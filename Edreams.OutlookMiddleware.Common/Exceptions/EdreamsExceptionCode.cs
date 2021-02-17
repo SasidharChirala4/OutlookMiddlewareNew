@@ -30,30 +30,41 @@ namespace Edreams.OutlookMiddleware.Common.Exceptions
         #region <| Azure KeyVault |>
 
         [Description("The Azure KeyVault service is not available. Please check your configuration or contact support for further assistance.")]
-        KEYVAULT_REQUEST_FAULT = 7001,
+        KEYVAULT_REQUEST_FAULT = 3001,
 
         [Description("There was an authentication issue with the Azure KeyVault service. Please check your configuration or contact support for further assistance.")]
-        KEYVAULT_AUTHENTICATION_FAULT = 7002,
+        KEYVAULT_AUTHENTICATION_FAULT = 3002,
 
         #endregion
 
         #region <| Azure ServiceBus |>
 
         [Description("The connection string to connect to Azure ServiceBus is missing. Please check your configuration or contact support for further assistance.")]
-        SERVICEBUS_CONNECTIONSTRING_MISSING = 8001,
+        SERVICEBUS_CONNECTIONSTRING_MISSING = 4001,
 
         [Description("The queue name to connect to Azure ServiceBus is missing. Please check your configuration or contact support for further assistance.")]
-        SERVICEBUS_QUEUENAME_MISSING = 8002,
+        SERVICEBUS_QUEUENAME_MISSING = 4002,
 
         [Description("The connection to Azure ServiceBus was successful, but the configured Queue cannot be found. Please check your configuration or contact support for further assistance.")]
-        SERVICEBUS_QUEUE_NOT_FOUND = 8003,
+        SERVICEBUS_QUEUE_NOT_FOUND = 4003,
 
         [Description("The connection to Azure ServiceBus has failed due to an authentication error. Please check your configuration or contact support for further assistance.")]
-        SERVICEBUS_UNAUTHORIZED = 8004,
+        SERVICEBUS_UNAUTHORIZED = 4004,
 
         [Description("The connection to Azure ServiceBus has failed due to a connection error. Please check your configuration or contact support for further assistance.")]
-        SERVICEBUS_CONNECTION_ERROR = 8005
+        SERVICEBUS_CONNECTION_ERROR = 4005,
 
         #endregion
+
+        #region <| Outlook Middleware |>
+
+        [Description("The specified batch was not found.")]
+        OUTLOOKMIDDLEWARE_BATCH_NOT_FOUND = 9001,
+        
+        [Description("The upload to e-DReaMS has failed.")]
+        OUTLOOKMIDDLEWARE_UPLOAD_TO_EDREAMS_FAILED = 9101,
+        
+        #endregion
+        
     }
 }

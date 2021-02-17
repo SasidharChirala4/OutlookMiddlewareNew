@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
+using Edreams.OutlookMiddleware.Common.Exceptions;
+using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api.Specific;
@@ -13,18 +15,23 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 {
     public class EmailManager : IEmailManager
     {
+        private readonly IRepository<Email> _emailRepository;
         private readonly IRepository<FilePreload> _preloadedFilesRepository;
         private readonly IMapper<CreateMailRequest, FilePreload> _createEmailRequestToFilePreloadMapper;
         private readonly ITransactionHelper _transactionHelper;
+        private readonly IExceptionFactory _exceptionFactory;
 
         public EmailManager(
+            IRepository<Email> emailRepository,
             IRepository<FilePreload> preloadedFilesRepository,
             IMapper<CreateMailRequest, FilePreload> createEmailRequestToFilePreloadMapper, 
-            ITransactionHelper transactionHelper)
+            ITransactionHelper transactionHelper, IExceptionFactory exceptionFactory)
         {
+            _emailRepository = emailRepository;
             _preloadedFilesRepository = preloadedFilesRepository;
             _createEmailRequestToFilePreloadMapper = createEmailRequestToFilePreloadMapper;
             _transactionHelper = transactionHelper;
+            _exceptionFactory = exceptionFactory;
         }
 
         /// <summary>
@@ -74,6 +81,20 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
                 return response;
             }
+        }
+
+        public async Task UpdateEmailStatus(Guid emailId, EmailStatus status)
+        {
+            Email email = await _emailRepository.GetSingle(x => x.Id == emailId);
+
+            if (email == null)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT);
+            }
+
+            email.Status = status;
+
+            await _emailRepository.Update(email);
         }
     }
 }

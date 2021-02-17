@@ -20,9 +20,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         /// <param name="itemBytes">The binary item data to upload.</param>
         /// <param name="siteUrl">Url of the site where Email/ Attachment should be uploaded.</param>
         /// <param name="folder">Url of the folder where Email/ Attachment should be uploaded.</param>
-        /// <param name="itemName">Email/ Attachment Name.</param>
-        /// <param name="ext">Email/ Attachment extension.</param>
+        /// <param name="fileName">Email/ Attachment Name.</param>
         /// <param name="overwrite">Flag to overwrite the file.</param>
-        Task<string> UploadFile(byte[] itemBytes, string siteUrl, string folder, string itemName, string ext, bool overwrite);
+        Task<string> UploadFile(byte[] itemBytes, string siteUrl, string folder, string fileName, bool overwrite);
     }
 }

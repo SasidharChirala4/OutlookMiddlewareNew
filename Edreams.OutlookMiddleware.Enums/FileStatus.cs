@@ -4,6 +4,6 @@
     {
         ReadyToUpload,
         Uploaded,
-        Finished
+        FailedToUpload
     }
 }
