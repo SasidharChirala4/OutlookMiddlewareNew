@@ -7,9 +7,11 @@ using Edreams.OutlookMiddleware.BusinessLogic.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
+using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Mapping.Custom.Interfaces;
+using Edreams.OutlookMiddleware.Mapping.Interfaces;
 using Edreams.OutlookMiddleware.Model;
 using Edreams.OutlookMiddleware.Tests.Framework.Extensions;
 using FluentAssertions;
@@ -32,13 +34,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
             var fileRepositoryMock = new Mock<IRepository<File>>();
             var batchFactoryMock = new Mock<IBatchFactory>();
+            var emailRepositoryMock = new Mock<IRepository<Email>>();
+            var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var preloadedFilesToFilesMapperMock = new Mock<IPreloadedFilesToFilesMapper>();
+            var emailRecipientDtoToEmailRecipientMapperMock = new Mock<IMapper<EmailRecipientDto,EmailRecipient>>();
             var transactionHelperMock = new Mock<ITransactionHelper>();
 
             // Create an instance of the "Subject Under Test" using the mocked dependencies.
             IBatchManager batchManager = new BatchManager(
                 preloadedFilesRepositoryMock.Object, batchRepositoryMock.Object, fileRepositoryMock.Object,
-                batchFactoryMock.Object, preloadedFilesToFilesMapperMock.Object, transactionHelperMock.Object);
+                emailRepositoryMock.Object,emailRecipientRepositoryMock.Object,
+                batchFactoryMock.Object, preloadedFilesToFilesMapperMock.Object,
+                emailRecipientDtoToEmailRecipientMapperMock.Object,transactionHelperMock.Object);
 
             // Prepare a request to use for when calling the "CommitBatch" method.
             CommitBatchRequest request = new CommitBatchRequest
@@ -86,13 +93,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
             var fileRepositoryMock = new Mock<IRepository<File>>();
             var batchFactoryMock = new Mock<IBatchFactory>();
+            var emailRepositoryMock = new Mock<IRepository<Email>>();
+            var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var preloadedFilesToFilesMapperMock = new Mock<IPreloadedFilesToFilesMapper>();
+            var emailRecipientDtoToEmailRecipientMapperMock = new Mock<IMapper<EmailRecipientDto, EmailRecipient>>();
             var transactionHelperMock = new Mock<ITransactionHelper>();
 
             // Create an instance of the "Subject Under Test" using the mocked dependencies.
             IBatchManager batchManager = new BatchManager(
-                preloadedFilesRepositoryMock.Object, batchRepositoryMock.Object, fileRepositoryMock.Object,
-                batchFactoryMock.Object, preloadedFilesToFilesMapperMock.Object, transactionHelperMock.Object);
+                 preloadedFilesRepositoryMock.Object, batchRepositoryMock.Object, fileRepositoryMock.Object,
+                emailRepositoryMock.Object, emailRecipientRepositoryMock.Object,
+                batchFactoryMock.Object, preloadedFilesToFilesMapperMock.Object,
+                emailRecipientDtoToEmailRecipientMapperMock.Object, transactionHelperMock.Object);
 
             // Prepare a request to use for when calling the "CancelBatch" method.
             CancelBatchRequest request = new CancelBatchRequest
@@ -136,13 +148,17 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
             var fileRepositoryMock = new Mock<IRepository<File>>();
             var batchFactoryMock = new Mock<IBatchFactory>();
+            var emailRepositoryMock = new Mock<IRepository<Email>>();
+            var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var preloadedFilesToFilesMapperMock = new Mock<IPreloadedFilesToFilesMapper>();
+            var emailRecipientDtoToEmailRecipientMapperMock = new Mock<IMapper<EmailRecipientDto, EmailRecipient>>();
             var transactionHelperMock = new Mock<ITransactionHelper>();
 
             // Create an instance of the "Subject Under Test" using the mocked dependencies.
-            IBatchManager batchManager = new BatchManager(
-                preloadedFilesRepositoryMock.Object, batchRepositoryMock.Object, fileRepositoryMock.Object,
-                batchFactoryMock.Object, preloadedFilesToFilesMapperMock.Object, transactionHelperMock.Object);
+            IBatchManager batchManager = new BatchManager(preloadedFilesRepositoryMock.Object, batchRepositoryMock.Object, fileRepositoryMock.Object,
+                emailRepositoryMock.Object, emailRecipientRepositoryMock.Object,
+                batchFactoryMock.Object, preloadedFilesToFilesMapperMock.Object,
+                emailRecipientDtoToEmailRecipientMapperMock.Object, transactionHelperMock.Object);
 
             // Generate a unique id to use for batches.
             Guid batchId = Guid.NewGuid();
