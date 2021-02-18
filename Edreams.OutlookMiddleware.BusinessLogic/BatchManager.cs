@@ -52,6 +52,15 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         public async Task<BatchDetailsDto> GetBatchDetails(Guid batchId)
         {
+            // Fetch the batch with specified unique ID.
+            Batch batch = await _batchRepository.GetSingle(x => x.Id == batchId);
+
+            // Throw an exception if a batch with specified unique ID cannot be found.
+            if (batch == null)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.OUTLOOKMIDDLEWARE_BATCH_NOT_FOUND);
+            }
+
             // Fetch all emails that are related to the specified batch and include the referenced files.
             IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files);
 

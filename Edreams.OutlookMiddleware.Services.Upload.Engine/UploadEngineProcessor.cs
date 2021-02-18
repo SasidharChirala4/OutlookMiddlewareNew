@@ -45,8 +45,8 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
             try
             {
-                // Get all batch details, including emails and files.
-                BatchDetailsDto batchDetails = await GetBatchDetails(batchId);
+                // Fetch all details for the batch from the database, into a single DTO.
+                BatchDetailsDto batchDetails = await _batchManager.GetBatchDetails(batchId);
 
                 int numberOfSuccessfullyUploadedEmails = 0;
 
@@ -108,21 +108,6 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         }
 
         #region <| Helper Methods |>
-
-        private async Task<BatchDetailsDto> GetBatchDetails(Guid batchId)
-        {
-            // Fetch all details for the batch from the database, into a single DTO.
-            BatchDetailsDto batchDetails = await _batchManager.GetBatchDetails(batchId);
-
-            // If the batch could not be found...
-            if (batchDetails == null)
-            {
-                // Throw an exception.
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.OUTLOOKMIDDLEWARE_BATCH_NOT_FOUND);
-            }
-
-            return batchDetails;
-        }
 
         private async Task<string> ProcessFile(FileDetailsDto fileDetails)
         {
