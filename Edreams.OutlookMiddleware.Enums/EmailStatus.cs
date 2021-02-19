@@ -3,7 +3,8 @@
     public enum EmailStatus
     {
         ReadyToUpload,
-        Uploaded,
-        Finished
+        Successful,
+        Partially,
+        Failed
     }
 }
