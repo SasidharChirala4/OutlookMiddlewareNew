@@ -17,7 +17,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class FilesController : ApiController<IFileManager>
+    public class FilesController : ApiController<IPreloadedFileManager>
     {
         private readonly IEdreamsConfiguration _configuration;
         private readonly ILogger<FilesController> _logger;
@@ -29,7 +29,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <param name="logger"></param>
         /// <param name="configuration"></param>
         public FilesController(
-            IFileManager fileManager,
+            IPreloadedFileManager fileManager,
             ILogger<FilesController> logger,
             IEdreamsConfiguration configuration)
             : base(fileManager, logger)

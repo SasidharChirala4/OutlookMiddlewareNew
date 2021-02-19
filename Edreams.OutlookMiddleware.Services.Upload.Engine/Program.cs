@@ -1,6 +1,7 @@
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common._DependencyInjection;
 using Edreams.Common.AzureServiceBus._DependencyInjection;
+using Edreams.OutlookMiddleware.Services.Upload.Engine.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -20,6 +21,8 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                     services.AddConfiguration(hostBuilder.Configuration);
                     services.AddServiceBus();
                     services.AddBusinessLogic();
+
+                    services.AddTransient<IUploadEngineProcessor, UploadEngineProcessor>();
                 })
                 .ConfigureServices((hostContext, services) =>
                 {

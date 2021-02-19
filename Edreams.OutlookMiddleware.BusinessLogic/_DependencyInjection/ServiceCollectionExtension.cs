@@ -23,6 +23,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection
             services.AddTransient<IBatchManager, BatchManager>();
             services.AddTransient<IEmailManager, EmailManager>();
             services.AddTransient<IFileManager, FileManager>();
+            services.AddTransient<IPreloadedFileManager, PreloadedFileManager>();
             services.AddTransient<ILoggingManager, LoggingManager>();
             services.AddTransient<IConfigurationManager, ConfigurationManager>();
             services.AddTransient<ITransactionQueueManager, TransactionQueueManager>();

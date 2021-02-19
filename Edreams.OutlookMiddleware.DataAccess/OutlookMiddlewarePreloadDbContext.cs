@@ -2,16 +2,25 @@
 using Edreams.OutlookMiddleware.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Configuration;
 
 namespace Edreams.OutlookMiddleware.DataAccess
 {
     public class OutlookMiddlewarePreloadDbContext : DbContext
     {
+        private readonly IConfiguration _configuration;
+        
         public DbSet<FilePreload> PreloadedFiles { get; set; }
+
+        public OutlookMiddlewarePreloadDbContext(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=.\\SQLDEV;Initial Catalog=EDREAMS-OUTLOOK-MIDDLEWARE-PRELOAD;Integrated Security=True;MultipleActiveResultSets=true");
+            string connectionString = _configuration.GetConnectionString("OutlookMiddlewarePreloadDbConnectionString");
+            optionsBuilder.UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

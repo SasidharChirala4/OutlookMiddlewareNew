@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Edreams.OutlookMiddleware.BusinessLogic.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
+using Edreams.OutlookMiddleware.Common.Exceptions;
+using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
+using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Mapping.Custom.Interfaces;
@@ -16,25 +20,73 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
     {
         private readonly IRepository<FilePreload> _preloadedFilesRepository;
         private readonly IRepository<Batch> _batchRepository;
+        private readonly IRepository<Email> _emailRepository;
         private readonly IRepository<File> _fileRepository;
         private readonly IBatchFactory _batchFactory;
+        private readonly IEmailsToEmailDetailsMapper _emailsToEmailDetailsMapper;
         private readonly IPreloadedFilesToFilesMapper _preloadedFilesToFilesMapper;
         private readonly ITransactionHelper _transactionHelper;
+        private readonly IExceptionFactory _exceptionFactory;
 
         public BatchManager(
             IRepository<FilePreload> preloadedFilesRepository,
             IRepository<Batch> batchRepository,
+            IRepository<Email> emailRepository,
             IRepository<File> fileRepository,
             IBatchFactory batchFactory,
+            IEmailsToEmailDetailsMapper emailsToEmailDetailsMapper,
             IPreloadedFilesToFilesMapper preloadedFilesToFilesMapper,
-            ITransactionHelper transactionHelper)
+            ITransactionHelper transactionHelper,
+            IExceptionFactory exceptionFactory)
         {
             _preloadedFilesRepository = preloadedFilesRepository;
             _batchRepository = batchRepository;
+            _emailRepository = emailRepository;
             _fileRepository = fileRepository;
             _batchFactory = batchFactory;
+            _emailsToEmailDetailsMapper = emailsToEmailDetailsMapper;
             _preloadedFilesToFilesMapper = preloadedFilesToFilesMapper;
             _transactionHelper = transactionHelper;
+            _exceptionFactory = exceptionFactory;
+        }
+
+        public async Task<BatchDetailsDto> GetBatchDetails(Guid batchId)
+        {
+            // Fetch the batch with specified unique ID.
+            Batch batch = await _batchRepository.GetSingle(x => x.Id == batchId);
+
+            // Throw an exception if a batch with specified unique ID cannot be found.
+            if (batch == null)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.OUTLOOKMIDDLEWARE_BATCH_NOT_FOUND);
+            }
+
+            // Fetch all emails that are related to the specified batch and include the referenced files.
+            IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files);
+
+            // Map the database emails and files to email details and file details.
+            IList<EmailDetailsDto> emailDetails = _emailsToEmailDetailsMapper.Map(emails);
+
+            // Return the batch details that contains the email details and file details.
+            return new BatchDetailsDto
+            {
+                Id = batchId,
+                Emails = emailDetails.ToList()
+            };
+        }
+
+        public async Task UpdateBatchStatus(Guid batchId, BatchStatus status)
+        {
+            Batch batch = await _batchRepository.GetSingle(x => x.Id == batchId);
+
+            if (batch == null)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.OUTLOOKMIDDLEWARE_BATCH_NOT_FOUND);
+            }
+
+            batch.Status = status;
+
+            await _batchRepository.Update(batch);
         }
 
         public async Task<CommitBatchResponse> CommitBatch(CommitBatchRequest request)

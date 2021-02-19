@@ -28,6 +28,9 @@
                 "InternetMessageId is required!";
             public const string RecipientsListRequired =
                 "RecipientsList is required!";
+            public const string FileNameRequired =
+                "FileName is required!";
+
         }
     }
 }
