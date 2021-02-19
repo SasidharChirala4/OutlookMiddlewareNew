@@ -14,14 +14,14 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class CategoryController : ApiController<ICategoryManager>
+    public class CategorizationController : ApiController<ICategorizationManager>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CategoryController" /> class.
+        /// Initializes a new instance of the <see cref="CategorizationController" /> class.
         /// </summary>
         /// <param name="categoryManager">T</param>
         /// <param name="logger"></param>
-        public CategoryController(ILogger<CategoryController> logger, ICategoryManager categoryManager)
+        public CategorizationController(ILogger<CategorizationController> logger, ICategorizationManager categoryManager)
            : base(categoryManager, logger) { }
 
         /// <summary>

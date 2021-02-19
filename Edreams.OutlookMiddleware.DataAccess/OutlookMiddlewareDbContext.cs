@@ -77,10 +77,9 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.Property(x => x.EmailAddress).HasMaxLength(200);
                 e.Property(x => x.InternetMessageId).IsRequired();
                 e.Property(x => x.InternetMessageId).HasMaxLength(200);
-                e.Property(x => x.Status).IsRequired();
-                e.Property(x => x.Type).IsRequired();
+                e.Property(x => x.Status).HasConversion(new EnumToStringConverter<CategorizationStatusType>());
+                e.Property(x => x.Type).HasConversion(new EnumToStringConverter<CategorizationRequestType>());
                 e.HasIndex(x => x.EmailAddress);
-                e.HasIndex(x => new { x.EmailAddress, x.Status, x.CategorizationRequestType, x.InternetMessageId });
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).IsRequired();
