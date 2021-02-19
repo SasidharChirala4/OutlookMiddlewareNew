@@ -42,8 +42,11 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
                 PreloadedFilesWorkerScheduleStopTime = configuration.GetValue<TimeSpan>("PreloadedFilesWorkerScheduleStopTime"),
                 CleanupWorkerIntervalInSeconds = configuration.GetValue<int>("CleanupWorkerIntervalInSeconds"),
                 TransactionsWorkerScheduleStartTime = configuration.GetValue<TimeSpan>("TransactionsWorkerScheduleStartTime"),
-                TransactionsWorkerScheduleStopTime = configuration.GetValue<TimeSpan>("TransactionsWorkerScheduleStopTime")
-            }); 
+                TransactionsWorkerScheduleStopTime = configuration.GetValue<TimeSpan>("TransactionsWorkerScheduleStopTime"),
+                CategorizationWorkerScheduleStartTime = configuration.GetValue<TimeSpan>("CategorizationWorkerScheduleStartTime"),
+                CategorizationWorkerScheduleStopTime = configuration.GetValue<TimeSpan>("CategorizationWorkerScheduleStopTime"),
+                CategorizationExpiryInMinutes = configuration.GetValue<int>("CategorizationExpiryInMinutes")
+            });
         }
 
         public static void AddCommon(this IServiceCollection services)

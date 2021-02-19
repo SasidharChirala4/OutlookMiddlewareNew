@@ -32,5 +32,8 @@ namespace Edreams.OutlookMiddleware.Common.Configuration
         public int CleanupWorkerIntervalInSeconds { get; set; }
         public TimeSpan TransactionsWorkerScheduleStartTime { get; set; }
         public TimeSpan TransactionsWorkerScheduleStopTime { get; set; }
+        public TimeSpan CategorizationWorkerScheduleStartTime { get; set; }
+        public TimeSpan CategorizationWorkerScheduleStopTime { get; set; }
+        public int CategorizationExpiryInMinutes { get; set; }
     }
 }

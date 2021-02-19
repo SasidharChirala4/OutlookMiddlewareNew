@@ -14,6 +14,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
     {
         private readonly IRepository<FilePreload> _preloadedFilesRepository;
         private readonly IRepository<HistoricTransaction> _transactionHistoryRepository;
+        private readonly IRepository<CategorizationRequest> _categorizationRequestRepository;
         private readonly IRepository<Batch> _batchRepository;
         private readonly IRepository<Email> _emailRepository;
         private readonly IRepository<File> _fileRepository;
@@ -23,6 +24,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         public CleanupManager(
             IRepository<FilePreload> preloadedFilesRepository,
             IRepository<HistoricTransaction> transactionHistoryRepository,
+            IRepository<CategorizationRequest> categorizationRequestRepository,
             IRepository<Batch> batchRepository,
             IRepository<Email> emailRepository,
             IRepository<File> fileRepository,
@@ -31,6 +33,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             _preloadedFilesRepository = preloadedFilesRepository;
             _transactionHistoryRepository = transactionHistoryRepository;
+            _categorizationRequestRepository = categorizationRequestRepository;
             _batchRepository = batchRepository;
             _emailRepository = emailRepository;
             _fileRepository = fileRepository;
@@ -150,6 +153,52 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
             // Return zero if no expired preloaded files were found.
             return 0;
+        }
+
+        public async Task<int> CleanupCategorizations()
+        {
+            // Find the processed/expired categories in the database.
+            IList<Guid> categorizationRequest = await _categorizationRequestRepository.FindAndProject(
+                x => (x.Status == CategorizationStatusType.Processed && x.Status == CategorizationStatusType.Expired), category => category.Id);
+
+            // If an processed/expired categories was found...
+            if (categorizationRequest.Count > 0)
+            {
+                // Force a database transaction scope to make sure multiple
+                // operations are combined as a single atomic operation.
+                using ITransactionScope transactionScope = _transactionHelper.CreateScope();
+
+                await _categorizationRequestRepository.Delete(categorizationRequest);
+
+                // Commit the transaction.
+                transactionScope.Commit();
+                return categorizationRequest.Count;
+            }
+            return 0;
+
+        }
+        public async Task<int> ExpireCategorizations()
+        {
+            // Read the time in minutes for expiry from configuration and calculate the datetime offset.
+            int expiry = _configuration.CategorizationExpiryInMinutes;
+            DateTime expirationDateTime = DateTime.UtcNow.AddMinutes(-expiry);
+
+            // Search for stuck categories that are older than the expiry offset.
+            IList<CategorizationRequest> categorizationRequests = await _categorizationRequestRepository.Find(
+                x => x.Status == CategorizationStatusType.Pending && x.InsertedOn < expirationDateTime);
+
+            // Change the status for all eligible categories to expired.
+            foreach (CategorizationRequest categorization in categorizationRequests)
+            {
+                categorization.Status = CategorizationStatusType.Expired;
+            }
+
+            // Update all expired categories in the database.
+            await _categorizationRequestRepository.Update(categorizationRequests);
+
+            // Return the number of categories that have been marked as expired.
+            return categorizationRequests.Count;
+
         }
     }
 }
