@@ -22,7 +22,7 @@ using Edreams.OutlookMiddleware.DataAccess.Exceptions;
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
     /// <summary>
-    /// CategoryManager defining methods to related to Categories.
+    /// CategorizationManager defining methods to related to Categories.
     /// </summary>
     public class CategorizationManager : ICategorizationManager
     {

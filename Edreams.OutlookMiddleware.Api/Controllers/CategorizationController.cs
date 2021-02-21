@@ -19,10 +19,10 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="CategorizationController" /> class.
         /// </summary>
-        /// <param name="categoryManager">T</param>
+        /// <param name="categorizationManager">T</param>
         /// <param name="logger"></param>
-        public CategorizationController(ILogger<CategorizationController> logger, ICategorizationManager categoryManager)
-           : base(categoryManager, logger) { }
+        public CategorizationController(ILogger<CategorizationController> logger, ICategorizationManager categorizationManager)
+           : base(categorizationManager, logger) { }
 
         /// <summary>
         /// Gets the pending email categories for the specified user.
