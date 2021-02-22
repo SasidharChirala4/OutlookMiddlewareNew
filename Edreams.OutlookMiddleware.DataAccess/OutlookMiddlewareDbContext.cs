@@ -2,11 +2,14 @@
 using Edreams.OutlookMiddleware.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Configuration;
 
 namespace Edreams.OutlookMiddleware.DataAccess
 {
     public class OutlookMiddlewareDbContext : DbContext
     {
+        private readonly IConfiguration _configuration;
+        
         public DbSet<Batch> Batches { get; set; }
         public DbSet<Email> Emails { get; set; }
         public DbSet<File> Files { get; set; }
@@ -15,9 +18,15 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<Transaction> TransactionQueue { get; set; }
         public DbSet<HistoricTransaction> TransactionHistory { get; set; }
 
+        public OutlookMiddlewareDbContext(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=.\\SQLDEV;Initial Catalog=EDREAMS-OUTLOOK-MIDDLEWARE;Integrated Security=True;MultipleActiveResultSets=true");
+            string connectionString = _configuration.GetConnectionString("OutlookMiddlewareDbConnectionString");
+            optionsBuilder.UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

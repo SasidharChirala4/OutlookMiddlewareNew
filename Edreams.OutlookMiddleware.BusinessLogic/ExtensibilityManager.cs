@@ -87,16 +87,15 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// <param name="itemBytes">The binary item data to upload.</param>
         /// <param name="siteUrl">Url of the site where Email/ Attachment should be uploaded.</param>
         /// <param name="folder">Url of the folder where Email/ Attachment should be uploaded.</param>
-        /// <param name="itemName">Email/ Attachment Name.</param>
-        /// <param name="ext">Email/ Attachment extension.</param>
+        /// <param name="fileName">Email/ Attachment Name.</param>
         /// <param name="overwrite">Flag to overwrite the file.</param>
         /// <returns>Uploaded file url</returns>
-        public async Task<string> UploadFile(byte[] itemBytes, string siteUrl, string folder, string itemName, string ext, bool overwrite)
+        public async Task<string> UploadFile(byte[] itemBytes, string siteUrl, string folder, string fileName, bool overwrite)
         {
             // Validations
             _validator.ValidateString(siteUrl, ValidationMessages.WebApi.SiteUrlRequired);
             _validator.ValidateString(folder, ValidationMessages.WebApi.FolderRequired);
-            _validator.ValidateString(itemName, ValidationMessages.WebApi.ItemNameRequired);
+            _validator.ValidateString(fileName, ValidationMessages.WebApi.FileNameRequired);
 
             try
             {
@@ -105,7 +104,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 {
                     Name = "file",
                     Writer = s => s.Write(itemBytes, 0, itemBytes.Length),
-                    FileName = itemName + (string.IsNullOrEmpty(ext) ? "" : "." + ext),
+                    FileName = fileName,
                     ContentLength = itemBytes.Length,
                     ContentType = "multipart/form-data"
                 };

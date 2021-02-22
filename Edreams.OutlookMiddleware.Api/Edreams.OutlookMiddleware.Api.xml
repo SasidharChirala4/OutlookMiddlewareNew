@@ -114,7 +114,7 @@
             Group of endpoints to handle different operations related to File(s) 
             </summary>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.FilesController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IFileManager,Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.FilesController},Edreams.OutlookMiddleware.Common.Configuration.Interfaces.IEdreamsConfiguration)">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.FilesController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IPreloadedFileManager,Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.FilesController},Edreams.OutlookMiddleware.Common.Configuration.Interfaces.IEdreamsConfiguration)">
             <summary>
             Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.FilesController" /> class.
             </summary>

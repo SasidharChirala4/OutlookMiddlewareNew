@@ -7,20 +7,26 @@ using Edreams.Common.AzureServiceBus.Contracts;
 using Edreams.Common.AzureServiceBus.Interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Edreams.OutlookMiddleware.DataTransferObjects;
+using Edreams.OutlookMiddleware.Services.Upload.Engine.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 {
     public class UploadEngineWorker : BackgroundService
     {
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IServiceBusHandler _serviceBusHandler;
         private readonly IEdreamsConfiguration _configuration;
         private readonly ILogger<UploadEngineWorker> _logger;
 
         public UploadEngineWorker(
+            IServiceScopeFactory serviceScopeFactory,
             IServiceBusHandler serviceBusHandler,
             IEdreamsConfiguration configuration,
             ILogger<UploadEngineWorker> logger)
         {
+            _serviceScopeFactory = serviceScopeFactory;
             _serviceBusHandler = serviceBusHandler;
             _configuration = configuration;
             _logger = logger;
@@ -28,10 +34,11 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // TODO: Replace current testing code with actual implementation.
+            // Run continuously as long as the Windows Service is running. If the Windows Service
+            // is stopped, the cancellation token will be cancelled and this loop will be stopped.
             while (!stoppingToken.IsCancellationRequested)
             {
-                await _serviceBusHandler.ProcessMessagesAsync<Guid>(_configuration.ServiceBusQueueName,
+                await _serviceBusHandler.ProcessMessagesAsync<TransactionMessage>(_configuration.ServiceBusQueueName,
                     _configuration.ServiceBusConnectionString, OnProcessing, OnError, stoppingToken);
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
@@ -39,12 +46,15 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             }
         }
 
-        private async Task OnProcessing(ServiceBusMessage<Guid> message, CancellationToken cancellationToken)
+        private async Task OnProcessing(ServiceBusMessage<TransactionMessage> message, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("WORKING FOR 6 MINUTES ...");
-            await Task.Delay(1000 * 60 * 6, cancellationToken);
-            _logger.LogInformation($"MESSAGE {message.CorrelationId} SUCCESSFULLY RECEIVED !!!");
+            using IServiceScope scope = _serviceScopeFactory.CreateScope();
+            IUploadEngineProcessor uploadEngineProcessor = scope.ServiceProvider.GetService<IUploadEngineProcessor>();
+
+            await uploadEngineProcessor.Process(message.Data);
         }
+
+
 
         private Task OnError(ServiceBusReceivedMessage serviceBusMessage, Exception ex, CancellationToken cancellationToken)
         {

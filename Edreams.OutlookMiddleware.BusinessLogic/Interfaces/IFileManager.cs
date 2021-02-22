@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.DataTransferObjects.Api;
+using Edreams.OutlookMiddleware.Enums;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
 {
     public interface IFileManager
     {
-        /// <summary>
-        /// Method to update the file details
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="storagePath"></param>
-        /// <returns></returns>
-        Task<UpdateFileResponse> UpdateFile(UpdateFileRequest request, string storagePath);
+        Task UpdateFileStatus(Guid fileId, FileStatus status);
     }
 }
