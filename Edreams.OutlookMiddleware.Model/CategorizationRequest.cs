@@ -8,8 +8,7 @@ namespace Edreams.OutlookMiddleware.Model
     {
         public string EmailAddress { get; set; }
         public string InternetMessageId { get; set; }
-        public int Status { get; set; }
-        public int Type { get; set; }
-        public CategorizationRequestType CategorizationRequestType { get; set; }
+        public CategorizationRequestStatus Status { get; set; }
+        public CategorizationRequestType Type { get; set; }
     }
 }

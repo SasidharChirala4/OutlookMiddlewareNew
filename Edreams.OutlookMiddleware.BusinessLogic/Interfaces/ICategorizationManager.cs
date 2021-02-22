@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
 {
-    public interface ICategoryManager
+    public interface ICategorizationManager
     {
         /// <summary>
         /// Method to get the pending categories for a given user.

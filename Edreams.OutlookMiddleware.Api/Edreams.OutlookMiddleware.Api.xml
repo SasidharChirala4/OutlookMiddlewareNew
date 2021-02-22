@@ -55,19 +55,19 @@
             Cancelling a batch changes the state of all related file-records and marks them ready for cleanup.
             </remarks>
         </member>
-        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.CategoryController">
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController">
             <summary>
             HTTP API Controller containing all mail category related operations.
             </summary>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategoryController.#ctor(Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.CategoryController},Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ICategoryManager)">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController.#ctor(Microsoft.Extensions.Logging.ILogger{Edreams.OutlookMiddleware.Api.Controllers.CategorizationController},Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ICategorizationManager)">
             <summary>
-            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.CategoryController" /> class.
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController" /> class.
             </summary>
             <param name="categoryManager">T</param>
             <param name="logger"></param>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategoryController.GetPendingCategories(System.String)">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController.GetPendingCategories(System.String)">
             <summary>
             Gets the pending email categories for the specified user.
             </summary>
@@ -75,7 +75,7 @@
             <returns>An ApiResult containing the pending categories.</returns>
             <remarks>This HTTP GET operation lists all pending categories for the specified mail address.</remarks>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategoryController.UpdatePendingCategories(Edreams.OutlookMiddleware.DataTransferObjects.Api.UpdatePendingCategoriesRequest)">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController.UpdatePendingCategories(Edreams.OutlookMiddleware.DataTransferObjects.Api.UpdatePendingCategoriesRequest)">
             <summary>
             Method to update the pending categories for the specified user.
             </summary>
