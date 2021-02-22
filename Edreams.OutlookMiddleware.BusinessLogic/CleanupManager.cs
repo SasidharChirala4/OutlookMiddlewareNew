@@ -155,6 +155,10 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             return 0;
         }
 
+        /// <summary>
+        /// Removing records from database which are Processed and Expired for longer time 
+        /// </summary>
+        /// <returns>Total count of records removed from the database.</returns>
         public async Task<int> CleanupCategorizations()
         {
             // Find the processed/expired categories in the database.
@@ -171,12 +175,17 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 await _categorizationRequestRepository.Delete(categorizationRequest);
 
                 // Commit the transaction.
+                // Return the total count of records removed from the database.
                 transactionScope.Commit();
                 return categorizationRequest.Count;
             }
             return 0;
 
         }
+        /// <summary>
+        /// Updating categorization status type as expired.
+        /// </summary>
+        /// <returns>Total count of records are set to expired status.</returns>
         public async Task<int> ExpireCategorizations()
         {
             // Read the time in minutes for expiry from configuration and calculate the datetime offset.
