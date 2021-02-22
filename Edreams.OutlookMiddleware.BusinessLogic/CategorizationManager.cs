@@ -71,7 +71,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 Limit limit = new Limit(0, _configuration.MaxNumberPendingCategories);
 
                 IList<CategorizationRequestEntity> categorizations = await _categorizationRequestRepository.FindDescending(x =>
-                                                                        x.EmailAddress.Equals(userPrincipalName) && x.Status == CategorizationStatusType.Pending, order => order.SysId, limit);
+                                                                        x.EmailAddress.Equals(userPrincipalName) && x.Status == CategorizationRequestStatus.Pending, order => order.SysId, limit);
                 if (categorizations.Count > 0)
                 {
                     getPendingCategoriesResponse.CategorizationRequests = _categorizationRequestMapper.Map(categorizations).ToList();
@@ -97,11 +97,11 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 IEnumerable<string> internetMessageIds = updatePendingCategoriesRequest.CategorizationRequests.Select(y => y.InternetMessageId).Distinct();
 
                 IList<CategorizationRequestEntity> categorizationRequests = await _categorizationRequestRepository.Find(x =>
-                 internetMessageIds.Contains(x.InternetMessageId) && x.EmailAddress.Equals(updatePendingCategoriesRequest.UserPrincipalName) && x.Status == CategorizationStatusType.Pending);
+                 internetMessageIds.Contains(x.InternetMessageId) && x.EmailAddress.Equals(updatePendingCategoriesRequest.UserPrincipalName) && x.Status == CategorizationRequestStatus.Pending);
 
                 foreach (CategorizationRequestEntity categorizationRequest in categorizationRequests)
                 {
-                    categorizationRequest.Status = CategorizationStatusType.Processed;
+                    categorizationRequest.Status = CategorizationRequestStatus.Processed;
                 }
 
                 await _categorizationRequestRepository.Update(categorizationRequests);
@@ -168,7 +168,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                     {
                         EmailAddress = recipient,
                         InternetMessageId = internetMessageId,
-                        Status = CategorizationStatusType.Pending,
+                        Status = CategorizationRequestStatus.Pending,
 
                         // TODO : Need to check with Johnny/Sasi about how & where to set all CategorizationRequestType
                         // setting catergorization type based on isUploaded value
