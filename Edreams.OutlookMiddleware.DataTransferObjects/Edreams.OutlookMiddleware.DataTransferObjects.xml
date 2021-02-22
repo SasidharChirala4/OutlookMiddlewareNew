@@ -108,6 +108,21 @@
             Request type of the Categorization
             </summary>
         </member>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest">
+            <summary>
+            Request class of CommitBatch
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.BatchId">
+            <summary>
+            BatchId
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.EmailRecipients">
+            <summary>
+            List of Email Recipients
+            </summary>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse">
             <summary>
             Response for Created Mail
@@ -248,6 +263,26 @@
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.UpdatePendingCategoriesResponse.Success">
             <summary>
             Response status of the set categeroies
+            </summary>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.EmailRecipientDto">
+            <summary>
+            Contract that represents Email Recipient
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.EmailRecipientDto.Recipient">
+            <summary>
+            Recipient
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.EmailRecipientDto.Type">
+            <summary>
+            EmailRecipient Type
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.EmailRecipientDto.EmailId">
+            <summary>
+            EmailId
             </summary>
         </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.TransactionDto">

@@ -4,14 +4,16 @@ using Edreams.OutlookMiddleware.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
 {
     [DbContext(typeof(OutlookMiddlewareDbContext))]
-    partial class OutlookMiddlewareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210216201506_Create_EmailRecipient")]
+    partial class Create_EmailRecipient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,6 +131,9 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                     b.Property<Guid?>("BatchId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("EmailRecipientId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("EntryId")
                         .HasColumnType("nvarchar(max)");
 
@@ -165,6 +170,8 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
 
                     b.HasIndex("BatchId");
 
+                    b.HasIndex("EmailRecipientId");
+
                     b.HasIndex("InternetMessageId");
 
                     b.HasIndex("SysId")
@@ -178,9 +185,6 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("EmailId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("InsertedBy")
@@ -214,8 +218,6 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
 
                     b.HasKey("Id")
                         .HasAnnotation("SqlServer:Clustered", false);
-
-                    b.HasIndex("EmailId");
 
                     b.HasIndex("SysId")
                         .IsUnique()
@@ -414,13 +416,10 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                     b.HasOne("Edreams.OutlookMiddleware.Model.Batch", "Batch")
                         .WithMany()
                         .HasForeignKey("BatchId");
-                });
 
-            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.EmailRecipient", b =>
-                {
-                    b.HasOne("Edreams.OutlookMiddleware.Model.Email", "Email")
+                    b.HasOne("Edreams.OutlookMiddleware.Model.EmailRecipient", "EmailRecipient")
                         .WithMany()
-                        .HasForeignKey("EmailId");
+                        .HasForeignKey("EmailRecipientId");
                 });
 
             modelBuilder.Entity("Edreams.OutlookMiddleware.Model.File", b =>

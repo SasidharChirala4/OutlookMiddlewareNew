@@ -5,7 +5,12 @@
     /// </summary>
     public enum CategorizationRequestType
     {
-        Uploaded = 10,
-        Failed = 20
+        EmailUploaded = 10,
+        AttachmentUploaded = 20,
+        EmailAndAttachmentUploaded = 30,
+        EmailUploadFailed = 40,
+        AtachmentUploadFailed = 50,
+        EmailAndAttachmentUploadFailed = 60
+        
     }
 }

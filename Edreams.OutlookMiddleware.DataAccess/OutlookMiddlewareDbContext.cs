@@ -14,6 +14,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<Email> Emails { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<CategorizationRequest> CategorizationRequests { get; set; }
+        public DbSet<EmailRecipient> EmailRecipients { get; set; }
         public DbSet<Transaction> TransactionQueue { get; set; }
         public DbSet<HistoricTransaction> TransactionHistory { get; set; }
 
@@ -51,21 +52,19 @@ namespace Edreams.OutlookMiddleware.DataAccess
 
             modelBuilder.Entity<Email>(e =>
             {
-                e
-                    .ToTable("Emails");
-                e
-                    .HasKey(x => x.Id)
+                e.ToTable("Emails");
+                e.HasKey(x => x.Id)
                     .IsClustered(false);
-                e
-                    .HasIndex(x => x.SysId)
+                e.HasIndex(x => x.SysId)
                     .IsUnique()
                     .IsClustered();
-                e
-                    .Property(x => x.SysId)
+                e.Property(x => x.SysId)
                     .ValueGeneratedOnAdd();
-                e
-                    .Property(x => x.Status)
+                e.Property(x => x.Status)
                     .HasConversion(new EnumToStringConverter<EmailStatus>());
+                e.Property(x => x.InternetMessageId)
+                    .HasMaxLength(200);
+                e.HasIndex(x => x.InternetMessageId);
             });
 
             modelBuilder.Entity<File>(e =>
@@ -83,14 +82,14 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.ToTable("CategorizationRequest");
                 e.HasKey(x => x.Id).IsClustered(false);
                 e.HasIndex(x => x.SysId).IsUnique().IsClustered();
-                e.Property(x => x.UserPrincipalName).IsRequired();
-                e.Property(x => x.UserPrincipalName).HasMaxLength(200);
+                e.Property(x => x.EmailAddress).IsRequired();
+                e.Property(x => x.EmailAddress).HasMaxLength(200);
                 e.Property(x => x.InternetMessageId).IsRequired();
                 e.Property(x => x.InternetMessageId).HasMaxLength(200);
-                e.Property(x => x.IsCompose).IsRequired();
-                e.Property(x => x.Sent).IsRequired();
-                e.HasIndex(x => x.UserPrincipalName);
-                e.HasIndex(x => new { x.UserPrincipalName, x.Sent, x.CategorizationRequestType, x.InternetMessageId });
+                e.Property(x => x.Status).IsRequired();
+                e.Property(x => x.Type).IsRequired();
+                e.HasIndex(x => x.EmailAddress);
+                e.HasIndex(x => new { x.EmailAddress, x.Status, x.CategorizationRequestType, x.InternetMessageId });
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).IsRequired();
@@ -118,6 +117,21 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.Property(x => x.SysId).ValueGeneratedOnAdd();
                 e.Property(x => x.Status).HasConversion(new EnumToStringConverter<TransactionStatus>());
                 e.Property(x => x.ProcessingEngine).HasMaxLength(100);
+                e.Property(x => x.InsertedBy).IsRequired();
+                e.Property(x => x.InsertedBy).HasMaxLength(100);
+                e.Property(x => x.UpdatedBy).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<EmailRecipient>(e =>
+            {
+                e.ToTable("EmailRecipients");
+                e.HasKey(x => x.Id).IsClustered(false);
+                e.HasIndex(x => x.SysId).IsUnique().IsClustered();
+                e.Property(x => x.SysId).ValueGeneratedOnAdd();
+                e.Property(x => x.Recipient).IsRequired();
+                e.Property(x => x.Recipient).HasMaxLength(200);
+                e.Property(x => x.Type).IsRequired();
+                e.Property(x => x.Type).HasConversion(new EnumToStringConverter<EmailRecipientType>());
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);

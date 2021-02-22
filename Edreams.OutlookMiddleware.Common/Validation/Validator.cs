@@ -1,6 +1,7 @@
 ﻿using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Edreams.OutlookMiddleware.Common.Validation
@@ -48,7 +49,18 @@ namespace Edreams.OutlookMiddleware.Common.Validation
                 throw new EdreamsValidationException(validationMessage);
             }
         }
-
+        /// <summary>
+        /// Validates a list of string values
+        /// </summary>
+        /// <param name="toValidate"></param>
+        /// <param name="validationMessage"></param>
+        public void ValidateList(List<string> toValidate, string validationMessage) 
+        {
+            if (toValidate.Count == 0) 
+            {
+                throw new EdreamsValidationException(validationMessage);
+            }
+        }
         /// <summary>
         /// Validates a datetime.
         /// </summary>
