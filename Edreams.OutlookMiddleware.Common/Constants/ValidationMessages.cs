@@ -30,7 +30,6 @@
                 "RecipientsList is required!";
             public const string FileNameRequired =
                 "FileName is required!";
-
         }
     }
 }
