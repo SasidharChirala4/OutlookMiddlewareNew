@@ -168,15 +168,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // If an processed/expired categories was found...
             if (categorizationRequest.Count > 0)
             {
-                // Force a database transaction scope to make sure multiple
-                // operations are combined as a single atomic operation.
-                using ITransactionScope transactionScope = _transactionHelper.CreateScope();
-
                 await _categorizationRequestRepository.Delete(categorizationRequest);
 
-                // Commit the transaction.
                 // Return the total count of records removed from the database.
-                transactionScope.Commit();
                 return categorizationRequest.Count;
             }
             return 0;
