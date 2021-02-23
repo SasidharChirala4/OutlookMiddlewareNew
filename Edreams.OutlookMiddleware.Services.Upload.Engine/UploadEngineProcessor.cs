@@ -96,6 +96,9 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 // Update batch status based on the success rate.
                 await _batchManager.UpdateBatchStatus(batchDetails.Id, batchStatus);
 
+                // Create a new transaction to schedule the categorization process.
+                await _transactionQueueManager.CreateCategorizationTransaction(batchId);
+
                 // Update the transaction to have a succeeded status.
                 await _transactionQueueManager.UpdateTransactionStatusAndArchive(transactionId, TransactionStatus.ProcessingSucceeded);
             }

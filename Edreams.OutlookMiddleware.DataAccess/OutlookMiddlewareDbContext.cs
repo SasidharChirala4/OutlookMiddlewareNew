@@ -102,6 +102,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.HasIndex(x => x.SysId).IsUnique().IsClustered();
                 e.Property(x => x.SysId).ValueGeneratedOnAdd();
                 e.Property(x => x.Status).HasConversion(new EnumToStringConverter<TransactionStatus>());
+                e.Property(x => x.Type).HasConversion(new EnumToStringConverter<TransactionType>());
                 e.Property(x => x.ProcessingEngine).HasMaxLength(100);
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
@@ -115,6 +116,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.HasIndex(x => x.SysId).IsUnique().IsClustered();
                 e.Property(x => x.SysId).ValueGeneratedOnAdd();
                 e.Property(x => x.Status).HasConversion(new EnumToStringConverter<TransactionStatus>());
+                e.Property(x => x.Type).HasConversion(new EnumToStringConverter<TransactionType>());
                 e.Property(x => x.ProcessingEngine).HasMaxLength(100);
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);

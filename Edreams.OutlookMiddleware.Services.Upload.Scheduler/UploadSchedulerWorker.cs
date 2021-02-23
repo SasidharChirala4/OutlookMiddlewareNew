@@ -83,7 +83,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
             try
             {
                 // Get the next transaction from the database.
-                TransactionDto nextTransaction = await _transactionQueueManager.GetNextTransaction();
+                TransactionDto nextTransaction = await _transactionQueueManager.GetNextUploadTransaction();
 
                 // If a transaction was found...
                 if (nextTransaction != null)
