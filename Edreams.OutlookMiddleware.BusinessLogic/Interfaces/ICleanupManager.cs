@@ -27,5 +27,17 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         /// </summary>
         /// <returns>The number of historic transactions and their related batches, mails and files that were removed.</returns>
         Task<int> CleanupTransactions();
+
+        /// <summary>
+        /// Removes the categorizations status were marked as processed/expired.
+        /// </summary>
+        /// <returns>The number of categorizations that were removed.</returns>
+        Task<int> CleanupCategorizations();
+
+        /// <summary>
+        /// Verify the categories and changes the status to expired for the old ones.
+        /// </summary>
+        /// <returns>The number of categories that were marked as expired.</returns>
+        Task<int> ExpireCategorizations();
     }
 }

@@ -64,7 +64,7 @@
             <summary>
             Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController" /> class.
             </summary>
-            <param name="categoryManager">T</param>
+            <param name="categorizationManager">T</param>
             <param name="logger"></param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController.GetPendingCategories(System.String)">
