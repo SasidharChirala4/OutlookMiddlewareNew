@@ -30,10 +30,28 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         Task<TransactionStatus?> GetTransactionStatus(Guid transactionId);
 
         /// <summary>
-        /// Gets the next transaction for provisioning.
+        /// Gets the next upload transaction for provisioning.
         /// </summary>
-        /// <returns>The requested transaction.</returns>
-        Task<TransactionDto> GetNextTransaction();
+        /// <returns>The requested upload transaction.</returns>
+        Task<TransactionDto> GetNextUploadTransaction();
+
+        /// <summary>
+        /// Gets the next categorization transaction for provisioning.
+        /// </summary>
+        /// <returns>The requested categorization transaction.</returns>
+        Task<TransactionDto> GetNextCategorizationTransaction();
+
+        /// <summary>
+        /// Creates a new upload transaction for a specific batch.
+        /// </summary>
+        /// <param name="batchId">The unique identifier for the batch that needs to be uploaded.</param>
+        Task CreateUploadTransaction(Guid batchId);
+
+        /// <summary>
+        /// Creates a new categorization transaction for a specific batch.
+        /// </summary>
+        /// <param name="batchId">The unique identifier for the batch that needs to be categorized.</param>
+        Task CreateCategorizationTransaction(Guid batchId);
 
         /// <summary>
         /// Updates the status of an existing transaction.

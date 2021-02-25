@@ -76,16 +76,40 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 x => x.Id == transactionId, proj => (TransactionStatus?)proj.Status);
         }
 
-        public async Task<TransactionDto> GetNextTransaction()
+        /// <summary>
+        /// Gets the next upload transaction for provisioning.
+        /// </summary>
+        /// <returns>The requested upload transaction.</returns>
+        public Task<TransactionDto> GetNextUploadTransaction()
         {
-            // Build the predicate that searches for all queued transactions that have a release date in the past.
-            Expression<Func<Transaction, bool>> predicate = x => x.Status == TransactionStatus.Queued && x.ReleaseDate.HasValue && x.ReleaseDate < DateTime.UtcNow;
+            return GetNextTransaction(TransactionType.Upload);
+        }
 
-            // Check the database and retrieve the first transaction using the prepared predicate, ordering them by release date.
-            Transaction transaction = await _transactionRepository.GetFirstAscending(predicate, o => o.ReleaseDate);
+        /// <summary>
+        /// Gets the next categorization transaction for provisioning.
+        /// </summary>
+        /// <returns>The requested categorization transaction.</returns>
+        public Task<TransactionDto> GetNextCategorizationTransaction()
+        {
+            return GetNextTransaction(TransactionType.Categorization);
+        }
 
-            // Return a mapped DTO.
-            return _transactionMapper.Map(transaction);
+        /// <summary>
+        /// Creates a new upload transaction for a specific batch.
+        /// </summary>
+        /// <param name="batchId">The unique identifier for the batch that needs to be uploaded.</param>
+        public Task CreateUploadTransaction(Guid batchId)
+        {
+            return CreateTransaction(batchId, TransactionType.Upload);
+        }
+
+        /// <summary>
+        /// Creates a new categorization transaction for a specific batch.
+        /// </summary>
+        /// <param name="batchId">The unique identifier for the batch that needs to be categorized.</param>
+        public Task CreateCategorizationTransaction(Guid batchId)
+        {
+            return CreateTransaction(batchId, TransactionType.Categorization);
         }
 
         public Task<TransactionDto> UpdateTransactionStatus(Guid transactionId, TransactionStatus status)
@@ -215,6 +239,34 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 // This handles all remaining exceptions.
                 throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, ex);
             }
+        }
+
+        public async Task<TransactionDto> GetNextTransaction(TransactionType transactionType)
+        {
+            // Build the predicate that searches for all queued transactions that have a release date in the past.
+            Expression<Func<Transaction, bool>> predicate =
+                x => x.Type == transactionType && x.Status == TransactionStatus.Queued &&
+                     x.ReleaseDate.HasValue && x.ReleaseDate < DateTime.UtcNow;
+
+            // Check the database and retrieve the first transaction using the prepared predicate, ordering them by release date.
+            Transaction transaction = await _transactionRepository.GetFirstAscending(predicate, o => o.ReleaseDate);
+
+            // Return a mapped DTO.
+            return _transactionMapper.Map(transaction);
+        }
+
+        private async Task CreateTransaction(Guid batchId, TransactionType transactionType)
+        {
+            Transaction transaction = new Transaction
+            {
+                BatchId = batchId,
+                Status = TransactionStatus.Queued,
+                Type = transactionType,
+                CorrelationId = _securityContext.CorrelationId,
+                ReleaseDate = DateTime.UtcNow
+            };
+
+            await _transactionRepository.Create(transaction);
         }
 
         private void UpdateTransactionStatus(ITransaction transaction, TransactionStatus status)
