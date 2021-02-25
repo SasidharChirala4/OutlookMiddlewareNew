@@ -18,14 +18,25 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<Transaction> TransactionQueue { get; set; }
         public DbSet<HistoricTransaction> TransactionHistory { get; set; }
 
+
+        public OutlookMiddlewareDbContext()
+        {
+            
+        }
         public OutlookMiddlewareDbContext(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    string connectionString = _configuration.GetConnectionString("OutlookMiddlewareDbConnectionString");
+        //    optionsBuilder.UseSqlServer(connectionString);
+        //}
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = _configuration.GetConnectionString("OutlookMiddlewareDbConnectionString");
+            string connectionString = "Data Source=.\\SQLDEV;Initial Catalog=EDREAMS-OUTLOOK-MIDDLEWARE;Integrated Security=True;MultipleActiveResultSets=true";
             optionsBuilder.UseSqlServer(connectionString);
         }
 
@@ -102,6 +113,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.HasIndex(x => x.SysId).IsUnique().IsClustered();
                 e.Property(x => x.SysId).ValueGeneratedOnAdd();
                 e.Property(x => x.Status).HasConversion(new EnumToStringConverter<TransactionStatus>());
+                e.Property(x => x.Type).HasConversion(new EnumToStringConverter<TransactionType>());
                 e.Property(x => x.ProcessingEngine).HasMaxLength(100);
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
@@ -115,6 +127,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.HasIndex(x => x.SysId).IsUnique().IsClustered();
                 e.Property(x => x.SysId).ValueGeneratedOnAdd();
                 e.Property(x => x.Status).HasConversion(new EnumToStringConverter<TransactionStatus>());
+                e.Property(x => x.Type).HasConversion(new EnumToStringConverter<TransactionType>());
                 e.Property(x => x.ProcessingEngine).HasMaxLength(100);
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);

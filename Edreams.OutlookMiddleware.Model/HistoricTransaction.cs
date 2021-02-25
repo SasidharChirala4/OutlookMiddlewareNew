@@ -13,6 +13,8 @@ namespace Edreams.OutlookMiddleware.Model
 
         public TransactionStatus Status { get; set; }
 
+        public TransactionType Type { get; set; }
+
         public DateTime? Scheduled { get; set; }
 
         public DateTime? ProcessingStarted { get; set; }
