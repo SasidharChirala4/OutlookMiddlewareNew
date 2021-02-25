@@ -77,7 +77,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         }
 
         /// <summary>
-        /// Gets the next upload transaction for provisioning.
+        /// Gets the next upload transaction to process.
         /// </summary>
         /// <returns>The requested upload transaction.</returns>
         public Task<TransactionDto> GetNextUploadTransaction()
@@ -86,7 +86,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         }
 
         /// <summary>
-        /// Gets the next categorization transaction for provisioning.
+        /// Gets the next categorization transaction to process.
         /// </summary>
         /// <returns>The requested categorization transaction.</returns>
         public Task<TransactionDto> GetNextCategorizationTransaction()
