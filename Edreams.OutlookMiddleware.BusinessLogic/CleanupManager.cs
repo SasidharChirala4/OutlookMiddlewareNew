@@ -163,7 +163,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             // Find the processed/expired categories in the database.
             IList<Guid> categorizationRequest = await _categorizationRequestRepository.FindAndProject(
-                x => (x.Status == CategorizationStatusType.Processed && x.Status == CategorizationStatusType.Expired), category => category.Id);
+                x => (x.Status == CategorizationRequestStatus.Processed && x.Status == CategorizationRequestStatus.Expired), category => category.Id);
 
             // If an processed/expired categories was found...
             if (categorizationRequest.Count > 0)
@@ -188,12 +188,12 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
             // Search for stuck categories that are older than the expiry offset.
             IList<CategorizationRequest> categorizationRequests = await _categorizationRequestRepository.Find(
-                x => x.Status == CategorizationStatusType.Pending && x.InsertedOn < expirationDateTime);
+                x => x.Status == CategorizationRequestStatus.Pending && x.InsertedOn < expirationDateTime);
 
             // Change the status for all eligible categories to expired.
             foreach (CategorizationRequest categorization in categorizationRequests)
             {
-                categorization.Status = CategorizationStatusType.Expired;
+                categorization.Status = CategorizationRequestStatus.Expired;
             }
 
             // Update all expired categories in the database.
