@@ -18,14 +18,25 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<Transaction> TransactionQueue { get; set; }
         public DbSet<HistoricTransaction> TransactionHistory { get; set; }
 
+
+        public OutlookMiddlewareDbContext()
+        {
+            
+        }
         public OutlookMiddlewareDbContext(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    string connectionString = _configuration.GetConnectionString("OutlookMiddlewareDbConnectionString");
+        //    optionsBuilder.UseSqlServer(connectionString);
+        //}
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = _configuration.GetConnectionString("OutlookMiddlewareDbConnectionString");
+            string connectionString = "Data Source=.\\SQLDEV;Initial Catalog=EDREAMS-OUTLOOK-MIDDLEWARE;Integrated Security=True;MultipleActiveResultSets=true";
             optionsBuilder.UseSqlServer(connectionString);
         }
 
