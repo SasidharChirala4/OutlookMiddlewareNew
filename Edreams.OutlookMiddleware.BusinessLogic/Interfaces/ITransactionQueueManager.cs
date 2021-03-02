@@ -30,13 +30,13 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         Task<TransactionStatus?> GetTransactionStatus(Guid transactionId);
 
         /// <summary>
-        /// Gets the next upload transaction for provisioning.
+        /// Gets the next upload transaction to process.
         /// </summary>
         /// <returns>The requested upload transaction.</returns>
         Task<TransactionDto> GetNextUploadTransaction();
 
         /// <summary>
-        /// Gets the next categorization transaction for provisioning.
+        /// Gets the next categorization transaction to process.
         /// </summary>
         /// <returns>The requested categorization transaction.</returns>
         Task<TransactionDto> GetNextCategorizationTransaction();
