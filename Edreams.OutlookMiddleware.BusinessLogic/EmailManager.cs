@@ -120,7 +120,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         public async Task<IList<EmailRecipient>> GetEmailRecipients(Guid emailId)
         {
             // Fetch all emails recipients that are related to the specified emails.
-            IList<EmailRecipient> emailRecipients = await _emailRecipientRepository.Find(x => x.Email.Id == emailId, Incl => Incl.Email);
+            IList<EmailRecipient> emailRecipients = await _emailRecipientRepository.Find(x => x.Email.Id == emailId, incl => incl.Email);
             return emailRecipients;
         }
 
