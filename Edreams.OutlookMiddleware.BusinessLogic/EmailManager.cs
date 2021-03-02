@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
 using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
-using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api.Specific;
 using Edreams.OutlookMiddleware.Enums;
-using Edreams.OutlookMiddleware.Mapping.Custom.Interfaces;
 using Edreams.OutlookMiddleware.Mapping.Interfaces;
 using Edreams.OutlookMiddleware.Model;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
@@ -24,7 +22,6 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly ITransactionHelper _transactionHelper;
         private readonly IExceptionFactory _exceptionFactory;
         private readonly IRepository<EmailRecipient> _emailRecipientRepository;
-        private readonly IEmailRecipientsToEmailRecipientDetailsMapper _emailRecipientsToEmailRecipientDetailsMapper;
         private readonly IRepository<Batch> _batchRepository;
 
         public EmailManager(
@@ -32,7 +29,6 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             IRepository<FilePreload> preloadedFilesRepository,
             IMapper<CreateMailRequest, FilePreload> createEmailRequestToFilePreloadMapper,
             ITransactionHelper transactionHelper, IExceptionFactory exceptionFactory, IRepository<EmailRecipient> emailRecipientRepository,
-            IEmailRecipientsToEmailRecipientDetailsMapper emailRecipientsToEmailRecipientDetailsMapper,
             IRepository<Batch> batchRepository)
         {
             _emailRepository = emailRepository;
@@ -41,7 +37,6 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             _transactionHelper = transactionHelper;
             _exceptionFactory = exceptionFactory;
             _emailRecipientRepository = emailRecipientRepository;
-            _emailRecipientsToEmailRecipientDetailsMapper = emailRecipientsToEmailRecipientDetailsMapper;
             _batchRepository = batchRepository;
         }
 
@@ -93,7 +88,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 return response;
             }
         }
-        
+
         /// <summary>
         /// GetEmails by batchId
         /// </summary>
@@ -122,15 +117,11 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// </summary>
         /// <param name="emailId"></param>
         /// <returns>EmailRecipients</returns>
-        public async Task<IList<EmailRecipientDto>> GetEmailRecipients(Guid emailId)
+        public async Task<IList<EmailRecipient>> GetEmailRecipients(Guid emailId)
         {
             // Fetch all emails recipients that are related to the specified emails.
-            IList<EmailRecipient> emailRecipients = await _emailRecipientRepository.Find(x => x.Email.Id == emailId, proj => proj.Email);
-
-            // Map the database emailRecipients to emailRecipients details .
-            IList<EmailRecipientDto> emailRecipientDetails = _emailRecipientsToEmailRecipientDetailsMapper.Map(emailRecipients);
-            return emailRecipientDetails;
-
+            IList<EmailRecipient> emailRecipients = await _emailRecipientRepository.Find(x => x.Email.Id == emailId, Incl => Incl.Email);
+            return emailRecipients;
         }
 
         public async Task UpdateEmailStatus(Guid emailId, EmailStatus status)

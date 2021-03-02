@@ -12,7 +12,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
     {
         Task<IList<Email>> GetEmails(Guid batchId);
 
-        Task<IList<EmailRecipientDto>> GetEmailRecipients(Guid emailId);
+        Task<IList<EmailRecipient>> GetEmailRecipients(Guid emailId);
 
         Task<CreateMailResponse> CreateMail(CreateMailRequest request);
 

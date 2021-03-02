@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Azure;
+﻿using Azure;
 using Azure.Identity;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
@@ -12,6 +10,8 @@ using Edreams.OutlookMiddleware.Common.KeyVault;
 using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
+using System;
+using System.Threading.Tasks;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
@@ -76,7 +76,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         #region <| Helper Method |>
 
-        private IKeyVaultClient CreateKeyVaultClient()
+        public IKeyVaultClient CreateKeyVaultClient()
         {
             try
             {
@@ -98,7 +98,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
         }
 
-        private async Task<IExchangeClient> CreateExchangeClient(IKeyVaultClient keyVaultClient)
+        public async Task<IExchangeClient> CreateExchangeClient(IKeyVaultClient keyVaultClient)
         {
             try
             {
