@@ -14,7 +14,7 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddHostedService<Worker>();
+                    services.AddHostedService<CategorizationEngineWorker>();
                 });
     }
 }

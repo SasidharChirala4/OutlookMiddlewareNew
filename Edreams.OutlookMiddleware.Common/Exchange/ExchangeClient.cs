@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
 using Microsoft.Exchange.WebServices.Data;
@@ -43,6 +44,26 @@ namespace Edreams.OutlookMiddleware.Common.Exchange
             }
 
             return nameResolution.Mailbox.Address;
+        }
+
+
+        public async Task<IList<string>> ExpandDistributionLists(string recipient)
+        {
+            IList<string> listOfEmails = new List<string>();
+            // Return the expanded group.
+            ExpandGroupResults groupMembers = await _exchangeService.ExpandGroup(recipient);
+
+            // Loop through the group members.
+            foreach (EmailAddress address in groupMembers.Members)
+            {
+                // Check to see if the type is not a public group
+                // From this level we will ignore nested groups.
+                if (address.MailboxType != MailboxType.PublicGroup)
+                {
+                    listOfEmails.Add(address.Address);
+                }
+            }
+            return listOfEmails;
         }
     }
 }
