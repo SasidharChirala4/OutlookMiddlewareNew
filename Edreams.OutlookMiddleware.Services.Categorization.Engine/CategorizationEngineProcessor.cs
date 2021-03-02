@@ -64,24 +64,23 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
                     {
                         throw new Exception($"EmailRecipients are null for the email {email.Id}");
                     }
-                    foreach (EmailRecipient emailRecipient in emailRecipients)
+
+                    // fetching recipient list which are not type as distribution
+                    List<string> individualRecipientsList = emailRecipients.Where(x => x.Type != EmailRecipientType.DistributionList).Select(x => x.Recipient).ToList();
+                    // adding individual recipients
+                    recipients.AddRange(individualRecipientsList);
+
+                    // fetching distribution recipients
+                    List<string> distributionRecipientsList = emailRecipients.Where(x => x.Type == EmailRecipientType.DistributionList).Select(x => x.Recipient).ToList();
+
+                    foreach (var emailRecipient in distributionRecipientsList)
                     {
-                        // cheking emailRecipientType as distribution list or not
-                        // if it's a distribution list we will expand recipients from that group.
-                        if (emailRecipient.Type == EmailRecipientType.DistributionList)
+                        // expanding recipients from distributionList group
+                        IList<string> expandedRecipientLists = await exchangeClient.ExpandDistributionLists(emailRecipient);
+                        if (expandedRecipientLists.Count > 0)
                         {
-                            // expanding recipients from distributionList group
-                            IList<string> expandedRecipientLists = await exchangeClient.ExpandDistributionLists(emailRecipient.Recipient);
-                            if (expandedRecipientLists.Count > 0)
-                            {
-                                // adding recipients into list
-                                recipients.AddRange(expandedRecipientLists);
-                            }
-                        }
-                        else
-                        {
-                            // adding recipients into list
-                            recipients.Add(emailRecipient.Recipient);
+                            // adding distribution recipients into list
+                            recipients.AddRange(expandedRecipientLists);
                         }
                     }
                     // Removing duplicate recipients from expandDistributionlist and emailRecipients
