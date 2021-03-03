@@ -1,7 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Principal;
+using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
+using Edreams.OutlookMiddleware.Common._DependencyInjection;
+using Edreams.OutlookMiddleware.Common.Security;
+using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -16,8 +17,17 @@ namespace Edreams.OutlookMiddleware.Services.Notification
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices((hostContext, services) =>
+                .ConfigureServices((hostBuilder, services) =>
                 {
+                    ISecurityContext securityContext = new SecurityContext();
+                    securityContext.RefreshCorrelationId();
+                    securityContext.SetUserIdentity(WindowsIdentity.GetCurrent());
+                    services.AddSingleton(_ => securityContext);
+
+                    services.AddCommon();
+                    services.AddConfiguration(hostBuilder.Configuration);
+                    services.AddBusinessLogic();
+
                     services.AddHostedService<Worker>();
                 });
     }

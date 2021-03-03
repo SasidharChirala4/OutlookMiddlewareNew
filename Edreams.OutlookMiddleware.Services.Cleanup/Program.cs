@@ -23,11 +23,12 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup
                     ISecurityContext securityContext = new SecurityContext();
                     securityContext.RefreshCorrelationId();
                     securityContext.SetUserIdentity(WindowsIdentity.GetCurrent());
-
                     services.AddSingleton(_ => securityContext);
-                    services.AddConfiguration(hostBuilder.Configuration);
+
                     services.AddCommon();
+                    services.AddConfiguration(hostBuilder.Configuration);
                     services.AddBusinessLogic();
+
                     services.AddHostedService<PreloadedFilesCleanupWorker>();
                     services.AddHostedService<PreloadedFilesExpirationWorker>();
                     services.AddHostedService<TransactionsCleanupWorker>();

@@ -29,9 +29,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
                     services.AddConfiguration(hostBuilder.Configuration);
                     services.AddServiceBus();
                     services.AddBusinessLogic();
-                })
-                .ConfigureServices((hostContext, services) =>
-                {
+
                     services.AddHostedService<UploadSchedulerWorker>();
                 });
     }
