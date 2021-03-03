@@ -1,6 +1,9 @@
+using System.Security.Principal;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common._DependencyInjection;
 using Edreams.Common.AzureServiceBus._DependencyInjection;
+using Edreams.OutlookMiddleware.Common.Security;
+using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.Services.Upload.Engine.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,15 +21,18 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostBuilder, services) =>
                 {
+                    ISecurityContext securityContext = new SecurityContext();
+                    securityContext.RefreshCorrelationId();
+                    securityContext.SetUserIdentity(WindowsIdentity.GetCurrent());
+                    services.AddSingleton(_ => securityContext);
+
+                    services.AddCommon();
                     services.AddConfiguration(hostBuilder.Configuration);
                     services.AddServiceBus();
                     services.AddBusinessLogic();
 
-                    services.AddTransient<IUploadEngineProcessor, UploadEngineProcessor>();
-                })
-                .ConfigureServices((hostContext, services) =>
-                {
                     services.AddHostedService<UploadEngineWorker>();
+                    services.AddTransient<IUploadEngineProcessor, UploadEngineProcessor>();
                 });
     }
 }

@@ -13,6 +13,5 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         /// </summary>
         /// <returns>The Outlook Middleware shared mailbox, if available. <see cref="System.String.Empty"/> otherwise.</returns>
         Task<GetSharedMailBoxResponse> GetSharedMailBox();
-
     }
 }
