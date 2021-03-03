@@ -1,5 +1,7 @@
 ﻿using Edreams.OutlookMiddleware.BusinessLogic.Factories;
 using Edreams.OutlookMiddleware.BusinessLogic.Factories.Interfaces;
+using Edreams.OutlookMiddleware.BusinessLogic.Helpers;
+using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
@@ -27,9 +29,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection
             services.AddTransient<ILoggingManager, LoggingManager>();
             services.AddTransient<IConfigurationManager, ConfigurationManager>();
             services.AddTransient<ITransactionQueueManager, TransactionQueueManager>();
-
-
             services.AddTransient<ICleanupManager, CleanupManager>();
+
+            services.AddTransient<IExchangeAndKeyVaultHelper, ExchangeAndKeyVaultHelper>();
 
             services.AddTransient<IBatchFactory, BatchFactory>();
         }

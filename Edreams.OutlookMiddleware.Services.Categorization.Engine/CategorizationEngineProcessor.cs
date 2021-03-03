@@ -1,5 +1,4 @@
 ﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
 using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
@@ -11,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
 {
@@ -18,23 +18,22 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
     {
         private readonly IEmailManager _emailManager;
         private readonly ITransactionQueueManager _transactionQueueManager;
-        private readonly IExceptionFactory _exceptionFactory;
         private readonly ILogger<CategorizationEngineProcessor> _logger;
         private readonly ICategorizationManager _categorizationManager;
-        private readonly IConfigurationManager _configurationManager;
+        private readonly IExchangeAndKeyVaultHelper _exchangeAndKeyVaultHelper;
 
-        public CategorizationEngineProcessor(IEmailManager emailManager,
-            ITransactionQueueManager transactionQueueManager,
-            IExceptionFactory exceptionFactory, ILogger<CategorizationEngineProcessor> logger,
+        public CategorizationEngineProcessor(
+            IEmailManager emailManager,
+            ITransactionQueueManager transactionQueueManager, 
+            ILogger<CategorizationEngineProcessor> logger,
             ICategorizationManager categorizationManager,
-            IConfigurationManager configurationManager)
+            IExchangeAndKeyVaultHelper exchangeAndKeyVaultHelper)
         {
             _emailManager = emailManager;
             _transactionQueueManager = transactionQueueManager;
-            _exceptionFactory = exceptionFactory;
             _logger = logger;
             _categorizationManager = categorizationManager;
-            _configurationManager = configurationManager;
+            _exchangeAndKeyVaultHelper = exchangeAndKeyVaultHelper;
         }
 
         public async Task Process(TransactionMessage transactionMessage)
@@ -48,10 +47,10 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
                 IList<Email> emails = await _emailManager.GetEmails(batchId);
 
                 // Create a client for Azure KeyVault, authenticated using the appsettings.json settings.
-                IKeyVaultClient keyVaultClient = _configurationManager.CreateKeyVaultClient();
+                IKeyVaultClient keyVaultClient = _exchangeAndKeyVaultHelper.CreateKeyVaultClient();
 
                 // Create a client for EWS, authenticated using data from Azure KeyVault.
-                IExchangeClient exchangeClient = await _configurationManager.CreateExchangeClient(keyVaultClient);
+                IExchangeClient exchangeClient = await _exchangeAndKeyVaultHelper.CreateExchangeClient(keyVaultClient);
 
                 foreach (var email in emails)
                 {
