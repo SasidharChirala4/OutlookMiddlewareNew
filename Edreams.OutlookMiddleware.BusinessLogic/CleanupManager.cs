@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Model;
@@ -18,6 +20,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IRepository<Batch> _batchRepository;
         private readonly IRepository<Email> _emailRepository;
         private readonly IRepository<File> _fileRepository;
+        private readonly IFileHelper _fileHelper;
         private readonly ITransactionHelper _transactionHelper;
         private readonly IEdreamsConfiguration _configuration;
 
@@ -28,6 +31,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             IRepository<Batch> batchRepository,
             IRepository<Email> emailRepository,
             IRepository<File> fileRepository,
+            IFileHelper fileHelper,
             ITransactionHelper transactionHelper,
             IEdreamsConfiguration configuration)
         {
@@ -37,6 +41,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             _batchRepository = batchRepository;
             _emailRepository = emailRepository;
             _fileRepository = fileRepository;
+            _fileHelper = fileHelper;
             _transactionHelper = transactionHelper;
             _configuration = configuration;
         }
@@ -98,14 +103,20 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             if (preloadedFile != null)
             {
                 // Get a list of all related preloaded files based on the batch ID.
-                IList<Guid> preloadedFileIds = await _preloadedFilesRepository.FindAndProject(
-                    x => x.BatchId == preloadedFile.BatchId, proj => proj.Id);
+                IList<KeyValuePair<Guid, string>> preloadedFiles = await _preloadedFilesRepository.FindAndProject(
+                    x => x.BatchId == preloadedFile.BatchId, file => new KeyValuePair<Guid, string>(file.Id, file.TempPath));
+
+                // Remove the expired preloaded files from temporary path for the one specific batch.
+                foreach (string fileTemPath in preloadedFiles.Select(v => v.Value))
+                {
+                    await _fileHelper.DeleteFile(fileTemPath);
+                }
 
                 // Remove the expired preloaded files for the one specific batch.
-                await _preloadedFilesRepository.Delete(preloadedFileIds);
+                _ = await _preloadedFilesRepository.Delete(ids: preloadedFiles.Select(k => k.Key).ToList());
 
                 // Return the number of preloaded files that have been removed.
-                return preloadedFileIds.Count;
+                return preloadedFiles.Count;
             }
 
             // Return zero if no expired preloaded files were found.
@@ -133,22 +144,28 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                     x => x.Batch.Id == batchId, proj => proj.Id);
 
                 // Get a list of all related file ID's.
-                IList<Guid> fileIds = await _fileRepository.FindAndProject(
-                    x => emailIds.Contains(x.Email.Id), proj => proj.Id);
+                IList<KeyValuePair<Guid, string>> files = await _fileRepository.FindAndProject(
+                    x => emailIds.Contains(x.Email.Id), file => new KeyValuePair<Guid, string>(file.Id, file.TempPath));
+
+                // Remove the expired transaction related files from temporary path
+                foreach (string fileTempPath in files.Select(v => v.Value))
+                {
+                    await _fileHelper.DeleteFile(fileTempPath);
+                }
 
                 // Remove the expired transaction and the related
                 // batch, emails and files from the database
-                await _fileRepository.Delete(fileIds);
-                await _emailRepository.Delete(emailIds);
-                await _batchRepository.Delete(batchId);
-                await _transactionHistoryRepository.Delete(historicTransaction);
+                _ = await _fileRepository.Delete(ids: files.Select(k => k.Key).ToList());
+                _ = await _emailRepository.Delete(emailIds);
+                _ = await _batchRepository.Delete(batchId);
+                _ = await _transactionHistoryRepository.Delete(historicTransaction);
 
                 // Commit the transaction.
                 transactionScope.Commit();
 
                 // Return the total count of records removed from the database.
                 // Number of files + number of emails + batch + transaction.
-                return fileIds.Count + emailIds.Count + 2;
+                return files.Count + emailIds.Count + 2;
             }
 
             // Return zero if no expired preloaded files were found.
