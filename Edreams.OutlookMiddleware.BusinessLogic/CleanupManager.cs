@@ -103,17 +103,14 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             if (preloadedFile != null)
             {
                 // Get a list of all related preloaded files based on the batch ID.
-                IList<KeyValuePair<Guid, string>> preloadedFiles = await _preloadedFilesRepository.FindAndProject(
-                    x => x.BatchId == preloadedFile.BatchId, file => new KeyValuePair<Guid, string>(file.Id, file.TempPath));
+                var preloadedFiles = await _preloadedFilesRepository.FindAndProject(
+                    x => x.BatchId == preloadedFile.BatchId, file => new { file.Id, file.TempPath });
 
                 // Remove the expired preloaded files from temporary path for the one specific batch.
-                foreach (string fileTemPath in preloadedFiles.Select(v => v.Value))
-                {
-                    await _fileHelper.DeleteFile(fileTemPath);
-                }
+                await _fileHelper.DeleteFile(preloadedFiles.Select(f => f.TempPath).ToList());
 
                 // Remove the expired preloaded files for the one specific batch.
-                _ = await _preloadedFilesRepository.Delete(ids: preloadedFiles.Select(k => k.Key).ToList());
+                _ = await _preloadedFilesRepository.Delete(preloadedFiles.Select(f => f.Id).ToList());
 
                 // Return the number of preloaded files that have been removed.
                 return preloadedFiles.Count;
@@ -144,18 +141,15 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                     x => x.Batch.Id == batchId, proj => proj.Id);
 
                 // Get a list of all related file ID's.
-                IList<KeyValuePair<Guid, string>> files = await _fileRepository.FindAndProject(
-                    x => emailIds.Contains(x.Email.Id), file => new KeyValuePair<Guid, string>(file.Id, file.TempPath));
+                var files = await _fileRepository.FindAndProject(
+                    x => emailIds.Contains(x.Email.Id), file => new { file.Id, file.TempPath });
 
-                // Remove the expired transaction related files from temporary path
-                foreach (string fileTempPath in files.Select(v => v.Value))
-                {
-                    await _fileHelper.DeleteFile(fileTempPath);
-                }
+                // Remove the expired transaction related files from temporary path                
+                await _fileHelper.DeleteFile(files.Select(f => f.TempPath).ToList());
 
                 // Remove the expired transaction and the related
                 // batch, emails and files from the database
-                _ = await _fileRepository.Delete(ids: files.Select(k => k.Key).ToList());
+                _ = await _fileRepository.Delete(files.Select(f => f.Id).ToList());
                 _ = await _emailRepository.Delete(emailIds);
                 _ = await _batchRepository.Delete(batchId);
                 _ = await _transactionHistoryRepository.Delete(historicTransaction);

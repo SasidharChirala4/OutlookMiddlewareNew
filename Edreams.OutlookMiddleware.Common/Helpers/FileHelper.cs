@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security;
 using System.Threading.Tasks;
@@ -93,11 +94,11 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public async Task DeleteFile(string filePath)
+        public Task DeleteFile(string filePath)
         {
             try
             {
-                await Task.Run(() =>
+                return Task.Run(() =>
                 {
                     File.Delete(filePath);
                 });
@@ -160,6 +161,19 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
 
                 // TODO: should not retry.
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Deletes list of files
+        /// </summary>
+        /// <param name="filesPath"></param>
+        /// <returns></returns>
+        public async Task DeleteFile(List<string> filesPath)
+        {
+            foreach (string filePath in filesPath)
+            {
+                await DeleteFile(filePath);
             }
         }
     }
