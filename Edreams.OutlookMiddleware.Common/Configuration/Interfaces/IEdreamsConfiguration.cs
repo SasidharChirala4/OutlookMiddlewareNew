@@ -4,6 +4,8 @@ namespace Edreams.OutlookMiddleware.Common.Configuration.Interfaces
 {
     public interface IEdreamsConfiguration
     {
+        string OutlookMiddlewareDbConnectionString { get; set; }
+        string OutlookMiddlewarePreloadDbConnectionString { get; set; }
         string ServiceName { get; set; }
         string StoragePath { get; set; }
         string EdreamsExtensibilityUrl { get; set; }

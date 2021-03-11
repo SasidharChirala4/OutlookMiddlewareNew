@@ -9,7 +9,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
     {
         private readonly ISecurityContext _securityContext;
 
-        public StatusManager(ISecurityContext securityContext)
+        public StatusManager(
+            ISecurityContext securityContext)
         {
             _securityContext = securityContext;
         }

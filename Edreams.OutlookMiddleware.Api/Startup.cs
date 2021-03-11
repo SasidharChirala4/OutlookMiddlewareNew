@@ -33,6 +33,7 @@ namespace Edreams.OutlookMiddleware.Api
         {
             _configuration = configuration;
         }
+        
         /// <summary>
         /// ConfigureServices
         /// </summary>

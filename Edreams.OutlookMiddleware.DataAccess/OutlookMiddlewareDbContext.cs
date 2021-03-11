@@ -1,14 +1,14 @@
-﻿using Edreams.OutlookMiddleware.Enums;
+﻿using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.Configuration;
 
 namespace Edreams.OutlookMiddleware.DataAccess
 {
     public class OutlookMiddlewareDbContext : DbContext
     {
-        private readonly IConfiguration _configuration;
+        private readonly IEdreamsConfiguration _configuration;
         
         public DbSet<Batch> Batches { get; set; }
         public DbSet<Email> Emails { get; set; }
@@ -17,26 +17,15 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<EmailRecipient> EmailRecipients { get; set; }
         public DbSet<Transaction> TransactionQueue { get; set; }
         public DbSet<HistoricTransaction> TransactionHistory { get; set; }
-
-
-        public OutlookMiddlewareDbContext()
-        {
-            
-        }
-        public OutlookMiddlewareDbContext(IConfiguration configuration)
+        
+        public OutlookMiddlewareDbContext(IEdreamsConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    string connectionString = _configuration.GetConnectionString("OutlookMiddlewareDbConnectionString");
-        //    optionsBuilder.UseSqlServer(connectionString);
-        //}
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = "Data Source=.\\SQLDEV;Initial Catalog=EDREAMS-OUTLOOK-MIDDLEWARE;Integrated Security=True;MultipleActiveResultSets=true";
+            string connectionString = _configuration.OutlookMiddlewareDbConnectionString;
             optionsBuilder.UseSqlServer(connectionString);
         }
 

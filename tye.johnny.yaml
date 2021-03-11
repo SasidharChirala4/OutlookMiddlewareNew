@@ -1,0 +1,26 @@
+name: Edreams.OutlookMiddleware
+services:
+
+- name: outlook-middleware-api
+  project: Edreams.OutlookMiddleware.Api/Edreams.OutlookMiddleware.Api.csproj
+  env:
+    - name: ServiceBusConnectionString
+      value: I'm Johnny!
+
+- name: outlook-middleware-upload-scheduler
+  project: Edreams.OutlookMiddleware.Services.Upload.Scheduler/Edreams.OutlookMiddleware.Services.Upload.Scheduler.csproj
+
+- name: outlook-middleware-upload-engine
+  project: Edreams.OutlookMiddleware.Services.Upload.Engine/Edreams.OutlookMiddleware.Services.Upload.Engine.csproj
+
+- name: outlook-middleware-categorization-scheduler
+  project: Edreams.OutlookMiddleware.Services.Categorization.Scheduler/Edreams.OutlookMiddleware.Services.Categorization.Scheduler.csproj
+
+- name: outlook-middleware-categorization-engine
+  project: Edreams.OutlookMiddleware.Services.Categorization.Engine/Edreams.OutlookMiddleware.Services.Categorization.Engine.csproj
+
+- name: outlook-middleware-cleanup
+  project: Edreams.OutlookMiddleware.Services.Cleanup/Edreams.OutlookMiddleware.Services.Cleanup.csproj
+
+- name: outlook-middleware-notification
+  project: Edreams.OutlookMiddleware.Services.Notification/Edreams.OutlookMiddleware.Services.Notification.csproj
