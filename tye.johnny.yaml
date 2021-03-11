@@ -4,8 +4,44 @@ services:
 - name: outlook-middleware-api
   project: Edreams.OutlookMiddleware.Api/Edreams.OutlookMiddleware.Api.csproj
   env:
+    - name: OutlookMiddlewarePreloadDbConnectionString
+      value: Data Source=.\\SQLDEV;Initial Catalog=EDREAMS-OUTLOOK-MIDDLEWARE-PRELOAD;Integrated Security=True;MultipleActiveResultSets=true
+    - name: OutlookMiddlewareDbConnectionString
+      value: Data Source=.\\SQLDEV;Initial Catalog=EDREAMS-OUTLOOK-MIDDLEWARE;Integrated Security=True;MultipleActiveResultSets=true
+    - name: StoragePath
+      value: C:\EdreamsCache
+    - name: EdreamsExtensibilityUrl
+      value: https://betst1630.be.deloitte.com/eDReaMS/api/v2/extensibility
+    - name: EdreamsTokenKey
+      value: edreams-token
+    - name: EdreamsTokenValue
+      value: MTIzNDU2NzgtYWJjZC0xMjM0LWFiY2QtMTIzNDU2Nzg5YWJj
+    - name: MaxNumberPendingCategories
+      value: 50
+    - name: ExchangeAuthority
+      value: https://login.microsoftonline.com/deloitte.onmicrosoft.com/oauth2/token
+    - name: ExchangeResourceId
+      value: https://outlook.office365.com
+    - name: ExchangeClientId
+      value: 2fae4fbb-2f89-4db4-925b-5d117fc51cb2
+    - name: ExchangeOnlineServer
+      value: https://outlook.office365.com/ews/exchange.asmx
+    - name: SharedMailBoxUserNameSecret
+      value: ConfirmationLettersCredentials-username
+    - name: SharedMailBoxPasswordSecret
+      value: ConfirmationLettersCredentials-password
+    - name: KeyVaultUri
+      value: https://edreamskeyvaulttest2019.vault.azure.net
+    - name: KeyVaultTenantId
+      value: 36da45f1-dd2c-4d1f-af13-5abe46b99921
+    - name: KeyVaultClientId
+      value: 2b70957d-752c-47ba-ac4c-c8f088e16bd6
+    - name: KeyVaultClientSecret
+      value: MEAyUVpic09sKVc9IzVZJH09Yj19c3NXSi1Dcm1iSl84Kw==
     - name: ServiceBusConnectionString
-      value: I'm Johnny!
+      value: Endpoint=sb://edreams-outlook-middleware-playground.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=AJ6p2Re68XJaEJoVOfs3hjMtNsJW4GUB0JRLDjCExiBY=
+    - name: ServiceBusQueueName
+      value: mail-batch-queue
 
 - name: outlook-middleware-upload-scheduler
   project: Edreams.OutlookMiddleware.Services.Upload.Scheduler/Edreams.OutlookMiddleware.Services.Upload.Scheduler.csproj
