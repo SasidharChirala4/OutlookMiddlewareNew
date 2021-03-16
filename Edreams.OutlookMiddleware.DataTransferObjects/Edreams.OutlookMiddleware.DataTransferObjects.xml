@@ -123,6 +123,11 @@
             List of Email Recipients
             </summary>
         </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.UploadOption">
+            <summary>
+            Email upload option
+            </summary>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse">
             <summary>
             Response for Created Mail

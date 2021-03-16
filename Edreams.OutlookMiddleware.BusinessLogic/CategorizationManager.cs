@@ -120,9 +120,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// </summary>
         /// <param name="internetMessageId">The internet message Id of the Email.</param>
         /// <param name="recipientsList">The list of recipients.</param>
-        /// <param name="isUploaded">Flag to set Uploaded/Failed Categorization.</param>
+        /// <param name="type">The type of the CategorizationRequest.</param>
         /// <returns></returns>
-        public async Task AddCategorizationRequest(string internetMessageId, List<string> recipientsList, bool isUploaded)
+        public async Task AddCategorizationRequest(string internetMessageId, List<string> recipientsList, CategorizationRequestType type)
         {
             // Validations
             _validator.ValidateString(internetMessageId, ValidationMessages.WebApi.InternetMessageIdRequired);
@@ -137,7 +137,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                     foreach (string recipient in recipientsList)
                     {
                         // Adding Categorise by individual recipent.
-                        await AddCategorizationByIndividualRecipient(internetMessageId, recipient, isUploaded);
+                        await AddCategorizationByIndividualRecipient(internetMessageId, recipient, type);
                     }
                 }
             }
@@ -156,7 +156,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// <param name="recipient"></param>
         /// <param name="isUploaded"></param>
         /// <returns></returns>
-        private async Task AddCategorizationByIndividualRecipient(string internetMessageId, string recipient, bool isUploaded)
+        private async Task AddCategorizationByIndividualRecipient(string internetMessageId, string recipient, CategorizationRequestType type)
         {
             int errors = 0;
             bool retry = false;
@@ -169,15 +169,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                         EmailAddress = recipient,
                         InternetMessageId = internetMessageId,
                         Status = CategorizationRequestStatus.Pending,
-
-                        // TODO : Need to check with Johnny/Sasi about how & where to set all CategorizationRequestType
-                        // setting catergorization type based on isUploaded value
-                        /* isUploaded is True -> Email/Attchament setting as Uploaded
-                         * isUploaded is False -> Email/Attchament setting as Failed */
-
-                        Type = isUploaded
-                           ? CategorizationRequestType.EmailUploaded
-                           : CategorizationRequestType.EmailUploadFailed
+                        Type = type
                     };
                     await _categorizationRequestRepository.Create(categorization);
                 }

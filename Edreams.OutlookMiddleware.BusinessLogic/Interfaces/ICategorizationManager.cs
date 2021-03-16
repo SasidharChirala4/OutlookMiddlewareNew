@@ -1,4 +1,5 @@
 ﻿using Edreams.OutlookMiddleware.DataTransferObjects.Api;
+using Edreams.OutlookMiddleware.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,8 +26,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         /// </summary>
         /// <param name="internetMessageId">The internet message Id of the Email.</param>
         /// <param name="recipientsList">The list of recipients.</param>
-        /// <param name="isUploaded">Flag to set Uploaded/Failed Categorization</param>
+        /// <param name="type">The type of the CategorizationRequest</param>
         /// <returns></returns>
-        Task AddCategorizationRequest(string internetMessageId, List<string> recipientsList, bool isUploaded);
+        Task AddCategorizationRequest(string internetMessageId, List<string> recipientsList, CategorizationRequestType type);
     }
 }

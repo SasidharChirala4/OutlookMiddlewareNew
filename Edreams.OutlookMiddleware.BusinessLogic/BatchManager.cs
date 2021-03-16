@@ -69,7 +69,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
 
             // Fetch all emails that are related to the specified batch and include the referenced files.
-            IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files);
+            IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files, inc => inc.UploadOption);
 
             // Map the database emails and files to email details and file details.
             IList<EmailDetailsDto> emailDetails = _emailsToEmailDetailsMapper.Map(emails);
@@ -120,7 +120,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 // Map the preloaded files to a list of files with relation to email and batch.
                 // Afterwards, create the files in the database. EF will automatically create
                 // the email references with that.
-                IList<File> files = _preloadedFilesToFilesMapper.Map(batch, preloadedFiles);
+                IList<File> files = _preloadedFilesToFilesMapper.Map(batch, preloadedFiles, request.UploadOption);
                 await _fileRepository.Create(files);
 
                 // Add email recipients for the current batch.

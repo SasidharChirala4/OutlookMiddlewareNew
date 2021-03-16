@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api.Base;
+using Edreams.OutlookMiddleware.Enums;
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
 {
@@ -18,5 +19,10 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
         /// List of Email Recipients
         /// </summary>
         public List<EmailRecipientDto> EmailRecipients { get; set; }
+
+        /// <summary>
+        /// Email upload option
+        /// </summary>
+        public EmailUploadOptions UploadOption { get; set; }
     }
 }

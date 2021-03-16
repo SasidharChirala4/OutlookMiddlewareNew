@@ -9,16 +9,17 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
 {
     public class PreloadedFilesToFilesMapper : IPreloadedFilesToFilesMapper
     {
-        public IList<File> Map(Batch batch, IList<FilePreload> preloadedFiles)
+        public IList<File> Map(Batch batch, IList<FilePreload> preloadedFiles, EmailUploadOptions uploadOption)
         {
             IList<File> files = new List<File>();
             Guid[] emailIds = preloadedFiles.Select(x => x.EmailId).Distinct().ToArray();
             foreach (Guid emailId in emailIds)
-            {
+            { 
                 Email email = new Email
                 {
                     Batch = batch,
-                    Status = EmailStatus.ReadyToUpload
+                    Status = EmailStatus.ReadyToUpload,
+                    UploadOption = uploadOption
                 };
 
                 foreach (var preloadedFile in preloadedFiles)

@@ -4,6 +4,7 @@
     {
         ReadyToUpload,
         Uploaded,
-        FailedToUpload
+        FailedToUpload,
+        Skipped
     }
 }

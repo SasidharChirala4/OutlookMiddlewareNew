@@ -29,7 +29,7 @@ namespace Edreams.OutlookMiddleware.Tests.Mapping
 
             Guid email1Id = Guid.NewGuid();
             Guid email2Id = Guid.NewGuid();
-
+            EmailUploadOptions uploadOption = EmailUploadOptions.Attachments;
             IList<FilePreload> preloadedFiles = new List<FilePreload>
             {
                 new FilePreload
@@ -56,7 +56,7 @@ namespace Edreams.OutlookMiddleware.Tests.Mapping
 
             #region [ ACT ]
 
-            IList<File> files = mapper.Map(batch, preloadedFiles);
+            IList<File> files = mapper.Map(batch, preloadedFiles, uploadOption);
 
             #endregion
 

@@ -60,15 +60,24 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                     {
                         try
                         {
-                            // Process the file based on the file details.
-                            string absoluteFileUrl = await ProcessFile(fileDetails);
+                            //Skip the files that are not matched with upload option.
+                            if (!IsFileSkipped(emailDetails.UploadOption,fileDetails.Kind))
+                            {
+                                // Process the file based on the file details.
+                                string absoluteFileUrl = await ProcessFile(fileDetails);
 
-                            // TODO: Update absolute file URL in database as part of metadata PBI.
-
-                            // Set the file status to be successfully uploaded and
-                            // increase the number of successfully uploaded files.
-                            await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
-                            numberOfSuccessfullyUploadedFiles++;
+                                // TODO: Update absolute file URL in database as part of metadata PBI.
+                                
+                                // Set the file status to be successfully uploaded and
+                                // increase the number of successfully uploaded files.
+                                await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
+                                numberOfSuccessfullyUploadedFiles++;
+                            }
+                            else
+                            {
+                                // Set the file status to be skipped if file kind doesnot match with upload option.
+                                await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Skipped);
+                            }
                         }
                         catch
                         {
@@ -160,6 +169,28 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             }
 
             return BatchStatus.Partially;
+        }
+
+        /// <summary>
+        /// Specifies whether the file kind is matched with upload option.
+        /// </summary>
+        /// <param name="uploadOption">Email Upload Option</param>
+        /// <param name="fileKind">File Kind</param>
+        /// <returns>boolen value specifies is file type is matched with upload option </returns>
+        private bool IsFileSkipped(EmailUploadOptions uploadOption, FileKind fileKind)
+        {
+            if (uploadOption == EmailUploadOptions.Emails)
+            {
+                return fileKind != FileKind.Email;
+            }
+            else if (uploadOption == EmailUploadOptions.Attachments)
+            {
+                return fileKind != FileKind.Attachment;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         #endregion

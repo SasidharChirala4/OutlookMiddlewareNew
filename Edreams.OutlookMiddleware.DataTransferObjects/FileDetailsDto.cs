@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Edreams.OutlookMiddleware.Enums;
+using System;
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects
 {
@@ -7,5 +8,6 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         public Guid Id { get; set; }
         public string Path { get; set; }
         public string Name { get; set; }
+        public FileKind Kind { get; set; }
     }
 }
