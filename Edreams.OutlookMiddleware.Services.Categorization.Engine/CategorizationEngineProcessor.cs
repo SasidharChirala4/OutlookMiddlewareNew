@@ -85,7 +85,7 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
                     // Removing duplicate recipients from expandDistributionlist and emailRecipients
                     List<string> orginalRecipients = recipients.Distinct().ToList();
 
-                    //Get the categorization request type based on upload option and email status.
+                    //Set the categorization request type based on upload option and email status.
                     CategorizationRequestType categorizationRequestType = GetCategorizationRequestType(email.UploadOption, email.Status);
 
                     // Adding Categorizations for the emailId

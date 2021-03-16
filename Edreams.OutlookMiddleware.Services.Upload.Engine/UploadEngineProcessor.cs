@@ -60,14 +60,14 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                     {
                         try
                         {
-                            //Checks the File Kind is matched with the Upload Option.
+                            //Skip the files that are not matched with upload option.
                             if (!IsFileSkipped(emailDetails.UploadOption,fileDetails.Kind))
                             {
                                 // Process the file based on the file details.
                                 string absoluteFileUrl = await ProcessFile(fileDetails);
 
                                 // TODO: Update absolute file URL in database as part of metadata PBI.
-
+                                
                                 // Set the file status to be successfully uploaded and
                                 // increase the number of successfully uploaded files.
                                 await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
