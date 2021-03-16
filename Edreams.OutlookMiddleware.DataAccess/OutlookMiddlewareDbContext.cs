@@ -75,6 +75,8 @@ namespace Edreams.OutlookMiddleware.DataAccess
                     .HasConversion(new EnumToStringConverter<EmailStatus>());
                 e.Property(x => x.InternetMessageId)
                     .HasMaxLength(200);
+                e.Property(x => x.UploadOption)
+                    .HasConversion(new EnumToStringConverter<EmailUploadOptions>());
                 e.HasIndex(x => x.InternetMessageId);
             });
 

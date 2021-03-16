@@ -22,7 +22,8 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                     {
                         Id = file.Id,
                         Name = file.FileName,
-                        Path = file.TempPath
+                        Path = file.TempPath,
+                        Kind = file.Kind
                     };
 
                     listOfFileDetails.Add(fileDetails);
@@ -31,7 +32,8 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                 EmailDetailsDto emailDetails = new EmailDetailsDto
                 {
                     Id = email.Id,
-                    Files = listOfFileDetails
+                    Files = listOfFileDetails,
+                    UploadOption = email.UploadOption
                 };
 
                 listOfEmailDetails.Add(emailDetails);

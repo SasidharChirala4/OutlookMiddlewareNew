@@ -12,5 +12,7 @@ namespace Edreams.OutlookMiddleware.Model
         public EmailStatus Status { get; set; }
         public Batch Batch { get; set; }
         public virtual IList<File> Files { get; set; }
+        public EmailUploadOptions UploadOption { get; set; }
+
     }
 }

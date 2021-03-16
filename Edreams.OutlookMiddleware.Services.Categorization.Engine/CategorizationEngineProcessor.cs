@@ -24,7 +24,7 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
 
         public CategorizationEngineProcessor(
             IEmailManager emailManager,
-            ITransactionQueueManager transactionQueueManager, 
+            ITransactionQueueManager transactionQueueManager,
             ILogger<CategorizationEngineProcessor> logger,
             ICategorizationManager categorizationManager,
             IExchangeAndKeyVaultHelper exchangeAndKeyVaultHelper)
@@ -85,10 +85,11 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
                     // Removing duplicate recipients from expandDistributionlist and emailRecipients
                     List<string> orginalRecipients = recipients.Distinct().ToList();
 
+                    //Get the categorization request type based on upload option and email status.
+                    CategorizationRequestType categorizationRequestType = GetCategorizationRequestType(email.UploadOption, email.Status);
+
                     // Adding Categorizations for the emailId
-                    // TODO : Need to check with Johnny/Sasi about setting isUploaded status.
-                    // TODO : Passing isUploaded value as true as of now  and need to adjust logic in categorizationManager 
-                    await _categorizationManager.AddCategorizationRequest(email.InternetMessageId, orginalRecipients, true);
+                    await _categorizationManager.AddCategorizationRequest(email.InternetMessageId, orginalRecipients, categorizationRequestType);
 
                     // Update the transaction to have a succeeded status.
                     await _transactionQueueManager.UpdateTransactionStatusAndArchive(transactionId, TransactionStatus.ProcessingSucceeded);
@@ -101,5 +102,49 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
                 throw;
             }
         }
+
+        #region <| Helper Methods |>
+
+        /// <summary>
+        /// Get the categorization request type based on upload option and email status.
+        /// </summary>
+        /// <param name="uploadOption">Upload Option</param>
+        /// <param name="status">Email Status</param>
+        /// <returns>Get the CategorizationRequestType based on upload option and email status.</returns>
+        private CategorizationRequestType GetCategorizationRequestType(EmailUploadOptions uploadOption, EmailStatus status)
+        {
+            if (status == EmailStatus.Failed || status == EmailStatus.Partially)
+            {
+                if (uploadOption == EmailUploadOptions.Emails)
+                {
+                    return CategorizationRequestType.EmailUploadFailed;
+                }
+                else if (uploadOption == EmailUploadOptions.Attachments)
+                {
+                    return CategorizationRequestType.AtachmentUploadFailed;
+                }
+                else
+                {
+                    return CategorizationRequestType.EmailAndAttachmentUploadFailed;
+                }
+            }
+            else if (status == EmailStatus.Successful)
+            {
+                if (uploadOption == EmailUploadOptions.Emails)
+                {
+                    return CategorizationRequestType.EmailUploaded;
+                }
+                else if (uploadOption == EmailUploadOptions.Attachments)
+                {
+                    return CategorizationRequestType.AttachmentUploaded;
+                }
+                else
+                {
+                    return CategorizationRequestType.EmailAndAttachmentUploaded;
+                }
+            }
+            return CategorizationRequestType.EmailUploadFailed;
+        }
+        #endregion
     }
 }
