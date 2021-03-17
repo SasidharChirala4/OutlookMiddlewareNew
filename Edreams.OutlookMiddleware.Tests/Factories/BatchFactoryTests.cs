@@ -27,7 +27,7 @@ namespace Edreams.OutlookMiddleware.Tests.Factories
 
             // Assert 
             result.Should().NotBeNull();
-            result.CreatedOn.Should().BeCloseTo(DateTime.UtcNow);
+            result.CreatedOn.Should().BeCloseTo(DateTime.UtcNow, precision: 100);
             result.CreatedBy.Should().Be("Mr. Skittles");
             result.Status.Should().Be(BatchStatus.Pending);
         }
