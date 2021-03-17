@@ -18,6 +18,27 @@ variables:
 
 # This build pipeline will run the following build steps...
 steps:
+
+  # This PowerShell script updates the build number.
+  - task: PowerShell@2
+    displayName: Set Dynamic Build Number
+    inputs:
+      targetType: 'inline'
+      script: |        
+        $today = Get-Date 
+        $midnight = Get-Date -Hour 0 -Minute 00 -Second 00
+        $referenceDate = [datetime]"01/01/2000 00:00"
+        $diffInDays = New-TimeSpan -Start $referenceDate -End $today
+        $autoBuild = [math]::Floor($diffInDays.TotalDays)
+        $diffInSeconds = New-TimeSpan -Start $midnight -End $today
+        $autoRevision = [math]::Floor($diffInSeconds.TotalSeconds / 2)
+        $buildNumber = "0.1." + $autoBuild + "." + $autoRevision
+
+        Write-Host "Current Build Number " + $env:BUILD_BUILDNUMBER
+        Write-Host "Generated Build Number " + $buildNumber
+        Write-Host "##vso[build.updatebuildnumber]$buildNumber"
+        Write-Host "Done"
+        
   # Install the latest NuGet tool for compatibility (the default one throws
   # a parse exception on our solution files).
   - task: NuGetToolInstaller@1
