@@ -27,7 +27,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
         #region <| GetPendingCategories |>
 
         [Fact]
-        public async Task CategorizationManager_GetPendingCategories__Without_PendingCategories_Should_Return_Null()
+        public async Task CategorizationManager_GetPendingCategories__With_No_PendingCategories_Exists_Should_Return_Null()
         {
             #region [ ARRANGE ]
 
@@ -43,7 +43,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             ICategorizationManager categorizationManager = new CategorizationManager(
                 categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator);
 
-            // Prepare a request to use for when calling the "CommitBatch" method.
+            // Prepare a request to use for when calling the "GetPendingCategories" method.
             CategorizationRequestEntity categorizationRequest = new CategorizationRequestEntity()
             {
                 EmailAddress = "edreamstest@deloitte.com",
@@ -59,7 +59,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 
             #region [ MOCK ]
             // Mock the "FindDescending" method on the "Repository" and run the predicate lambda expression on
-            // an  list of "categorizationResult" objects.
+            // an  list of "categorizationRequest" objects.
             categorizationRequestsRepositoryMock.SetupRepositoryFindDescending<CategorizationRequestEntity, long>(categorizationRequestList);
 
             #endregion
@@ -96,7 +96,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             ICategorizationManager categorizationManager = new CategorizationManager(
                 categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator);
 
-            // Prepare a request to use for when calling the "CommitBatch" method.
+            // Prepare a request to use for when calling the "CategorizationManager" method.
             CategorizationRequestEntity categorizationRequest = new CategorizationRequestEntity()
             {
                 EmailAddress = "edreamstest@deloitte.com",
@@ -105,14 +105,13 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
                 Status = Enums.CategorizationRequestStatus.Pending
             };
             string userPrincipalName = "edreamstest@deloitte.com";
-            Limit limit = new Limit(0, 20);
             IList<CategorizationRequestEntity> categorizationRequestList = new List<CategorizationRequestEntity>() { categorizationRequest };
 
             #endregion
 
             #region [ MOCK ]
             // Mock the "FindDescending" method on the "Repository" and run the predicate lambda expression on
-            // an  list of "categorizationResult" objects.
+            // an  list of "categorizationRequest" objects.
             categorizationRequestsRepositoryMock.SetupRepositoryFindDescending<CategorizationRequestEntity, long>(categorizationRequestList);
 
             #endregion
@@ -120,7 +119,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             #region [ ACT ]
 
             // Call the "GetPendingCategories" method using the prepared request.
-            DataTransferObjects.Api.GetPendingCategoriesResponse response = await categorizationManager.GetPendingCategories(userPrincipalName);
+            GetPendingCategoriesResponse response = await categorizationManager.GetPendingCategories(userPrincipalName);
 
             #endregion
 
@@ -136,7 +135,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
         #region <| UpdatePendingCategories |>
 
         [Fact]
-        public async Task CategorizationManager_UpdatePendingCategories__Without_PendingCategories_Should_Return_Null()
+        public async Task CategorizationManager_UpdatePendingCategories__With_No_PendingCategories_Should_Return_Null()
         {
             #region [ ARRANGE ]
 
@@ -152,7 +151,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             ICategorizationManager categorizationManager = new CategorizationManager(
                 categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator);
 
-            // Prepare a request to use for when calling the "CommitBatch" method.
+            // Prepare a request to use for when calling the "UpdatePendingCategories" method.
             CategorizationRequestEntity categorizationRequestEntity = new CategorizationRequestEntity()
             {
                 EmailAddress = "edreamstest@deloitte.com",
@@ -173,8 +172,8 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             #endregion
 
             #region [ MOCK ]
-            // Mock the "FindDescending" method on the "Repository" and run the predicate lambda expression on
-            // an  list of "categorizationResult" objects.
+            // Mock the "Find" method on the "Repository" and run the predicate lambda expression on
+            // an  list of "categorizationRequestEntity" objects.
             categorizationRequestsRepositoryMock.SetupRepositoryFind(categorizationRequestEntityList);
 
 
@@ -188,7 +187,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             #endregion
 
             #region [ ASSERT ]
-            // If there are no "PendingCategories" objects found, the "GetPendingCategories" method should return Null.
+            // If there are no "PendingCategories" objects found, the "UpdatePendingCategories" method should return Null.
             response.Success.Should().Be(true);
 
             #endregion
@@ -211,7 +210,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             ICategorizationManager categorizationManager = new CategorizationManager(
                 categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator);
 
-            // Prepare a request to use for when calling the "CommitBatch" method.
+            // Prepare a request to use for when calling the "UpdatePendingCategories" method.
             CategorizationRequestEntity categorizationRequestEntity = new CategorizationRequestEntity()
             {
                 EmailAddress = "edreamstest@deloitte.com",
@@ -232,8 +231,8 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             #endregion
 
             #region [ MOCK ]
-            // Mock the "FindDescending" method on the "Repository" and run the predicate lambda expression on
-            // an  list of "categorizationResult" objects.
+            // Mock the "Find" method on the "Repository" and run the predicate lambda expression on
+            // an  list of "categorizationRequestEntity" objects.
             categorizationRequestsRepositoryMock.SetupRepositoryFind(categorizationRequestEntityList);
 
 
@@ -248,9 +247,10 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 
             #region [ ASSERT ]
 
-            // If there are no "PendingCategories" objects found, the "GetPendingCategories" method should return Null.
+            //The "UpdatePendingCategoriesResponse" method should call CategorizationRequestRepository  Update method once.
             categorizationRequestsRepositoryMock.VerifyRepositoryUpdate(Times.Once());
-
+            // The response Success should be set to true.
+            response.Success.Should().Be(true);
             #endregion
         }
         #endregion
@@ -285,8 +285,9 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             #endregion
 
             #region [ ASSERT ]
-            // If there are is no "internetMessageId" it should throw internetmessageid is required validation
+            //Exception should not be null
             exception.Should().NotBeNull();
+            // If there are is no "internetMessageId" it should throw internetmessageid is required validation
             exception.ValidationErrors[0].Should().Be(ValidationMessages.WebApi.InternetMessageIdRequired);
             #endregion
         }
@@ -318,8 +319,8 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             #endregion
 
             #region [ ASSERT ]
-            // If there is no "RecipientsList" it should throw RecipientsList is required validation
             exception.Should().NotBeNull();
+            // If there is no "RecipientsList" it should throw RecipientsList is required validation
             exception.ValidationErrors[0].Should().Be(ValidationMessages.WebApi.RecipientsListRequired);
             #endregion
         }
@@ -337,15 +338,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var loggerMock = new Mock<ILogger>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
-            CategorizationRequestEntity categorizationRequestEntity = new CategorizationRequestEntity()
-            {
-                EmailAddress = "edreamstest@deloitte.com",
-                Id = new Guid("2D1EE7EC-6E7D-46DA-B2DD-9EC6F0C66653"),
-                InternetMessageId = "<b267a11ab00348e3aa77bd20e20e1060>",
-                Status = Enums.CategorizationRequestStatus.Pending
-            };
-            List<CategorizationRequestEntity> categorizationRequestEntityList = new List<CategorizationRequestEntity>() { categorizationRequestEntity };
-
+            
             ICategorizationManager categorizationManager = new CategorizationManager(
                 categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator);
 
@@ -357,25 +350,26 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             List<Email> emailEntityList = new List<Email>() { emailEntity };
             string internetMessageId = "<b267a11ab00348e3aa77bd20e20e1060>";
             List<string> recipientList = new List<string>() { "edreamstest@deloitte.com" };
+
             #endregion
 
             #region [ MOCK ]
-            // Mock the "FirstDescending" method on the "Repository" and run the predicate lambda expression on
-            // an  list of "categorizationResult" objects.
+            // Mock the "GetFirstDescending" method on the "Repository" and run the predicate lambda expression on
+            // an  list of "emailEntity" objects.
             emailRepositoryMock.SetupRepositoryGetFirstDescending<Email, Guid>(emailEntityList);
             #endregion
 
             #region [ ACT ]
 
-            // Call the "UpdatePendingCategoriesResponse" method using the prepared request.
+            // Call the "AddCategorizationRequest" method using the prepared request.
             await categorizationManager.AddCategorizationRequest(internetMessageId, recipientList, Enums.CategorizationRequestType.AttachmentUploaded);
 
             #endregion
 
             #region [ ASSERT ]
 
-            // If there are no "PendingCategories" objects found, the "GetPendingCategories" method should return Null.
-            categorizationRequestsRepositoryMock.VerifyRepositoryCreate(Times.Once());
+            // The "AddCategorizationRequest" method should call Categorization repositories Create method once.
+            categorizationRequestsRepositoryMock.VerifyRepositoryCreateSingle(Times.Once());
 
             #endregion
         }
