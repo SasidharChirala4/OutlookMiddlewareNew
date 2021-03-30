@@ -1,25 +1,25 @@
-﻿using Edreams.OutlookMiddleware.Enums;
+﻿using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.Configuration;
 
 namespace Edreams.OutlookMiddleware.DataAccess
 {
     public class OutlookMiddlewarePreloadDbContext : DbContext
     {
-        private readonly IConfiguration _configuration;
+        private readonly IEdreamsConfiguration _configuration;
         
         public DbSet<FilePreload> PreloadedFiles { get; set; }
 
-        public OutlookMiddlewarePreloadDbContext(IConfiguration configuration)
+        public OutlookMiddlewarePreloadDbContext(IEdreamsConfiguration configuration)
         {
             _configuration = configuration;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = _configuration.GetConnectionString("OutlookMiddlewarePreloadDbConnectionString");
+            string connectionString = _configuration.OutlookMiddlewarePreloadDbConnectionString;
             optionsBuilder.UseSqlServer(connectionString);
         }
 

@@ -3,6 +3,7 @@ using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common._DependencyInjection;
 using Edreams.OutlookMiddleware.Common.Security;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -17,6 +18,10 @@ namespace Edreams.OutlookMiddleware.Services.Notification
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(configBuilder =>
+                {
+                    configBuilder.AddEnvironmentVariables();
+                })
                 .ConfigureServices((hostBuilder, services) =>
                 {
                     ISecurityContext securityContext = new SecurityContext();

@@ -16,6 +16,8 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
         {
             services.AddSingleton<IEdreamsConfiguration>(_ => new EdreamsConfiguration
             {
+                OutlookMiddlewareDbConnectionString = configuration.GetValue<string>("OutlookMiddlewareDbConnectionString"),
+                OutlookMiddlewarePreloadDbConnectionString = configuration.GetValue<string>("OutlookMiddlewarePreloadDbConnectionString"),
                 ServiceName = configuration.GetValue<string>("ServiceName"),
                 StoragePath = configuration.GetValue<string>("StoragePath"),
                 EdreamsExtensibilityUrl = configuration.GetValue<string>("EdreamsExtensibilityUrl"),

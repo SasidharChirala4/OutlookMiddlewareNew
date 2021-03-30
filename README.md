@@ -23,6 +23,20 @@ The e-DReaMS Outlook Middleware is the backend API and processing platform for u
 * [Database](#database)
 * [Repository](#repository)
 
+# Tye
+
+For local development, all Outlook Middleware application services (WebApi and Workers) can be run as a whole by using [Project Tye](https://github.com/dotnet/tye). [Project Tye](https://github.com/dotnet/tye) allows you to configure the entire distributed application in a single YAML-file.
+
+Tye is still an experimental tool, but already very helpful. Documentation can be found at [https://github.com/dotnet/tye/blob/master/docs/README.md](https://github.com/dotnet/tye/blob/master/docs/README.md).
+
+You can install Tye, using PowerShell, by executing the following command. Please replace the version with the actual current version.
+
+```
+dotnet tool install -g Microsoft.Tye --version "0.6.0-alpha.21070.5"
+```
+
+
+
 # Architecture
 
 ![Architecture](.documentation/architecture.drawio.png)

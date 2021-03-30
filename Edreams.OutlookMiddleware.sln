@@ -5,17 +5,17 @@ VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.Api", "Edreams.OutlookMiddleware.Api\Edreams.OutlookMiddleware.Api.csproj", "{6C3BD876-D441-4781-9FC4-1B0E2BC15018}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. API", "1. API", "{84C56E02-0C68-407D-BA9F-3A4CDF242A74}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. API", "2. API", "{84C56E02-0C68-407D-BA9F-3A4CDF242A74}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Services", "2. Services", "{435724F9-0E1D-4A3A-AAFB-BF431D024805}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Services", "3. Services", "{435724F9-0E1D-4A3A-AAFB-BF431D024805}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Business Logic", "3. Business Logic", "{22D3B378-010D-464C-A8CC-12CB67DCAF74}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Business Logic", "4. Business Logic", "{22D3B378-010D-464C-A8CC-12CB67DCAF74}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. DataAccess", "4. DataAccess", "{F7A5CE55-1698-4DC9-A84D-08822462D471}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5. DataAccess", "5. DataAccess", "{F7A5CE55-1698-4DC9-A84D-08822462D471}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.DataAccess", "Edreams.OutlookMiddleware.DataAccess\Edreams.OutlookMiddleware.DataAccess.csproj", "{68CAA1AC-C3AF-48C3-80A1-07D0CADED56F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Common", "0. Common", "{6936B1E5-526F-45EC-BA61-408C1E38C8F7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Common", "1. Common", "{6936B1E5-526F-45EC-BA61-408C1E38C8F7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.Model", "Edreams.OutlookMiddleware.Model\Edreams.OutlookMiddleware.Model.csproj", "{CBE6DBD3-258C-4766-A186-181D033B7A18}"
 EndProject
@@ -37,13 +37,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.Services.Upload.Engine", "Edreams.OutlookMiddleware.Services.Upload.Engine\Edreams.OutlookMiddleware.Services.Upload.Engine.csproj", "{2EBA4C7A-A9DA-44F7-8BF6-1927AF6A8AD2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5. Tests", "5. Tests", "{FAC21692-03EE-42C2-81C7-7E2ACD3AA395}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6. Tests", "6. Tests", "{FAC21692-03EE-42C2-81C7-7E2ACD3AA395}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.Tests", "Edreams.OutlookMiddleware.Tests\Edreams.OutlookMiddleware.Tests.csproj", "{AC3AA331-2518-45A2-8244-CA7498F23B72}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.Enums", "Edreams.OutlookMiddleware.Enums\Edreams.OutlookMiddleware.Enums.csproj", "{5C8EABA3-843A-43BD-BCB2-6D9783655C6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edreams.OutlookMiddleware.Services.Categorization.Engine", "Edreams.OutlookMiddleware.Services.Categorization.Engine\Edreams.OutlookMiddleware.Services.Categorization.Engine.csproj", "{AA5A8F01-43D2-41F3-83CB-F1A406D2E908}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.Services.Categorization.Engine", "Edreams.OutlookMiddleware.Services.Categorization.Engine\Edreams.OutlookMiddleware.Services.Categorization.Engine.csproj", "{AA5A8F01-43D2-41F3-83CB-F1A406D2E908}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Tye", "0. Tye", "{D556C5BD-9AE7-4DB7-B454-50E01CE2D503}"
+	ProjectSection(SolutionItems) = preProject
+		tye.johnny.yaml = tye.johnny.yaml
+		tye.yaml = tye.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
