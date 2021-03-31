@@ -248,6 +248,10 @@
       <Project>{c94cf16d-3e51-4726-bb7e-31995fe5ee86}</Project>
       <Name>Edreams.OutlookMiddleware.DataTransferObjects</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Edreams.OutlookMiddleware.Enums\Edreams.OutlookMiddleware.Enums.csproj">
+      <Project>{89DE9B44-0DB4-41D1-B1C3-98736005E334}</Project>
+      <Name>Edreams.OutlookMiddleware.Enums</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
@@ -261,7 +265,7 @@
     <ManifestKeyFile>Edreams.Outlook.TestPlugin_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>39DEC2ACDBA7A7031A720546CDC38C476932229E</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>7EFA99531C16A5BB256C5CD207B1896793E1CD54</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

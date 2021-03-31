@@ -10,7 +10,7 @@ namespace Edreams.Outlook.TestPlugin.Helpers
 {
     public static class HttpHelper
     {
-        private static string _baseUrl = "http://localhost:65290";
+        private static string _baseUrl = "https://localhost:44361";
 
         public static async Task<CreateMailResponse> CreateMail(CreateMailRequest createMailRequest)
         {
@@ -22,11 +22,12 @@ namespace Edreams.Outlook.TestPlugin.Helpers
             return response.Data;
         }
 
-        public static async Task CommitBatch(Guid batchId)
+        public static async Task CommitBatch(CommitBatchRequest commitBatchRequest)
         {
             RestClient client = new RestClient(_baseUrl);
-            RestRequest request = new RestRequest($"batches/{batchId}/commit", Method.POST);
-            var response = await client.ExecuteAsync<CancelBatchResponse>(request);
+            RestRequest request = new RestRequest($"/batches/{commitBatchRequest.BatchId}/commit", Method.POST);
+            request.AddJsonBody(commitBatchRequest);
+            var response = await client.ExecuteAsync<CommitBatchResponse>(request);
         }
 
         public static async Task CancelBatch(Guid batchId)
@@ -49,7 +50,7 @@ namespace Edreams.Outlook.TestPlugin.Helpers
                 };
                 content.Add(new StreamContent(stream), "file", fileName);
 
-                message.Method = HttpMethod.Put;
+                message.Method = HttpMethod.Post;
                 message.Content = content;
                 return await clientHttp.SendAsync(message);
             }

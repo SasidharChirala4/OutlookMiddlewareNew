@@ -18,20 +18,21 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
     {
         private readonly IEmailManager _emailManager;
         private readonly ITransactionQueueManager _transactionQueueManager;
-        private readonly ILogger<CategorizationEngineProcessor> _logger;
+        // TODO : Commented temporarily which is causing dependency issue. 
+        // private readonly ILogger<CategorizationEngineProcessor> _logger;
         private readonly ICategorizationManager _categorizationManager;
         private readonly IExchangeAndKeyVaultHelper _exchangeAndKeyVaultHelper;
 
         public CategorizationEngineProcessor(
             IEmailManager emailManager,
             ITransactionQueueManager transactionQueueManager,
-            ILogger<CategorizationEngineProcessor> logger,
+            //ILogger<CategorizationEngineProcessor> logger,
             ICategorizationManager categorizationManager,
             IExchangeAndKeyVaultHelper exchangeAndKeyVaultHelper)
         {
             _emailManager = emailManager;
             _transactionQueueManager = transactionQueueManager;
-            _logger = logger;
+           // _logger = logger;
             _categorizationManager = categorizationManager;
             _exchangeAndKeyVaultHelper = exchangeAndKeyVaultHelper;
         }
@@ -98,7 +99,7 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
             catch (Exception ex)
             {
                 // TODO: Do better logging.
-                _logger.LogError(ex, ex.Message);
+               // _logger.LogError(ex, ex.Message);
                 throw;
             }
         }

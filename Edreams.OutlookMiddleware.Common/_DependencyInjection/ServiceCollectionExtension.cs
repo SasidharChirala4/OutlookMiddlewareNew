@@ -54,6 +54,7 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
             services.AddSingleton<IExceptionFactory, ExceptionFactory>();
             services.AddSingleton<ITimeHelper, TimeHelper>();
             services.AddSingleton<IFileHelper, FileHelper>();
+            services.AddTransient(typeof(IRestHelper<>), typeof(RestHelper<>));
         }
     }
 }

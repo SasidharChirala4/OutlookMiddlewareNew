@@ -5,6 +5,10 @@ using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
+using Edreams.OutlookMiddleware.Common.Helpers;
+using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
+using Edreams.OutlookMiddleware.Common.Validation;
+using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Edreams.OutlookMiddleware.DataAccess.DependencyInjection;
 using Edreams.OutlookMiddleware.Mapping.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +34,10 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection
             services.AddTransient<IConfigurationManager, ConfigurationManager>();
             services.AddTransient<ITransactionQueueManager, TransactionQueueManager>();
             services.AddTransient<ICleanupManager, CleanupManager>();
+            services.AddTransient<IFileHelper, FileHelper>();
+            services.AddTransient<ICategorizationManager, CategorizationManager>();
+            services.AddTransient<IValidator, Validator>();
+
 
             services.AddTransient<IExchangeAndKeyVaultHelper, ExchangeAndKeyVaultHelper>();
 
