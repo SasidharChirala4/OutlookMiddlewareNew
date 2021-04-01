@@ -32,7 +32,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IRepository<EmailEntity> _emailRepository;
         private readonly IMapper<CategorizationRequestEntity, CategorizationRequestContract> _categorizationRequestMapper;
         private readonly IEdreamsConfiguration _configuration;
-        private readonly ILogger _logger;
+        // TODO : Commented temporarily which is causing dependency issue.
+        //private readonly ILogger _logger;
         private readonly IValidator _validator;
 
         #endregion
@@ -48,12 +49,12 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// <param name="validator"></param>
         public CategorizationManager(IRepository<CategorizationRequestEntity> categorizationRequestsRepository,
             IMapper<CategorizationRequestEntity, CategorizationRequestContract> categorizationRequestMapper,
-        IEdreamsConfiguration configuration, ILogger logger, IRepository<EmailEntity> emailRepository, IValidator validator)
+        IEdreamsConfiguration configuration, IRepository<EmailEntity> emailRepository, IValidator validator)
         {
             _categorizationRequestRepository = categorizationRequestsRepository;
             _categorizationRequestMapper = categorizationRequestMapper;
             _configuration = configuration;
-            _logger = logger;
+            //_logger = logger;
             _validator = validator;
             _emailRepository = emailRepository;
         }
@@ -80,7 +81,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error at getting pending categories");
+                //_logger.LogError(ex, "Error at getting pending categories");
                 throw;
             }
         }
@@ -110,7 +111,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error at update pending categories");
+                //_logger.LogError(ex, "Error at update pending categories");
                 throw;
             }
         }
@@ -143,7 +144,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
             catch (Exception ex)
             {
-                _logger.LogError("something went wrong while adding categorization.", ex);
+                //_logger.LogError("something went wrong while adding categorization.", ex);
             }
         }
 
@@ -187,13 +188,13 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                     else
                     {
                         //TODO : Need to check with Johnny/Sasi about proper logs
-                        _logger.LogError("Error at adding categorization after exceeding 3 times.", ex);
+                        //_logger.LogError("Error at adding categorization after exceeding 3 times.", ex);
                         retry = false;
                     }
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Unexpected error occured while adding catergorization.", ex);
+                    //_logger.LogError("Unexpected error occured while adding catergorization.", ex);
                     retry = false;
                 }
             } while (retry);

@@ -8,6 +8,8 @@ using Edreams.OutlookMiddleware.Services.Upload.Engine.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+using Edreams.OutlookMiddleware.BusinessLogic;
 
 namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 {
@@ -38,6 +40,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
                     services.AddHostedService<UploadEngineWorker>();
                     services.AddTransient<IUploadEngineProcessor, UploadEngineProcessor>();
+                    services.AddTransient<IExtensibilityManager, ExtensibilityManager>();
                 });
     }
 }

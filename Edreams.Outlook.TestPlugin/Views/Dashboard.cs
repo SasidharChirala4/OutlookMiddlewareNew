@@ -6,7 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Edreams.Outlook.TestPlugin.Helpers;
+using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
+using Edreams.OutlookMiddleware.Enums;
 using Microsoft.Office.Interop.Outlook;
 
 namespace Edreams.Outlook.TestPlugin.Views
@@ -131,7 +133,14 @@ namespace Edreams.Outlook.TestPlugin.Views
         {
             if (_preloaded && _batchId.HasValue)
             {
-                await HttpHelper.CommitBatch(_batchId.Value);
+                // TODO : Needs to adjust CommitBatchRequest Logic 
+                CommitBatchRequest commitBatchRequest = new CommitBatchRequest()
+                {
+                    BatchId = new Guid("8A34B973-B5D8-4CFF-9769-2F648335EAD2"),
+                    UploadOption = EmailUploadOptions.Emails,
+                    //EmailRecipients = emailRecipientDto
+                };
+                await HttpHelper.CommitBatch(commitBatchRequest);
             }
 
             _synchronizationContext.Send(_ =>

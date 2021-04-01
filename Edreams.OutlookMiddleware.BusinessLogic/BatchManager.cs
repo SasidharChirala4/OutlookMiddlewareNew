@@ -69,6 +69,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
 
             // Fetch all emails that are related to the specified batch and include the referenced files.
+            // TODO: Need to Remove Upload Option/adjust logic    
+            // Error: Throwing error(Lambda expression used inside Include is not valid) if UploadOption is included in the below statement. 
             IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files, inc => inc.UploadOption);
 
             // Map the database emails and files to email details and file details.
@@ -100,11 +102,12 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             // Force a database transaction scope to make sure multiple
             // operations are combined as a single atomic operation.
+            // TODO : Adjust transactionscope for both context.
             using (ITransactionScope transactionScope = _transactionHelper.CreateScope())
             {
                 // Find all the file records that have been preloaded for the specified batch.
                 var preloadedFiles = await _preloadedFilesRepository.Find(
-                    x => x.BatchId == request.BatchId);
+                x => x.BatchId == request.BatchId);
 
                 // If there were no file records found for the specified batch, that batch
                 // is not found and 'null' should be returned to force an HTTP 404.

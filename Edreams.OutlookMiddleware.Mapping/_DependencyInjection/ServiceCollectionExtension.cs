@@ -6,6 +6,8 @@ using Edreams.OutlookMiddleware.Mapping.Custom.Interfaces;
 using Edreams.OutlookMiddleware.Mapping.Interfaces;
 using Edreams.OutlookMiddleware.Model;
 using Microsoft.Extensions.DependencyInjection;
+using CategorizationRequestEntity = Edreams.OutlookMiddleware.Model.CategorizationRequest;
+using CategorizationRequestContract = Edreams.OutlookMiddleware.DataTransferObjects.Api.CategorizationRequest;
 
 // ReSharper disable once CheckNamespace
 namespace Edreams.OutlookMiddleware.Mapping.DependencyInjection
@@ -21,6 +23,7 @@ namespace Edreams.OutlookMiddleware.Mapping.DependencyInjection
             services.AddTransient<IMapper<EmailRecipientDto, EmailRecipient>, EmailRecipientDtoToEmailRecipientMapper>();
             services.AddSingleton<IPreloadedFilesToFilesMapper, PreloadedFilesToFilesMapper>();
             services.AddSingleton<IEmailsToEmailDetailsMapper, EmailsToEmailDetailsMapper>();
+            services.AddSingleton<IMapper<CategorizationRequestEntity, CategorizationRequestContract>, CategorizationRequestMapper>();
         }
     }
 }
