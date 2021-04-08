@@ -69,7 +69,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
 
             // Fetch all emails that are related to the specified batch and include the referenced files.
-            // Error: Throwing error(Lambda expression used inside Include is not valid) if UploadOption is included in the below statement. 
+            // TODO: Need to Remove Upload Option/adjust logic
             IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files);
 
             // Map the database emails and files to email details and file details.
@@ -99,14 +99,15 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         public async Task<CommitBatchResponse> CommitBatch(CommitBatchRequest request)
         {
-            // Force a database transaction scope to make sure multiple
-            // operations are combined as a single atomic operation.
-            // TODO : Adjust transactionscope for both context.
+            // Create response object contains information about the committed batch
+            CommitBatchResponse response = new CommitBatchResponse();
 
             // Find all the file records that have been preloaded for the specified batch.
             var preloadedFiles = await _preloadedFilesRepository.Find(
             x => x.BatchId == request.BatchId);
 
+            // Force a database transaction scope to make sure multiple
+            // operations are combined as a single atomic operation.
             using (ITransactionScope transactionScope = _transactionHelper.CreateScope())
             {
                 // If there were no file records found for the specified batch, that batch
@@ -160,18 +161,16 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
                 transactionScope.Commit();
 
-                // Update all file records in the pre-load database.
-                await _preloadedFilesRepository.Update(preloadedFiles);
-
-                // Return a response containing some information about the committed batch.
-                return new CommitBatchResponse
-                {
-                    CorrelationId = request.CorrelationId,
-                    BatchId = batch.Id,
-                    NumberOfEmails = files.Select(x => x.Email).Distinct().Count(),
-                    NumberOfFiles = preloadedFiles.Count
-                };
+                // Fill response object.
+                response.CorrelationId = request.CorrelationId;
+                response.BatchId = batch.Id;
+                response.NumberOfEmails = files.Select(x => x.Email).Distinct().Count();
+                response.NumberOfFiles = preloadedFiles.Count;
             }
+            // Update all file records in the pre-load database.
+            await _preloadedFilesRepository.Update(preloadedFiles);
+
+            return response;
         }
 
         public async Task<CancelBatchResponse> CancelBatch(CancelBatchRequest request)
