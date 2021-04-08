@@ -5,9 +5,10 @@ using System.Linq.Expressions;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Helpers;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.Model.Base;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Moq.Language.Flow;
-using Microsoft.EntityFrameworkCore;
+
 // ReSharper disable once CheckNamespace
 namespace Edreams.OutlookMiddleware.Tests.Framework.Extensions
 {

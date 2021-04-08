@@ -1,23 +1,23 @@
-﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Helpers;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
-using Edreams.OutlookMiddleware.DataTransferObjects.Api;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Edreams.OutlookMiddleware.Mapping.Interfaces;
-using CategorizationRequestEntity = Edreams.OutlookMiddleware.Model.CategorizationRequest;
-using CategorizationRequestContract = Edreams.OutlookMiddleware.DataTransferObjects.Api.CategorizationRequest;
-using EmailEntity = Edreams.OutlookMiddleware.Model.Email;
-using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Edreams.OutlookMiddleware.Common.Constants;
-using Edreams.OutlookMiddleware.Model;
-using Edreams.OutlookMiddleware.Enums;
+using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Edreams.OutlookMiddleware.DataAccess.Exceptions;
+using Edreams.OutlookMiddleware.DataAccess.Repositories.Helpers;
+using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
+using Edreams.OutlookMiddleware.DataTransferObjects.Api;
+using Edreams.OutlookMiddleware.Enums;
+using Edreams.OutlookMiddleware.Mapping.Interfaces;
+using Edreams.OutlookMiddleware.Model;
+using Microsoft.EntityFrameworkCore;
+using CategorizationRequestContract = Edreams.OutlookMiddleware.DataTransferObjects.Api.CategorizationRequest;
+using CategorizationRequestEntity = Edreams.OutlookMiddleware.Model.CategorizationRequest;
+using EmailEntity = Edreams.OutlookMiddleware.Model.Email;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
@@ -32,7 +32,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IRepository<EmailEntity> _emailRepository;
         private readonly IMapper<CategorizationRequestEntity, CategorizationRequestContract> _categorizationRequestMapper;
         private readonly IEdreamsConfiguration _configuration;
-        private readonly ILogger _logger;
+        private readonly IEdreamsLogger<CategorizationManager> _logger;
         private readonly IValidator _validator;
 
         #endregion
@@ -48,7 +48,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// <param name="validator"></param>
         public CategorizationManager(IRepository<CategorizationRequestEntity> categorizationRequestsRepository,
             IMapper<CategorizationRequestEntity, CategorizationRequestContract> categorizationRequestMapper,
-            IEdreamsConfiguration configuration, ILogger logger, IRepository<EmailEntity> emailRepository, IValidator validator)
+            IEdreamsConfiguration configuration, IEdreamsLogger<CategorizationManager> logger, IRepository<EmailEntity> emailRepository, IValidator validator)
         {
             _categorizationRequestRepository = categorizationRequestsRepository;
             _categorizationRequestMapper = categorizationRequestMapper;
@@ -143,7 +143,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
             catch (Exception ex)
             {
-                _logger.LogError("something went wrong while adding categorization.", ex);
+                _logger.LogError(ex, "something went wrong while adding categorization.");
             }
         }
 
@@ -187,13 +187,13 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                     else
                     {
                         //TODO : Need to check with Johnny/Sasi about proper logs
-                        _logger.LogError("Error at adding categorization after exceeding 3 times.", ex);
+                        _logger.LogError(ex, "Error at adding categorization after exceeding 3 times.");
                         retry = false;
                     }
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Unexpected error occured while adding catergorization.", ex);
+                    _logger.LogError(ex, "Unexpected error occured while adding catergorization.");
                     retry = false;
                 }
             } while (retry);

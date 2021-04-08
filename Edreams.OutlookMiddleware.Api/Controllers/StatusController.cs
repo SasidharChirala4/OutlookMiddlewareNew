@@ -2,8 +2,8 @@
 using Edreams.OutlookMiddleware.Api.Helpers;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
@@ -16,7 +16,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class StatusController : ApiController<IStatusManager>
+    public class StatusController : ApiController<StatusController, IStatusManager>
     {
         private readonly IEdreamsConfiguration _configuration;
 
@@ -25,9 +25,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <param name="logger">The logger.</param>
         /// <param name="configuration">The configuration.</param>
         public StatusController(
-            IStatusManager statusManager,
-            ILogger<StatusController> logger,
-            IEdreamsConfiguration configuration)
+            IStatusManager statusManager, IEdreamsLogger<StatusController> logger, IEdreamsConfiguration configuration)
             : base(statusManager, logger)
         {
             _configuration = configuration;

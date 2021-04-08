@@ -1,18 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Edreams.OutlookMiddleware.Services.Notification
 {
     public class Worker : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly IEdreamsLogger<Worker> _logger;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(IEdreamsLogger<Worker> logger)
         {
             _logger = logger;
         }
@@ -21,7 +19,7 @@ namespace Edreams.OutlookMiddleware.Services.Notification
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                _logger.LogInformation("Worker running at: {time}", new object[] { DateTimeOffset.Now });
                 await Task.Delay(1000, stoppingToken);
             }
         }

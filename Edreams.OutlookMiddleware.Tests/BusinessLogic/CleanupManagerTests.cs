@@ -1,18 +1,18 @@
-﻿using Edreams.OutlookMiddleware.BusinessLogic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Edreams.OutlookMiddleware.BusinessLogic;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.Mapping;
 using Edreams.OutlookMiddleware.Model;
 using Edreams.OutlookMiddleware.Tests.Framework.Extensions;
-using Moq;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Moq;
 using Xunit;
-using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 {

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Edreams.OutlookMiddleware.Api.Helpers;
 using Swashbuckle.AspNetCore.Annotations;
 using Edreams.OutlookMiddleware.DataTransferObjects;
@@ -24,7 +24,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     /// </remarks>
     [ApiController]
     [Route("[controller]")]
-    public class MailsController : ApiController<IEmailManager>
+    public class MailsController : ApiController<MailsController, IEmailManager>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MailsController"/> class.
@@ -32,10 +32,9 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <param name="emailManager">The email manager.</param>
         /// <param name="logger">The logger.</param>
         public MailsController(
-            IEmailManager emailManager,
-            ILogger<MailsController> logger)
+            IEmailManager emailManager, IEdreamsLogger<MailsController> logger)
             : base(emailManager, logger) { }
-        
+
         /// <summary>
         /// Creates an email to prepare for uploading binary data.
         /// </summary>

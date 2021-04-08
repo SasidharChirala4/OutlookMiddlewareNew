@@ -1,15 +1,15 @@
-﻿using Edreams.Contracts.Data.Enums;
+﻿using System;
+using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
+using Edreams.Contracts.Data.Common;
+using Edreams.Contracts.Data.Enums;
 using Edreams.Contracts.Data.Extensibility;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Constants;
+using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.Common.Validation.Interface;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
-using System;
-using Edreams.OutlookMiddleware.Common.Exceptions;
 using RestSharp;
-using Edreams.Contracts.Data.Common;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
@@ -20,7 +20,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IRestHelper<SuggestedSite> _suggestedSiteRestHelper;
         private readonly IRestHelper<SharePointFile> _sharePointFileRestHelper;
         private readonly IValidator _validator;
-        private readonly ILogger _logger;
+        private readonly IEdreamsLogger<ExtensibilityManager> _logger;
 
         #endregion
 
@@ -29,7 +29,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         public ExtensibilityManager(
             IRestHelper<SuggestedSite> suggestedSiteRestHelper,
             IRestHelper<SharePointFile> sharePointFileRestHelper,
-            IValidator validator, ILogger logger)
+            IValidator validator, IEdreamsLogger<ExtensibilityManager> logger)
         {
             _suggestedSiteRestHelper = suggestedSiteRestHelper;
             _sharePointFileRestHelper = sharePointFileRestHelper;
@@ -70,13 +70,13 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             catch (EdreamsException ex)
             {
                 // TODO : Need to check with johnny/sasi about proper log message 
-                _logger.LogError("Error at setting suggested sites.", ex);
+                _logger.LogError(ex, "Error at setting suggested sites.");
             }
             catch (Exception ex)
             {
                 // TODO : Need to check with johnny/sasi about proper log message
                 // This handles all remaining exceptions.
-                _logger.LogError("Unexpected error occured while setting suggested sites.", ex);
+                _logger.LogError(ex, "Unexpected error occured while setting suggested sites.");
             }
         }
 
@@ -115,23 +115,21 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                     _logger.LogInformation($"File [{fileParameter.FileName}] uploaded to site [{siteUrl}] successfully.");
                     return response.Content.AbsoluteUrl;
                 }
-                else
-                {
-                    // this scenario won't occur mostly, because we are handling all kind of exceptions in rest helper
-                    _logger.LogInformation($"File [{fileParameter.FileName}] uploaded failed to site [{siteUrl}] with out any error.");
-                    return null;
-                }
+
+                // this scenario won't occur mostly, because we are handling all kind of exceptions in rest helper
+                _logger.LogInformation($"File [{fileParameter.FileName}] uploaded failed to site [{siteUrl}] with out any error.");
+                return null;
             }
             catch (EdreamsException ex)
             {
                 // TODO : Need to check with johnny/sasi about proper log message and return value
-                _logger.LogError("Error at upload file.", ex);
+                _logger.LogError(ex, "Error at upload file.");
                 return null;
             }
             catch (Exception ex)
             {
                 // TODO : Need to check with johnny/sasi about proper log message and return value
-                _logger.LogError("Unexpected error occured while uploading file.", ex);
+                _logger.LogError(ex, "Unexpected error occured while uploading file.");
                 return null;
             }
         }

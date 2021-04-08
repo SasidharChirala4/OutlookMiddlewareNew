@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
 using Edreams.OutlookMiddleware.Api.Helpers;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
@@ -20,7 +20,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     /// </remarks>
     [ApiController]
     [Route("[controller]")]
-    public class TransactionsController : ApiController<ITransactionQueueManager>
+    public class TransactionsController : ApiController<TransactionsController, ITransactionQueueManager>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TransactionsController" /> class.
@@ -28,7 +28,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <param name="transactionQueueManager">The transaction queue manager.</param>
         /// <param name="logger">The logger.</param>
         public TransactionsController(
-            ITransactionQueueManager transactionQueueManager, ILogger<ConfigurationController> logger)
+            ITransactionQueueManager transactionQueueManager, IEdreamsLogger<TransactionsController> logger)
             : base(transactionQueueManager, logger) { }
 
         /// <summary>

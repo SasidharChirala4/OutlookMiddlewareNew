@@ -4,6 +4,7 @@ using Edreams.OutlookMiddleware.Common._DependencyInjection;
 using Edreams.OutlookMiddleware.Common.Security;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.Common.AzureServiceBus._DependencyInjection;
+using Edreams.Common.Logging._DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,6 +31,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
                     securityContext.SetUserIdentity(WindowsIdentity.GetCurrent());
                     services.AddSingleton(_ => securityContext);
 
+                    services.AddEdreamsLogging();
                     services.AddCommon();
                     services.AddConfiguration(hostBuilder.Configuration);
                     services.AddServiceBus();
