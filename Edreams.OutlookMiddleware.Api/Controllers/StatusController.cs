@@ -41,8 +41,6 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [SwaggerResponse(200, "Successfully returns a GetStatusResponse object.", typeof(ApiResult<GetStatusResponse>))]
         public Task<IActionResult> Status()
         {
-            Debug.WriteLine(_configuration.EdreamsExtensibilityUrl);
-
             return ExecuteManager(manager => manager.GetStatus());
         }
     }

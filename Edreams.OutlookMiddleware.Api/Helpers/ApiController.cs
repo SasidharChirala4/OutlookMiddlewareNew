@@ -34,6 +34,11 @@ namespace Edreams.OutlookMiddleware.Api.Helpers
         private readonly TManager _manager;
         private readonly ILogger _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ApiController{TManager}" /> class.
+        /// </summary>
+        /// <param name="manager">The manager.</param>
+        /// <param name="logger">The logger.</param>
         public ApiController(TManager manager, ILogger logger)
         {
             _manager = manager;
@@ -71,19 +76,6 @@ namespace Edreams.OutlookMiddleware.Api.Helpers
             });
         }
 
-        protected void Validate<T>(T routeParam, T requestParam, string validationMessage) where T : struct
-        {
-            if (!routeParam.Equals(requestParam))
-            {
-                EdreamsValidationException validationException = new EdreamsValidationException
-                {
-                    ValidationErrors = { validationMessage }
-                };
-
-                throw validationException;
-            }
-        }
-
         private async Task<IActionResult> Try(Func<Task<IActionResult>> action)
         {
             try
@@ -101,7 +93,7 @@ namespace Edreams.OutlookMiddleware.Api.Helpers
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return ActionResult(500, 0);
+                return InternalServerError(ex);
             }
         }
 
@@ -118,15 +110,16 @@ namespace Edreams.OutlookMiddleware.Api.Helpers
             });
         }
 
-        private IActionResult ActionResult(int status, long elapsedMilliseconds)
+        private IActionResult InternalServerError(Exception ex)
         {
-            return StatusCode(status, new ApiResult
+            return StatusCode(500, new ApiErrorResult
             {
                 CorrelationId = Guid.NewGuid(),
-                StatusCode = $"{status}",
+                StatusCode = "500",
                 TimeStamp = DateTime.UtcNow,
                 ApiVersion = $"{Assembly.GetEntryAssembly()?.GetName().Version}",
-                ElapsedMilliseconds = elapsedMilliseconds
+                ErrorCode = $"{EdreamsExceptionCode.UnhandledException}",
+                ErrorMessage = ex.Message
             });
         }
     }

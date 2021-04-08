@@ -41,7 +41,8 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
-                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator);
+                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, 
+                loggerMock.Object, emailRepositoryMock.Object, validator);
 
             // Prepare a request to use for when calling the "GetPendingCategories" method.
             CategorizationRequestEntity categorizationRequest = new CategorizationRequestEntity()

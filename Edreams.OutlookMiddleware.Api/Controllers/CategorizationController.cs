@@ -48,9 +48,9 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [SwaggerResponse(200, "Successfully categories have been processed.", typeof(ApiResult<UpdatePendingCategoriesResponse>))]
         [SwaggerResponse(404, "Specified categories could not be found.", typeof(ApiResult))]
         [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
-        public async Task<IActionResult> UpdatePendingCategories([FromBody] UpdatePendingCategoriesRequest updatePendingCategoriesRequest)
+        public Task<IActionResult> UpdatePendingCategories([FromBody] UpdatePendingCategoriesRequest updatePendingCategoriesRequest)
         {
-            return await ExecuteManager(manager => manager.UpdatePendingCategories(updatePendingCategoriesRequest));
+            return ExecuteManager(manager => manager.UpdatePendingCategories(updatePendingCategoriesRequest));
         }
     }
 }

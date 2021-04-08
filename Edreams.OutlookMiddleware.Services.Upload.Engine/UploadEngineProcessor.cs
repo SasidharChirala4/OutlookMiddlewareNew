@@ -137,7 +137,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             catch (Exception ex)
             {
                 // Throw an exception.
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.OUTLOOKMIDDLEWARE_UPLOAD_TO_EDREAMS_FAILED, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.OutlookMiddlewareUploadToEdreamsFailed, ex);
             }
         }
 

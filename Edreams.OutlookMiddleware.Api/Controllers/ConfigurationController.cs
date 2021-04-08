@@ -40,9 +40,9 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [HttpGet("sharedmailbox")]
         [SwaggerResponse(200, "Successfully returns a GetSharedMailBox object.", typeof(ApiResult<GetSharedMailBoxResponse>))]
         [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
-        public async Task<IActionResult> GetSharedMailBox()
+        public Task<IActionResult> GetSharedMailBox()
         {
-            return await ExecuteManager(manager => manager.GetSharedMailBox());
+            return ExecuteManager(manager => manager.GetSharedMailBox());
         }
     }
 }

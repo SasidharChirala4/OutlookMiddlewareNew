@@ -13,6 +13,6 @@ namespace Edreams.OutlookMiddleware.Common.Exceptions
         /// Initializes a new instance of the <see cref="EdreamsFatalException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public EdreamsFatalException(string message) : base(EdreamsExceptionCode.UNKNOWN_FAULT, message) { }
+        public EdreamsFatalException(string message) : base(EdreamsExceptionCode.UnknownFault, message) { }
     }
 }

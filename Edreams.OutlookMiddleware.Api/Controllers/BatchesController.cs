@@ -54,11 +54,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
         public Task<IActionResult> CommitBatch(Guid batchId, CommitBatchRequest request)
         {
-            return ExecuteManager(x =>
-            {
-                Validate(batchId, request.BatchId, "There is a 'BatchId' mismatch for route and request.");
-                return x.CommitBatch(request);
-            });
+            return ExecuteManager(x => x.CommitBatch(batchId, request));
         }
 
         /// <summary>
@@ -80,11 +76,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [SwaggerResponse(500, "An internal server error has occurred, this is not your fault.", typeof(ApiErrorResult))]
         public Task<IActionResult> CancelBatch(Guid batchId, CancelBatchRequest request)
         {
-            return ExecuteManager(x =>
-            {
-                Validate(batchId, request.BatchId, "There is a 'BatchId' mismatch for route and request.");
-                return x.CancelBatch(request);
-            });
+            return ExecuteManager(x => x.CancelBatch(batchId, request));
         }
     }
 }

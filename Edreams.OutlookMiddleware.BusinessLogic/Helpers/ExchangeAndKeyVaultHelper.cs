@@ -60,7 +60,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Helpers
             }
             catch (Exception ex)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault, ex);
             }
         }
 
@@ -86,21 +86,21 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Helpers
                 {
                     if (ex is RequestFailedException)
                     {
-                        throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.KEYVAULT_REQUEST_FAULT, ex);
+                        throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.KeyVaultRequestFault, ex);
                     }
 
                     return false;
                 });
 
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, aggregateException);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault, aggregateException);
             }
             catch (AuthenticationFailedException ex)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.KEYVAULT_AUTHENTICATION_FAULT, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.KeyVaultAuthenticationFault, ex);
             }
             catch (Exception ex)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault, ex);
             }
         }
 

@@ -25,15 +25,17 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         /// <summary>
         /// Commits the batch specified by the request object.
         /// </summary>
+        /// <param name="batchId">The unique batch identifier.</param>
         /// <param name="request">A request object containing the unique batch identifier and the metadata needed to commit the specified batch.</param>
         /// <returns>A response object containing the number of emails and files that are part of the batch.</returns>
-        Task<CommitBatchResponse> CommitBatch(CommitBatchRequest request);
+        Task<CommitBatchResponse> CommitBatch(Guid batchId, CommitBatchRequest request);
 
         /// <summary>
         /// Cancels the batch specified by the request object.
         /// </summary>
+        /// <param name="batchId">The unique batch identifier.</param>
         /// <param name="request">A request object containing the unique batch identifier.</param>
         /// <returns>A response object containing the number of files that are cancelled as part of the batch.</returns>
-        Task<CancelBatchResponse> CancelBatch(CancelBatchRequest request);
+        Task<CancelBatchResponse> CancelBatch(Guid batchId, CancelBatchRequest request);
     }
 }

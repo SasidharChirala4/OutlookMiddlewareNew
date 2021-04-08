@@ -77,7 +77,7 @@ namespace Edreams.OutlookMiddleware.Common.Validation
         /// <summary>
         /// Validates a datetime.
         /// </summary>
-        /// <param name="dateTime">The datetime to validate.</param>
+        /// <param name="toValidate">The datetime to validate.</param>
         /// <param name="validationMessage">The validation message.</param>
         public void ValidateDateTime(DateTime? toValidate, string validationMessage)
         {

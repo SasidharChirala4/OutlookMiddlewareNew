@@ -42,7 +42,7 @@ namespace Edreams.OutlookMiddleware.Common.Exchange
             if (authenticationResult.StatusCode != HttpStatusCode.OK || authenticationResult.Data == null)
             {
                 string errorMessage = $"Exchange authentication failed: {authenticationResult.Content}!";
-                Exception exception = new EdreamsException(EdreamsExceptionCode.UNKNOWN_FAULT, errorMessage);
+                Exception exception = new EdreamsException(EdreamsExceptionCode.UnknownFault, errorMessage);
                 throw exception;
             }
 

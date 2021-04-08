@@ -242,6 +242,13 @@
             </summary>
             <typeparam name="TManager"></typeparam>
         </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Helpers.ApiController`1.#ctor(`0,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Helpers.ApiController`1" /> class.
+            </summary>
+            <param name="manager">The manager.</param>
+            <param name="logger">The logger.</param>
+        </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Helpers.ApiController`1.ExecuteManager``1(System.Func{`0,System.Threading.Tasks.Task{``0}})">
             <summary>
             This method executes a method on the Manager that is associated with this ApiController<typeparamref name="TManager"/>.

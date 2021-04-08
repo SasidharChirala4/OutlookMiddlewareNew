@@ -196,13 +196,13 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // If connection string is empty, throw exception.
             if (string.IsNullOrEmpty(connectionString))
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_CONNECTIONSTRING_MISSING);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.ServiceBusConnectionStringMissing);
             }
 
             // If queue name is empty, throw exception.
             if (string.IsNullOrEmpty(queueName))
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_QUEUENAME_MISSING);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.ServiceBusQueueNameMissing);
             }
 
             try
@@ -222,22 +222,22 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             catch (MessagingEntityNotFoundException ex)
             {
                 // This exception gets thrown when the specified queue could not be found.
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_QUEUE_NOT_FOUND, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.ServiceBusQueueNotFound, ex);
             }
             catch (UnauthorizedException ex)
             {
                 // This exception gets thrown when there is an issue with authorization.
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_UNAUTHORIZED, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.ServiceBusUnauthorized, ex);
             }
             catch (ServiceBusException ex)
             {
                 // This exception gets thrown when there is an issue with connecting to Azure ServiceBus.
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_CONNECTION_ERROR, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.ServiceBusConnectionError, ex);
             }
             catch (Exception ex)
             {
                 // This handles all remaining exceptions.
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault, ex);
             }
         }
 

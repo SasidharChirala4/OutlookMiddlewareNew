@@ -28,7 +28,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
             if (file == null)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault);
             }
 
             file.Status = status;

@@ -102,7 +102,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // Throw an exception if a batch with specified unique ID cannot be found.
             if (batch == null)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.OUTLOOKMIDDLEWARE_BATCH_NOT_FOUND);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.OutlookMiddlewareBatchNotFound);
             }
             // Get a list of all related email's.
             IList<Email> emails = await _emailRepository.Find(
@@ -130,7 +130,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
             if (email == null)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault);
             }
 
             email.Status = status;

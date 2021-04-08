@@ -42,9 +42,9 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [HttpGet("queue/statistics")]
         [SwaggerResponse(200, "Successfully returns a GetTransactionQueueStatisticsResponse object.", typeof(ApiResult<GetTransactionQueueStatisticsResponse>))]
         [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
-        public async Task<IActionResult> GetTransactionQueueStatistics()
+        public Task<IActionResult> GetTransactionQueueStatistics()
         {
-            return await ExecuteManager(manager => manager.GetTransactionQueueStatistics());
+            return ExecuteManager(manager => manager.GetTransactionQueueStatistics());
         }
     }
 }
