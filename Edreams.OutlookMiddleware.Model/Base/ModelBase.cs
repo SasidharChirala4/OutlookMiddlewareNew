@@ -5,7 +5,7 @@ namespace Edreams.OutlookMiddleware.Model.Base
     /// <summary>
     /// Base class for all model classes containing common properties.
     /// </summary>
-    public class ModelBase
+    public class ModelBase : IInsertedBy, IInsertedOn, IUpdatedBy, IUpdatedOn
     {
         /// <summary>
         /// Public identifier; Primary Key
