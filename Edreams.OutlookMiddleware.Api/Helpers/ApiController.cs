@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Api.Helpers
 {
@@ -28,13 +29,17 @@ namespace Edreams.OutlookMiddleware.Api.Helpers
     /// <summary>
     /// Base Api controller with TManager
     /// </summary>
+    /// <typeparam name="TController"></typeparam>
     /// <typeparam name="TManager"></typeparam>
-    public class ApiController<TManager> : ApiController
+    public class ApiController<TController, TManager> : ApiController
     {
         private readonly TManager _manager;
-        private readonly ILogger _logger;
+        private readonly IEdreamsLogger<TController> _logger;
 
-        public ApiController(TManager manager, ILogger logger)
+        /// <summary>Initializes a new instance of the <see cref="ApiController{TController, TManager}" /> class.</summary>
+        /// <param name="manager">The manager.</param>
+        /// <param name="logger">The logger.</param>
+        public ApiController(TManager manager, IEdreamsLogger<TController> logger)
         {
             _manager = manager;
             _logger = logger;

@@ -1,16 +1,16 @@
-﻿using Edreams.OutlookMiddleware.BusinessLogic;
-using Moq;
-using FluentAssertions;
-using System.Threading.Tasks;
-using Xunit;
-using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
-using Edreams.Contracts.Data.Extensibility;
+﻿using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
 using Edreams.Contracts.Data.Common;
-using Edreams.OutlookMiddleware.Common.Validation.Interface;
-using Microsoft.Extensions.Logging;
-using Edreams.OutlookMiddleware.Common.Exceptions;
+using Edreams.Contracts.Data.Extensibility;
+using Edreams.OutlookMiddleware.BusinessLogic;
 using Edreams.OutlookMiddleware.Common.Constants;
+using Edreams.OutlookMiddleware.Common.Exceptions;
+using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.Common.Validation;
+using Edreams.OutlookMiddleware.Common.Validation.Interface;
+using FluentAssertions;
+using Moq;
+using Xunit;
 
 namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 {
@@ -27,7 +27,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var validator = new Validator();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
@@ -62,7 +62,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var validator = new Validator();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
@@ -87,6 +87,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             exception.ValidationErrors[0].Should().Be(ValidationMessages.WebApi.SiteUrlRequired);
             #endregion
         }
+
         [Fact]
         public async Task ExtensibilityManager_SetSuggestedSites_Empty_From_Value_Should_Return_Validation()
         {
@@ -96,7 +97,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var validator = new Validator();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
@@ -131,7 +132,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var validatorMock = new Mock<IValidator>();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
@@ -177,7 +178,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var validator = new Validator();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
@@ -214,7 +215,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var validator = new Validator();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
@@ -229,7 +230,6 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             bool overrite = false;
             #endregion
 
-
             #region [ ACT ]
             // Call the "UploadFile" method using the prepared request.
             EdreamsValidationException exception = await Assert.ThrowsAsync<EdreamsValidationException>(() => extensibilityManager.UploadFile(fileBytes, siteUrl, folderName, fileName, overrite));
@@ -241,6 +241,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             exception.ValidationErrors[0].Should().Be(ValidationMessages.WebApi.FolderRequired);
             #endregion
         }
+
         [Fact]
         public async Task ExtensibilityManager_UploadFile_Empty_FileName_Value_Should_Return_Validation()
         {
@@ -250,7 +251,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var validator = new Validator();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
@@ -265,7 +266,6 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             byte[] fileBytes = new byte[10];
             bool overrite = false;
             #endregion
-
 
             #region [ ACT ]
             // Call the "UploadFile" method using the prepared request.
@@ -288,7 +288,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var validator = new Validator();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
@@ -303,6 +303,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             byte[] fileBytes = new byte[10];
             bool overrite = false;
             #endregion
+
             #region [ MOCK ]
 
             // Mock the "Find" method on the "Repository" and run the predicate lambda expression on
@@ -332,7 +333,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var validatorMock = new Mock<IValidator>();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
@@ -348,7 +349,6 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             bool overrite = false;
             #endregion
 
-
             #region [ ACT ]
             // Call the "UploadFile" method using the prepared request.
             await extensibilityManager.UploadFile(fileBytes, siteUrl, folderName, fileName, overrite);
@@ -360,6 +360,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             //exception.ValidationErrors[0].Should().Be(ValidationMessages.WebApi.PrincipalNameRequired);
             #endregion
         }
+
         #endregion
     }
 }

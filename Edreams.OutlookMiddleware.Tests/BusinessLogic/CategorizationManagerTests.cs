@@ -1,24 +1,24 @@
-﻿using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
-using CategorizationRequestEntity = Edreams.OutlookMiddleware.Model.CategorizationRequest;
-using Moq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Xunit;
-using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Microsoft.Extensions.Logging;
-using Edreams.OutlookMiddleware.Model;
-using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+using Edreams.Common.Logging.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic;
-using FluentAssertions;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Helpers;
-using Edreams.OutlookMiddleware.Tests.Framework.Extensions;
-using Edreams.OutlookMiddleware.Mapping;
-using Edreams.OutlookMiddleware.DataTransferObjects.Api;
-using CategorizationRequest = Edreams.OutlookMiddleware.DataTransferObjects.Api.CategorizationRequest;
-using Edreams.OutlookMiddleware.Common.Exceptions;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Constants;
+using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Validation;
+using Edreams.OutlookMiddleware.DataAccess.Repositories.Helpers;
+using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
+using Edreams.OutlookMiddleware.DataTransferObjects.Api;
+using Edreams.OutlookMiddleware.Mapping;
+using Edreams.OutlookMiddleware.Model;
+using Edreams.OutlookMiddleware.Tests.Framework.Extensions;
+using FluentAssertions;
+using Moq;
+using Xunit;
+using CategorizationRequest = Edreams.OutlookMiddleware.DataTransferObjects.Api.CategorizationRequest;
+using CategorizationRequestEntity = Edreams.OutlookMiddleware.Model.CategorizationRequest;
 
 namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 {
@@ -37,7 +37,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var emailRepositoryMock = new Mock<IRepository<Email>>();
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
@@ -90,7 +90,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var emailRepositoryMock = new Mock<IRepository<Email>>();
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
@@ -130,6 +130,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 
             #endregion
         }
+
         #endregion
 
         #region <| UpdatePendingCategories |>
@@ -145,7 +146,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var emailRepositoryMock = new Mock<IRepository<Email>>();
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
@@ -204,7 +205,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var emailRepositoryMock = new Mock<IRepository<Email>>();
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
@@ -253,6 +254,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             response.Success.Should().Be(true);
             #endregion
         }
+
         #endregion
 
         #region <| AddCategorizationRequest |>
@@ -268,7 +270,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var emailRepositoryMock = new Mock<IRepository<Email>>();
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
@@ -291,6 +293,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             exception.ValidationErrors[0].Should().Be(ValidationMessages.WebApi.InternetMessageIdRequired);
             #endregion
         }
+
         [Fact]
         public async Task CategorizationManager_AddCategorizationRequest__Without_RecipientsList_Should_Throw_Validattion()
         {
@@ -302,7 +305,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var emailRepositoryMock = new Mock<IRepository<Email>>();
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
@@ -324,6 +327,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             exception.ValidationErrors[0].Should().Be(ValidationMessages.WebApi.RecipientsListRequired);
             #endregion
         }
+
         [Fact]
         public async Task CategorizationManager_AddCategorizationRequest_Should_Add_CategorizationRequest()
         {
@@ -335,7 +339,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var emailRepositoryMock = new Mock<IRepository<Email>>();
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
-            var loggerMock = new Mock<ILogger>();
+            var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             
@@ -373,6 +377,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 
             #endregion
         }
+
         #endregion
     }
 }

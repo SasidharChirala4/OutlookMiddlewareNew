@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
 using Edreams.OutlookMiddleware.Api.Helpers;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
@@ -17,10 +18,10 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class FilesController : ApiController<IPreloadedFileManager>
+    public class FilesController : ApiController<FilesController, IPreloadedFileManager>
     {
+        private readonly IEdreamsLogger<FilesController> _logger;
         private readonly IEdreamsConfiguration _configuration;
-        private readonly ILogger<FilesController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FilesController" /> class.
@@ -29,13 +30,11 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <param name="logger"></param>
         /// <param name="configuration"></param>
         public FilesController(
-            IPreloadedFileManager fileManager,
-            ILogger<FilesController> logger,
-            IEdreamsConfiguration configuration)
+            IPreloadedFileManager fileManager, IEdreamsLogger<FilesController> logger, IEdreamsConfiguration configuration)
             : base(fileManager, logger)
         {
-            _configuration = configuration;
             _logger = logger;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -68,7 +67,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
             {
                 await Request.Form.Files[0].CopyToAsync(fs);
             }
-            
+
             return await ExecuteManager(manager => manager.UpdateFile(request, storagePath));
         }
     }

@@ -1,4 +1,5 @@
 using System.Security.Principal;
+using Edreams.Common.Logging._DependencyInjection;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common._DependencyInjection;
 using Edreams.OutlookMiddleware.Common.Security;
@@ -31,6 +32,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup
                     services.AddSingleton(_ => securityContext);
 
                     services.AddCommon();
+                    services.AddEdreamsLogging();
                     services.AddConfiguration(hostBuilder.Configuration);
                     services.AddBusinessLogic();
 

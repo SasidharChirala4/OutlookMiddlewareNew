@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
 using Edreams.OutlookMiddleware.Api.Helpers;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
@@ -14,7 +14,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class ConfigurationController : ApiController<IConfigurationManager>
+    public class ConfigurationController : ApiController<ConfigurationController, IConfigurationManager>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationController" /> class.
@@ -22,7 +22,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <param name="configurationManager">The configuration service.</param>
         /// <param name="logger">The logger.</param>
         public ConfigurationController(
-            IConfigurationManager configurationManager, ILogger<ConfigurationController> logger)
+            IConfigurationManager configurationManager, IEdreamsLogger<ConfigurationController> logger)
             : base(configurationManager, logger) { }
 
         /// <summary>

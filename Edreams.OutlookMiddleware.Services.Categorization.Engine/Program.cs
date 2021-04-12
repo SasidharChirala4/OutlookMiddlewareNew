@@ -1,5 +1,6 @@
 using System.Security.Principal;
 using Edreams.Common.AzureServiceBus._DependencyInjection;
+using Edreams.Common.Logging._DependencyInjection;
 using Edreams.OutlookMiddleware.BusinessLogic;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
@@ -34,6 +35,7 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
                     services.AddSingleton(_ => securityContext);
 
                     services.AddCommon();
+                    services.AddEdreamsLogging();
                     services.AddConfiguration(hostBuilder.Configuration);
                     services.AddServiceBus();
                     services.AddBusinessLogic();

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
 using Edreams.OutlookMiddleware.Api.Helpers;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
@@ -23,7 +23,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     /// </remarks>
     [ApiController]
     [Route("[controller]")]
-    public class BatchesController : ApiController<IBatchManager>
+    public class BatchesController : ApiController<BatchesController, IBatchManager>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BatchesController"/> class.
@@ -31,8 +31,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <param name="batchManager">The batch manager.</param>
         /// <param name="logger">The logger.</param>
         public BatchesController(
-            IBatchManager batchManager,
-            ILogger<BatchesController> logger) : base(batchManager, logger) { }
+            IBatchManager batchManager, IEdreamsLogger<BatchesController> logger) 
+            : base(batchManager, logger) { }
 
         /// <summary>
         /// Commits the specified batch of files to be processed by the Outlook Middleware.
