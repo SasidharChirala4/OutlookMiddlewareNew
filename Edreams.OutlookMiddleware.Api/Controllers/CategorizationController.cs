@@ -22,7 +22,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <param name="categorizationManager">T</param>
         /// <param name="logger"></param>
         public CategorizationController(
-            IEdreamsLogger<CategorizationController> logger, ICategorizationManager categorizationManager)
+            ICategorizationManager categorizationManager, IEdreamsLogger<CategorizationController> logger)
            : base(categorizationManager, logger) { }
 
         /// <summary>

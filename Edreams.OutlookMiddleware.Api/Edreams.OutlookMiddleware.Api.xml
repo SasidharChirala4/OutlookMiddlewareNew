@@ -60,7 +60,7 @@
             HTTP API Controller containing all mail category related operations.
             </summary>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController.#ctor(Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.CategorizationController},Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ICategorizationManager)">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ICategorizationManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.CategorizationController})">
             <summary>
             Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController" /> class.
             </summary>
@@ -256,6 +256,12 @@
             <typeparam name="TResponse">The type of the response. This can be inferred from the <paramref name="managerCall"/></typeparam>
             <param name="managerCall">A delegate to the method on the Manager that needs to be called.</param>
             <returns>An IActionResult that contains the response data and the appropriate HTTP status code.</returns>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Program.BuildSerilogSqlSinkColumnOptions">
+            <summary>
+            Configure SQL table columns for serlog
+            </summary>
+            <returns>Column Options</returns>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
