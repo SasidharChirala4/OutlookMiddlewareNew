@@ -9,8 +9,7 @@ using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Services.Categorization.Engine.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
+using Edreams.Common.Logging.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
 {
@@ -19,13 +18,13 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IServiceBusHandler _serviceBusHandler;
         private readonly IEdreamsConfiguration _configuration;
-        private readonly ILogger<CategorizationEngineWorker> _logger;
+        private readonly IEdreamsLogger<CategorizationEngineWorker> _logger;
 
         public CategorizationEngineWorker(
             IServiceScopeFactory serviceScopeFactory,
             IServiceBusHandler serviceBusHandler,
             IEdreamsConfiguration configuration,
-            ILogger<CategorizationEngineWorker> logger)
+            IEdreamsLogger<CategorizationEngineWorker> logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _serviceBusHandler = serviceBusHandler;
@@ -42,7 +41,7 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
                 await _serviceBusHandler.ProcessMessagesAsync<TransactionMessage>(_configuration.ServiceBusQueueName,
                     _configuration.ServiceBusConnectionString, OnProcessing, OnError, stoppingToken);
 
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                _logger.LogInformation(string.Format("Worker running at: {0}", DateTimeOffset.Now));
                 await Task.Delay(1000, stoppingToken);
             }
         }

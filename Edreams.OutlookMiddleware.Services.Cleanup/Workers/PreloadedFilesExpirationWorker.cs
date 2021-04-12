@@ -7,19 +7,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.Common.Logging.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 {
     public class PreloadedFilesExpirationWorker : BackgroundService
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly ILogger<PreloadedFilesExpirationWorker> _logger;
+        private readonly IEdreamsLogger<PreloadedFilesExpirationWorker> _logger;
         private readonly IEdreamsConfiguration _configuration;
 
         public PreloadedFilesExpirationWorker(
             IServiceScopeFactory serviceScopeFactory,
             IEdreamsConfiguration configuration,
-            ILogger<PreloadedFilesExpirationWorker> logger)
+            IEdreamsLogger<PreloadedFilesExpirationWorker> logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _configuration = configuration;

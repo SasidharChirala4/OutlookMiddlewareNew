@@ -15,6 +15,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.ServiceBus;
+using Edreams.Common.Logging.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
 {
@@ -25,7 +26,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
         private readonly IExceptionFactory _exceptionFactory;
         private readonly IEdreamsConfiguration _configuration;
         private readonly ISecurityContext _securityContext;
-        private readonly ILogger<UploadSchedulerWorker> _logger;
+        private readonly IEdreamsLogger<UploadSchedulerWorker> _logger;
 
         public UploadSchedulerWorker(
             ITransactionQueueManager transactionQueueManager,
@@ -33,7 +34,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
             IExceptionFactory exceptionFactory,
             IEdreamsConfiguration configuration,
             ISecurityContext securityContext,
-            ILogger<UploadSchedulerWorker> logger)
+            IEdreamsLogger<UploadSchedulerWorker> logger)
         {
             _transactionQueueManager = transactionQueueManager;
             _serviceBusHandler = serviceBusHandler;

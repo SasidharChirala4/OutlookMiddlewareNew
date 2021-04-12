@@ -8,6 +8,7 @@ using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Edreams.Common.Logging.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 {
@@ -16,13 +17,13 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IEdreamsConfiguration _configuration;
         private readonly ITimeHelper _timeHelper;
-        private readonly ILogger<TransactionsCleanupWorker> _logger;
+        private readonly IEdreamsLogger<TransactionsCleanupWorker> _logger;
 
         public TransactionsCleanupWorker(
             IServiceScopeFactory serviceScopeFactory,
             IEdreamsConfiguration configuration,
             ITimeHelper timeHelper,
-            ILogger<TransactionsCleanupWorker> logger)
+            IEdreamsLogger<TransactionsCleanupWorker> logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _configuration = configuration;

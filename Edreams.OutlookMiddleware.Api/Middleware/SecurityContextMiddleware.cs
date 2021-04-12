@@ -1,5 +1,6 @@
 ﻿using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Serilog.Context;
 using System.Security.Principal;
 using System.Threading.Tasks;
 
@@ -18,6 +19,7 @@ namespace Edreams.OutlookMiddleware.Api.Middleware
         {
             _securityContext.RefreshCorrelationId();
 
+            LogContext.PushProperty("CorrelationId", _securityContext.CorrelationId);
             if (context.Request.HttpContext.User.Identity is WindowsIdentity identity)
             {
                 _securityContext.SetUserIdentity(identity);
