@@ -14,13 +14,12 @@ using Edreams.OutlookMiddleware.Enums;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
+using Edreams.Common.Logging.Interfaces;
 namespace Edreams.OutlookMiddleware.Services.Categorization.Scheduler
 {
     public class CategorizationSchedulerWorker : BackgroundService
     {
-        private readonly ILogger<CategorizationSchedulerWorker> _logger;
+        private readonly IEdreamsLogger<CategorizationSchedulerWorker> _logger;
         private readonly ITransactionQueueManager _transactionQueueManager;
         private readonly IServiceBusHandler _serviceBusHandler;
         private readonly IExceptionFactory _exceptionFactory;
@@ -31,7 +30,7 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Scheduler
             IServiceBusHandler serviceBusHandler,
             IExceptionFactory exceptionFactory,
             IEdreamsConfiguration configuration,
-            ISecurityContext securityContext, ILogger<CategorizationSchedulerWorker> logger)
+            ISecurityContext securityContext, IEdreamsLogger<CategorizationSchedulerWorker> logger)
         {
             _transactionQueueManager = transactionQueueManager;
             _serviceBusHandler = serviceBusHandler;

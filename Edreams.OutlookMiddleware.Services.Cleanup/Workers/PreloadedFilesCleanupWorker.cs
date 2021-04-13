@@ -7,8 +7,7 @@ using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
+using Edreams.Common.Logging.Interfaces;
 namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 {
     public class PreloadedFilesCleanupWorker : BackgroundService
@@ -16,13 +15,13 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IEdreamsConfiguration _configuration;
         private readonly ITimeHelper _timeHelper;
-        private readonly ILogger<PreloadedFilesCleanupWorker> _logger;
+        private readonly IEdreamsLogger<PreloadedFilesCleanupWorker> _logger;
 
         public PreloadedFilesCleanupWorker(
             IServiceScopeFactory serviceScopeFactory,
             IEdreamsConfiguration configuration,
             ITimeHelper timeHelper,
-            ILogger<PreloadedFilesCleanupWorker> logger)
+            IEdreamsLogger<PreloadedFilesCleanupWorker> logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _configuration = configuration;

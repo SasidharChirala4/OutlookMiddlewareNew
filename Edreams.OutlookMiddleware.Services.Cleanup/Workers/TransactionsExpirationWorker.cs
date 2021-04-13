@@ -5,21 +5,21 @@ using System.Threading.Tasks;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.Common.Logging.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 {
     public class TransactionsExpirationWorker : BackgroundService
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly ILogger<TransactionsExpirationWorker> _logger;
+        private readonly IEdreamsLogger<TransactionsExpirationWorker> _logger;
         private readonly IEdreamsConfiguration _configuration;
 
         public TransactionsExpirationWorker(
             IServiceScopeFactory serviceScopeFactory,
             IEdreamsConfiguration configuration,
-            ILogger<TransactionsExpirationWorker> logger)
+            IEdreamsLogger<TransactionsExpirationWorker> logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _configuration = configuration;

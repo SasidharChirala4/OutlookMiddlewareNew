@@ -9,19 +9,20 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 {
     public class CategorizationExpirationWorker : BackgroundService
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly ILogger<CategorizationExpirationWorker> _logger;
+        private readonly IEdreamsLogger<CategorizationExpirationWorker> _logger;
         private readonly IEdreamsConfiguration _configuration;
 
         public CategorizationExpirationWorker(
             IServiceScopeFactory serviceScopeFactory,
             IEdreamsConfiguration configuration,
-            ILogger<CategorizationExpirationWorker> logger)
+            IEdreamsLogger<CategorizationExpirationWorker> logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _configuration = configuration;

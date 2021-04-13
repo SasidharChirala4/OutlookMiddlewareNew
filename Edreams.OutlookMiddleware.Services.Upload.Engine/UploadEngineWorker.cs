@@ -6,10 +6,10 @@ using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.Common.AzureServiceBus.Contracts;
 using Edreams.Common.AzureServiceBus.Interfaces;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Services.Upload.Engine.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Edreams.Common.Logging.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 {
@@ -18,13 +18,13 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IServiceBusHandler _serviceBusHandler;
         private readonly IEdreamsConfiguration _configuration;
-        private readonly ILogger<UploadEngineWorker> _logger;
+        private readonly IEdreamsLogger<UploadEngineWorker> _logger;
 
         public UploadEngineWorker(
             IServiceScopeFactory serviceScopeFactory,
             IServiceBusHandler serviceBusHandler,
             IEdreamsConfiguration configuration,
-            ILogger<UploadEngineWorker> logger)
+            IEdreamsLogger<UploadEngineWorker> logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _serviceBusHandler = serviceBusHandler;
@@ -41,7 +41,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 await _serviceBusHandler.ProcessMessagesAsync<TransactionMessage>(_configuration.ServiceBusQueueName,
                     _configuration.ServiceBusConnectionString, OnProcessing, OnError, stoppingToken);
 
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                _logger.LogInformation(string.Format("Worker running at: {0}", DateTimeOffset.Now));
                 await Task.Delay(1000, stoppingToken);
             }
         }
