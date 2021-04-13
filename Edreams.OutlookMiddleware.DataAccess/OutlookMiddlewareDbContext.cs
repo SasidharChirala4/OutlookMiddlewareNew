@@ -18,17 +18,14 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<Transaction> TransactionQueue { get; set; }
         public DbSet<HistoricTransaction> TransactionHistory { get; set; }
 
-        //public OutlookMiddlewareDbContext(IEdreamsConfiguration configuration)
-        //{
-        //    _configuration = configuration;
-        //}
-        public OutlookMiddlewareDbContext()
+        public OutlookMiddlewareDbContext(IEdreamsConfiguration configuration)
         {
-            //_configuration = configuration;
+            _configuration = configuration;
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = "Data Source=BEDAC9000;Initial Catalog=EDREAMS-OUTLOOK-MIDDLEWARE;Integrated Security=True;MultipleActiveResultSets=true";
+            string connectionString = _configuration.OutlookMiddlewareDbConnectionString;
             optionsBuilder.UseSqlServer(connectionString);
         }
 
