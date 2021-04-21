@@ -217,7 +217,7 @@
     <EmbeddedResource Include="Views\Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Edreams.Outlook.TestPlugin_1_TemporaryKey.pfx" />
+    <None Include="Edreams.Outlook.TestPlugin_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -262,10 +262,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Edreams.Outlook.TestPlugin_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Edreams.Outlook.TestPlugin_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>2E0A4EB865B75E50416E2736558DBE49B38A675E</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>7EFA99531C16A5BB256C5CD207B1896793E1CD54</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
