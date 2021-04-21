@@ -173,6 +173,7 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
         {
             foreach (string filePath in filesPath)
             {
+                if(!string.IsNullOrEmpty(filePath))
                 await DeleteFile(filePath);
             }
         }

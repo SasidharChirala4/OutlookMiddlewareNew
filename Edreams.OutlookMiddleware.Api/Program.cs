@@ -10,6 +10,7 @@ using Serilog.Sinks.MSSqlServer.Sinks.MSSqlServer.Options;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Security.Principal;
 
 namespace Edreams.OutlookMiddleware.Api
 {
@@ -37,6 +38,7 @@ namespace Edreams.OutlookMiddleware.Api
                     .ReadFrom.Configuration(hostContext.Configuration)
                     // Enrich logging with contextual properties.
                     .Enrich.FromLogContext()
+                    .Enrich.WithProperty("InsertedBy", WindowsIdentity.GetCurrent().Name)
                     // Enrich logging with deconstructed Exception properties.
                     .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                         .WithDefaultDestructurers()

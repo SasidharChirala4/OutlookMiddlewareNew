@@ -1,5 +1,4 @@
-﻿using Edreams.Common.Helpers.Interfaces;
-using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -7,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using ITimeHelper = Edreams.OutlookMiddleware.Common.Helpers.Interfaces.ITimeHelper;
 using Edreams.Common.Logging.Interfaces;
 namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 {

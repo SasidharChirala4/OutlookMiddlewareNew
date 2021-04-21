@@ -9,7 +9,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
     public class OutlookMiddlewarePreloadDbContext : DbContext
     {
         private readonly IEdreamsConfiguration _configuration;
-        
+
         public DbSet<FilePreload> PreloadedFiles { get; set; }
 
         public OutlookMiddlewarePreloadDbContext(IEdreamsConfiguration configuration)
@@ -50,6 +50,10 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e
                     .Property(x => x.FileStatus)
                     .HasConversion(new EnumToStringConverter<FilePreloadStatus>());
+                e.
+                     Property(x => x.InternetMessageId)
+                    .HasMaxLength(200);
+
             });
         }
     }

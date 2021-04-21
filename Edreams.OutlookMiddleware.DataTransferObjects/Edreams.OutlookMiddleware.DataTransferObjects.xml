@@ -44,6 +44,11 @@
             Wrapper object used as common response type for all endpoints which include response data.
             </summary>
         </member>
+        <member name="M:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1.#ctor">
+            <summary>
+            Added empty constructor for restsharp response
+            </summary>
+        </member>
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1.ResponseData">
             <summary>
             The response data wrapped by this wrapper object.
@@ -57,7 +62,7 @@
         </member>
         <member name="M:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1.#ctor(`0)">
             <summary>
-            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1" /> class.
+            Initializes a new instance of the <see cref="!:ApiResult&lt;TRes ponse&gt;" /> class.
             </summary>
             <param name="responseData">The response data that should be wrapped by this object.</param>
         </member>

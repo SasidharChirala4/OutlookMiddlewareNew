@@ -45,9 +45,14 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
     public class ApiResult<TResponse> : ApiResult where TResponse : Response
     {
         /// <summary>
+        /// Added empty constructor for restsharp response
+        /// </summary>
+        public ApiResult() { }
+
+        /// <summary>
         /// The response data wrapped by this wrapper object.
         /// </summary>
-        public TResponse ResponseData { get; }
+        public TResponse ResponseData { get; set; }
 
         /// <summary>
         /// The type of the response data.

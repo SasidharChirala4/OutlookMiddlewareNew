@@ -98,6 +98,7 @@
             this.commitButton.Text = "Commit";
             this.commitButton.UseVisualStyleBackColor = false;
             this.commitButton.Click += new System.EventHandler(this.commitButton_Click);
+            this.commitButton.Enabled = true;
             // 
             // preloadButton
             // 

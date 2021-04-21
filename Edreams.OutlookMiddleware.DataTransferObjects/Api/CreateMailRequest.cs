@@ -16,6 +16,7 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
         public string MailEntryId { get; set; }
         public string MailEwsId { get; set; }
         public string MailSubject { get; set; }
+        public string InternetMessageId { get; set; }
 
         public IList<Attachment> Attachments { get; set; }
     }

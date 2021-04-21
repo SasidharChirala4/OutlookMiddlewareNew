@@ -124,33 +124,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 // Map the preloaded files to a list of files with relation to email and batch.
                 // Afterwards, create the files in the database. EF will automatically create
                 // the email references with that.
-                IList<File> files = _preloadedFilesToFilesMapper.Map(batch, preloadedFiles, request.UploadOption);
+                IList<File> files = _preloadedFilesToFilesMapper.Map(batch, preloadedFiles, request.UploadOption, request.EmailRecipients);
                 await _fileRepository.Create(files);
 
-                // Add email recipients for the current batch.
-                if (request.EmailRecipients != null && request.EmailRecipients.Any())
-                {
-                    // Find all the email records for the specified batch.
-                    IEnumerable<Email> batchEmails = await _emailRepository.Find(
-                        x => x.Batch.Id == request.BatchId);
-
-                    // Creates Email Recipients for each email of batch
-                    foreach (Email batchemail in batchEmails)
-                    {
-                        // Get the requested email recipients for the specified batch email.
-                        var emailRecipientsDto = request.EmailRecipients.Where(x => x.EmailId == batchemail.Id).ToList();
-
-                        // Map the list of EmailRecipientDto to list of EmailRecipients.
-                        var emailRecipients = _emailRecipientDtoToEmailRecipientMapper.Map(emailRecipientsDto);
-
-                        //ToDo: will the requested recipients contain emailid.
-                        if (emailRecipients.Any())
-                        {
-                            // Creates Email Recipients for each batch email  
-                            await _emailRecipientRepository.Create(emailRecipients);
-                        }
-                    }
-                }
 
                 // All file records for the specified batch should be marked for cleanup
                 // by setting their status to 'Committed'.
