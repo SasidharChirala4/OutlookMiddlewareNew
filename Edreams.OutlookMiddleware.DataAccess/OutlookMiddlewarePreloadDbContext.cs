@@ -50,6 +50,15 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e
                     .Property(x => x.FileStatus)
                     .HasConversion(new EnumToStringConverter<FilePreloadStatus>());
+                e.
+                     Property(x => x.InternetMessageId)
+                    .HasMaxLength(200);
+                e.
+                     Property(x => x.InsertedBy).IsRequired();
+                e.
+                     Property(x => x.InsertedBy).HasMaxLength(100);
+                e.
+                     Property(x => x.UpdatedBy).HasMaxLength(100);
 
             });
         }
