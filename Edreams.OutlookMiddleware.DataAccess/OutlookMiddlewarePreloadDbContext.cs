@@ -12,14 +12,19 @@ namespace Edreams.OutlookMiddleware.DataAccess
 
         public DbSet<FilePreload> PreloadedFiles { get; set; }
 
-        public OutlookMiddlewarePreloadDbContext(IEdreamsConfiguration configuration)
+        //public OutlookMiddlewarePreloadDbContext(IEdreamsConfiguration configuration)
+        //{
+        //    _configuration = configuration;
+        //}
+
+        public OutlookMiddlewarePreloadDbContext()
         {
-            _configuration = configuration;
+           // _configuration = configuration;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = _configuration.OutlookMiddlewarePreloadDbConnectionString;
+            string connectionString = "Data Source=BEDAC9000;Initial Catalog=EDREAMS-OUTLOOK-MIDDLEWARE-PRELOAD;Integrated Security=True;MultipleActiveResultSets=true";
             optionsBuilder.UseSqlServer(connectionString);
         }
 
@@ -53,6 +58,12 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.
                      Property(x => x.InternetMessageId)
                     .HasMaxLength(200);
+                e.
+                     Property(x => x.InsertedBy).IsRequired();
+                e.   
+                     Property(x => x.InsertedBy).HasMaxLength(100);
+                e.
+                     Property(x => x.UpdatedBy).HasMaxLength(100);
 
             });
         }
