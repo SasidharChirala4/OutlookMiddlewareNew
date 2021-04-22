@@ -51,7 +51,9 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewarePrelo
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("InsertedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime>("InsertedOn")
                         .HasColumnType("datetime2");
@@ -83,7 +85,8 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewarePrelo
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");

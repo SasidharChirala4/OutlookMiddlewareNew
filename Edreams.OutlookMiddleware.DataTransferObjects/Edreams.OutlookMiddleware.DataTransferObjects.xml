@@ -62,7 +62,7 @@
         </member>
         <member name="M:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1.#ctor(`0)">
             <summary>
-            Initializes a new instance of the <see cref="!:ApiResult&lt;TRes ponse&gt;" /> class.
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1" /> class.
             </summary>
             <param name="responseData">The response data that should be wrapped by this object.</param>
         </member>
