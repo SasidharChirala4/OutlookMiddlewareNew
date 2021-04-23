@@ -4,14 +4,16 @@ using Edreams.OutlookMiddleware.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
 {
     [DbContext(typeof(OutlookMiddlewareDbContext))]
-    partial class OutlookMiddlewareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210421135854_Added_EmailKind_EmailReferenceId_To_Email")]
+    partial class Added_EmailKind_EmailReferenceId_To_Email
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,6 +100,7 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdatedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
@@ -125,12 +128,12 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                     b.Property<Guid?>("BatchId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("EdreamsReferenceId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("EmailKind")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("EmailReferenceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EntryId")
                         .HasColumnType("nvarchar(max)");
@@ -491,7 +494,7 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
             modelBuilder.Entity("Edreams.OutlookMiddleware.Model.EmailRecipient", b =>
                 {
                     b.HasOne("Edreams.OutlookMiddleware.Model.Email", "Email")
-                        .WithMany("EmailRecipients")
+                        .WithMany()
                         .HasForeignKey("EmailId");
                 });
 

@@ -4,14 +4,16 @@ using Edreams.OutlookMiddleware.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewarePreloadDb
 {
     [DbContext(typeof(OutlookMiddlewarePreloadDbContext))]
-    partial class OutlookMiddlewarePreloadDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210421135546_Added_EmailKind_EmailReferenceId")]
+    partial class Added_EmailKind_EmailReferenceId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,15 +33,15 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewarePrelo
                     b.Property<Guid>("BatchId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("EdreamsReferenceId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("EmailId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EmailKind")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("EmailReferenceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EmailSubject")
                         .HasColumnType("nvarchar(max)");
@@ -58,16 +60,10 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewarePrelo
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("InsertedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("InsertedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("InternetMessageId")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
 
                     b.Property<string>("Kind")
                         .IsRequired()
@@ -92,8 +88,7 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewarePrelo
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");

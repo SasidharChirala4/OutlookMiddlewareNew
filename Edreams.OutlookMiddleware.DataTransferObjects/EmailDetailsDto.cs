@@ -9,7 +9,8 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         public Guid Id { get; set; }
 
         public List<FileDetailsDto> Files { get; set; }
-
+        public Guid EdreamsReferenceId { get; set; }
+        public EmailKind EmailKind { get; set; }
         public EmailUploadOptions UploadOption { get; set; }
     }
 }

@@ -60,6 +60,8 @@ namespace Edreams.OutlookMiddleware.DataAccess
                     .IsClustered();
                 e.Property(x => x.SysId)
                     .ValueGeneratedOnAdd();
+                e.Property(x=>x.EmailKind)
+                     .HasConversion(new EnumToStringConverter<EmailKind>());
                 e.Property(x => x.Status)
                     .HasConversion(new EnumToStringConverter<EmailStatus>());
                 e.Property(x => x.InternetMessageId)

@@ -42,6 +42,9 @@ namespace Edreams.OutlookMiddleware.DataAccess
                     .Property(x => x.SysId)
                     .ValueGeneratedOnAdd();
                 e
+                    .Property(x => x.EmailKind)
+                    .HasConversion(new EnumToStringConverter<EmailKind>());
+                e
                     .Property(x => x.Kind)
                     .HasConversion(new EnumToStringConverter<FileKind>());
                 e
