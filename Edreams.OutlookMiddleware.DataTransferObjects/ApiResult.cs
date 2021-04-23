@@ -45,11 +45,6 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
     public class ApiResult<TResponse> : ApiResult where TResponse : Response
     {
         /// <summary>
-        /// Added empty constructor for restsharp response
-        /// </summary>
-        public ApiResult() { }
-
-        /// <summary>
         /// The response data wrapped by this wrapper object.
         /// </summary>
         public TResponse ResponseData { get; set; }
@@ -59,6 +54,11 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         /// </summary>
         /// <example>Response</example>
         public string ResponseType { get; } = $"{typeof(TResponse)}";
+
+        /// <summary>
+        /// Default constructor needed to support deserialization
+        /// </summary>
+        public ApiResult() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiResult{TResponse}" /> class.

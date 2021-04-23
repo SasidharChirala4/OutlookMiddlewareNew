@@ -15,12 +15,12 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
             IList<File> files = new List<File>();
             Guid[] emailIds = preloadedFiles.Select(x => x.EmailId).Distinct().ToArray();
             foreach (Guid emailId in emailIds)
-            { 
+            {
                 Email email = new Email
                 {
                     Batch = batch,
                     Status = EmailStatus.ReadyToUpload,
-                    UploadOption = uploadOption,
+                    UploadOption = uploadOption
                 };
 
                 foreach (var preloadedFile in preloadedFiles)
@@ -32,15 +32,16 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         email.InternetMessageId = preloadedFile.InternetMessageId;
                         email.EmailRecipients = new List<EmailRecipient>();
                         IEnumerable<EmailRecipientDto> emailRecipientList = emailRecipients.Where(x => x.EmailId == emailId);
-                        foreach(EmailRecipientDto emailRecipient in emailRecipientList)
+                        foreach (EmailRecipientDto emailRecipient in emailRecipientList)
                         {
-                            EmailRecipient newEmailRecipient = new EmailRecipient();
-                            newEmailRecipient.Email = email;
-                            newEmailRecipient.Recipient = emailRecipient.Recipient;
-                            newEmailRecipient.Type = emailRecipient.Type;
-                            // ToDo: Need to remove and configure in repository.
-                            newEmailRecipient.InsertedBy = "BE\\kkaredla";
-                            email.EmailRecipients.Add(newEmailRecipient);
+                            email.EmailRecipients.Add(new EmailRecipient()
+                            {
+                                Email = email,
+                                Recipient = emailRecipient.Recipient,
+                                Type = emailRecipient.Type,
+                                // ToDo: Need to remove and configure in repository.
+                                InsertedBy = "BE\\kkaredla"
+                            });
                         }
                         files.Add(new File
                         {
