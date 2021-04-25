@@ -11,11 +11,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api.Specific;
-using Edreams.OutlookMiddleware.Common.Exceptions;
 using System.Linq;
+using Edreams.Common.Exceptions;
+using Edreams.Common.Exceptions.Factories;
+using Edreams.Common.Exceptions.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Tests.BusinessLogic

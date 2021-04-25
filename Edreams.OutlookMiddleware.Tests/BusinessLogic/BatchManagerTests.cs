@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Edreams.Common.Exceptions.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic;
 using Edreams.OutlookMiddleware.BusinessLogic.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;

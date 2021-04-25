@@ -1,7 +1,5 @@
 ﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exceptions;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api.Specific;
@@ -11,6 +9,8 @@ using Edreams.OutlookMiddleware.Model;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Edreams.Common.Exceptions.Constants;
+using Edreams.Common.Exceptions.Factories.Interfaces;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {

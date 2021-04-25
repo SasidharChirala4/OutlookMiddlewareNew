@@ -4,6 +4,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Edreams.Common.Exceptions;
 using Xunit;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -16,7 +17,6 @@ using Edreams.OutlookMiddleware.Tests.Framework.Extensions;
 using Edreams.OutlookMiddleware.Mapping;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using CategorizationRequest = Edreams.OutlookMiddleware.DataTransferObjects.Api.CategorizationRequest;
-using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Constants;
 using Edreams.OutlookMiddleware.Common.Validation;
 

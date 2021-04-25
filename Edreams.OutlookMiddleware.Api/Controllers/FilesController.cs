@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.Api.Helpers;
+using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Web;
+using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
-using Edreams.OutlookMiddleware.DataTransferObjects;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
@@ -17,10 +17,10 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class FilesController : ApiController<IPreloadedFileManager>
+    public class FilesController : ApiController<FilesController, IPreloadedFileManager>
     {
         private readonly IEdreamsConfiguration _configuration;
-        private readonly ILogger<FilesController> _logger;
+        private readonly IEdreamsLogger<FilesController> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FilesController" /> class.
@@ -30,7 +30,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <param name="configuration"></param>
         public FilesController(
             IPreloadedFileManager fileManager,
-            ILogger<FilesController> logger,
+            IEdreamsLogger<FilesController> logger,
             IEdreamsConfiguration configuration)
             : base(fileManager, logger)
         {
@@ -68,7 +68,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
             {
                 await Request.Form.Files[0].CopyToAsync(fs);
             }
-            
+
             return await ExecuteManager(manager => manager.UpdateFile(request, storagePath));
         }
     }

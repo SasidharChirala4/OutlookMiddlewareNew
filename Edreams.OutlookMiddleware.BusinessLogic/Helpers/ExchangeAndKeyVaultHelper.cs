@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Azure;
 using Azure.Identity;
+using Edreams.Common.Exceptions.Constants;
+using Edreams.Common.Exceptions.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exceptions;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Edreams.OutlookMiddleware.Common.Exchange;
 using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
 using Edreams.OutlookMiddleware.Common.KeyVault;

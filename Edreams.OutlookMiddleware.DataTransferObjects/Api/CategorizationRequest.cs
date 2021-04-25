@@ -1,11 +1,12 @@
-﻿using Edreams.OutlookMiddleware.Enums;
+﻿using Edreams.Common.Web.Contracts;
+using Edreams.OutlookMiddleware.Enums;
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
 {
     /// <summary>
     /// Request class of Categorization
     /// </summary>
-    public class CategorizationRequest
+    public class CategorizationRequest : Request
     {
         /// <summary>
         /// Internet MessageId

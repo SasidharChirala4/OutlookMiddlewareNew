@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.Common.Exceptions;
+using Edreams.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Extensions;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.DataAccess.Exceptions;

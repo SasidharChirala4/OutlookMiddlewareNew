@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security;
 using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
+using Edreams.Common.Exceptions.Factories.Interfaces;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Common.Helpers

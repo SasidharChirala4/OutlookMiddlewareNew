@@ -7,7 +7,7 @@ using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System;
-using Edreams.OutlookMiddleware.Common.Exceptions;
+using Edreams.Common.Exceptions;
 using RestSharp;
 using Edreams.Contracts.Data.Common;
 

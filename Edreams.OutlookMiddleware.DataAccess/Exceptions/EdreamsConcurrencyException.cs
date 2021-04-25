@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Edreams.OutlookMiddleware.Common.Exceptions;
+using Edreams.Common.Exceptions;
 
 namespace Edreams.OutlookMiddleware.DataAccess.Exceptions
 {

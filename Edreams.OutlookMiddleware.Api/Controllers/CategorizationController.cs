@@ -1,11 +1,11 @@
-﻿using Edreams.OutlookMiddleware.Api.Helpers;
-using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.DataTransferObjects;
+﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Web;
+using Edreams.Common.Web.Contracts;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
@@ -14,14 +14,15 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class CategorizationController : ApiController<ICategorizationManager>
+    public class CategorizationController : ApiController<CategorizationController, ICategorizationManager>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CategorizationController" /> class.
         /// </summary>
         /// <param name="categorizationManager">T</param>
         /// <param name="logger"></param>
-        public CategorizationController(ILogger<CategorizationController> logger, ICategorizationManager categorizationManager)
+        public CategorizationController(
+            ICategorizationManager categorizationManager, IEdreamsLogger<CategorizationController> logger)
            : base(categorizationManager, logger) { }
 
         /// <summary>

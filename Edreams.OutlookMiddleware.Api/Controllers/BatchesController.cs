@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.Api.Helpers;
+using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Web;
+using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
@@ -23,7 +23,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     /// </remarks>
     [ApiController]
     [Route("[controller]")]
-    public class BatchesController : ApiController<IBatchManager>
+    public class BatchesController : ApiController<BatchesController, IBatchManager>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BatchesController"/> class.
@@ -32,7 +32,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <param name="logger">The logger.</param>
         public BatchesController(
             IBatchManager batchManager,
-            ILogger<BatchesController> logger) : base(batchManager, logger) { }
+            IEdreamsLogger<BatchesController> logger) : base(batchManager, logger) { }
 
         /// <summary>
         /// Commits the specified batch of files to be processed by the Outlook Middleware.
@@ -71,7 +71,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// Cancelling a batch changes the state of all related file-records and marks them ready for cleanup.
         /// </remarks>
         [HttpDelete("{batchId}/cancel")]
-        [SwaggerResponse(200, "Successfully cancelled the specified batch of emails to be processed by the Outlook Middleware.", typeof(ApiResult<CommitBatchResponse>))]
+        [SwaggerResponse(200, "Successfully cancelled the specified batch of emails to be processed by the Outlook Middleware.", typeof(ApiResult<CancelBatchResponse>))]
         [SwaggerResponse(404, "The specified batch does not exist and cannot be cancelled.", typeof(ApiResult))]
         [SwaggerResponse(500, "An internal server error has occurred, this is not your fault.", typeof(ApiErrorResult))]
         public Task<IActionResult> CancelBatch(Guid batchId, CancelBatchRequest request)

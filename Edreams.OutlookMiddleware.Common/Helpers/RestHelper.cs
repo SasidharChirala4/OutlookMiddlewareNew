@@ -6,9 +6,10 @@ using System.Linq;
 using System.Net;
 using Edreams.Contracts.Data.Common;
 using System.Threading.Tasks;
+using Edreams.Common.Exceptions;
+using Edreams.Common.Exceptions.Constants;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exceptions;
 
 namespace Edreams.OutlookMiddleware.Common.Helpers
 {

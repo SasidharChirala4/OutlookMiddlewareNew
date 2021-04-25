@@ -1,11 +1,10 @@
-﻿using System.Diagnostics;
-using Edreams.OutlookMiddleware.Api.Helpers;
-using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Web;
+using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -16,7 +15,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class StatusController : ApiController<IStatusManager>
+    public class StatusController : ApiController<StatusController, IStatusManager>
     {
         private readonly IEdreamsConfiguration _configuration;
 
@@ -26,7 +25,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <param name="configuration">The configuration.</param>
         public StatusController(
             IStatusManager statusManager,
-            ILogger<StatusController> logger,
+            IEdreamsLogger<StatusController> logger,
             IEdreamsConfiguration configuration)
             : base(statusManager, logger)
         {

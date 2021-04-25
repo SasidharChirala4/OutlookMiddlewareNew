@@ -2,13 +2,13 @@
 using Moq;
 using FluentAssertions;
 using System.Threading.Tasks;
+using Edreams.Common.Exceptions;
 using Xunit;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.Contracts.Data.Extensibility;
 using Edreams.Contracts.Data.Common;
 using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Microsoft.Extensions.Logging;
-using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Constants;
 using Edreams.OutlookMiddleware.Common.Validation;
 

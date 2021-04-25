@@ -1,7 +1,7 @@
-﻿using Edreams.OutlookMiddleware.Common.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Edreams.Common.Exceptions;
 
 namespace Edreams.OutlookMiddleware.Common.Validation.Interface
 {
