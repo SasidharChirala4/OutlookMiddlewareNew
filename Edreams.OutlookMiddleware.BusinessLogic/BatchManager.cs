@@ -9,6 +9,7 @@ using Edreams.Common.Exceptions.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
+using Edreams.OutlookMiddleware.Common.Constants;
 using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
@@ -63,7 +64,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // Throw an exception if a batch with specified unique ID cannot be found.
             if (batch == null)
             {
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.OutlookMiddlewareBatchNotFound);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsOutlookMiddlewareExceptionCode.OutlookMiddlewareBatchNotFound);
             }
 
             // Fetch all emails that are related to the specified batch and include the referenced files.
@@ -87,7 +88,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
             if (batch == null)
             {
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.OutlookMiddlewareBatchNotFound);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsOutlookMiddlewareExceptionCode.OutlookMiddlewareBatchNotFound);
             }
 
             batch.Status = status;

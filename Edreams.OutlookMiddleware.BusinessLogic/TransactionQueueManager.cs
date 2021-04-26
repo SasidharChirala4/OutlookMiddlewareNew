@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Edreams.Common.AzureServiceBus.Constants;
 using Edreams.Common.AzureServiceBus.Contracts;
 using Edreams.Common.AzureServiceBus.Interfaces;
 using Edreams.Common.DataAccess.Interfaces;
@@ -197,13 +198,13 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // If connection string is empty, throw exception.
             if (string.IsNullOrEmpty(connectionString))
             {
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.ServiceBusConnectionStringMissing);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusConnectionStringMissing);
             }
 
             // If queue name is empty, throw exception.
             if (string.IsNullOrEmpty(queueName))
             {
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.ServiceBusQueueNameMissing);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusQueueNameMissing);
             }
 
             try
@@ -223,17 +224,17 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             catch (MessagingEntityNotFoundException ex)
             {
                 // This exception gets thrown when the specified queue could not be found.
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.ServiceBusQueueNotFound, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusQueueNotFound, ex);
             }
             catch (UnauthorizedException ex)
             {
                 // This exception gets thrown when there is an issue with authorization.
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.ServiceBusUnauthorized, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusUnauthorized, ex);
             }
             catch (ServiceBusException ex)
             {
                 // This exception gets thrown when there is an issue with connecting to Azure ServiceBus.
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.ServiceBusConnectionError, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusConnectionError, ex);
             }
             catch (Exception ex)
             {

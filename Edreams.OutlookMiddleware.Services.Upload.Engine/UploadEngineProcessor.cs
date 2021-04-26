@@ -9,6 +9,8 @@ using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Services.Upload.Engine.Interfaces;
 using Microsoft.Extensions.Logging;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.OutlookMiddleware.Common.Constants;
+
 namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 {
     public class UploadEngineProcessor : IUploadEngineProcessor
@@ -137,7 +139,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             catch (Exception ex)
             {
                 // Throw an exception.
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.OutlookMiddlewareUploadToEdreamsFailed, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsOutlookMiddlewareExceptionCode.OutlookMiddlewareUploadToEdreamsFailed, ex);
             }
         }
 

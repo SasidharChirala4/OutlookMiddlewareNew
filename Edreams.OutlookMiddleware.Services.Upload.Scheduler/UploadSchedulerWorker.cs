@@ -2,8 +2,10 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Edreams.Common.AzureServiceBus.Constants;
 using Edreams.Common.AzureServiceBus.Contracts;
 using Edreams.Common.AzureServiceBus.Interfaces;
+using Edreams.Common.DataAccess.Constants;
 using Edreams.Common.Exceptions;
 using Edreams.Common.Exceptions.Constants;
 using Edreams.Common.Exceptions.Factories.Interfaces;
@@ -126,31 +128,31 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
             }
             catch (SqlException ex) when (ex.Number == -1)
             {
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.SqlClientServerNotFoundFault, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsDataAccessExceptionCode.SqlClientServerNotFoundFault, ex);
             }
             catch (SqlException ex) when (ex.Number == -2)
             {
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.SqlClientTimeoutFault, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsDataAccessExceptionCode.SqlClientTimeoutFault, ex);
             }
             catch (SqlException ex) when (ex.Number == 4060)
             {
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.SqlClientDatabaseNotFoundFault, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsDataAccessExceptionCode.SqlClientDatabaseNotFoundFault, ex);
             }
             catch (SqlException ex)
             {
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.SqlClientUnknowFault, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsDataAccessExceptionCode.SqlClientUnknowFault, ex);
             }
             catch (MessagingEntityNotFoundException ex)
             {
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.ServiceBusQueueNotFound, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusQueueNotFound, ex);
             }
             catch (UnauthorizedException ex)
             {
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.ServiceBusUnauthorized, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusUnauthorized, ex);
             }
             catch (ServiceBusException ex)
             {
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.ServiceBusConnectionError, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusConnectionError, ex);
             }
             catch (Exception ex)
             {

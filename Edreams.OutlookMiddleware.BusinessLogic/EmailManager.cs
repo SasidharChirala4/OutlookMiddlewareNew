@@ -6,6 +6,7 @@ using Edreams.Common.Exceptions.Constants;
 using Edreams.Common.Exceptions.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
+using Edreams.OutlookMiddleware.Common.Constants;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api.Specific;
 using Edreams.OutlookMiddleware.Enums;
@@ -103,7 +104,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // Throw an exception if a batch with specified unique ID cannot be found.
             if (batch == null)
             {
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.OutlookMiddlewareBatchNotFound);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsOutlookMiddlewareExceptionCode.OutlookMiddlewareBatchNotFound);
             }
             // Get a list of all related email's.
             IList<Email> emails = await _emailRepository.Find(

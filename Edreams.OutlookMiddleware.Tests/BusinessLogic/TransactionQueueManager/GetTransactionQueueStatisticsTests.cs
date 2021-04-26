@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Edreams.Common.AzureServiceBus.Constants;
 using Edreams.Common.AzureServiceBus.Interfaces;
 using Edreams.Common.DataAccess.Interfaces;
 using Edreams.Common.Exceptions;
@@ -65,7 +67,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic._TransactionQueueManager
             // an empty list of "FilePreload" objects.
             _edreamsConfigurationMock.Setup(x => x.ServiceBusConnectionString).Returns(string.Empty);
             _edreamsConfigurationMock.Setup(x => x.ServiceBusQueueName).Returns("QUEUE_NAME");
-            _exceptionFactoryMock.Setup(x => x.CreateEdreamsExceptionFromCode(It.IsAny<int>())).Returns(new EdreamsException());
+            _exceptionFactoryMock.Setup(x => x.CreateEdreamsExceptionFromCode(It.IsAny<Expression<Func<EdreamsServiceBusExceptionCode, int>>>())).Returns(new EdreamsException());
 
             #endregion
 
@@ -80,8 +82,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic._TransactionQueueManager
             await act.Should().ThrowAsync<EdreamsException>();
             _edreamsConfigurationMock.Verify(x => x.ServiceBusConnectionString, Times.Once);
             _edreamsConfigurationMock.Verify(x => x.ServiceBusQueueName, Times.Once);
-            _exceptionFactoryMock.Verify(x => x.CreateEdreamsExceptionFromCode(It.Is<int>(x => x == EdreamsExceptionCode.ServiceBusConnectionStringMissing), It.IsAny<object[]>()));
-
+            
             #endregion
         }
 
@@ -104,7 +105,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic._TransactionQueueManager
             // an empty list of "FilePreload" objects.
             _edreamsConfigurationMock.Setup(x => x.ServiceBusConnectionString).Returns("CONNECTION_STRING");
             _edreamsConfigurationMock.Setup(x => x.ServiceBusQueueName).Returns(string.Empty);
-            _exceptionFactoryMock.Setup(x => x.CreateEdreamsExceptionFromCode(It.IsAny<int>())).Returns(new EdreamsException());
+            _exceptionFactoryMock.Setup(x => x.CreateEdreamsExceptionFromCode(It.IsAny<Expression<Func<EdreamsServiceBusExceptionCode, int>>>())).Returns(new EdreamsException());
 
             #endregion
 
@@ -119,8 +120,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic._TransactionQueueManager
             await act.Should().ThrowAsync<EdreamsException>();
             _edreamsConfigurationMock.Verify(x => x.ServiceBusConnectionString, Times.Once);
             _edreamsConfigurationMock.Verify(x => x.ServiceBusQueueName, Times.Once);
-            _exceptionFactoryMock.Verify(x => x.CreateEdreamsExceptionFromCode(It.Is<int>(x => x == EdreamsExceptionCode.ServiceBusQueueNameMissing), It.IsAny<object[]>()));
-
+            
             #endregion
         }
     }

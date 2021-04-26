@@ -7,6 +7,7 @@ using Edreams.Common.Exceptions.Factories.Interfaces;
 using Edreams.Common.Exchange;
 using Edreams.Common.Exchange.Interfaces;
 using Edreams.Common.KeyVault;
+using Edreams.Common.KeyVault.Constants;
 using Edreams.Common.KeyVault.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
@@ -86,7 +87,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Helpers
                 {
                     if (ex is RequestFailedException)
                     {
-                        throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.KeyVaultRequestFault, ex);
+                        throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsKeyVaultExceptionCode.KeyVaultRequestFault, ex);
                     }
 
                     return false;
@@ -96,7 +97,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Helpers
             }
             catch (AuthenticationFailedException ex)
             {
-                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.KeyVaultAuthenticationFault, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsKeyVaultExceptionCode.KeyVaultAuthenticationFault, ex);
             }
             catch (Exception ex)
             {
