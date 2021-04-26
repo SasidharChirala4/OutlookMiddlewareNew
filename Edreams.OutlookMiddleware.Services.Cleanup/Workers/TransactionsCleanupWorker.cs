@@ -31,7 +31,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
             _logger = logger;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             TimeSpan startTime = _configuration.TransactionsWorkerScheduleStartTime;
             TimeSpan stopTime = _configuration.TransactionsWorkerScheduleStopTime;
@@ -41,7 +41,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
             int schedulingInterval = _configuration.CleanupWorkerIntervalInSeconds * 1000;
 
             _logger.LogInformation("TransactionsCleanupWorker STARTED");
-            while (!cancellationToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 // Start a stopwatch for future reference when calculating the time we need to delay.
                 Stopwatch stopwatch = Stopwatch.StartNew();
@@ -71,7 +71,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
                     schedulingInterval -= (int)stopwatch.ElapsedMilliseconds;
                     if (schedulingInterval > 0)
                     {
-                        await Task.Delay(schedulingInterval, cancellationToken);
+                        await Task.Delay(schedulingInterval, stoppingToken);
                     }
                 }
             }

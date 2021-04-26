@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Edreams.Outlook.TestPlugin.Helpers;
-using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
 using Microsoft.Office.Interop.Outlook;
@@ -20,7 +19,7 @@ namespace Edreams.Outlook.TestPlugin.Views
         private Guid? _batchId;
         private bool _preloaded;
         private bool _committed;
-
+        public const string SchemaInternetMessageId = "http://schemas.microsoft.com/mapi/proptag/0x1035001F";
         public Dashboard()
         {
             InitializeComponent();
@@ -75,6 +74,7 @@ namespace Edreams.Outlook.TestPlugin.Views
                     string ewsId = await ExchangeHelper.ConvertEntryIdToEwsId(mail.EntryID);
 
                     var ewsEmail = await ExchangeHelper.DownloadEmail(ewsId);
+                    var internetMessageId = mail.PropertyAccessor.GetProperty(SchemaInternetMessageId);
 
                     var createMailRequest = new CreateMailRequest
                     {
@@ -82,7 +82,9 @@ namespace Edreams.Outlook.TestPlugin.Views
                         CorrelationId = correlationId,
                         MailEntryId = mail.EntryID,
                         MailEwsId = ewsId,
-                        MailSubject = ewsEmail.Subject
+                        MailSubject = ewsEmail.Subject,
+                        InternetMessageId = internetMessageId
+
                     };
 
                     foreach (var attachment in ewsEmail.Attachments)
@@ -138,7 +140,8 @@ namespace Edreams.Outlook.TestPlugin.Views
                 {
                     BatchId = new Guid("8A34B973-B5D8-4CFF-9769-2F648335EAD2"),
                     UploadOption = EmailUploadOptions.Emails,
-                    //EmailRecipients = emailRecipientDto
+                    //EmailRecipients = new List<EmailRecipientDto>() { new EmailRecipientDto() { EmailId=new Guid("E400B31C-BC09-4F4F-B16F-546181285D67") ,Type=EmailRecipientType.Contact,Recipient="kkaredla@deloitte.com" },
+                    // new EmailRecipientDto() { EmailId=new Guid("7F6856BF-6490-4D60-A52B-FE1301C894CD") ,Type=EmailRecipientType.Contact,Recipient="bkonijeti@deloitte.com" }}
                 };
                 await HttpHelper.CommitBatch(commitBatchRequest);
             }

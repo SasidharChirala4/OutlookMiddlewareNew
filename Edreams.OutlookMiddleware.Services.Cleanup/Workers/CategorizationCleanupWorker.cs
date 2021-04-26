@@ -1,5 +1,4 @@
-﻿using Edreams.Common.Helpers.Interfaces;
-using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -7,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using ITimeHelper = Edreams.OutlookMiddleware.Common.Helpers.Interfaces.ITimeHelper;
 using Edreams.Common.Logging.Interfaces;
 namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 {
@@ -29,7 +29,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
             _logger = logger;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             TimeSpan startTime = _configuration.CategorizationWorkerScheduleStartTime;
             TimeSpan stopTime = _configuration.CategorizationWorkerScheduleStopTime;
@@ -39,7 +39,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
             int schedulingInterval = _configuration.CleanupWorkerIntervalInSeconds * 1000;
 
             _logger.LogInformation("CategorizationCleanupWorker STARTED");
-            while (!cancellationToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 // Start a stopwatch for future reference when calculating the time we need to delay.
                 Stopwatch stopwatch = Stopwatch.StartNew();
@@ -69,7 +69,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
                     schedulingInterval -= (int)stopwatch.ElapsedMilliseconds;
                     if (schedulingInterval > 0)
                     {
-                        await Task.Delay(schedulingInterval, cancellationToken);
+                        await Task.Delay(schedulingInterval, stoppingToken);
                     }
                 }
             }

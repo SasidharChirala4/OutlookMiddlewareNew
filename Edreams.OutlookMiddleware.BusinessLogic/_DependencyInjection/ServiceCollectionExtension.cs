@@ -5,8 +5,12 @@ using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
+using Edreams.OutlookMiddleware.Common.Exchange;
+using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
 using Edreams.OutlookMiddleware.Common.Helpers;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
+using Edreams.OutlookMiddleware.Common.KeyVault;
+using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
 using Edreams.OutlookMiddleware.Common.Validation;
 using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Edreams.OutlookMiddleware.DataAccess.DependencyInjection;
@@ -36,11 +40,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection
             services.AddTransient<ICleanupManager, CleanupManager>();
             services.AddTransient<IFileHelper, FileHelper>();
             services.AddTransient<ICategorizationManager, CategorizationManager>();
-            services.AddTransient<IValidator, Validator>();
-
-
             services.AddTransient<IExchangeAndKeyVaultHelper, ExchangeAndKeyVaultHelper>();
-
             services.AddTransient<IBatchFactory, BatchFactory>();
         }
     }

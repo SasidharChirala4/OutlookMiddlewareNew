@@ -167,8 +167,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
                 // Map the transaction into a historic transaction and update the transaction status.
                 HistoricTransaction historicTransaction = _historicTransactionMapper.Map(transactionToArchive);
-                UpdateTransactionStatus(historicTransaction, status);
 
+                UpdateTransactionStatus(historicTransaction, status);
+                
                 // If the engine name is not empty...
                 if (!string.IsNullOrEmpty(engine))
                 {

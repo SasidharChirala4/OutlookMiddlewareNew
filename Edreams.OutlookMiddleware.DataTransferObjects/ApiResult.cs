@@ -47,13 +47,18 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         /// <summary>
         /// The response data wrapped by this wrapper object.
         /// </summary>
-        public TResponse ResponseData { get; }
+        public TResponse ResponseData { get; set; }
 
         /// <summary>
         /// The type of the response data.
         /// </summary>
         /// <example>Response</example>
         public string ResponseType { get; } = $"{typeof(TResponse)}";
+
+        /// <summary>
+        /// Default constructor needed to support deserialization
+        /// </summary>
+        public ApiResult() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiResult{TResponse}" /> class.

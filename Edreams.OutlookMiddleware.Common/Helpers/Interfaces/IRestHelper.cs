@@ -22,7 +22,7 @@ namespace Edreams.OutlookMiddleware.Common.Helpers.Interfaces
 
         Task<List<T>> CreateNew(string resourceUrl, bool skipResponseCheck = false);
 
-        Task<ApiResult<T>> CreateFile(string resourceUrl, FileParameter fileParamter, bool skipResponseCheck = false);
+        Task<ApiResult<T>> CreateFile(string resourceUrl, FileParameter fileParameter, bool skipResponseCheck = false);
 
         Task<ApiResult<T>> CreateNew(string resourceUrl, T objectToCreate, bool skipResponseCheck=false);
 

@@ -95,7 +95,6 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.HasIndex(x => x.EmailAddress);
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
-                e.Property(x => x.UpdatedBy).IsRequired();
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);
             });
 
