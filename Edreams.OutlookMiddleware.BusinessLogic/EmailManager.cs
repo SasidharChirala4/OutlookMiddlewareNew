@@ -137,5 +137,27 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
             await _emailRepository.Update(email);
         }
+
+        /// <summary>
+        /// Updates the internetmessageid, ewsid to the sent email.
+        /// </summary>
+        /// <param name="emailId">Email id</param>
+        /// <param name="internetMessageId">InternetMessageId</param>
+        /// <param name="ewsId">ewsId</param>
+        /// <returns></returns>
+        public async Task UpdateEmailInternetMessageId(Guid emailId, string internetMessageId,string ewsId)
+        {
+            Email email = await _emailRepository.GetSingle(x => x.Id == emailId);
+
+            if (email == null)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT);
+            }
+
+            email.InternetMessageId = internetMessageId;
+            email.EwsId = ewsId;
+
+            await _emailRepository.Update(email);
+        }
     }
 }

@@ -7,8 +7,10 @@ using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Services.Upload.Engine.Interfaces;
-using Microsoft.Extensions.Logging;
 using Edreams.Common.Logging.Interfaces;
+using System.IO;
+using System.Linq;
+
 namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 {
     public class UploadEngineProcessor : IUploadEngineProcessor
@@ -18,6 +20,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         private readonly IFileManager _fileManager;
         private readonly IExtensibilityManager _extensibilityManager;
         private readonly ITransactionQueueManager _transactionQueueManager;
+        private readonly IExchangeManager _exchangeManager;
         private readonly IFileHelper _fileHelper;
         private readonly IExceptionFactory _exceptionFactory;
         private readonly IEdreamsLogger<UploadEngineProcessor> _logger;
@@ -26,6 +29,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             IBatchManager batchManager, IEmailManager emailManager,
             IFileManager fileManager, IExtensibilityManager extensibilityManager,
             ITransactionQueueManager transactionQueueManager, IFileHelper fileHelper,
+            IExchangeManager exchangeManager,
             IExceptionFactory exceptionFactory, IEdreamsLogger<UploadEngineProcessor> logger)
         {
             _batchManager = batchManager;
@@ -33,6 +37,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             _fileManager = fileManager;
             _extensibilityManager = extensibilityManager;
             _transactionQueueManager = transactionQueueManager;
+            _exchangeManager = exchangeManager;
             _fileHelper = fileHelper;
             _exceptionFactory = exceptionFactory;
             _logger = logger;
@@ -55,37 +60,102 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 {
                     int numberOfSuccessfullyUploadedFiles = 0;
 
-                    // Loop through all the files that are part of this email.
-                    foreach (FileDetailsDto fileDetails in emailDetails.Files)
+                    // check if the Email is sent email and EdreamsReferenceId is not empty
+                    if (emailDetails.EmailKind == EmailKind.Sent && emailDetails.EdreamsReferenceId != Guid.Empty)
                     {
-                        try
+                        // Get the sent emails details from the exchange service.
+                        SharedMailBoxDto shredMailBoxEmail = await _exchangeManager.FindSharedMailBoxEmail(emailDetails.EdreamsReferenceId);
+                        if (shredMailBoxEmail != null)
                         {
-                            //Skip the files that are not matched with upload option.
-                            if (!IsFileSkipped(emailDetails.UploadOption,fileDetails.Kind))
+                            emailDetails.InternetMessageId = shredMailBoxEmail.InternetMessageId;
+                            // Update internetMessageId, EwsId for email
+                            await _emailManager.UpdateEmailInternetMessageId(emailDetails.Id,
+                                shredMailBoxEmail.InternetMessageId, shredMailBoxEmail.EwsId);
+                        }
+                        else // throw an exception if mail not found in SharedMailBox
+                        {
+                            _logger.LogError(new FileNotFoundException(), string.Format("Email '{0}' not found in SharedMailBox!", emailDetails.EdreamsReferenceId));
+                            // set Email status to failed.
+                            await _emailManager.UpdateEmailStatus(emailDetails.Id, EmailStatus.Failed);
+                            continue;
+                        }
+                        // Loop through all the files that are part of this email.
+                        foreach (FileDetailsDto fileDetails in emailDetails.Files)
+                        {
+                            try
                             {
-                                // Process the file based on the file details.
-                                string absoluteFileUrl = await ProcessFile(fileDetails);
+                                //Skip the files that are not matched with upload option.
+                                if (!IsFileSkipped(emailDetails.UploadOption, fileDetails.Kind))
+                                {
+                                    // check if the Email is sent email and found in sharedmailbox
+                                    if (emailDetails.EmailKind == EmailKind.Sent && shredMailBoxEmail != null)
+                                    {
+                                        byte[] itemBytes = null;
+                                        // if file kind is Attachment then download from exhange service.
+                                        if (fileDetails.Kind == FileKind.Attachment)
+                                        {
+                                            // if shredMailBoxEmail does not have any attchments then throw exception.
+                                            if (shredMailBoxEmail.Attachments?.Any() != true)
+                                            {
+                                                _logger.LogWarning($"Unable to read attachments for mail [{emailDetails.Id}] from SharedMailBox!");
+                                            }
+                                            else
+                                            {
+                                                string attachmentName = $"{fileDetails.Name}";
+                                                // Find attachment related to file details
+                                                var sharedMailBoxAttachment = shredMailBoxEmail.Attachments.SingleOrDefault(x => x.Name.Equals(attachmentName, StringComparison.OrdinalIgnoreCase));
+                                                if (sharedMailBoxAttachment?.Data != null)
+                                                {
+                                                    itemBytes = sharedMailBoxAttachment.Data;
+                                                    // Process the file based on downloaded sharedmailbox attachment.
+                                                    string absoluteFileUrl = await ProcessShredMailBoxFile(itemBytes, fileDetails.Name);
+                                                }
+                                                else
+                                                {
+                                                    _logger.LogWarning($"Unable to find attachments [{fileDetails.Name}] for mail [{emailDetails.Id}] from SharedMailBox!");
+                                                }
+                                            }
+                                        }
+                                        else  // if file kind is Email then download from exhange service.
+                                        {
+                                            if (shredMailBoxEmail.Data != null)
+                                            {
+                                                itemBytes = shredMailBoxEmail.Data ?? null;
+                                                // Process the file based on downloaded sharedmailbox email.
+                                                string absoluteFileUrl = await ProcessShredMailBoxFile(itemBytes, fileDetails.Name);
+                                            }
+                                            else
+                                            {
+                                                _logger.LogWarning($"Unable to download email [{fileDetails.Name}] for mail [{emailDetails.InternetMessageId}] from SharedMailBox!");
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // Process the file based on the file details.
+                                        string absoluteFileUrl = await ProcessFile(fileDetails);
+                                    }
+                                    // TODO: Update absolute file URL in database as part of metadata PBI.
 
-                                // TODO: Update absolute file URL in database as part of metadata PBI.
-                                
-                                // Set the file status to be successfully uploaded and
-                                // increase the number of successfully uploaded files.
-                                await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
-                                numberOfSuccessfullyUploadedFiles++;
+                                    // Set the file status to be successfully uploaded and
+                                    // increase the number of successfully uploaded files.
+                                    await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
+                                    numberOfSuccessfullyUploadedFiles++;
+                                }
+                                else
+                                {
+                                    // Set the file status to be skipped if file kind doesnot match with upload option.
+                                    await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Skipped);
+                                }
                             }
-                            else
+                            catch
                             {
-                                // Set the file status to be skipped if file kind doesnot match with upload option.
-                                await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Skipped);
+                                // Set the file status to failed to upload.
+                                await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.FailedToUpload);
                             }
                         }
-                        catch
-                        {
-                            // Set the file status to failed to upload.
-                            await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.FailedToUpload);
-                        }
+
                     }
-
                     // Determine the email status by comparing the number of successful uploads and the total number of files.
                     EmailStatus emailStatus = CalculateEmailStatus(emailDetails.Files.Count, numberOfSuccessfullyUploadedFiles);
 
@@ -131,6 +201,23 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 // Upload the file to e-DReaMS.
                 // TODO: Get the site URL and folder from metadata.
                 string absoluteFileUrl = await _extensibilityManager.UploadFile(fileData, null, null, fileDetails.Name, true);
+
+                return absoluteFileUrl;
+            }
+            catch (Exception ex)
+            {
+                // Throw an exception.
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.OUTLOOKMIDDLEWARE_UPLOAD_TO_EDREAMS_FAILED, ex);
+            }
+        }
+
+        private async Task<string> ProcessShredMailBoxFile(byte[] fileData, string fileName)
+        {
+            try
+            {
+                // Upload the file to e-DReaMS.
+                // TODO: Get the site URL and folder from metadata.
+                string absoluteFileUrl = await _extensibilityManager.UploadFile(fileData, null, null, fileName, true);
 
                 return absoluteFileUrl;
             }

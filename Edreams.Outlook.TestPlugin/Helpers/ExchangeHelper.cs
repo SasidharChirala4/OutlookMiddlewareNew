@@ -76,7 +76,7 @@ namespace Edreams.Outlook.TestPlugin.Helpers
             AlternateId alternateId = new AlternateId
             {
                 Format = IdFormat.HexEntryId,
-                Mailbox = "jhooyberghs@deloitte.com",
+                Mailbox = "kkaredla@deloitte.com",
                 UniqueId = entryId
             };
 
