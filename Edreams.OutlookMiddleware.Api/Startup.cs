@@ -1,6 +1,8 @@
 using System.IO;
 using System.Security.Principal;
 using Edreams.Common.AzureServiceBus._DependencyInjection;
+using Edreams.Common.Exchange._DependencyInjection;
+using Edreams.Common.KeyVault._DependencyInjection;
 using Edreams.Common.Logging._DependencyInjection;
 using Edreams.Common.Security._DependencyInjection;
 using Edreams.OutlookMiddleware.Api.Middleware;
@@ -40,6 +42,8 @@ namespace Edreams.OutlookMiddleware.Api
             services.AddConfiguration(_configuration);
             services.AddEdreamsLogging();
             services.AddServiceBus();
+            services.AddEdreamsKeyVaultIntegration();
+            services.AddEdreamsExchangeIntegration();
 
             services.AddBusinessLogic();
             services.AddControllers();

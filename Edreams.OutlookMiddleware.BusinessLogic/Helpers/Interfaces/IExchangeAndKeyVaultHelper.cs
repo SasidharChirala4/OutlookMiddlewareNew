@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
-using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
+using Edreams.Common.Exchange.Interfaces;
+using Edreams.Common.KeyVault.Interfaces;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces
 {

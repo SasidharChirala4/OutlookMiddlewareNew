@@ -1,16 +1,15 @@
-﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
-using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Edreams.Common.Exchange.Interfaces;
+using Edreams.Common.KeyVault.Interfaces;
+using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Model;
 using Edreams.OutlookMiddleware.Services.Categorization.Engine.Interfaces;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
 {
