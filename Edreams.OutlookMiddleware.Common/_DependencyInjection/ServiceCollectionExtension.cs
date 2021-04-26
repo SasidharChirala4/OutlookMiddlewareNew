@@ -1,18 +1,14 @@
-﻿using Edreams.OutlookMiddleware.Common.Configuration;
-using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exchange;
-using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
-using Edreams.OutlookMiddleware.Common.Helpers;
-using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
-using Edreams.OutlookMiddleware.Common.KeyVault;
-using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
-using Edreams.OutlookMiddleware.Common.Validation.Interface;
-using Edreams.OutlookMiddleware.Common.Validation;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using Edreams.Common.Exceptions.Factories;
 using Edreams.Common.Exceptions.Factories.Interfaces;
+using Edreams.OutlookMiddleware.Common.Configuration;
+using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Common.Helpers;
+using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
+using Edreams.OutlookMiddleware.Common.Validation;
+using Edreams.OutlookMiddleware.Common.Validation.Interface;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Edreams.OutlookMiddleware.Common._DependencyInjection
 {
@@ -64,8 +60,6 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
             services.AddSingleton<IFileHelper, FileHelper>();
             services.AddTransient(typeof(IRestHelper<>), typeof(RestHelper<>));
             services.AddSingleton<IValidator, Validator>();
-            services.AddSingleton<IExchangeClientFactory, ExchangeClientFactory>();
-            services.AddSingleton<IKeyVaultClientFactory, KeyVaultClientFactory>();
             services.AddSingleton<IExceptionFactory, ExceptionFactory>();
         }
     }
