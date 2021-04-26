@@ -1,4 +1,5 @@
-﻿using Edreams.OutlookMiddleware.Common.Security.Interfaces;
+﻿using Edreams.Common.DataAccess;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.Model;
 
 

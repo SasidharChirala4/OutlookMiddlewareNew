@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Edreams.Common.DataAccess.Model;
+using Edreams.Common.DataAccess.Model.Interfaces;
 using Edreams.OutlookMiddleware.Enums;
-using Edreams.OutlookMiddleware.Model.Base;
 
 namespace Edreams.OutlookMiddleware.Model
 {

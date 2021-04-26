@@ -7,15 +7,15 @@ using Edreams.Common.AzureServiceBus.Interfaces;
 using Edreams.Common.Exceptions;
 using Edreams.Common.Exceptions.Constants;
 using Edreams.Common.Exceptions.Factories.Interfaces;
+using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Enums;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
-using Edreams.Common.Logging.Interfaces;
 namespace Edreams.OutlookMiddleware.Services.Categorization.Scheduler
 {
     public class CategorizationSchedulerWorker : BackgroundService

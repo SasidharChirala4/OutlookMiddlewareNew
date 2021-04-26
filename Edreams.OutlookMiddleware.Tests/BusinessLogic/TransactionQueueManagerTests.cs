@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Edreams.Common.AzureServiceBus.Contracts;
 using Edreams.Common.AzureServiceBus.Interfaces;
+using Edreams.Common.DataAccess.Interfaces;
 using Edreams.Common.Exceptions;
 using Edreams.Common.Exceptions.Factories;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Edreams.OutlookMiddleware.Common.Security.Interfaces;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
@@ -35,18 +35,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object,historicTransactionRepositoryMock.Object,
-                _transactionMapper,_historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper,historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "IsTransactionAvailable" method.
             Guid transactionId = new Guid("46b7722d-f317-4a1d-9e69-d7592ad79c99");
@@ -91,18 +91,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "IsTransactionAvailable" method.
             Guid transactionId = new Guid("46b7722d-f317-4a1d-9e69-d7592ad79c99");
@@ -150,18 +150,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "GetTransaction" method.
             Guid transactionId = new Guid("46b7722d-f317-4a1d-9e69-d7592ad79c99");
@@ -206,18 +206,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "GetTransaction" method.
             Guid transactionId = new Guid("46b7722d-f317-4a1d-9e69-d7592ad79c99");
@@ -265,18 +265,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "GetTransaction" method.
             Guid transactionId = new Guid("46b7722d-f317-4a1d-9e69-d7592ad79c99");
@@ -322,18 +322,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "GetTransactionStatus" method.
             Guid transactionId = new Guid("46b7722d-f317-4a1d-9e69-d7592ad79c99");
@@ -385,18 +385,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "GetNextUploadTransaction" method.
             Guid transactionId = new Guid("46b7722d-f317-4a1d-9e69-d7592ad79c99");
@@ -443,18 +443,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "GetNextUploadTransaction" method.
             Transaction transaction = new Transaction
@@ -505,18 +505,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "CreateUploadTransaction" method.
             Guid batchId = new Guid("9FC3D8F8-2A11-4B39-86A8-BD73D7FA3316");
@@ -550,18 +550,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "CreateUploadTransaction" method.
             Guid batchId = new Guid("9FC3D8F8-2A11-4B39-86A8-BD73D7FA3316");
@@ -595,18 +595,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "UpdateTransactionStatus" method.
             Transaction transaction = new Transaction
@@ -658,18 +658,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "UpdateTransactionStatusAndArchive" method.
             Transaction transaction = new Transaction
@@ -729,18 +729,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "GetTransactionQueueStatistics" method.
             Transaction transaction = new Transaction
@@ -758,8 +758,8 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             #region [ MOCK ]
 
             //Mock the configuration to setup ServiceBusConnectionString,ServiceBusQueueName values
-            _configurationMock.Setup(x => x.ServiceBusConnectionString).Returns(string.Empty);
-            _configurationMock.Setup(x => x.ServiceBusQueueName).Returns("OutlookMiddleWare");
+            configurationMock.Setup(x => x.ServiceBusConnectionString).Returns(string.Empty);
+            configurationMock.Setup(x => x.ServiceBusQueueName).Returns("OutlookMiddleWare");
 
             #endregion
 
@@ -785,18 +785,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "GetTransactionQueueStatistics" method.
             Transaction transaction = new Transaction
@@ -814,8 +814,8 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             #region [ MOCK ]
 
             //Mock the configuration to setup ServiceBusConnectionString,ServiceBusQueueName values
-            _configurationMock.Setup(x => x.ServiceBusConnectionString).Returns("OutlookMiddleWareConnectionString");
-            _configurationMock.Setup(x => x.ServiceBusQueueName).Returns(string.Empty);
+            configurationMock.Setup(x => x.ServiceBusConnectionString).Returns("OutlookMiddleWareConnectionString");
+            configurationMock.Setup(x => x.ServiceBusQueueName).Returns(string.Empty);
 
             #endregion
 
@@ -841,18 +841,18 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var transactionRepositoryMock = new Mock<IRepository<Transaction>>();
             var historicTransactionRepositoryMock = new Mock<IRepository<HistoricTransaction>>();
-            var _transactionMapper = new TransactionToTransactionDtoMapper();
-            var _historicTransactionMapper = new TransactionToHistoricTransactionMapper();
-            var _serviceBusHandlerMock = new Mock<IServiceBusHandler>();
-            var _configurationMock = new Mock<IEdreamsConfiguration>();
-            var _securityContextMock = new Mock<ISecurityContext>();
-            var _exceptionFactory = new ExceptionFactory();
+            var transactionMapper = new TransactionToTransactionDtoMapper();
+            var historicTransactionMapper = new TransactionToHistoricTransactionMapper();
+            var serviceBusHandlerMock = new Mock<IServiceBusHandler>();
+            var configurationMock = new Mock<IEdreamsConfiguration>();
+            var securityContextMock = new Mock<ISecurityContext>();
+            var exceptionFactory = new ExceptionFactory();
 
             // Create an instance of the "TransactionQueueManager" using the mocked dependencies.
             ITransactionQueueManager transactionQueueManager = new TransactionQueueManager(
                 transactionHelperMock.Object, transactionRepositoryMock.Object, historicTransactionRepositoryMock.Object,
-                _transactionMapper, _historicTransactionMapper, _serviceBusHandlerMock.Object, _configurationMock.Object,
-                _securityContextMock.Object, _exceptionFactory);
+                transactionMapper, historicTransactionMapper, serviceBusHandlerMock.Object, configurationMock.Object,
+                securityContextMock.Object, exceptionFactory);
 
             // Prepare a request to use for when calling the "GetTransactionQueueStatistics" method.
             Transaction transaction = new Transaction
@@ -875,10 +875,10 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 
             #region [ MOCK ]
             //Mock the configuration to setup ServiceBusConnectionString,ServiceBusQueueName values
-            _configurationMock.Setup(x => x.ServiceBusConnectionString).Returns("OutlookMiddleWareConnectionString");
-            _configurationMock.Setup(x => x.ServiceBusQueueName).Returns("OutlookMiddleWare");
+            configurationMock.Setup(x => x.ServiceBusConnectionString).Returns("OutlookMiddleWareConnectionString");
+            configurationMock.Setup(x => x.ServiceBusQueueName).Returns("OutlookMiddleWare");
             // Mock the "GetQueueStatistics" method on the "serviceBusHandler" 
-            _serviceBusHandlerMock.Setup(x => x.GetQueueStatistics(It.IsAny<string>(), It.IsAny<string>(), System.Threading.CancellationToken.None)).ReturnsAsync(queueStatistics);
+            serviceBusHandlerMock.Setup(x => x.GetQueueStatistics(It.IsAny<string>(), It.IsAny<string>(), System.Threading.CancellationToken.None)).ReturnsAsync(queueStatistics);
             #endregion
 
             #region [ ACT ]

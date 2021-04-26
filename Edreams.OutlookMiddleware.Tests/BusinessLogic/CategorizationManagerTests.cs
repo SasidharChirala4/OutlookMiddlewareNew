@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Edreams.Common.DataAccess;
+using Edreams.Common.DataAccess.Interfaces;
 using Edreams.Common.Exceptions;
 using Edreams.Common.Logging.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic;
@@ -8,8 +10,6 @@ using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Constants;
 using Edreams.OutlookMiddleware.Common.Validation;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Helpers;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Mapping;
 using Edreams.OutlookMiddleware.Model;

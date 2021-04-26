@@ -1,6 +1,7 @@
-﻿using System.Security.Principal;
+﻿using System;
+using System.Security.Principal;
 using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.Common.Security.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Serilog.Context;
 
@@ -17,9 +18,9 @@ namespace Edreams.OutlookMiddleware.Api.Middleware
 
         public Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            _securityContext.RefreshCorrelationId();
+            Guid correlationId = _securityContext.RefreshCorrelationId();
+            LogContext.PushProperty("CorrelationId", correlationId);
 
-            LogContext.PushProperty("CorrelationId", _securityContext.CorrelationId);
             if (context.Request.HttpContext.User.Identity is WindowsIdentity identity)
             {
                 _securityContext.SetUserIdentity(identity);
