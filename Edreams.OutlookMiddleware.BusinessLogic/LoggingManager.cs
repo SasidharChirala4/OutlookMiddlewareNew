@@ -1,11 +1,11 @@
-﻿using Edreams.Contracts.Data.Logging;
+﻿using System.Threading.Tasks;
+using Edreams.Contracts.Data.Logging;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Constants;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Mapping.Interfaces;
-using System.Threading.Tasks;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {

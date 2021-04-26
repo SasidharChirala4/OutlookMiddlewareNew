@@ -30,8 +30,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="batchManager">The batch manager.</param>
         /// <param name="logger">The logger.</param>
-        public BatchesController(
-            IBatchManager batchManager,
+        public BatchesController(IBatchManager batchManager,
             IEdreamsLogger<BatchesController> logger) : base(batchManager, logger) { }
 
         /// <summary>

@@ -135,7 +135,7 @@
             Group of endpoints that are helpful to Logs a specified message or error..
             </summary>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.LoggingController.#ctor(Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.LoggingController},Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ILoggingManager)">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.LoggingController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ILoggingManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.LoggingController})">
             <summary>Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.LoggingController" /> class.</summary>
             <param name="loggingManager">The logging manager.</param>
             <param name="logger">The logger.</param>        
@@ -185,11 +185,10 @@
             Group of endpoints that are related to getting the status for this e-DReaMS Outlook Middleware HTTP API.
             </summary>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IStatusManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.StatusController},Edreams.OutlookMiddleware.Common.Configuration.Interfaces.IEdreamsConfiguration)">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IStatusManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.StatusController})">
             <summary>Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.StatusController" /> class.</summary>
             <param name="statusManager">The status manager.</param>
             <param name="logger">The logger.</param>
-            <param name="configuration">The configuration.</param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.Status">
             <summary>
@@ -224,6 +223,12 @@
             retrieves statistics like number of active messages, number of scheduled messages and
             number of dead lettered messages.
             </remarks>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Program.BuildSerilogSqlSinkColumnOptions">
+            <summary>
+            Configure SQL table columns for serlog
+            </summary>
+            <returns>Column Options</returns>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>

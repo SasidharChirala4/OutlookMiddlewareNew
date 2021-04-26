@@ -1,16 +1,13 @@
-﻿using Edreams.Common.Helpers.Interfaces;
-using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using ITimeHelper = Edreams.OutlookMiddleware.Common.Helpers.Interfaces.ITimeHelper;
+using Edreams.Common.Logging.Interfaces;
 namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 {
     public class CategorizationCleanupWorker : BackgroundService
@@ -18,13 +15,13 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IEdreamsConfiguration _configuration;
         private readonly ITimeHelper _timeHelper;
-        private readonly ILogger<CategorizationCleanupWorker> _logger;
+        private readonly IEdreamsLogger<CategorizationCleanupWorker> _logger;
 
         public CategorizationCleanupWorker(
            IServiceScopeFactory serviceScopeFactory,
            IEdreamsConfiguration configuration,
            ITimeHelper timeHelper,
-           ILogger<CategorizationCleanupWorker> logger)
+           IEdreamsLogger<CategorizationCleanupWorker> logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _configuration = configuration;
@@ -32,7 +29,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
             _logger = logger;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             TimeSpan startTime = _configuration.CategorizationWorkerScheduleStartTime;
             TimeSpan stopTime = _configuration.CategorizationWorkerScheduleStopTime;
@@ -42,7 +39,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
             int schedulingInterval = _configuration.CleanupWorkerIntervalInSeconds * 1000;
 
             _logger.LogInformation("CategorizationCleanupWorker STARTED");
-            while (!cancellationToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 // Start a stopwatch for future reference when calculating the time we need to delay.
                 Stopwatch stopwatch = Stopwatch.StartNew();
@@ -72,7 +69,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
                     schedulingInterval -= (int)stopwatch.ElapsedMilliseconds;
                     if (schedulingInterval > 0)
                     {
-                        await Task.Delay(schedulingInterval, cancellationToken);
+                        await Task.Delay(schedulingInterval, stoppingToken);
                     }
                 }
             }

@@ -27,9 +27,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="transactionQueueManager">The transaction queue manager.</param>
         /// <param name="logger">The logger.</param>
-        public TransactionsController(
-            ITransactionQueueManager transactionQueueManager, IEdreamsLogger<TransactionsController> logger)
-            : base(transactionQueueManager, logger) { }
+        public TransactionsController(ITransactionQueueManager transactionQueueManager,
+            IEdreamsLogger<TransactionsController> logger) : base(transactionQueueManager, logger) { }
 
         /// <summary>
         /// Gets some statistics about the Azure ServiceBus transaction queue.

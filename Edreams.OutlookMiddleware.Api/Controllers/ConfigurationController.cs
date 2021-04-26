@@ -21,9 +21,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="configurationManager">The configuration service.</param>
         /// <param name="logger">The logger.</param>
-        public ConfigurationController(
-            IConfigurationManager configurationManager, IEdreamsLogger<ConfigurationController> logger)
-            : base(configurationManager, logger) { }
+        public ConfigurationController(IConfigurationManager configurationManager,
+            IEdreamsLogger<ConfigurationController> logger) : base(configurationManager, logger) { }
 
         /// <summary>
         /// Gets the Outlook Middleware shared mailbox.

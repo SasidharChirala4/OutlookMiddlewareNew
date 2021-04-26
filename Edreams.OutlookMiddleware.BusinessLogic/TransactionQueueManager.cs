@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
-using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.Common.AzureServiceBus.Contracts;
 using Edreams.Common.AzureServiceBus.Interfaces;
 using Edreams.Common.Exceptions.Constants;
 using Edreams.Common.Exceptions.Factories.Interfaces;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
+using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
@@ -167,8 +167,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
                 // Map the transaction into a historic transaction and update the transaction status.
                 HistoricTransaction historicTransaction = _historicTransactionMapper.Map(transactionToArchive);
-                UpdateTransactionStatus(historicTransaction, status);
 
+                UpdateTransactionStatus(historicTransaction, status);
+                
                 // If the engine name is not empty...
                 if (!string.IsNullOrEmpty(engine))
                 {

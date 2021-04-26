@@ -1,18 +1,18 @@
-﻿using Edreams.OutlookMiddleware.BusinessLogic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Edreams.OutlookMiddleware.BusinessLogic;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.Mapping;
 using Edreams.OutlookMiddleware.Model;
 using Edreams.OutlookMiddleware.Tests.Framework.Extensions;
-using Moq;
 using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Moq;
 using Xunit;
-using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 {
@@ -32,6 +32,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var categorizationRequestMapper = new CategorizationRequestMapper();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
             var emailRepositoryMock = new Mock<IRepository<Email>>();
+            var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var fileRepositoryMock = new Mock<IRepository<File>>();
             var fileHelperMock = new Mock<IFileHelper>();
             var transactionHelperMock = new Mock<TransactionHelper>();
@@ -44,6 +45,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
                 categorizationRequestsRepositoryMock.Object,
                 batchRepositoryMock.Object,
                 emailRepositoryMock.Object,
+                emailRecipientRepositoryMock.Object,
                 fileRepositoryMock.Object,
                 fileHelperMock.Object,
                 transactionHelperMock.Object,
@@ -99,6 +101,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var categorizationRequestMapper = new CategorizationRequestMapper();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
             var emailRepositoryMock = new Mock<IRepository<Email>>();
+            var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var fileRepositoryMock = new Mock<IRepository<File>>();
             var fileHelperMock = new Mock<IFileHelper>();
             var transactionHelperMock = new Mock<TransactionHelper>();
@@ -111,6 +114,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
                 categorizationRequestsRepositoryMock.Object,
                 batchRepositoryMock.Object,
                 emailRepositoryMock.Object,
+                emailRecipientRepositoryMock.Object,
                 fileRepositoryMock.Object,
                 fileHelperMock.Object,
                 transactionHelperMock.Object,
@@ -164,6 +168,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var categorizationRequestMapper = new CategorizationRequestMapper();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
             var emailRepositoryMock = new Mock<IRepository<Email>>();
+            var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var fileRepositoryMock = new Mock<IRepository<File>>();
             var fileHelperMock = new Mock<IFileHelper>();
             var transactionHelperMock = new Mock<TransactionHelper>();
@@ -176,6 +181,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
                 categorizationRequestsRepositoryMock.Object,
                 batchRepositoryMock.Object,
                 emailRepositoryMock.Object,
+                emailRecipientRepositoryMock.Object,
                 fileRepositoryMock.Object,
                 fileHelperMock.Object,
                 transactionHelperMock.Object,
@@ -234,6 +240,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var categorizationRequestMapper = new CategorizationRequestMapper();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
             var emailRepositoryMock = new Mock<IRepository<Email>>();
+            var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var fileRepositoryMock = new Mock<IRepository<File>>();
             var fileHelperMock = new Mock<IFileHelper>();
             var transactionHelperMock = new Mock<TransactionHelper>();
@@ -246,6 +253,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
                 categorizationRequestsRepositoryMock.Object,
                 batchRepositoryMock.Object,
                 emailRepositoryMock.Object,
+                emailRecipientRepositoryMock.Object,
                 fileRepositoryMock.Object,
                 fileHelperMock.Object,
                 transactionHelperMock.Object,
@@ -309,6 +317,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var categorizationRequestsRepositoryMock = new Mock<IRepository<CategorizationRequest>>();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
             var emailRepositoryMock = new Mock<IRepository<Email>>();
+            var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var fileRepositoryMock = new Mock<IRepository<File>>();
             var fileHelperMock = new Mock<IFileHelper>();
             var transactionHelperMock = new Mock<TransactionHelper>();
@@ -316,15 +325,16 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 
             // Create an instance of the "CleanupManager" using the mocked dependencies.
             ICleanupManager cleanupManager = new CleanupManager(
-                preloadedFilesRepositoryMock.Object,
-                transactionHistoryRepositoryMock.Object,
-                categorizationRequestsRepositoryMock.Object,
-                batchRepositoryMock.Object,
-                emailRepositoryMock.Object,
-                fileRepositoryMock.Object,
-                fileHelperMock.Object,
-                transactionHelperMock.Object,
-                edreamsConfigurationMock.Object);
+                 preloadedFilesRepositoryMock.Object,
+                 transactionHistoryRepositoryMock.Object,
+                 categorizationRequestsRepositoryMock.Object,
+                 batchRepositoryMock.Object,
+                 emailRepositoryMock.Object,
+                 emailRecipientRepositoryMock.Object,
+                 fileRepositoryMock.Object,
+                 fileHelperMock.Object,
+                 transactionHelperMock.Object,
+                 edreamsConfigurationMock.Object);
 
             // Prepare a request to use for when calling the "CleanupTransactions" method.
             HistoricTransaction historicTransaction = new HistoricTransaction()
@@ -368,6 +378,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var categorizationRequestMapper = new CategorizationRequestMapper();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
             var emailRepositoryMock = new Mock<IRepository<Email>>();
+            var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var fileRepositoryMock = new Mock<IRepository<File>>();
             var fileHelperMock = new Mock<IFileHelper>();
             var transactionHelperMock = new Mock<TransactionHelper>();
@@ -375,15 +386,16 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 
             // Create an instance of the "CleanupManager" using the mocked dependencies.
             ICleanupManager cleanupManager = new CleanupManager(
-                preloadedFilesRepositoryMock.Object,
-                transactionHistoryRepositoryMock.Object,
-                categorizationRequestsRepositoryMock.Object,
-                batchRepositoryMock.Object,
-                emailRepositoryMock.Object,
-                fileRepositoryMock.Object,
-                fileHelperMock.Object,
-                transactionHelperMock.Object,
-                edreamsConfigurationMock.Object);
+                 preloadedFilesRepositoryMock.Object,
+                 transactionHistoryRepositoryMock.Object,
+                 categorizationRequestsRepositoryMock.Object,
+                 batchRepositoryMock.Object,
+                 emailRepositoryMock.Object,
+                 emailRecipientRepositoryMock.Object,
+                 fileRepositoryMock.Object,
+                 fileHelperMock.Object,
+                 transactionHelperMock.Object,
+                 edreamsConfigurationMock.Object);
 
             // Prepare a request to use for when calling the "CleanupTransactions" method.
             HistoricTransaction historicTransaction = new HistoricTransaction()
@@ -463,6 +475,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var categorizationRequestsRepositoryMock = new Mock<IRepository<CategorizationRequest>>();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
             var emailRepositoryMock = new Mock<IRepository<Email>>();
+            var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var fileRepositoryMock = new Mock<IRepository<File>>();
             var fileHelperMock = new Mock<IFileHelper>();
             var transactionHelperMock = new Mock<TransactionHelper>();
@@ -475,6 +488,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
                 categorizationRequestsRepositoryMock.Object,
                 batchRepositoryMock.Object,
                 emailRepositoryMock.Object,
+                emailRecipientRepositoryMock.Object,
                 fileRepositoryMock.Object,
                 fileHelperMock.Object,
                 transactionHelperMock.Object,
@@ -522,6 +536,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var categorizationRequestMapper = new CategorizationRequestMapper();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
             var emailRepositoryMock = new Mock<IRepository<Email>>();
+            var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var fileRepositoryMock = new Mock<IRepository<File>>();
             var fileHelperMock = new Mock<IFileHelper>();
             var transactionHelperMock = new Mock<TransactionHelper>();
@@ -534,6 +549,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
                 categorizationRequestsRepositoryMock.Object,
                 batchRepositoryMock.Object,
                 emailRepositoryMock.Object,
+                emailRecipientRepositoryMock.Object,
                 fileRepositoryMock.Object,
                 fileHelperMock.Object,
                 transactionHelperMock.Object,
@@ -587,6 +603,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var categorizationRequestMapper = new CategorizationRequestMapper();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
             var emailRepositoryMock = new Mock<IRepository<Email>>();
+            var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var fileRepositoryMock = new Mock<IRepository<File>>();
             var fileHelperMock = new Mock<IFileHelper>();
             var transactionHelperMock = new Mock<TransactionHelper>();
@@ -599,6 +616,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
                 categorizationRequestsRepositoryMock.Object,
                 batchRepositoryMock.Object,
                 emailRepositoryMock.Object,
+                emailRecipientRepositoryMock.Object,
                 fileRepositoryMock.Object,
                 fileHelperMock.Object,
                 transactionHelperMock.Object,
@@ -649,6 +667,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var categorizationRequestMapper = new CategorizationRequestMapper();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
             var emailRepositoryMock = new Mock<IRepository<Email>>();
+            var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var fileRepositoryMock = new Mock<IRepository<File>>();
             var fileHelperMock = new Mock<IFileHelper>();
             var transactionHelperMock = new Mock<TransactionHelper>();
@@ -661,6 +680,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
                 categorizationRequestsRepositoryMock.Object,
                 batchRepositoryMock.Object,
                 emailRepositoryMock.Object,
+                emailRecipientRepositoryMock.Object,
                 fileRepositoryMock.Object,
                 fileHelperMock.Object,
                 transactionHelperMock.Object,

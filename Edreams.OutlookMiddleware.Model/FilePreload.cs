@@ -15,8 +15,11 @@ namespace Edreams.OutlookMiddleware.Model
         public string TempPath { get; set; }
         public string FileName { get; set; }
         public long Size { get; set; }
+        public string InternetMessageId { get; set; }
         public DateTime PreloadedOn { get; set; }
+        public Guid EdreamsReferenceId { get; set; }
         public FileKind Kind { get; set; }
+        public EmailKind EmailKind { get; set; }
         public EmailPreloadStatus Status { get; set; }
         public FilePreloadStatus FileStatus { get; set; }
     }

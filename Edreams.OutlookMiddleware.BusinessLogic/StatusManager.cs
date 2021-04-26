@@ -1,7 +1,7 @@
-﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+﻿using System.Threading.Tasks;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
-using System.Threading.Tasks;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {

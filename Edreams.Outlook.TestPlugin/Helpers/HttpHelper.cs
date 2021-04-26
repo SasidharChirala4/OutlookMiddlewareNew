@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using RestSharp;
 
@@ -17,9 +18,9 @@ namespace Edreams.Outlook.TestPlugin.Helpers
             RestClient client = new RestClient(_baseUrl);
             RestRequest request = new RestRequest("mails", Method.POST);
             request.AddJsonBody(createMailRequest);
-            var response = await client.ExecuteAsync<CreateMailResponse>(request);
+            var response = await client.ExecuteAsync<ApiResult<CreateMailResponse>>(request);
 
-            return response.Data;
+            return response.Data.ResponseData;
         }
 
         public static async Task CommitBatch(CommitBatchRequest commitBatchRequest)
@@ -27,14 +28,14 @@ namespace Edreams.Outlook.TestPlugin.Helpers
             RestClient client = new RestClient(_baseUrl);
             RestRequest request = new RestRequest($"/batches/{commitBatchRequest.BatchId}/commit", Method.POST);
             request.AddJsonBody(commitBatchRequest);
-            var response = await client.ExecuteAsync<CommitBatchResponse>(request);
+            var response = await client.ExecuteAsync<ApiResult<CommitBatchResponse>>(request);
         }
 
         public static async Task CancelBatch(Guid batchId)
         {
             RestClient client = new RestClient(_baseUrl);
             RestRequest request = new RestRequest($"batches/{batchId}/cancel", Method.DELETE);
-            var response = await client.ExecuteAsync<CancelBatchResponse>(request);
+            var response = await client.ExecuteAsync<ApiResult<CancelBatchResponse>>(request);
         }
 
         public static async Task<HttpResponseMessage> UploadAsync(Stream stream, string fileName, Guid fileId)

@@ -1,11 +1,11 @@
-﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.DataTransferObjects.Api;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
 using Edreams.Common.Web;
 using Edreams.Common.Web.Contracts;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+using Edreams.OutlookMiddleware.DataTransferObjects.Api;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
@@ -21,9 +21,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="categorizationManager">T</param>
         /// <param name="logger"></param>
-        public CategorizationController(
-            ICategorizationManager categorizationManager, IEdreamsLogger<CategorizationController> logger)
-           : base(categorizationManager, logger) { }
+        public CategorizationController(ICategorizationManager categorizationManager,
+            IEdreamsLogger<CategorizationController> logger) : base(categorizationManager, logger) { }
 
         /// <summary>
         /// Gets the pending email categories for the specified user.

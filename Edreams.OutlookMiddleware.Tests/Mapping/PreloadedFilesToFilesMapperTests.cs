@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Mapping.Custom;
 using Edreams.OutlookMiddleware.Mapping.Custom.Interfaces;
@@ -51,12 +52,12 @@ namespace Edreams.OutlookMiddleware.Tests.Mapping
                     EmailId = email2Id
                 }
             };
-
+            List<EmailRecipientDto> emailRecipients = new List<EmailRecipientDto>();
             #endregion
 
             #region [ ACT ]
 
-            IList<File> files = mapper.Map(batch, preloadedFiles, uploadOption);
+            IList<File> files = mapper.Map(batch, preloadedFiles, uploadOption, emailRecipients);
 
             #endregion
 

@@ -16,6 +16,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.ServiceBus;
+using Edreams.Common.Logging.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
 {
@@ -26,7 +27,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
         private readonly IExceptionFactory _exceptionFactory;
         private readonly IEdreamsConfiguration _configuration;
         private readonly ISecurityContext _securityContext;
-        private readonly ILogger<UploadSchedulerWorker> _logger;
+        private readonly IEdreamsLogger<UploadSchedulerWorker> _logger;
 
         public UploadSchedulerWorker(
             ITransactionQueueManager transactionQueueManager,
@@ -34,7 +35,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
             IExceptionFactory exceptionFactory,
             IEdreamsConfiguration configuration,
             ISecurityContext securityContext,
-            ILogger<UploadSchedulerWorker> logger)
+            IEdreamsLogger<UploadSchedulerWorker> logger)
         {
             _transactionQueueManager = transactionQueueManager;
             _serviceBusHandler = serviceBusHandler;
@@ -44,11 +45,11 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
             _logger = logger;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // Run continuously as long as the Windows Service is running. If the Windows Service
             // is stopped, the cancellation token will be cancelled and this loop will be stopped.
-            while (!cancellationToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 // Get the scheduling interval in seconds from the application
                 // configuration and convert to milliseconds.
@@ -60,7 +61,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
                 try
                 {
                     // Schedule the next transaction if available.
-                    await ScheduleNextTransaction(cancellationToken);
+                    await ScheduleNextTransaction(stoppingToken);
                 }
                 catch (EdreamsException ex)
                 {
@@ -74,7 +75,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
                 schedulingInterval -= (int)stopwatch.ElapsedMilliseconds;
                 if (schedulingInterval > 0)
                 {
-                    await Task.Delay(schedulingInterval, cancellationToken);
+                    await Task.Delay(schedulingInterval, stoppingToken);
                 }
             }
         }

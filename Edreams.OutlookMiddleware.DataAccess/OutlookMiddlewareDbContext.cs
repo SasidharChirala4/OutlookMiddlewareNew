@@ -9,7 +9,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
     public class OutlookMiddlewareDbContext : DbContext
     {
         private readonly IEdreamsConfiguration _configuration;
-        
+
         public DbSet<Batch> Batches { get; set; }
         public DbSet<Email> Emails { get; set; }
         public DbSet<File> Files { get; set; }
@@ -17,7 +17,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<EmailRecipient> EmailRecipients { get; set; }
         public DbSet<Transaction> TransactionQueue { get; set; }
         public DbSet<HistoricTransaction> TransactionHistory { get; set; }
-        
+
         public OutlookMiddlewareDbContext(IEdreamsConfiguration configuration)
         {
             _configuration = configuration;
@@ -60,6 +60,8 @@ namespace Edreams.OutlookMiddleware.DataAccess
                     .IsClustered();
                 e.Property(x => x.SysId)
                     .ValueGeneratedOnAdd();
+                e.Property(x=>x.EmailKind)
+                     .HasConversion(new EnumToStringConverter<EmailKind>());
                 e.Property(x => x.Status)
                     .HasConversion(new EnumToStringConverter<EmailStatus>());
                 e.Property(x => x.InternetMessageId)
@@ -93,7 +95,6 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.HasIndex(x => x.EmailAddress);
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
-                e.Property(x => x.UpdatedBy).IsRequired();
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);
             });
 
@@ -138,6 +139,19 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);
+            });
+            modelBuilder.Entity<Log>(e =>
+            {
+                e.ToTable("Logs");
+                e.Property(x => x.Id).HasColumnName("SysId");
+                e.Property(x => x.SourceContext).HasMaxLength(512);
+                e.Property(x => x.MethodName).HasMaxLength(512);
+                e.Property(x => x.SourceFile).HasMaxLength(512);
+                e.Property(x => x.InsertedBy).IsRequired();
+                e.Property(x => x.InsertedBy).HasMaxLength(100);
+                e.HasIndex(x => x.Level);
+                e.HasIndex(x => x.TimeStamp);
+                e.HasIndex(x => x.CorrelationId);
             });
         }
     }

@@ -28,14 +28,11 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <param name="fileManager"></param>
         /// <param name="logger"></param>
         /// <param name="configuration"></param>
-        public FilesController(
-            IPreloadedFileManager fileManager,
-            IEdreamsLogger<FilesController> logger,
-            IEdreamsConfiguration configuration)
-            : base(fileManager, logger)
+        public FilesController(IPreloadedFileManager fileManager,
+            IEdreamsLogger<FilesController> logger, IEdreamsConfiguration configuration) : base(fileManager, logger)
         {
-            _configuration = configuration;
             _logger = logger;
+            _configuration = configuration;
         }
 
         /// <summary>

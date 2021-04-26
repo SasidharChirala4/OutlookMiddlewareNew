@@ -1,11 +1,11 @@
-﻿using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.DataTransferObjects.Api;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
 using Edreams.Common.Web;
 using Edreams.Common.Web.Contracts;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+using Edreams.OutlookMiddleware.DataTransferObjects.Api;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
@@ -19,8 +19,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <summary>Initializes a new instance of the <see cref="LoggingController" /> class.</summary>
         /// <param name="loggingManager">The logging manager.</param>
         /// <param name="logger">The logger.</param>        
-        public LoggingController(IEdreamsLogger<LoggingController> logger, ILoggingManager loggingManager)
-            : base(loggingManager, logger) { }
+        public LoggingController(ILoggingManager loggingManager,
+            IEdreamsLogger<LoggingController> logger) : base(loggingManager, logger) { }
 
         /// <summary>
         /// Logs a specified message or error.

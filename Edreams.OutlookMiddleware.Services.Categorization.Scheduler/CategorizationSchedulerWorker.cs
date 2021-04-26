@@ -15,13 +15,12 @@ using Edreams.OutlookMiddleware.Enums;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
+using Edreams.Common.Logging.Interfaces;
 namespace Edreams.OutlookMiddleware.Services.Categorization.Scheduler
 {
     public class CategorizationSchedulerWorker : BackgroundService
     {
-        private readonly ILogger<CategorizationSchedulerWorker> _logger;
+        private readonly IEdreamsLogger<CategorizationSchedulerWorker> _logger;
         private readonly ITransactionQueueManager _transactionQueueManager;
         private readonly IServiceBusHandler _serviceBusHandler;
         private readonly IExceptionFactory _exceptionFactory;
@@ -32,7 +31,7 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Scheduler
             IServiceBusHandler serviceBusHandler,
             IExceptionFactory exceptionFactory,
             IEdreamsConfiguration configuration,
-            ISecurityContext securityContext, ILogger<CategorizationSchedulerWorker> logger)
+            ISecurityContext securityContext, IEdreamsLogger<CategorizationSchedulerWorker> logger)
         {
             _transactionQueueManager = transactionQueueManager;
             _serviceBusHandler = serviceBusHandler;
@@ -42,11 +41,11 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Scheduler
             _logger = logger;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // Run continuously as long as the Windows Service is running. If the Windows Service
             // is stopped, the cancellation token will be cancelled and this loop will be stopped.
-            while (!cancellationToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 // Get the scheduling interval in seconds from the application
                 // configuration and convert to milliseconds.
@@ -58,7 +57,7 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Scheduler
                 try
                 {
                     // Schedule the next transaction if available.
-                    await ScheduleNextTransaction(cancellationToken);
+                    await ScheduleNextTransaction(stoppingToken);
                 }
                 catch (EdreamsException ex)
                 {
@@ -72,7 +71,7 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Scheduler
                 schedulingInterval -= (int)stopwatch.ElapsedMilliseconds;
                 if (schedulingInterval > 0)
                 {
-                    await Task.Delay(schedulingInterval, cancellationToken);
+                    await Task.Delay(schedulingInterval, stoppingToken);
                 }
             }
         }

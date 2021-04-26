@@ -9,31 +9,32 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
 {
     public class CategorizationExpirationWorker : BackgroundService
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly ILogger<CategorizationExpirationWorker> _logger;
+        private readonly IEdreamsLogger<CategorizationExpirationWorker> _logger;
         private readonly IEdreamsConfiguration _configuration;
 
         public CategorizationExpirationWorker(
             IServiceScopeFactory serviceScopeFactory,
             IEdreamsConfiguration configuration,
-            ILogger<CategorizationExpirationWorker> logger)
+            IEdreamsLogger<CategorizationExpirationWorker> logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _configuration = configuration;
             _logger = logger;
         }
-        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Categorization-ExpirationWorker STARTED");
             // Run continuously as long as the Windows Service is running. If the Windows Service
             // is stopped, the cancellation token will be cancelled and this loop will be stopped.
 
-            while (!cancellationToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 // Get the scheduling interval in seconds from the application
                 // configuration and convert to milliseconds.
@@ -61,7 +62,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup.Workers
                     schedulingInterval -= (int)stopwatch.ElapsedMilliseconds;
                     if (schedulingInterval > 0)
                     {
-                        await Task.Delay(schedulingInterval, cancellationToken);
+                        await Task.Delay(schedulingInterval, stoppingToken);
                     }
                 }
             }

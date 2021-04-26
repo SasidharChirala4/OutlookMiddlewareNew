@@ -8,7 +8,7 @@ using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Services.Upload.Engine.Interfaces;
 using Microsoft.Extensions.Logging;
-
+using Edreams.Common.Logging.Interfaces;
 namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 {
     public class UploadEngineProcessor : IUploadEngineProcessor
@@ -20,13 +20,13 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         private readonly ITransactionQueueManager _transactionQueueManager;
         private readonly IFileHelper _fileHelper;
         private readonly IExceptionFactory _exceptionFactory;
-        private readonly ILogger<UploadEngineProcessor> _logger;
+        private readonly IEdreamsLogger<UploadEngineProcessor> _logger;
 
         public UploadEngineProcessor(
             IBatchManager batchManager, IEmailManager emailManager,
             IFileManager fileManager, IExtensibilityManager extensibilityManager,
             ITransactionQueueManager transactionQueueManager, IFileHelper fileHelper,
-            IExceptionFactory exceptionFactory, ILogger<UploadEngineProcessor> logger)
+            IExceptionFactory exceptionFactory, IEdreamsLogger<UploadEngineProcessor> logger)
         {
             _batchManager = batchManager;
             _emailManager = emailManager;

@@ -1,23 +1,23 @@
-﻿using Edreams.OutlookMiddleware.BusinessLogic;
-using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.BusinessLogic.Transactions;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
-using Edreams.OutlookMiddleware.Mapping;
-using Edreams.OutlookMiddleware.Model;
-using Edreams.OutlookMiddleware.Tests.Framework.Extensions;
-using Moq;
-using FluentAssertions;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Xunit;
-using Edreams.OutlookMiddleware.DataTransferObjects.Api;
-using Edreams.OutlookMiddleware.DataTransferObjects.Api.Specific;
 using System.Linq;
+using System.Threading.Tasks;
 using Edreams.Common.Exceptions;
 using Edreams.Common.Exceptions.Factories;
 using Edreams.Common.Exceptions.Factories.Interfaces;
+using Edreams.OutlookMiddleware.BusinessLogic;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+using Edreams.OutlookMiddleware.BusinessLogic.Transactions;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
+using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
+using Edreams.OutlookMiddleware.DataTransferObjects.Api;
+using Edreams.OutlookMiddleware.DataTransferObjects.Api.Specific;
+using Edreams.OutlookMiddleware.Mapping;
+using Edreams.OutlookMiddleware.Model;
+using Edreams.OutlookMiddleware.Tests.Framework.Extensions;
+using FluentAssertions;
+using Moq;
+using Xunit;
 
 namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 {
@@ -258,7 +258,6 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             #endregion
         }
         #endregion
-
 
         #region <| UpdateEmailStatus |>
         [Fact]

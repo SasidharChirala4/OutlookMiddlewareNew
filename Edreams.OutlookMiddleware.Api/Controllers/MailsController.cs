@@ -31,10 +31,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="emailManager">The email manager.</param>
         /// <param name="logger">The logger.</param>
-        public MailsController(
-            IEmailManager emailManager,
-            IEdreamsLogger<MailsController> logger)
-            : base(emailManager, logger) { }
+        public MailsController(IEmailManager emailManager,
+            IEdreamsLogger<MailsController> logger) : base(emailManager, logger) { }
 
         /// <summary>
         /// Creates an email to prepare for uploading binary data.

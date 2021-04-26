@@ -98,7 +98,6 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
@@ -125,6 +124,13 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
 
                     b.Property<Guid?>("BatchId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EdreamsReferenceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EmailKind")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EntryId")
                         .HasColumnType("nvarchar(max)");
@@ -352,6 +358,63 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                     b.ToTable("TransactionHistory");
                 });
 
+            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.Log", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SysId")
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<Guid?>("CorrelationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Exception")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InsertedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Level")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("LineNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LogEvent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MethodName")
+                        .HasColumnType("nvarchar(512)")
+                        .HasMaxLength(512);
+
+                    b.Property<string>("SourceContext")
+                        .HasColumnType("nvarchar(512)")
+                        .HasMaxLength(512);
+
+                    b.Property<string>("SourceFile")
+                        .HasColumnType("nvarchar(512)")
+                        .HasMaxLength(512);
+
+                    b.Property<DateTime?>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CorrelationId");
+
+                    b.HasIndex("Level");
+
+                    b.HasIndex("TimeStamp");
+
+                    b.ToTable("Logs");
+                });
+
             modelBuilder.Entity("Edreams.OutlookMiddleware.Model.Transaction", b =>
                 {
                     b.Property<Guid>("Id")
@@ -428,7 +491,7 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
             modelBuilder.Entity("Edreams.OutlookMiddleware.Model.EmailRecipient", b =>
                 {
                     b.HasOne("Edreams.OutlookMiddleware.Model.Email", "Email")
-                        .WithMany()
+                        .WithMany("EmailRecipients")
                         .HasForeignKey("EmailId");
                 });
 

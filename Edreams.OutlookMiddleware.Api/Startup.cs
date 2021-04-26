@@ -1,20 +1,11 @@
 using System.IO;
+using Edreams.Common.AzureServiceBus._DependencyInjection;
+using Edreams.Common.Logging._DependencyInjection;
 using Edreams.OutlookMiddleware.Api.Middleware;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common._DependencyInjection;
-using Edreams.OutlookMiddleware.Common.Exchange;
-using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
-using Edreams.OutlookMiddleware.Common.Helpers;
-using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
-using Edreams.OutlookMiddleware.Common.KeyVault;
-using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
 using Edreams.OutlookMiddleware.Common.Security;
 using Edreams.OutlookMiddleware.Common.Security.Interfaces;
-using Edreams.Common.AzureServiceBus._DependencyInjection;
-using Edreams.Common.Exceptions.Factories;
-using Edreams.Common.Exceptions.Factories.Interfaces;
-using Edreams.OutlookMiddleware.Common.Validation;
-using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,17 +35,14 @@ namespace Edreams.OutlookMiddleware.Api
             services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
             services.AddScoped<SecurityContextMiddleware>();
             services.AddScoped<ISecurityContext, SecurityContext>();
-            services.AddTransient(typeof(IRestHelper<>), typeof(RestHelper<>));
-            services.AddSingleton<IValidator, Validator>();
 
-            services.AddSingleton<IExchangeClientFactory, ExchangeClientFactory>();
-            services.AddSingleton<IKeyVaultClientFactory, KeyVaultClientFactory>();
-            services.AddSingleton<IExceptionFactory, ExceptionFactory>();
-
-            services.AddServiceBus();
+            services.AddCommon();
             services.AddConfiguration(_configuration);
-            services.AddControllers();
+            services.AddEdreamsLogging();
+            services.AddServiceBus();
+
             services.AddBusinessLogic();
+            services.AddControllers();
 
             services.AddSwaggerGen(c =>
             {

@@ -4,6 +4,84 @@
         <name>Edreams.OutlookMiddleware.DataTransferObjects</name>
     </assembly>
     <members>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult">
+            <summary>
+            Wrapper object used as common response type for all endpoints.
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult.CorrelationId">
+            <summary>
+            The CorrelationId copied from the response data, if any.
+            </summary>
+            <example>4ad4eb08-a9e3-4950-8a52-0ff09cfac6d8</example>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult.ElapsedMilliseconds">
+            <summary>
+            The time needed to execute the actual business logic and generate the response.
+            </summary>
+            <example>4271</example>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult.ApiVersion">
+            <summary>
+            The version of the API used.
+            </summary>
+            <example>1.0.7599.26874</example>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult.TimeStamp">
+            <summary>
+            Timestamp when the request finished.
+            </summary>
+            <example>2020-12-04T13:03:59.346006Z</example>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult.StatusCode">
+            <summary>
+            HTTP response status code.
+            </summary>
+            <example>200</example>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1">
+            <summary>
+            Wrapper object used as common response type for all endpoints which include response data.
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1.ResponseData">
+            <summary>
+            The response data wrapped by this wrapper object.
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1.ResponseType">
+            <summary>
+            The type of the response data.
+            </summary>
+            <example>Response</example>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1.#ctor">
+            <summary>
+            Default constructor needed to support deserialization
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1.#ctor(`0)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1" /> class.
+            </summary>
+            <param name="responseData">The response data that should be wrapped by this object.</param>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.ApiErrorResult">
+            <summary>
+            Wrapper object used as common response type for all endpoints which return an HTTP 500 Internal Server Error.
+            </summary>
+            <seealso cref="T:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult" />
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.ApiErrorResult.ErrorCode">
+            <summary>
+            The error code.
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.ApiErrorResult.ErrorMessage">
+            <summary>
+            The error message.
+            </summary>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.CategorizationRequest">
             <summary>
             Request class of Categorization
