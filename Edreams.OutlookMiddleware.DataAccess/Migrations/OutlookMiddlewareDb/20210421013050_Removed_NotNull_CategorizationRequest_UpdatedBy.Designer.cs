@@ -4,14 +4,16 @@ using Edreams.OutlookMiddleware.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
 {
     [DbContext(typeof(OutlookMiddlewareDbContext))]
-    partial class OutlookMiddlewareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210421013050_Removed_NotNull_CategorizationRequest_UpdatedBy")]
+    partial class Removed_NotNull_CategorizationRequest_UpdatedBy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,13 +126,6 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
 
                     b.Property<Guid?>("BatchId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EdreamsReferenceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("EmailKind")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EntryId")
                         .HasColumnType("nvarchar(max)");

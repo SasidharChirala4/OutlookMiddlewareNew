@@ -12,7 +12,6 @@ using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Mapping.Custom.Interfaces;
-using Edreams.OutlookMiddleware.Mapping.Interfaces;
 using Edreams.OutlookMiddleware.Model;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
@@ -23,8 +22,6 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IRepository<Batch> _batchRepository;
         private readonly IRepository<Email> _emailRepository;
         private readonly IRepository<File> _fileRepository;
-        private readonly IMapper<EmailRecipientDto, EmailRecipient> _emailRecipientDtoToEmailRecipientMapper;
-        private readonly IRepository<EmailRecipient> _emailRecipientRepository;
         private readonly IBatchFactory _batchFactory;
         private readonly IEmailsToEmailDetailsMapper _emailsToEmailDetailsMapper;
         private readonly IPreloadedFilesToFilesMapper _preloadedFilesToFilesMapper;
@@ -36,11 +33,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             IRepository<Batch> batchRepository,
             IRepository<Email> emailRepository,
             IRepository<File> fileRepository,
-            IRepository<EmailRecipient> emailRecipientRepository,
             IBatchFactory batchFactory,
             IEmailsToEmailDetailsMapper emailsToEmailDetailsMapper,
             IPreloadedFilesToFilesMapper preloadedFilesToFilesMapper,
-            IMapper<EmailRecipientDto, EmailRecipient> emailRecipientDtoToEmailRecipientMapper,
             ITransactionHelper transactionHelper,
             IExceptionFactory exceptionFactory)
         {
@@ -48,11 +43,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             _batchRepository = batchRepository;
             _emailRepository = emailRepository;
             _fileRepository = fileRepository;
-            _emailRecipientRepository = emailRecipientRepository;
             _batchFactory = batchFactory;
             _emailsToEmailDetailsMapper = emailsToEmailDetailsMapper;
             _preloadedFilesToFilesMapper = preloadedFilesToFilesMapper;
-            _emailRecipientDtoToEmailRecipientMapper = emailRecipientDtoToEmailRecipientMapper;
             _transactionHelper = transactionHelper;
             _exceptionFactory = exceptionFactory;
         }
@@ -124,33 +117,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 // Map the preloaded files to a list of files with relation to email and batch.
                 // Afterwards, create the files in the database. EF will automatically create
                 // the email references with that.
-                IList<File> files = _preloadedFilesToFilesMapper.Map(batch, preloadedFiles, request.UploadOption);
+                IList<File> files = _preloadedFilesToFilesMapper.Map(batch, preloadedFiles, request.UploadOption, request.EmailRecipients);
                 await _fileRepository.Create(files);
 
-                // Add email recipients for the current batch.
-                if (request.EmailRecipients != null && request.EmailRecipients.Any())
-                {
-                    // Find all the email records for the specified batch.
-                    IEnumerable<Email> batchEmails = await _emailRepository.Find(
-                        x => x.Batch.Id == request.BatchId);
-
-                    // Creates Email Recipients for each email of batch
-                    foreach (Email batchemail in batchEmails)
-                    {
-                        // Get the requested email recipients for the specified batch email.
-                        var emailRecipientsDto = request.EmailRecipients.Where(x => x.EmailId == batchemail.Id).ToList();
-
-                        // Map the list of EmailRecipientDto to list of EmailRecipients.
-                        var emailRecipients = _emailRecipientDtoToEmailRecipientMapper.Map(emailRecipientsDto);
-
-                        //ToDo: will the requested recipients contain emailid.
-                        if (emailRecipients.Any())
-                        {
-                            // Creates Email Recipients for each batch email  
-                            await _emailRecipientRepository.Create(emailRecipients);
-                        }
-                    }
-                }
 
                 // All file records for the specified batch should be marked for cleanup
                 // by setting their status to 'Committed'.

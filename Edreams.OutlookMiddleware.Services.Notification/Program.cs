@@ -52,6 +52,7 @@ namespace Edreams.OutlookMiddleware.Services.Notification
                     .ReadFrom.Configuration(hostContext.Configuration)
                     // Enrich logging with contextual properties.
                     .Enrich.FromLogContext()
+                    .Enrich.WithProperty("InsertedBy", WindowsIdentity.GetCurrent().Name)
                     // Enrich logging with deconstructed Exception properties.
                     .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                         .WithDefaultDestructurers()

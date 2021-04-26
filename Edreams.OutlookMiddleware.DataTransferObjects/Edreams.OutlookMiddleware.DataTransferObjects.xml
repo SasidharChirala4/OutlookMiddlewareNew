@@ -55,6 +55,11 @@
             </summary>
             <example>Response</example>
         </member>
+        <member name="M:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1.#ctor">
+            <summary>
+            Default constructor needed to support deserialization
+            </summary>
+        </member>
         <member name="M:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1.#ctor(`0)">
             <summary>
             Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.DataTransferObjects.ApiResult`1" /> class.

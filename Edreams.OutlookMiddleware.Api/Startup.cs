@@ -46,16 +46,13 @@ namespace Edreams.OutlookMiddleware.Api
             services.AddScoped<SecurityContextMiddleware>();
             services.AddScoped<ISecurityContext, SecurityContext>();
             services.AddTransient(typeof(IRestHelper<>), typeof(RestHelper<>));
-            services.AddSingleton<IValidator, Validator>();
-
-            services.AddSingleton<IExchangeClientFactory, ExchangeClientFactory>();
-            services.AddSingleton<IKeyVaultClientFactory, KeyVaultClientFactory>();
-            services.AddSingleton<IExceptionFactory, ExceptionFactory>();
+            
 
             services.AddEdreamsLogging();
             services.AddServiceBus();
             services.AddConfiguration(_configuration);
             services.AddControllers();
+            services.AddCommon();
             services.AddBusinessLogic();
 
             services.AddSwaggerGen(c =>

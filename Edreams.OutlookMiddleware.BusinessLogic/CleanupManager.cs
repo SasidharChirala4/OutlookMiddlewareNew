@@ -19,6 +19,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IRepository<CategorizationRequest> _categorizationRequestRepository;
         private readonly IRepository<Batch> _batchRepository;
         private readonly IRepository<Email> _emailRepository;
+        private readonly IRepository<EmailRecipient> _emailRecipientRepository;
         private readonly IRepository<File> _fileRepository;
         private readonly IFileHelper _fileHelper;
         private readonly ITransactionHelper _transactionHelper;
@@ -30,6 +31,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             IRepository<CategorizationRequest> categorizationRequestRepository,
             IRepository<Batch> batchRepository,
             IRepository<Email> emailRepository,
+            IRepository<EmailRecipient> emailRecipientRepository,
             IRepository<File> fileRepository,
             IFileHelper fileHelper,
             ITransactionHelper transactionHelper,
@@ -40,6 +42,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             _categorizationRequestRepository = categorizationRequestRepository;
             _batchRepository = batchRepository;
             _emailRepository = emailRepository;
+            _emailRecipientRepository = emailRecipientRepository;
             _fileRepository = fileRepository;
             _fileHelper = fileHelper;
             _transactionHelper = transactionHelper;
@@ -150,6 +153,13 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 // Remove the expired transaction and the related
                 // batch, emails and files from the database
                 _ = await _fileRepository.Delete(files.Select(f => f.Id).ToList());
+
+                // Get list of all Email Recipients
+                var emailRecipients = await _emailRecipientRepository.FindAndProject(
+                    x => emailIds.Contains(x.Email.Id), emailRecipient => emailRecipient.Id);
+                // Remove email recipients
+                _ = await _emailRecipientRepository.Delete(emailRecipients);
+                // Remove emails
                 _ = await _emailRepository.Delete(emailIds);
                 _ = await _batchRepository.Delete(batchId);
                 _ = await _transactionHistoryRepository.Delete(historicTransaction);

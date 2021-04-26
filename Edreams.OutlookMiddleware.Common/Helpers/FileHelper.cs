@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security;
 using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Common.Helpers
 {
     public class FileHelper : IFileHelper
     {
-        private readonly IExceptionFactory _exceptionFactory;
 
-        public FileHelper(IExceptionFactory exceptionFactory)
+        public FileHelper()
         {
-            _exceptionFactory = exceptionFactory;
         }
 
         /// <summary>
@@ -173,7 +170,10 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
         {
             foreach (string filePath in filesPath)
             {
-                await DeleteFile(filePath);
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    await DeleteFile(filePath);
+                }
             }
         }
     }
