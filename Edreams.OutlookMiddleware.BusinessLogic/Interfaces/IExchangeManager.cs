@@ -10,7 +10,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
     public interface IExchangeManager
     {
         Task<GetSharedMailBoxResponse> GetSharedMailBox();
-        Task<SharedMailBoxDto> FindSharedMailBoxEmail(Guid sharedMailBoxMailId);
+        Task<SentEmailDto> FindSharedMailBoxEmail(Guid sharedMailBoxMailId);
         Task DeleteSharedMailBoxMails(List<Guid> sharedMailBoxMailIds);
     }
 }

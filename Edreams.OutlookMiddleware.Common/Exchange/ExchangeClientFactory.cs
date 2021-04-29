@@ -24,6 +24,18 @@ namespace Edreams.OutlookMiddleware.Common.Exchange
             return new ExchangeClient(exchangeService, exchangeClientToken, clientOptions);
         }
 
+        public async Task<ExchangeService> AuthenticateAndCreateService(ExchangeClientOptions clientOptions)
+        {
+            ExchangeClientToken exchangeClientToken = await GetAuthenticationToken(clientOptions);
+            ExchangeService exchangeService = new ExchangeService
+            {
+                Credentials = new OAuthCredentials(exchangeClientToken.AccessToken),
+                Url = new Uri(clientOptions.WebUri)
+            };
+
+            return exchangeService;
+        }
+
         private async Task<ExchangeClientToken> GetAuthenticationToken(ExchangeClientOptions clientOptions)
         {
             StringBuilder formDataBuilder = new StringBuilder();

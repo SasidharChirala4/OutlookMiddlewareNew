@@ -20,7 +20,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         private readonly IFileManager _fileManager;
         private readonly IExtensibilityManager _extensibilityManager;
         private readonly ITransactionQueueManager _transactionQueueManager;
-        private readonly IExchangeManager _exchangeManager;
+        private readonly IConfigurationManager _configurationManager;
         private readonly IFileHelper _fileHelper;
         private readonly IExceptionFactory _exceptionFactory;
         private readonly IEdreamsLogger<UploadEngineProcessor> _logger;
@@ -29,7 +29,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             IBatchManager batchManager, IEmailManager emailManager,
             IFileManager fileManager, IExtensibilityManager extensibilityManager,
             ITransactionQueueManager transactionQueueManager, IFileHelper fileHelper,
-            IExchangeManager exchangeManager,
+            IConfigurationManager configurationManager,
             IExceptionFactory exceptionFactory, IEdreamsLogger<UploadEngineProcessor> logger)
         {
             _batchManager = batchManager;
@@ -37,7 +37,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             _fileManager = fileManager;
             _extensibilityManager = extensibilityManager;
             _transactionQueueManager = transactionQueueManager;
-            _exchangeManager = exchangeManager;
+            _configurationManager = configurationManager;
             _fileHelper = fileHelper;
             _exceptionFactory = exceptionFactory;
             _logger = logger;
@@ -59,103 +59,52 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 foreach (EmailDetailsDto emailDetails in batchDetails.Emails)
                 {
                     int numberOfSuccessfullyUploadedFiles = 0;
+                    // Get sent email details from shared mail box
+                    SentEmailDto sentEmailDetails = await GetSentEmailDetails(emailDetails);
 
-                    // check if the Email is sent email and EdreamsReferenceId is not empty
-                    if (emailDetails.EmailKind == EmailKind.Sent && emailDetails.EdreamsReferenceId != Guid.Empty)
+                    // Loop through all the files that are part of this email.
+                    foreach (FileDetailsDto fileDetails in emailDetails.Files)
                     {
-                        // Get the sent emails details from the exchange service.
-                        SharedMailBoxDto shredMailBoxEmail = await _exchangeManager.FindSharedMailBoxEmail(emailDetails.EdreamsReferenceId);
-                        if (shredMailBoxEmail != null)
+                        try
                         {
-                            emailDetails.InternetMessageId = shredMailBoxEmail.InternetMessageId;
-                            // Update internetMessageId, EwsId for email
-                            await _emailManager.UpdateEmailInternetMessageId(emailDetails.Id,
-                                shredMailBoxEmail.InternetMessageId, shredMailBoxEmail.EwsId);
-                        }
-                        else // throw an exception if mail not found in SharedMailBox
-                        {
-                            _logger.LogError(new FileNotFoundException(), string.Format("Email '{0}' not found in SharedMailBox!", emailDetails.EdreamsReferenceId));
-                            // set Email status to failed.
-                            await _emailManager.UpdateEmailStatus(emailDetails.Id, EmailStatus.Failed);
-                            continue;
-                        }
-                        // Loop through all the files that are part of this email.
-                        foreach (FileDetailsDto fileDetails in emailDetails.Files)
-                        {
-                            try
+                            //Skip the files that are not matched with upload option.
+                            if (!IsFileSkipped(emailDetails.UploadOption, fileDetails.Kind))
                             {
-                                //Skip the files that are not matched with upload option.
-                                if (!IsFileSkipped(emailDetails.UploadOption, fileDetails.Kind))
+                                // check if the Email is sent email.
+                                if (emailDetails.EmailKind == EmailKind.Sent)
                                 {
-                                    // check if the Email is sent email and found in sharedmailbox
-                                    if (emailDetails.EmailKind == EmailKind.Sent && shredMailBoxEmail != null)
+                                    byte[] itemBytes = GetFileData(emailDetails, fileDetails, sentEmailDetails);
+                                    if (itemBytes != null)
                                     {
-                                        byte[] itemBytes = null;
-                                        // if file kind is Attachment then download from exhange service.
-                                        if (fileDetails.Kind == FileKind.Attachment)
-                                        {
-                                            // if shredMailBoxEmail does not have any attchments then throw exception.
-                                            if (shredMailBoxEmail.Attachments?.Any() != true)
-                                            {
-                                                _logger.LogWarning($"Unable to read attachments for mail [{emailDetails.Id}] from SharedMailBox!");
-                                            }
-                                            else
-                                            {
-                                                string attachmentName = $"{fileDetails.Name}";
-                                                // Find attachment related to file details
-                                                var sharedMailBoxAttachment = shredMailBoxEmail.Attachments.SingleOrDefault(x => x.Name.Equals(attachmentName, StringComparison.OrdinalIgnoreCase));
-                                                if (sharedMailBoxAttachment?.Data != null)
-                                                {
-                                                    itemBytes = sharedMailBoxAttachment.Data;
-                                                    // Process the file based on downloaded sharedmailbox attachment.
-                                                    string absoluteFileUrl = await ProcessShredMailBoxFile(itemBytes, fileDetails.Name);
-                                                }
-                                                else
-                                                {
-                                                    _logger.LogWarning($"Unable to find attachments [{fileDetails.Name}] for mail [{emailDetails.Id}] from SharedMailBox!");
-                                                }
-                                            }
-                                        }
-                                        else  // if file kind is Email then download from exhange service.
-                                        {
-                                            if (shredMailBoxEmail.Data != null)
-                                            {
-                                                itemBytes = shredMailBoxEmail.Data ?? null;
-                                                // Process the file based on downloaded sharedmailbox email.
-                                                string absoluteFileUrl = await ProcessShredMailBoxFile(itemBytes, fileDetails.Name);
-                                            }
-                                            else
-                                            {
-                                                _logger.LogWarning($"Unable to download email [{fileDetails.Name}] for mail [{emailDetails.InternetMessageId}] from SharedMailBox!");
-                                            }
-                                        }
+                                        // Process the file based on downloaded sharedmailbox email.
+                                        string absoluteFileUrl = await ProcessShredMailBoxFile(itemBytes, fileDetails.Name);
                                     }
-                                    else
-                                    {
-                                        // Process the file based on the file details.
-                                        string absoluteFileUrl = await ProcessFile(fileDetails);
-                                    }
-                                    // TODO: Update absolute file URL in database as part of metadata PBI.
-
-                                    // Set the file status to be successfully uploaded and
-                                    // increase the number of successfully uploaded files.
-                                    await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
-                                    numberOfSuccessfullyUploadedFiles++;
                                 }
                                 else
                                 {
-                                    // Set the file status to be skipped if file kind doesnot match with upload option.
-                                    await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Skipped);
+                                    // Process the file based on the file details.
+                                    string absoluteFileUrl = await ProcessFile(fileDetails);
                                 }
+                                // TODO: Update absolute file URL in database as part of metadata PBI.
+
+                                // Set the file status to be successfully uploaded and
+                                // increase the number of successfully uploaded files.
+                                await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
+                                numberOfSuccessfullyUploadedFiles++;
                             }
-                            catch
+                            else
                             {
-                                // Set the file status to failed to upload.
-                                await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.FailedToUpload);
+                                // Set the file status to be skipped if file kind doesnot match with upload option.
+                                await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Skipped);
                             }
                         }
-
+                        catch
+                        {
+                            // Set the file status to failed to upload.
+                            await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.FailedToUpload);
+                        }
                     }
+
                     // Determine the email status by comparing the number of successful uploads and the total number of files.
                     EmailStatus emailStatus = CalculateEmailStatus(emailDetails.Files.Count, numberOfSuccessfullyUploadedFiles);
 
@@ -190,7 +139,70 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         }
 
         #region <| Helper Methods |>
+        private async Task<SentEmailDto> GetSentEmailDetails(EmailDetailsDto emailDetails)
+        {
+            // Check if the email is sent email and EdreamsReferenceId is not empty
+            if (emailDetails.EmailKind == EmailKind.Sent && emailDetails.EdreamsReferenceId != Guid.Empty)
+            {
+                // Get the sent emails details from the exchange service.
+                SentEmailDto sentEmailDetails = await _configurationManager.GetSharedMailBoxEmail(emailDetails.EdreamsReferenceId);
+                if (sentEmailDetails != null)
+                {
+                    emailDetails.InternetMessageId = sentEmailDetails.InternetMessageId;
+                    // Update internetMessageId, EwsId for email
+                    await _emailManager.UpdateEmailInternetMessageId(emailDetails.Id,
+                        sentEmailDetails.InternetMessageId, sentEmailDetails.EwsId);
+                    return sentEmailDetails;
+                }
+                else // throw an exception if mail not found in SharedMailBox
+                {
+                    _logger.LogError(new FileNotFoundException(), string.Format("Email '{0}' not found in SharedMailBox!", emailDetails.EdreamsReferenceId));
+                    // set Email status to failed.
+                    await _emailManager.UpdateEmailStatus(emailDetails.Id, EmailStatus.Failed);
+                }
+            }
+            return new SentEmailDto();
+        }
 
+        private byte[] GetFileData(EmailDetailsDto emailDetails, FileDetailsDto fileDetails, SentEmailDto sentEmailDetails)
+        {
+            if (fileDetails.Kind == FileKind.Attachment)
+            {
+                // If sentemail does not have any attchments then throw exception.
+                if (sentEmailDetails.Attachments?.Any() != true)
+                {
+                    _logger.LogWarning($"Unable to read attachments for mail [{emailDetails.Id}] from SharedMailBox!");
+                }
+                else
+                {
+                    string attachmentName = $"{fileDetails.Name}";
+                    // Find attachment related to file details
+                    var sharedMailBoxAttachment = sentEmailDetails.Attachments.SingleOrDefault(x => x.Name.Equals(attachmentName, StringComparison.OrdinalIgnoreCase));
+                    if (sharedMailBoxAttachment?.Data != null)
+                    {
+                        fileDetails.Name = sharedMailBoxAttachment.Name;
+                        return sharedMailBoxAttachment.Data;
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"Unable to find attachments [{fileDetails.Name}] for mail [{emailDetails.Id}] from SharedMailBox!");
+                    }
+                }
+            }
+            else  // if file kind is Email
+            {
+                if (sentEmailDetails.Data != null)
+                {
+                    fileDetails.Name = sentEmailDetails.Subject;
+                    return sentEmailDetails.Data;
+                }
+                else
+                {
+                    _logger.LogWarning($"Unable to download file [{fileDetails.Name}] for mail [{emailDetails.Id}] from SharedMailBox!");
+                }
+            }
+            return null;
+        }
         private async Task<string> ProcessFile(FileDetailsDto fileDetails)
         {
             try
@@ -200,7 +212,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
                 // Upload the file to e-DReaMS.
                 // TODO: Get the site URL and folder from metadata.
-                string absoluteFileUrl = await _extensibilityManager.UploadFile(fileData, null, null, fileDetails.Name, true);
+                string absoluteFileUrl = await _extensibilityManager.UploadFile(fileData, "https://edreams4-t.be.deloitte.com/Sites/42k21cf7", "https://edreams4-t.be.deloitte.com/Sites/42k21cf7/42k240mr/AllDocuments/Correspondence", fileDetails.Name, true);
 
                 return absoluteFileUrl;
             }
@@ -217,7 +229,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             {
                 // Upload the file to e-DReaMS.
                 // TODO: Get the site URL and folder from metadata.
-                string absoluteFileUrl = await _extensibilityManager.UploadFile(fileData, null, null, fileName, true);
+                string absoluteFileUrl = await _extensibilityManager.UploadFile(fileData, "https://edreams4-t.be.deloitte.com/Sites/42k21cf7", "https://edreams4-t.be.deloitte.com/Sites/42k21cf7/42k240mr/AllDocuments/Correspondence", fileName, true);
 
                 return absoluteFileUrl;
             }

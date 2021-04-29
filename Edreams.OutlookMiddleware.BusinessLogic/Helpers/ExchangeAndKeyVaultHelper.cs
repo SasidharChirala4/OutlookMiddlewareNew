@@ -10,7 +10,7 @@ using Edreams.OutlookMiddleware.Common.Exchange;
 using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
 using Edreams.OutlookMiddleware.Common.KeyVault;
 using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
-
+using Microsoft.Exchange.WebServices.Data;
 namespace Edreams.OutlookMiddleware.BusinessLogic.Helpers
 {
     public class ExchangeAndKeyVaultHelper : IExchangeAndKeyVaultHelper
@@ -104,6 +104,50 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Helpers
             }
         }
 
+        /// <summary>
+        /// Create exchange service, authenticate using data from Azure KeyVault 
+        /// </summary>
+        /// <param name="keyVaultClient"></param>
+        /// <returns>ExchangeService</returns>
+        public async Task<ExchangeService> CreateExchangeService(IKeyVaultClient keyVaultClient)
+        {
+            try
+            {
+                ExchangeClientOptions exchangeClientOptions = new ExchangeClientOptions
+                {
+                    Authority = _configuration.ExchangeAuthority,
+                    Resource = _configuration.ExchangeResourceId,
+                    ClientId = _configuration.ExchangeClientId,
+                    WebUri = _configuration.ExchangeOnlineServer,
+                    UserName = await keyVaultClient.GetSecret(_configuration.SharedMailBoxUserNameSecret),
+                    Password = await keyVaultClient.GetSecret(_configuration.SharedMailBoxPasswordSecret)
+                };
+
+                return await _exchangeClientFactory.AuthenticateAndCreateService(exchangeClientOptions);
+            }
+            catch (AggregateException aggregateException)
+            {
+                aggregateException.Handle(ex =>
+                {
+                    if (ex is RequestFailedException)
+                    {
+                        throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.KEYVAULT_REQUEST_FAULT, ex);
+                    }
+
+                    return false;
+                });
+
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, aggregateException);
+            }
+            catch (AuthenticationFailedException ex)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.KEYVAULT_AUTHENTICATION_FAULT, ex);
+            }
+            catch (Exception ex)
+            {
+                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, ex);
+            }
+        }
         #endregion
     }
 }
