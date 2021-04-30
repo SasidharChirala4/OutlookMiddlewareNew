@@ -212,7 +212,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
                 // Upload the file to e-DReaMS.
                 // TODO: Get the site URL and folder from metadata.
-                string absoluteFileUrl = await _extensibilityManager.UploadFile(fileData, "https://edreams4-t.be.deloitte.com/Sites/42k21cf7", "https://edreams4-t.be.deloitte.com/Sites/42k21cf7/42k240mr/AllDocuments/Correspondence", fileDetails.Name, true);
+                string absoluteFileUrl = await _extensibilityManager.UploadFile(fileData, null, null, fileDetails.Name, true);
 
                 return absoluteFileUrl;
             }
@@ -229,7 +229,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             {
                 // Upload the file to e-DReaMS.
                 // TODO: Get the site URL and folder from metadata.
-                string absoluteFileUrl = await _extensibilityManager.UploadFile(fileData, "https://edreams4-t.be.deloitte.com/Sites/42k21cf7", "https://edreams4-t.be.deloitte.com/Sites/42k21cf7/42k240mr/AllDocuments/Correspondence", fileName, true);
+                string absoluteFileUrl = await _extensibilityManager.UploadFile(fileData, null, null, fileName, true);
 
                 return absoluteFileUrl;
             }
