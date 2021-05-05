@@ -3,7 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Edreams.Common.Exceptions.Factories.Interfaces;
+using Edreams.Common.Exchange.Contracts;
+using Edreams.Common.Exchange.Interfaces;
+using Edreams.Common.KeyVault.Interfaces;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Constants;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
@@ -20,8 +24,8 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         private readonly IFileManager _fileManager;
         private readonly IExtensibilityManager _extensibilityManager;
         private readonly ITransactionQueueManager _transactionQueueManager;
-        private readonly IConfigurationManager _configurationManager;
         private readonly IFileHelper _fileHelper;
+        private readonly IExchangeAndKeyVaultHelper _exchangeAndKeyVaultHelper;
         private readonly IExceptionFactory _exceptionFactory;
         private readonly IEdreamsLogger<UploadEngineProcessor> _logger;
 
@@ -29,16 +33,16 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             IBatchManager batchManager, IEmailManager emailManager,
             IFileManager fileManager, IExtensibilityManager extensibilityManager,
             ITransactionQueueManager transactionQueueManager, IFileHelper fileHelper,
-            IConfigurationManager configurationManager, IExceptionFactory exceptionFactory, 
-            IEdreamsLogger<UploadEngineProcessor> logger)
+            IExchangeAndKeyVaultHelper exchangeAndKeyVaultHelper,
+            IExceptionFactory exceptionFactory, IEdreamsLogger<UploadEngineProcessor> logger)
         {
             _batchManager = batchManager;
             _emailManager = emailManager;
             _fileManager = fileManager;
             _extensibilityManager = extensibilityManager;
             _transactionQueueManager = transactionQueueManager;
-            _configurationManager = configurationManager;
             _fileHelper = fileHelper;
+            _exchangeAndKeyVaultHelper = exchangeAndKeyVaultHelper;
             _exceptionFactory = exceptionFactory;
             _logger = logger;
         }
@@ -47,6 +51,12 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         {
             Guid transactionId = transactionMessage.TransctionId;
             Guid batchId = transactionMessage.BatchId;
+
+            // Create a client for Azure KeyVault, authenticated using the appsettings.json settings.
+            IKeyVaultClient keyVaultClient = _exchangeAndKeyVaultHelper.CreateKeyVaultClient();
+
+            // Create a client for EWS, authenticated using data from Azure KeyVault.
+            IExchangeClient exchangeClient = await _exchangeAndKeyVaultHelper.CreateExchangeClient(keyVaultClient);
 
             try
             {
@@ -61,7 +71,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                     int numberOfSuccessfullyUploadedFiles = 0;
 
                     // Get sent email details from shared mailbox, or null if the email is not of type: "Sent".
-                    SentEmailDto sentEmailDetails = await GetSentEmailDetails(emailDetails);
+                    ExchangeEmail sentEmailDetails = await GetSentEmailDetails(emailDetails, exchangeClient);
 
                     // Loop through all the files that are part of this email.
                     foreach (FileDetailsDto fileDetails in emailDetails.Files)
@@ -128,13 +138,13 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
         #region <| Helper Methods |>
 
-        private async Task<SentEmailDto> GetSentEmailDetails(EmailDetailsDto emailDetails)
+        private async Task<ExchangeEmail> GetSentEmailDetails(EmailDetailsDto emailDetails, IExchangeClient exchangeClient)
         {
             // Check if the email is sent email and EdreamsReferenceId is not empty
             if (emailDetails.EmailKind == EmailKind.Sent && emailDetails.EdreamsReferenceId != Guid.Empty)
             {
                 // Get the sent emails details from the exchange service.
-                SentEmailDto sentEmailDetails = await _configurationManager.GetSharedMailBoxEmail(emailDetails.EdreamsReferenceId);
+                ExchangeEmail sentEmailDetails = await exchangeClient.FindEmailByExtendedProperty("EdreamsReferenceId", $"{emailDetails.EdreamsReferenceId}");
 
                 if (sentEmailDetails != null)
                 {
@@ -142,7 +152,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
                     // Update internetMessageId, EwsId for email
                     await _emailManager.UpdateEmailInternetMessageId(emailDetails.Id, sentEmailDetails.InternetMessageId, sentEmailDetails.EwsId);
-                    
+
                     return sentEmailDetails;
                 }
 
@@ -156,7 +166,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             return null;
         }
 
-        private byte[] GetFileData(SentEmailDto sentEmail, FileDetailsDto fileDetails)
+        private byte[] GetFileData(ExchangeEmail sentEmail, FileDetailsDto fileDetails)
         {
             if (fileDetails.Kind == FileKind.Email)
             {
@@ -166,7 +176,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
             if (fileDetails.Kind == FileKind.Attachment)
             {
-                SentEmailAttachmentDto attachment = sentEmail.Attachments.SingleOrDefault(x => x.Name == fileDetails.Name);
+                ExchangeAttachement attachment = sentEmail.Attachments.SingleOrDefault(x => x.Name == fileDetails.Name);
                 if (attachment != null)
                 {
                     fileDetails.Name = attachment.Name;
@@ -177,7 +187,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             return null;
         }
 
-        private async Task<string> ProcessFile(EmailDetailsDto emailDetails, SentEmailDto sentEmail, FileDetailsDto fileDetails)
+        private async Task<string> ProcessFile(EmailDetailsDto emailDetails, ExchangeEmail sentEmail, FileDetailsDto fileDetails)
         {
             try
             {

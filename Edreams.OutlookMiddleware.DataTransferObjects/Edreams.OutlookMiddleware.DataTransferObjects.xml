@@ -206,51 +206,6 @@
             EmailId
             </summary>
         </member>
-        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.SentEmailDto">
-            <summary>
-            SentEmailDto
-            </summary>
-        </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.SentEmailDto.NotFound">
-            <summary>
-            NotFound
-            </summary>
-        </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.SentEmailDto.IsFound">
-            <summary>
-            IsFound
-            </summary>
-        </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.SentEmailDto.Subject">
-            <summary>
-            Subject
-            </summary>
-        </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.SentEmailDto.InternetMessageId">
-            <summary>
-            InternetMessageId
-            </summary>
-        </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.SentEmailDto.EwsId">
-            <summary>
-            EwsId
-            </summary>
-        </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.SentEmailDto.Data">
-            <summary>
-            Data
-            </summary>
-        </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.SentEmailDto.Attachments">
-            <summary>
-            Attachments
-            </summary>
-        </member>
-        <member name="M:Edreams.OutlookMiddleware.DataTransferObjects.SentEmailDto.#ctor">
-            <summary>
-            Constructor
-            </summary>
-        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.TransactionDto">
             <summary>
             Contract that represents a transaction.
