@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Edreams.Common.DataAccess;
+using Edreams.Common.DataAccess.Interfaces;
+using Edreams.Common.Exceptions;
 using Edreams.Common.Logging.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Constants;
-using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Validation;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Helpers;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Mapping;
 using Edreams.OutlookMiddleware.Model;
@@ -41,7 +41,8 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
-                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator);
+                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, 
+                loggerMock.Object, emailRepositoryMock.Object, validator);
 
             // Prepare a request to use for when calling the "GetPendingCategories" method.
             CategorizationRequestEntity categorizationRequest = new CategorizationRequestEntity()

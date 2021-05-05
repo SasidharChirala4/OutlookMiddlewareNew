@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Edreams.Common.DataAccess.Interfaces;
+using Edreams.Common.Exceptions;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exceptions;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Model;

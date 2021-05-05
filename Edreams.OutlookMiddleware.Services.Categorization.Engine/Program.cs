@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Security;
 using System.Security.Principal;
 using Edreams.Common.AzureServiceBus._DependencyInjection;
 using Edreams.Common.Logging._DependencyInjection;
+using Edreams.Common.Security._DependencyInjection;
 using Edreams.OutlookMiddleware.BusinessLogic;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common._DependencyInjection;
-using Edreams.OutlookMiddleware.Common.Security;
-using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.Services.Categorization.Engine.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,11 +39,8 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
                 })
                 .ConfigureServices((hostBuilder, services) =>
                 {
-                    ISecurityContext securityContext = new SecurityContext();
-                    securityContext.RefreshCorrelationId();
-                    securityContext.SetUserIdentity(WindowsIdentity.GetCurrent());
-                    services.AddSingleton(_ => securityContext);
-                    LogContext.PushProperty("CorrelationId", securityContext.CorrelationId);
+                    Guid correlationId = services.AddEdreamsSecurity(WindowsIdentity.GetCurrent());
+                    LogContext.PushProperty("CorrelationId", correlationId);
                     services.AddCommon();
                     services.AddEdreamsLogging();
                     services.AddConfiguration(hostBuilder.Configuration);

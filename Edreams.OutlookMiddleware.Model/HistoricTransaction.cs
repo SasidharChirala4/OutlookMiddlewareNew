@@ -1,6 +1,7 @@
 ﻿using System;
+using Edreams.Common.DataAccess.Model;
+using Edreams.Common.DataAccess.Model.Interfaces;
 using Edreams.OutlookMiddleware.Enums;
-using Edreams.OutlookMiddleware.Model.Base;
 using Edreams.OutlookMiddleware.Model.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Model

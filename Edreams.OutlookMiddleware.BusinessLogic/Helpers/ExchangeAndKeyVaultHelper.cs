@@ -2,14 +2,15 @@
 using System.Threading.Tasks;
 using Azure;
 using Azure.Identity;
+using Edreams.Common.Exceptions.Constants;
+using Edreams.Common.Exceptions.Factories.Interfaces;
+using Edreams.Common.Exchange;
+using Edreams.Common.Exchange.Interfaces;
+using Edreams.Common.KeyVault;
+using Edreams.Common.KeyVault.Constants;
+using Edreams.Common.KeyVault.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exceptions;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exchange;
-using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
-using Edreams.OutlookMiddleware.Common.KeyVault;
-using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic.Helpers
 {
@@ -60,7 +61,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Helpers
             }
             catch (Exception ex)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault, ex);
             }
         }
 
@@ -86,21 +87,21 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Helpers
                 {
                     if (ex is RequestFailedException)
                     {
-                        throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.KEYVAULT_REQUEST_FAULT, ex);
+                        throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsKeyVaultExceptionCode.KeyVaultRequestFault, ex);
                     }
 
                     return false;
                 });
 
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, aggregateException);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault, aggregateException);
             }
             catch (AuthenticationFailedException ex)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.KEYVAULT_AUTHENTICATION_FAULT, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsKeyVaultExceptionCode.KeyVaultAuthenticationFault, ex);
             }
             catch (Exception ex)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault, ex);
             }
         }
 

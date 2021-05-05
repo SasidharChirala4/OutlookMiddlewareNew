@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
-using Edreams.OutlookMiddleware.Api.Helpers;
+using Edreams.Common.Web;
+using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -27,9 +27,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="transactionQueueManager">The transaction queue manager.</param>
         /// <param name="logger">The logger.</param>
-        public TransactionsController(
-            ITransactionQueueManager transactionQueueManager, IEdreamsLogger<TransactionsController> logger)
-            : base(transactionQueueManager, logger) { }
+        public TransactionsController(ITransactionQueueManager transactionQueueManager,
+            IEdreamsLogger<TransactionsController> logger) : base(transactionQueueManager, logger) { }
 
         /// <summary>
         /// Gets some statistics about the Azure ServiceBus transaction queue.
@@ -42,9 +41,9 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [HttpGet("queue/statistics")]
         [SwaggerResponse(200, "Successfully returns a GetTransactionQueueStatisticsResponse object.", typeof(ApiResult<GetTransactionQueueStatisticsResponse>))]
         [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
-        public async Task<IActionResult> GetTransactionQueueStatistics()
+        public Task<IActionResult> GetTransactionQueueStatistics()
         {
-            return await ExecuteManager(manager => manager.GetTransactionQueueStatistics());
+            return ExecuteManager(manager => manager.GetTransactionQueueStatistics());
         }
     }
 }

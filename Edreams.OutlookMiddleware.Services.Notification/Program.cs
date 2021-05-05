@@ -1,9 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Security.Principal;
 using Edreams.Common.Logging._DependencyInjection;
+using Edreams.Common.Security._DependencyInjection;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common._DependencyInjection;
-using Edreams.OutlookMiddleware.Common.Security;
-using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,9 +16,6 @@ using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Sinks.MSSqlServer;
 using Serilog.Sinks.MSSqlServer.Sinks.MSSqlServer.Options;
-using System.Collections.Generic;
-using System.Data;
-using System;
 namespace Edreams.OutlookMiddleware.Services.Notification
 {
     public class Program
@@ -34,11 +33,8 @@ namespace Edreams.OutlookMiddleware.Services.Notification
                 })
                 .ConfigureServices((hostBuilder, services) =>
                 {
-                    ISecurityContext securityContext = new SecurityContext();
-                    securityContext.RefreshCorrelationId();
-                    securityContext.SetUserIdentity(WindowsIdentity.GetCurrent());
-                    services.AddSingleton(_ => securityContext);
-                    LogContext.PushProperty("CorrelationId", securityContext.CorrelationId);
+                    Guid correlationId = services.AddEdreamsSecurity(WindowsIdentity.GetCurrent());
+                    LogContext.PushProperty("CorrelationId", correlationId);
                     services.AddCommon();
                     services.AddEdreamsLogging();
                     services.AddConfiguration(hostBuilder.Configuration);

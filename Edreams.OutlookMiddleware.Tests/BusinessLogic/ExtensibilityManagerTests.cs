@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Edreams.Common.Exceptions;
 using Edreams.Common.Logging.Interfaces;
 using Edreams.Contracts.Data.Common;
 using Edreams.Contracts.Data.Extensibility;
 using Edreams.OutlookMiddleware.BusinessLogic;
 using Edreams.OutlookMiddleware.Common.Constants;
-using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.Common.Validation;
 using Edreams.OutlookMiddleware.Common.Validation.Interface;

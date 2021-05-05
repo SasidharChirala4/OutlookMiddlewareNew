@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Security.Principal;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -7,10 +11,6 @@ using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Sinks.MSSqlServer;
 using Serilog.Sinks.MSSqlServer.Sinks.MSSqlServer.Options;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Security.Principal;
 
 namespace Edreams.OutlookMiddleware.Api
 {
@@ -90,6 +90,5 @@ namespace Edreams.OutlookMiddleware.Api
 
             return columnOptions;
         }
-
     }
 }

@@ -185,11 +185,10 @@
             Group of endpoints that are related to getting the status for this e-DReaMS Outlook Middleware HTTP API.
             </summary>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IStatusManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.StatusController},Edreams.OutlookMiddleware.Common.Configuration.Interfaces.IEdreamsConfiguration)">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IStatusManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.StatusController})">
             <summary>Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.StatusController" /> class.</summary>
             <param name="statusManager">The status manager.</param>
             <param name="logger">The logger.</param>
-            <param name="configuration">The configuration.</param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.Status">
             <summary>
@@ -224,38 +223,6 @@
             retrieves statistics like number of active messages, number of scheduled messages and
             number of dead lettered messages.
             </remarks>
-        </member>
-        <member name="T:Edreams.OutlookMiddleware.Api.Helpers.ApiController">
-            <summary>
-            Base class for all the Controllers
-            </summary>
-        </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Helpers.ApiController.Success">
-            <summary>
-            Success Method
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:Edreams.OutlookMiddleware.Api.Helpers.ApiController`2">
-            <summary>
-            Base Api controller with TManager
-            </summary>
-            <typeparam name="TController"></typeparam>
-            <typeparam name="TManager"></typeparam>
-        </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Helpers.ApiController`2.#ctor(`1,Edreams.Common.Logging.Interfaces.IEdreamsLogger{`0})">
-            <summary>Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Helpers.ApiController`2" /> class.</summary>
-            <param name="manager">The manager.</param>
-            <param name="logger">The logger.</param>
-        </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Helpers.ApiController`2.ExecuteManager``1(System.Func{`1,System.Threading.Tasks.Task{``0}})">
-            <summary>
-            This method executes a method on the Manager that is associated with this ApiController<typeparamref name="TManager"/>.
-            Based on the response from the Manager, it will return an IActionResult that is an HTTP status code like 200, 404, 500, ...
-            </summary>
-            <typeparam name="TResponse">The type of the response. This can be inferred from the <paramref name="managerCall"/></typeparam>
-            <param name="managerCall">A delegate to the method on the Manager that needs to be called.</param>
-            <returns>An IActionResult that contains the response data and the appropriate HTTP status code.</returns>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Program.BuildSerilogSqlSinkColumnOptions">
             <summary>

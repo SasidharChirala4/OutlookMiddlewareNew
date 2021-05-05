@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Helpers;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
-using Edreams.OutlookMiddleware.Model.Base;
+using Edreams.Common.DataAccess;
+using Edreams.Common.DataAccess.Interfaces;
+using Edreams.Common.DataAccess.Model;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Moq.Language.Flow;

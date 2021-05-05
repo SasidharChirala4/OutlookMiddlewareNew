@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Edreams.Common.DataAccess.Interfaces;
+using Edreams.Common.Exceptions;
+using Edreams.Common.Exceptions.Constants;
+using Edreams.Common.Exceptions.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exceptions;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
+using Edreams.OutlookMiddleware.Common.Constants;
+using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
@@ -26,6 +29,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IEmailsToEmailDetailsMapper _emailsToEmailDetailsMapper;
         private readonly IPreloadedFilesToFilesMapper _preloadedFilesToFilesMapper;
         private readonly ITransactionHelper _transactionHelper;
+        private readonly IValidator _validator;
         private readonly IExceptionFactory _exceptionFactory;
 
         public BatchManager(
@@ -37,6 +41,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             IEmailsToEmailDetailsMapper emailsToEmailDetailsMapper,
             IPreloadedFilesToFilesMapper preloadedFilesToFilesMapper,
             ITransactionHelper transactionHelper,
+            IValidator validator,
             IExceptionFactory exceptionFactory)
         {
             _preloadedFilesRepository = preloadedFilesRepository;
@@ -47,6 +52,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             _emailsToEmailDetailsMapper = emailsToEmailDetailsMapper;
             _preloadedFilesToFilesMapper = preloadedFilesToFilesMapper;
             _transactionHelper = transactionHelper;
+            _validator = validator;
             _exceptionFactory = exceptionFactory;
         }
 
@@ -58,7 +64,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // Throw an exception if a batch with specified unique ID cannot be found.
             if (batch == null)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.OUTLOOKMIDDLEWARE_BATCH_NOT_FOUND);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsOutlookMiddlewareExceptionCode.OutlookMiddlewareBatchNotFound);
             }
 
             // Fetch all emails that are related to the specified batch and include the referenced files.
@@ -82,7 +88,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
             if (batch == null)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.OUTLOOKMIDDLEWARE_BATCH_NOT_FOUND);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsOutlookMiddlewareExceptionCode.OutlookMiddlewareBatchNotFound);
             }
 
             batch.Status = status;
@@ -90,8 +96,12 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             await _batchRepository.Update(batch);
         }
 
-        public async Task<CommitBatchResponse> CommitBatch(CommitBatchRequest request)
+        public async Task<CommitBatchResponse> CommitBatch(Guid batchId, CommitBatchRequest request)
         {
+            // Validate the batch identifier.
+            _validator.Validate<EdreamsValidationException>(() => batchId == request.BatchId,
+                "There is a 'BatchId' mismatch for route and request.");
+
             // Create response object contains information about the committed batch
             CommitBatchResponse response = new CommitBatchResponse();
 
@@ -142,8 +152,12 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             return response;
         }
 
-        public async Task<CancelBatchResponse> CancelBatch(CancelBatchRequest request)
+        public async Task<CancelBatchResponse> CancelBatch(Guid batchId, CancelBatchRequest request)
         {
+            // Validate the batch identifier.
+            _validator.Validate<EdreamsValidationException>(() => batchId == request.BatchId,
+                "There is a 'BatchId' mismatch for route and request.");
+
             // Find all the file records that have been preloaded for the specified batch.
             var preloadedFiles = await _preloadedFilesRepository.Find(
                 x => x.BatchId == request.BatchId);

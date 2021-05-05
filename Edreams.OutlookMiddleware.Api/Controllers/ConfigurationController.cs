@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
-using Edreams.OutlookMiddleware.Api.Helpers;
+using Edreams.Common.Web;
+using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -21,9 +21,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="configurationManager">The configuration service.</param>
         /// <param name="logger">The logger.</param>
-        public ConfigurationController(
-            IConfigurationManager configurationManager, IEdreamsLogger<ConfigurationController> logger)
-            : base(configurationManager, logger) { }
+        public ConfigurationController(IConfigurationManager configurationManager,
+            IEdreamsLogger<ConfigurationController> logger) : base(configurationManager, logger) { }
 
         /// <summary>
         /// Gets the Outlook Middleware shared mailbox.
@@ -40,9 +39,9 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [HttpGet("sharedmailbox")]
         [SwaggerResponse(200, "Successfully returns a GetSharedMailBox object.", typeof(ApiResult<GetSharedMailBoxResponse>))]
         [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
-        public async Task<IActionResult> GetSharedMailBox()
+        public Task<IActionResult> GetSharedMailBox()
         {
-            return await ExecuteManager(manager => manager.GetSharedMailBox());
+            return ExecuteManager(manager => manager.GetSharedMailBox());
         }
     }
 }

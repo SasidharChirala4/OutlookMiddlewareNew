@@ -1,21 +1,13 @@
 using System.IO;
+using System.Security.Principal;
+using Edreams.Common.AzureServiceBus._DependencyInjection;
+using Edreams.Common.Exchange._DependencyInjection;
+using Edreams.Common.KeyVault._DependencyInjection;
+using Edreams.Common.Logging._DependencyInjection;
+using Edreams.Common.Security._DependencyInjection;
 using Edreams.OutlookMiddleware.Api.Middleware;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common._DependencyInjection;
-using Edreams.OutlookMiddleware.Common.Exceptions;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exchange;
-using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
-using Edreams.OutlookMiddleware.Common.Helpers;
-using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
-using Edreams.OutlookMiddleware.Common.KeyVault;
-using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
-using Edreams.OutlookMiddleware.Common.Security;
-using Edreams.OutlookMiddleware.Common.Security.Interfaces;
-using Edreams.Common.AzureServiceBus._DependencyInjection;
-using Edreams.Common.Logging._DependencyInjection;
-using Edreams.OutlookMiddleware.Common.Validation;
-using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,7 +26,7 @@ namespace Edreams.OutlookMiddleware.Api
         {
             _configuration = configuration;
         }
-        
+
         /// <summary>
         /// ConfigureServices
         /// </summary>
@@ -44,16 +36,17 @@ namespace Edreams.OutlookMiddleware.Api
         {
             services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
             services.AddScoped<SecurityContextMiddleware>();
-            services.AddScoped<ISecurityContext, SecurityContext>();
-            services.AddTransient(typeof(IRestHelper<>), typeof(RestHelper<>));
-            
 
+            services.AddCommon();
+            services.AddEdreamsSecurity(WindowsIdentity.GetCurrent());
+            services.AddConfiguration(_configuration);
             services.AddEdreamsLogging();
             services.AddServiceBus();
-            services.AddConfiguration(_configuration);
-            services.AddControllers();
-            services.AddCommon();
+            services.AddEdreamsKeyVaultIntegration();
+            services.AddEdreamsExchangeIntegration();
+
             services.AddBusinessLogic();
+            services.AddControllers();
 
             services.AddSwaggerGen(c =>
             {

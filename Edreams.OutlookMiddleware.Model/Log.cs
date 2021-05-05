@@ -1,7 +1,4 @@
-﻿using Edreams.OutlookMiddleware.Model.Base;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace Edreams.OutlookMiddleware.Model
 {

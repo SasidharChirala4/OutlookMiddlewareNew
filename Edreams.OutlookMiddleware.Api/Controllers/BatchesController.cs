@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
-using Edreams.OutlookMiddleware.Api.Helpers;
+using Edreams.Common.Web;
+using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -30,9 +30,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="batchManager">The batch manager.</param>
         /// <param name="logger">The logger.</param>
-        public BatchesController(
-            IBatchManager batchManager, IEdreamsLogger<BatchesController> logger) 
-            : base(batchManager, logger) { }
+        public BatchesController(IBatchManager batchManager,
+            IEdreamsLogger<BatchesController> logger) : base(batchManager, logger) { }
 
         /// <summary>
         /// Commits the specified batch of files to be processed by the Outlook Middleware.
@@ -54,11 +53,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
         public Task<IActionResult> CommitBatch(Guid batchId, CommitBatchRequest request)
         {
-            return ExecuteManager(x =>
-            {
-                Validate(batchId, request.BatchId, "There is a 'BatchId' mismatch for route and request.");
-                return x.CommitBatch(request);
-            });
+            return ExecuteManager(x => x.CommitBatch(batchId, request));
         }
 
         /// <summary>
@@ -75,16 +70,12 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// Cancelling a batch changes the state of all related file-records and marks them ready for cleanup.
         /// </remarks>
         [HttpDelete("{batchId}/cancel")]
-        [SwaggerResponse(200, "Successfully cancelled the specified batch of emails to be processed by the Outlook Middleware.", typeof(ApiResult<CommitBatchResponse>))]
+        [SwaggerResponse(200, "Successfully cancelled the specified batch of emails to be processed by the Outlook Middleware.", typeof(ApiResult<CancelBatchResponse>))]
         [SwaggerResponse(404, "The specified batch does not exist and cannot be cancelled.", typeof(ApiResult))]
         [SwaggerResponse(500, "An internal server error has occurred, this is not your fault.", typeof(ApiErrorResult))]
         public Task<IActionResult> CancelBatch(Guid batchId, CancelBatchRequest request)
         {
-            return ExecuteManager(x =>
-            {
-                Validate(batchId, request.BatchId, "There is a 'BatchId' mismatch for route and request.");
-                return x.CancelBatch(request);
-            });
+            return ExecuteManager(x => x.CancelBatch(batchId, request));
         }
     }
 }

@@ -2,20 +2,22 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exceptions;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
-using Edreams.OutlookMiddleware.Common.Security.Interfaces;
-using Edreams.OutlookMiddleware.DataTransferObjects;
-using Edreams.OutlookMiddleware.Enums;
+using Edreams.Common.AzureServiceBus.Constants;
 using Edreams.Common.AzureServiceBus.Contracts;
 using Edreams.Common.AzureServiceBus.Interfaces;
+using Edreams.Common.DataAccess.Constants;
+using Edreams.Common.Exceptions;
+using Edreams.Common.Exceptions.Constants;
+using Edreams.Common.Exceptions.Factories.Interfaces;
+using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Security.Interfaces;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.DataTransferObjects;
+using Edreams.OutlookMiddleware.Enums;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Azure.ServiceBus;
-using Edreams.Common.Logging.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
 {
@@ -126,35 +128,35 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Scheduler
             }
             catch (SqlException ex) when (ex.Number == -1)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SQLCLIENT_SERVER_NOT_FOUND_FAULT, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsDataAccessExceptionCode.SqlClientServerNotFoundFault, ex);
             }
             catch (SqlException ex) when (ex.Number == -2)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SQLCLIENT_TIMEOUT_FAULT, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsDataAccessExceptionCode.SqlClientTimeoutFault, ex);
             }
             catch (SqlException ex) when (ex.Number == 4060)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SQLCLIENT_DATABASE_NOT_FOUND_FAULT, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsDataAccessExceptionCode.SqlClientDatabaseNotFoundFault, ex);
             }
             catch (SqlException ex)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SQLCLIENT_UNKNOWN_FAULT, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsDataAccessExceptionCode.SqlClientUnknowFault, ex);
             }
             catch (MessagingEntityNotFoundException ex)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_QUEUE_NOT_FOUND, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusQueueNotFound, ex);
             }
             catch (UnauthorizedException ex)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_UNAUTHORIZED, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusUnauthorized, ex);
             }
             catch (ServiceBusException ex)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_CONNECTION_ERROR, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusConnectionError, ex);
             }
             catch (Exception ex)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault, ex);
             }
         }
     }

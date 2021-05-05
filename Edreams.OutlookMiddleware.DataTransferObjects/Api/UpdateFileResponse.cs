@@ -1,5 +1,5 @@
-﻿using Edreams.OutlookMiddleware.DataTransferObjects.Api.Base;
-using System;
+﻿using System;
+using Edreams.Common.Web.Contracts;
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
 {

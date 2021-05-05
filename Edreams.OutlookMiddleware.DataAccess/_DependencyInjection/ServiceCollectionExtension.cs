@@ -1,5 +1,5 @@
-﻿using Edreams.OutlookMiddleware.DataAccess.Repositories;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
+﻿using Edreams.Common.DataAccess.Interfaces;
+using Edreams.OutlookMiddleware.DataAccess.Repositories;
 using Edreams.OutlookMiddleware.Model;
 using Microsoft.Extensions.DependencyInjection;
 

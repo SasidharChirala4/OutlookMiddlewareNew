@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Web;
+using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
-using Edreams.OutlookMiddleware.Api.Helpers;
 using Swashbuckle.AspNetCore.Annotations;
-using Edreams.OutlookMiddleware.DataTransferObjects;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
@@ -31,9 +31,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="emailManager">The email manager.</param>
         /// <param name="logger">The logger.</param>
-        public MailsController(
-            IEmailManager emailManager, IEdreamsLogger<MailsController> logger)
-            : base(emailManager, logger) { }
+        public MailsController(IEmailManager emailManager,
+            IEdreamsLogger<MailsController> logger) : base(emailManager, logger) { }
 
         /// <summary>
         /// Creates an email to prepare for uploading binary data.

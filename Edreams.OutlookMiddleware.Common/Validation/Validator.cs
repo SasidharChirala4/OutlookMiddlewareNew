@@ -1,8 +1,8 @@
-﻿using Edreams.OutlookMiddleware.Common.Exceptions;
-using Edreams.OutlookMiddleware.Common.Validation.Interface;
+﻿using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Edreams.Common.Exceptions;
 
 namespace Edreams.OutlookMiddleware.Common.Validation
 {
@@ -77,7 +77,7 @@ namespace Edreams.OutlookMiddleware.Common.Validation
         /// <summary>
         /// Validates a datetime.
         /// </summary>
-        /// <param name="dateTime">The datetime to validate.</param>
+        /// <param name="toValidate">The datetime to validate.</param>
         /// <param name="validationMessage">The validation message.</param>
         public void ValidateDateTime(DateTime? toValidate, string validationMessage)
         {

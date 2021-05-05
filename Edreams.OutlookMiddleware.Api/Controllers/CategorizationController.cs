@@ -1,11 +1,11 @@
-﻿using Edreams.OutlookMiddleware.Api.Helpers;
+﻿using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Web;
+using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Threading.Tasks;
-using Edreams.Common.Logging.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Api.Controllers
 {
@@ -21,9 +21,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="categorizationManager">T</param>
         /// <param name="logger"></param>
-        public CategorizationController(
-            ICategorizationManager categorizationManager, IEdreamsLogger<CategorizationController> logger)
-           : base(categorizationManager, logger) { }
+        public CategorizationController(ICategorizationManager categorizationManager,
+            IEdreamsLogger<CategorizationController> logger) : base(categorizationManager, logger) { }
 
         /// <summary>
         /// Gets the pending email categories for the specified user.
@@ -49,9 +48,9 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         [SwaggerResponse(200, "Successfully categories have been processed.", typeof(ApiResult<UpdatePendingCategoriesResponse>))]
         [SwaggerResponse(404, "Specified categories could not be found.", typeof(ApiResult))]
         [SwaggerResponse(500, "An internal server error has occurred. This is not your fault.", typeof(ApiErrorResult))]
-        public async Task<IActionResult> UpdatePendingCategories([FromBody] UpdatePendingCategoriesRequest updatePendingCategoriesRequest)
+        public Task<IActionResult> UpdatePendingCategories([FromBody] UpdatePendingCategoriesRequest updatePendingCategoriesRequest)
         {
-            return await ExecuteManager(manager => manager.UpdatePendingCategories(updatePendingCategoriesRequest));
+            return ExecuteManager(manager => manager.UpdatePendingCategories(updatePendingCategoriesRequest));
         }
     }
 }

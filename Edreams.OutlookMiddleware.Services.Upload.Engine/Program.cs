@@ -1,16 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Security.Principal;
-using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
-using Edreams.OutlookMiddleware.Common._DependencyInjection;
 using Edreams.Common.AzureServiceBus._DependencyInjection;
+using Edreams.Common.Exchange._DependencyInjection;
+using Edreams.Common.KeyVault._DependencyInjection;
 using Edreams.Common.Logging._DependencyInjection;
-using Edreams.OutlookMiddleware.Common.Security;
-using Edreams.OutlookMiddleware.Common.Security.Interfaces;
+using Edreams.Common.Security._DependencyInjection;
+using Edreams.OutlookMiddleware.BusinessLogic;
+using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
+using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
+using Edreams.OutlookMiddleware.Common._DependencyInjection;
 using Edreams.OutlookMiddleware.Services.Upload.Engine.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.BusinessLogic;
 using Serilog;
 using Serilog.Context;
 using Serilog.Exceptions;
@@ -18,9 +22,7 @@ using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Sinks.MSSqlServer;
 using Serilog.Sinks.MSSqlServer.Sinks.MSSqlServer.Options;
-using System.Collections.Generic;
-using System.Data;
-using System;
+
 namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 {
     public class Program
@@ -38,16 +40,15 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 })
                 .ConfigureServices((hostBuilder, services) =>
                 {
-                    ISecurityContext securityContext = new SecurityContext();
-                    securityContext.RefreshCorrelationId();
-                    securityContext.SetUserIdentity(WindowsIdentity.GetCurrent());
-                    services.AddSingleton(_ => securityContext);
-                    LogContext.PushProperty("CorrelationId", securityContext.CorrelationId);
+                    Guid correlationId = services.AddEdreamsSecurity(WindowsIdentity.GetCurrent());
+                    LogContext.PushProperty("CorrelationId", correlationId);
                     services.AddCommon();
                     services.AddEdreamsLogging();
                     services.AddConfiguration(hostBuilder.Configuration);
                     services.AddServiceBus();
                     services.AddBusinessLogic();
+                    services.AddEdreamsKeyVaultIntegration();
+                    services.AddEdreamsExchangeIntegration();
 
                     services.AddHostedService<UploadEngineWorker>();
                     services.AddTransient<IUploadEngineProcessor, UploadEngineProcessor>();
