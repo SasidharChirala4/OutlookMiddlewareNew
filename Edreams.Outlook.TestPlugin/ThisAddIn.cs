@@ -16,7 +16,7 @@ namespace Edreams.Outlook.TestPlugin
 
         private Dashboard _dashboard;
         private CustomTaskPane _customTaskPane;
-        public const string SchemaInternetMessageId = "http://schemas.microsoft.com/mapi/proptag/0x1035001F";
+
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
             Explorer = Application.ActiveExplorer();
@@ -30,11 +30,9 @@ namespace Edreams.Outlook.TestPlugin
 
         }
 
-        private void Application_ItemSendAsync(object Item, ref bool Cancel)
+        private void Application_ItemSendAsync(object item, ref bool cancel)
         {
-
-            MailItem mailItem = Item as MailItem;
-            if (mailItem != null)
+            if (item is MailItem mailItem)
             {
                 if (mailItem.EntryID == null) { mailItem.Save(); }
                 Guid edreamsReferenceId = Guid.NewGuid();
@@ -51,15 +49,16 @@ namespace Edreams.Outlook.TestPlugin
                 mailItem.Save();
 
                 #region PreloadFiles
+
                 Guid batchId = Guid.NewGuid();
                 Guid correlationId = Guid.NewGuid();
-                int currentSelected = 0;
+
                 try
                 {
-                    currentSelected++;
                     string ewsId = ExchangeHelper.ConvertEntryIdToEwsId(mailItem.EntryID).Result;
                     //var ewsEmail = ExchangeHelper.DownloadEmail(ewsId).Result;
                     //var internetMessageId = mailItem.PropertyAccessor.GetProperty(SchemaInternetMessageId);
+                    
                     var createMailRequest = new CreateMailRequest
                     {
                         BatchId = batchId,
@@ -79,16 +78,18 @@ namespace Edreams.Outlook.TestPlugin
                             Name = string.Empty
                         });
                     }
-                    var createMailResponse = HttpHelper.CreateMail(createMailRequest).Result;
-                    
+
+                    _ = HttpHelper.CreateMail(createMailRequest).Result;
                 }
                 catch
                 {
                     // Nothing we can do...
                 }
+
                 #endregion
 
                 #region CommitBatch
+                
                 //Calling CommitBatch Endpoint
                 CommitBatchRequest commitBatchRequest = new CommitBatchRequest()
                 {
@@ -97,7 +98,9 @@ namespace Edreams.Outlook.TestPlugin
                     //EmailRecipients = new List<EmailRecipientDto>() { new EmailRecipientDto() { EmailId=new Guid("E400B31C-BC09-4F4F-B16F-546181285D67") ,Type=EmailRecipientType.Contact,Recipient="kkaredla@deloitte.com" },
                     // new EmailRecipientDto() { EmailId=new Guid("7F6856BF-6490-4D60-A52B-FE1301C894CD") ,Type=EmailRecipientType.Contact,Recipient="bkonijeti@deloitte.com" }}
                 };
+                
                 HttpHelper.CommitBatch(commitBatchRequest).Wait();
+                
                 #endregion
             }
         }

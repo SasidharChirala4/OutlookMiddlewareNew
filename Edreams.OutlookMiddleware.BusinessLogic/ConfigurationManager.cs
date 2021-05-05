@@ -1,14 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Edreams.Common.Exchange.Interfaces;
 using Edreams.Common.KeyVault.Interfaces;
 using Edreams.Common.Logging.Interfaces;
 using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
-using Microsoft.Exchange.WebServices.Data;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
@@ -51,10 +48,10 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
             // Create a client for EWS, authenticated using data from Azure KeyVault.
             IExchangeClient exchangeClient = await _exchangeAndKeyVaultHelper.CreateExchangeClient(keyVaultClient);
+
             // Use the client for EWS to resolve the email address for the current 
             string emailAddress = await exchangeClient.ResolveEmailAddress();
-
-
+            
             // Return a response containing the resolved email address and a correlation ID.
             return new GetSharedMailBoxResponse
             {
