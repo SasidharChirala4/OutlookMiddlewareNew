@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Edreams.OutlookMiddleware.DataTransferObjects
+﻿namespace Edreams.OutlookMiddleware.DataTransferObjects
 {
     public class SentEmailAttachmentDto
     {

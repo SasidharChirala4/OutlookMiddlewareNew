@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Edreams.Common.Logging.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Exceptions;
 using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
@@ -7,9 +10,6 @@ using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Services.Upload.Engine.Interfaces;
-using Edreams.Common.Logging.Interfaces;
-using System.IO;
-using System.Linq;
 
 namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 {
@@ -29,8 +29,8 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             IBatchManager batchManager, IEmailManager emailManager,
             IFileManager fileManager, IExtensibilityManager extensibilityManager,
             ITransactionQueueManager transactionQueueManager, IFileHelper fileHelper,
-            IConfigurationManager configurationManager,
-            IExceptionFactory exceptionFactory, IEdreamsLogger<UploadEngineProcessor> logger)
+            IConfigurationManager configurationManager, IExceptionFactory exceptionFactory, 
+            IEdreamsLogger<UploadEngineProcessor> logger)
         {
             _batchManager = batchManager;
             _emailManager = emailManager;
@@ -59,7 +59,8 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 foreach (EmailDetailsDto emailDetails in batchDetails.Emails)
                 {
                     int numberOfSuccessfullyUploadedFiles = 0;
-                    // Get sent email details from shared mail box
+
+                    // Get sent email details from shared mailbox, or null if the email is not of type: "Sent".
                     SentEmailDto sentEmailDetails = await GetSentEmailDetails(emailDetails);
 
                     // Loop through all the files that are part of this email.
@@ -67,24 +68,11 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                     {
                         try
                         {
-                            //Skip the files that are not matched with upload option.
+                            // Skip the files that are not matched with upload option.
                             if (!IsFileSkipped(emailDetails.UploadOption, fileDetails.Kind))
                             {
-                                // check if the Email is sent email.
-                                if (emailDetails.EmailKind == EmailKind.Sent)
-                                {
-                                    byte[] itemBytes = GetFileData(emailDetails, fileDetails, sentEmailDetails);
-                                    if (itemBytes != null)
-                                    {
-                                        // Process the file based on downloaded sharedmailbox email.
-                                        string absoluteFileUrl = await ProcessShredMailBoxFile(itemBytes, fileDetails.Name);
-                                    }
-                                }
-                                else
-                                {
-                                    // Process the file based on the file details.
-                                    string absoluteFileUrl = await ProcessFile(fileDetails);
-                                }
+                                // Process the file based on the file details.
+                                string absoluteFileUrl = await ProcessFile(emailDetails, sentEmailDetails, fileDetails);
                                 // TODO: Update absolute file URL in database as part of metadata PBI.
 
                                 // Set the file status to be successfully uploaded and
@@ -139,6 +127,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         }
 
         #region <| Helper Methods |>
+
         private async Task<SentEmailDto> GetSentEmailDetails(EmailDetailsDto emailDetails)
         {
             // Check if the email is sent email and EdreamsReferenceId is not empty
@@ -146,92 +135,69 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             {
                 // Get the sent emails details from the exchange service.
                 SentEmailDto sentEmailDetails = await _configurationManager.GetSharedMailBoxEmail(emailDetails.EdreamsReferenceId);
+
                 if (sentEmailDetails != null)
                 {
                     emailDetails.InternetMessageId = sentEmailDetails.InternetMessageId;
+
                     // Update internetMessageId, EwsId for email
-                    await _emailManager.UpdateEmailInternetMessageId(emailDetails.Id,
-                        sentEmailDetails.InternetMessageId, sentEmailDetails.EwsId);
+                    await _emailManager.UpdateEmailInternetMessageId(emailDetails.Id, sentEmailDetails.InternetMessageId, sentEmailDetails.EwsId);
+                    
                     return sentEmailDetails;
                 }
-                else // throw an exception if mail not found in SharedMailBox
-                {
-                    _logger.LogError(new FileNotFoundException(), string.Format("Email '{0}' not found in SharedMailBox!", emailDetails.EdreamsReferenceId));
-                    // set Email status to failed.
-                    await _emailManager.UpdateEmailStatus(emailDetails.Id, EmailStatus.Failed);
-                }
-            }
-            return new SentEmailDto();
-        }
 
-        private byte[] GetFileData(EmailDetailsDto emailDetails, FileDetailsDto fileDetails, SentEmailDto sentEmailDetails)
-        {
-            if (fileDetails.Kind == FileKind.Attachment)
-            {
-                // If sentemail does not have any attchments then throw exception.
-                if (sentEmailDetails.Attachments?.Any() != true)
-                {
-                    _logger.LogWarning($"Unable to read attachments for mail [{emailDetails.Id}] from SharedMailBox!");
-                }
-                else
-                {
-                    string attachmentName = $"{fileDetails.Name}";
-                    // Find attachment related to file details
-                    var sharedMailBoxAttachment = sentEmailDetails.Attachments.SingleOrDefault(x => x.Name.Equals(attachmentName, StringComparison.OrdinalIgnoreCase));
-                    if (sharedMailBoxAttachment?.Data != null)
-                    {
-                        fileDetails.Name = sharedMailBoxAttachment.Name;
-                        return sharedMailBoxAttachment.Data;
-                    }
-                    else
-                    {
-                        _logger.LogWarning($"Unable to find attachments [{fileDetails.Name}] for mail [{emailDetails.Id}] from SharedMailBox!");
-                    }
-                }
+                // Set email status to failed.
+                await _emailManager.UpdateEmailStatus(emailDetails.Id, EmailStatus.Failed);
+
+                // Throw an exception if mail not found in SharedMailBox
+                _logger.LogError(new FileNotFoundException(), string.Format("Email '{0}' not found in SharedMailBox!", emailDetails.EdreamsReferenceId));
             }
-            else  // if file kind is Email
-            {
-                if (sentEmailDetails.Data != null)
-                {
-                    fileDetails.Name = sentEmailDetails.Subject;
-                    return sentEmailDetails.Data;
-                }
-                else
-                {
-                    _logger.LogWarning($"Unable to download file [{fileDetails.Name}] for mail [{emailDetails.Id}] from SharedMailBox!");
-                }
-            }
+
             return null;
         }
-        private async Task<string> ProcessFile(FileDetailsDto fileDetails)
+
+        private byte[] GetFileData(SentEmailDto sentEmail, FileDetailsDto fileDetails)
         {
-            try
+            if (fileDetails.Kind == FileKind.Email)
             {
-                // Load the file into memory from its temporary path.
-                byte[] fileData = await _fileHelper.LoadFileInMemory(fileDetails.Path);
-
-                // Upload the file to e-DReaMS.
-                // TODO: Get the site URL and folder from metadata.
-                string absoluteFileUrl = await _extensibilityManager.UploadFile(fileData, null, null, fileDetails.Name, true);
-
-                return absoluteFileUrl;
+                fileDetails.Name = sentEmail.Subject;
+                return sentEmail.Data;
             }
-            catch (Exception ex)
+
+            if (fileDetails.Kind == FileKind.Attachment)
             {
-                // Throw an exception.
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.OUTLOOKMIDDLEWARE_UPLOAD_TO_EDREAMS_FAILED, ex);
+                SentEmailAttachmentDto attachment = sentEmail.Attachments.SingleOrDefault(x => x.Name == fileDetails.Name);
+                if (attachment != null)
+                {
+                    fileDetails.Name = attachment.Name;
+                    return attachment.Data;
+                }
             }
+
+            return null;
         }
 
-        private async Task<string> ProcessShredMailBoxFile(byte[] fileData, string fileName)
+        private async Task<string> ProcessFile(EmailDetailsDto emailDetails, SentEmailDto sentEmail, FileDetailsDto fileDetails)
         {
             try
             {
+                byte[] fileData;
+
+                // Check if the Email is sent email.
+                if (emailDetails.EmailKind == EmailKind.Sent && sentEmail != null)
+                {
+                    // Load the file into memory from its temporary path.
+                    fileData = GetFileData(sentEmail, fileDetails);
+                }
+                else
+                {
+                    // Load the file into memory from its temporary path.
+                    fileData = await _fileHelper.LoadFileInMemory(fileDetails.Path);
+                }
+
                 // Upload the file to e-DReaMS.
                 // TODO: Get the site URL and folder from metadata.
-                string absoluteFileUrl = await _extensibilityManager.UploadFile(fileData, null, null, fileName, true);
-
-                return absoluteFileUrl;
+                return await _extensibilityManager.UploadFile(fileData, null, null, fileDetails.Name, true);
             }
             catch (Exception ex)
             {
@@ -275,21 +241,20 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         /// </summary>
         /// <param name="uploadOption">Email Upload Option</param>
         /// <param name="fileKind">File Kind</param>
-        /// <returns>boolen value specifies is file type is matched with upload option </returns>
+        /// <returns>Boolen value specifies is file type is matched with upload option </returns>
         private bool IsFileSkipped(EmailUploadOptions uploadOption, FileKind fileKind)
         {
             if (uploadOption == EmailUploadOptions.Emails)
             {
                 return fileKind != FileKind.Email;
             }
-            else if (uploadOption == EmailUploadOptions.Attachments)
+
+            if (uploadOption == EmailUploadOptions.Attachments)
             {
                 return fileKind != FileKind.Attachment;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
 
         #endregion

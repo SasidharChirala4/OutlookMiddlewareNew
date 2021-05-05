@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects
 {
@@ -52,6 +50,5 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         {
             Attachments = new List<SentEmailAttachmentDto>();
         }
-
     }
 }
