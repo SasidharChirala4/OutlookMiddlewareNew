@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
-using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
-using Microsoft.Exchange.WebServices.Data;
+using Edreams.Common.Exchange.Interfaces;
+using Edreams.Common.KeyVault.Interfaces;
+
 namespace Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces
 {
     public interface IExchangeAndKeyVaultHelper
@@ -18,12 +18,5 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces
         /// <param name="keyVaultClient"></param>
         /// <returns>IExchangeClient</returns>
         Task<IExchangeClient> CreateExchangeClient(IKeyVaultClient keyVaultClient);
-
-        /// <summary>
-        /// Create exchange service, authenticate using data from Azure KeyVault 
-        /// </summary>
-        /// <param name="keyVaultClient"></param>
-        /// <returns>ExchangeService</returns>
-        Task<ExchangeService> CreateExchangeService(IKeyVaultClient keyVaultClient);
     }
 }

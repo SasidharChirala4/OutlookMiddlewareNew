@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Edreams.OutlookMiddleware.DataTransferObjects.Api.Base;
+using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api.Specific;
 using Edreams.OutlookMiddleware.Enums;
 

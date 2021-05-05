@@ -2,10 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Edreams.Common.Exceptions.Factories.Interfaces;
 using Edreams.Common.Logging.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exceptions;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
+using Edreams.OutlookMiddleware.Common.Constants;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Enums;
@@ -202,7 +202,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             catch (Exception ex)
             {
                 // Throw an exception.
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.OUTLOOKMIDDLEWARE_UPLOAD_TO_EDREAMS_FAILED, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsOutlookMiddlewareExceptionCode.OutlookMiddlewareUploadToEdreamsFailed, ex);
             }
         }
 

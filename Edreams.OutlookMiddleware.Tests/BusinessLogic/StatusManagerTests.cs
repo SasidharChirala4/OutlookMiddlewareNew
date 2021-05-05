@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic;
-using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using FluentAssertions;
 using Moq;

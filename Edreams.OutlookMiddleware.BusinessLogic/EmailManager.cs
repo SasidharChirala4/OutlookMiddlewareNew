@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Edreams.Common.DataAccess.Interfaces;
+using Edreams.Common.Exceptions.Constants;
+using Edreams.Common.Exceptions.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exceptions;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
+using Edreams.OutlookMiddleware.Common.Constants;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api.Specific;
 using Edreams.OutlookMiddleware.Enums;
@@ -49,46 +50,46 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             // Force a database transaction scope to make sure multiple
             // operations are combined as a single atomic operation.
-                using (ITransactionScope transactionScope = _transactionHelper.CreateScope())
+            using (ITransactionScope transactionScope = _transactionHelper.CreateScope())
+            {
+                // Extract the EwsId, EntryId and MailSubject from the request and create the Mail
+                FilePreload preloadedFile = _createEmailRequestToFilePreloadMapper.Map(request);
+                preloadedFile.EmailId = Guid.NewGuid();
+                preloadedFile.Kind = FileKind.Email;
+                preloadedFile.PreloadedOn = DateTime.UtcNow;
+                preloadedFile.Status = EmailPreloadStatus.Pending;
+                preloadedFile.InternetMessageId = request.InternetMessageId;
+                preloadedFile = await _preloadedFilesRepository.Create(preloadedFile);
+
+                CreateMailResponse response = new CreateMailResponse
                 {
-                    // Extract the EwsId, EntryId and MailSubject from the request and create the Mail
-                    FilePreload preloadedFile = _createEmailRequestToFilePreloadMapper.Map(request);
-                    preloadedFile.EmailId = Guid.NewGuid();
-                    preloadedFile.Kind = FileKind.Email;
-                    preloadedFile.PreloadedOn = DateTime.UtcNow;
-                    preloadedFile.Status = EmailPreloadStatus.Pending;
-                    preloadedFile.InternetMessageId = request.InternetMessageId;
-                    preloadedFile = await _preloadedFilesRepository.Create(preloadedFile);
+                    CorrelationId = request.CorrelationId,
+                    FileId = preloadedFile.Id
+                };
 
-                    CreateMailResponse response = new CreateMailResponse
+                // Extract the Attachment details of the Mail and insert in DB
+                foreach (var attachment in request.Attachments)
+                {
+                    FilePreload preloadedAttachment = _createEmailRequestToFilePreloadMapper.Map(request);
+                    preloadedAttachment.EmailId = preloadedFile.EmailId;
+                    preloadedAttachment.Kind = FileKind.Attachment;
+                    preloadedAttachment.AttachmentId = attachment.Id;
+                    preloadedAttachment.PreloadedOn = DateTime.UtcNow;
+                    preloadedAttachment.Status = EmailPreloadStatus.Pending;
+                    preloadedAttachment = await _preloadedFilesRepository.Create(preloadedAttachment);
+
+                    response.Attachments.Add(new AttachmentResponse
                     {
-                        CorrelationId = request.CorrelationId,
-                        FileId = preloadedFile.Id
-                    };
-
-                    // Extract the Attachment details of the Mail and insert in DB
-                    foreach (var attachment in request.Attachments)
-                    {
-                        FilePreload preloadedAttachment = _createEmailRequestToFilePreloadMapper.Map(request);
-                        preloadedAttachment.EmailId = preloadedFile.EmailId;
-                        preloadedAttachment.Kind = FileKind.Attachment;
-                        preloadedAttachment.AttachmentId = attachment.Id;
-                        preloadedAttachment.PreloadedOn = DateTime.UtcNow;
-                        preloadedAttachment.Status = EmailPreloadStatus.Pending;
-                        preloadedAttachment = await _preloadedFilesRepository.Create(preloadedAttachment);
-
-                        response.Attachments.Add(new AttachmentResponse
-                        {
-                            AttachmentId = attachment.Id,
-                            FileId = preloadedAttachment.Id
-                        });
-                    }
-
-                    transactionScope.Commit();
-
-                    return response;
+                        AttachmentId = attachment.Id,
+                        FileId = preloadedAttachment.Id
+                    });
                 }
+
+                transactionScope.Commit();
+
+                return response;
             }
+        }
 
         /// <summary>
         /// GetEmails by batchId
@@ -103,7 +104,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // Throw an exception if a batch with specified unique ID cannot be found.
             if (batch == null)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.OUTLOOKMIDDLEWARE_BATCH_NOT_FOUND);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsOutlookMiddlewareExceptionCode.OutlookMiddlewareBatchNotFound);
             }
             // Get a list of all related email's.
             IList<Email> emails = await _emailRepository.Find(
@@ -131,7 +132,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
             if (email == null)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault);
             }
 
             email.Status = status;
@@ -146,13 +147,13 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// <param name="internetMessageId">InternetMessageId</param>
         /// <param name="ewsId">ewsId</param>
         /// <returns></returns>
-        public async Task UpdateEmailInternetMessageId(Guid emailId, string internetMessageId,string ewsId)
+        public async Task UpdateEmailInternetMessageId(Guid emailId, string internetMessageId, string ewsId)
         {
             Email email = await _emailRepository.GetSingle(x => x.Id == emailId);
 
             if (email == null)
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault);
             }
 
             email.InternetMessageId = internetMessageId;

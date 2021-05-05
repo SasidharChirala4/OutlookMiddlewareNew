@@ -1,7 +1,7 @@
 ﻿using System;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Factories;
 using Edreams.OutlookMiddleware.BusinessLogic.Factories.Interfaces;
-using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Model;
 using FluentAssertions;

@@ -6,9 +6,10 @@ using System.Linq;
 using System.Net;
 using Edreams.Contracts.Data.Common;
 using System.Threading.Tasks;
+using Edreams.Common.Exceptions;
+using Edreams.Common.Exceptions.Constants;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exceptions;
 
 namespace Edreams.OutlookMiddleware.Common.Helpers
 {
@@ -521,7 +522,7 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             {
                 if (!skipResponseCheck)
                 {
-                    throw new EdreamsException(EdreamsExceptionCode.UNKNOWN_FAULT, $"Error in RestResponse Method[{method}] StatusCode[{result.StatusCode}] Message[{result.ErrorMessage}] Exception[{result.ErrorException}]");
+                    throw new EdreamsException(EdreamsExceptionCode.UnknownFault, $"Error in RestResponse Method[{method}] StatusCode[{result.StatusCode}] Message[{result.ErrorMessage}] Exception[{result.ErrorException}]");
                 }
                 return false;
             }
@@ -529,7 +530,7 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
             {
                 if (!skipResponseCheck)
                 {
-                    throw new EdreamsException(EdreamsExceptionCode.UNKNOWN_FAULT, $"[{result.StatusCode}] in RestResponse Method[{method}] StatusCode[{result.StatusCode}] Content[{result.Content}]");
+                    throw new EdreamsException(EdreamsExceptionCode.UnknownFault, $"[{result.StatusCode}] in RestResponse Method[{method}] StatusCode[{result.StatusCode}] Content[{result.Content}]");
                 }
                 return false;
             }

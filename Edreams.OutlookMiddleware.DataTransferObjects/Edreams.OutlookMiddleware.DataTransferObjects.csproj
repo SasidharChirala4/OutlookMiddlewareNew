@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Edreams.Common.Web.Contracts" Version="2.0.7786.30191" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Edreams.OutlookMiddleware.Model\Edreams.OutlookMiddleware.Model.csproj" />
   </ItemGroup>
 

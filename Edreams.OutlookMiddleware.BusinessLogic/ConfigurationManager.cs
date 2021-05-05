@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Edreams.Common.Exchange.Interfaces;
+using Edreams.Common.KeyVault.Interfaces;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exchange.Interfaces;
-using Edreams.OutlookMiddleware.Common.KeyVault.Interfaces;
-using Edreams.OutlookMiddleware.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Microsoft.Exchange.WebServices.Data;
@@ -19,6 +19,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IExchangeAndKeyVaultHelper _exchangeAndKeyVaultHelper;
         private readonly ISecurityContext _securityContext;
         private readonly IEdreamsLogger<ConfigurationManager> _logger;
+
         #endregion
 
         #region <| Construction |>
@@ -28,6 +29,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// </summary>
         /// <param name="exchangeAndKeyVaultHelper">The exchange and key vault helper.</param>
         /// <param name="securityContext">The security context.</param>
+        /// <param name="logger">The logger.</param>
         public ConfigurationManager(
             IExchangeAndKeyVaultHelper exchangeAndKeyVaultHelper,
             ISecurityContext securityContext,
@@ -75,7 +77,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 // Create a client for Azure KeyVault, authenticated using the appsettings.json settings.
                 IKeyVaultClient keyVaultClient = _exchangeAndKeyVaultHelper.CreateKeyVaultClient();
                 // Create exchange service,  authenticated using data from Azure KeyVault.
-                ExchangeService exchangeService  = await _exchangeAndKeyVaultHelper.CreateExchangeService(keyVaultClient);
+                //ExchangeService exchangeService = await _exchangeAndKeyVaultHelper.CreateExchangeService(keyVaultClient);
+                ExchangeService exchangeService = null;
                 // Crete propery definition for EdreamsReferenceId property.
                 ExtendedPropertyDefinition emailExtendedPropDef =
                     new ExtendedPropertyDefinition(DefaultExtendedPropertySet.PublicStrings, "EdreamsReferenceId", MapiPropertyType.String);

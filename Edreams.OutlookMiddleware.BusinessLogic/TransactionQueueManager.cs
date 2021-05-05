@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Edreams.Common.AzureServiceBus.Constants;
 using Edreams.Common.AzureServiceBus.Contracts;
 using Edreams.Common.AzureServiceBus.Interfaces;
+using Edreams.Common.DataAccess.Interfaces;
+using Edreams.Common.Exceptions.Constants;
+using Edreams.Common.Exceptions.Factories.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
-using Edreams.OutlookMiddleware.Common.Exceptions;
-using Edreams.OutlookMiddleware.Common.Exceptions.Interfaces;
-using Edreams.OutlookMiddleware.Common.Security.Interfaces;
-using Edreams.OutlookMiddleware.DataAccess.Repositories.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
@@ -197,13 +198,13 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // If connection string is empty, throw exception.
             if (string.IsNullOrEmpty(connectionString))
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_CONNECTIONSTRING_MISSING);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusConnectionStringMissing);
             }
 
             // If queue name is empty, throw exception.
             if (string.IsNullOrEmpty(queueName))
             {
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_QUEUENAME_MISSING);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusQueueNameMissing);
             }
 
             try
@@ -223,22 +224,22 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             catch (MessagingEntityNotFoundException ex)
             {
                 // This exception gets thrown when the specified queue could not be found.
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_QUEUE_NOT_FOUND, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusQueueNotFound, ex);
             }
             catch (UnauthorizedException ex)
             {
                 // This exception gets thrown when there is an issue with authorization.
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_UNAUTHORIZED, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusUnauthorized, ex);
             }
             catch (ServiceBusException ex)
             {
                 // This exception gets thrown when there is an issue with connecting to Azure ServiceBus.
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.SERVICEBUS_CONNECTION_ERROR, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsServiceBusExceptionCode.ServiceBusConnectionError, ex);
             }
             catch (Exception ex)
             {
                 // This handles all remaining exceptions.
-                throw _exceptionFactory.CreateFromCode(EdreamsExceptionCode.UNKNOWN_FAULT, ex);
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault, ex);
             }
         }
 
