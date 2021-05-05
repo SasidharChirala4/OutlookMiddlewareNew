@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Model;
@@ -17,5 +16,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         Task<CreateMailResponse> CreateMail(CreateMailRequest request);
 
         Task UpdateEmailStatus(Guid emailId, EmailStatus status);
+
+        Task UpdateEmailInternetMessageId(Guid emailId, string internetMessageId, string ewsId);
     }
 }

@@ -422,7 +422,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             #region [ ACT ]
 
             // Call the "GetNextUploadTransaction" method using the prepared request.
-            TransactionDto? response = await transactionQueueManager.GetNextUploadTransaction();
+            TransactionDto response = await transactionQueueManager.GetNextUploadTransaction();
 
             #endregion
 

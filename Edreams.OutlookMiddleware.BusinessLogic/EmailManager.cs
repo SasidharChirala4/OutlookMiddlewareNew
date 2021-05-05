@@ -50,46 +50,46 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             // Force a database transaction scope to make sure multiple
             // operations are combined as a single atomic operation.
-                using (ITransactionScope transactionScope = _transactionHelper.CreateScope())
+            using (ITransactionScope transactionScope = _transactionHelper.CreateScope())
+            {
+                // Extract the EwsId, EntryId and MailSubject from the request and create the Mail
+                FilePreload preloadedFile = _createEmailRequestToFilePreloadMapper.Map(request);
+                preloadedFile.EmailId = Guid.NewGuid();
+                preloadedFile.Kind = FileKind.Email;
+                preloadedFile.PreloadedOn = DateTime.UtcNow;
+                preloadedFile.Status = EmailPreloadStatus.Pending;
+                preloadedFile.InternetMessageId = request.InternetMessageId;
+                preloadedFile = await _preloadedFilesRepository.Create(preloadedFile);
+
+                CreateMailResponse response = new CreateMailResponse
                 {
-                    // Extract the EwsId, EntryId and MailSubject from the request and create the Mail
-                    FilePreload preloadedFile = _createEmailRequestToFilePreloadMapper.Map(request);
-                    preloadedFile.EmailId = Guid.NewGuid();
-                    preloadedFile.Kind = FileKind.Email;
-                    preloadedFile.PreloadedOn = DateTime.UtcNow;
-                    preloadedFile.Status = EmailPreloadStatus.Pending;
-                    preloadedFile.InternetMessageId = request.InternetMessageId;
-                    preloadedFile = await _preloadedFilesRepository.Create(preloadedFile);
+                    CorrelationId = request.CorrelationId,
+                    FileId = preloadedFile.Id
+                };
 
-                    CreateMailResponse response = new CreateMailResponse
+                // Extract the Attachment details of the Mail and insert in DB
+                foreach (var attachment in request.Attachments)
+                {
+                    FilePreload preloadedAttachment = _createEmailRequestToFilePreloadMapper.Map(request);
+                    preloadedAttachment.EmailId = preloadedFile.EmailId;
+                    preloadedAttachment.Kind = FileKind.Attachment;
+                    preloadedAttachment.AttachmentId = attachment.Id;
+                    preloadedAttachment.PreloadedOn = DateTime.UtcNow;
+                    preloadedAttachment.Status = EmailPreloadStatus.Pending;
+                    preloadedAttachment = await _preloadedFilesRepository.Create(preloadedAttachment);
+
+                    response.Attachments.Add(new AttachmentResponse
                     {
-                        CorrelationId = request.CorrelationId,
-                        FileId = preloadedFile.Id
-                    };
-
-                    // Extract the Attachment details of the Mail and insert in DB
-                    foreach (var attachment in request.Attachments)
-                    {
-                        FilePreload preloadedAttachment = _createEmailRequestToFilePreloadMapper.Map(request);
-                        preloadedAttachment.EmailId = preloadedFile.EmailId;
-                        preloadedAttachment.Kind = FileKind.Attachment;
-                        preloadedAttachment.AttachmentId = attachment.Id;
-                        preloadedAttachment.PreloadedOn = DateTime.UtcNow;
-                        preloadedAttachment.Status = EmailPreloadStatus.Pending;
-                        preloadedAttachment = await _preloadedFilesRepository.Create(preloadedAttachment);
-
-                        response.Attachments.Add(new AttachmentResponse
-                        {
-                            AttachmentId = attachment.Id,
-                            FileId = preloadedAttachment.Id
-                        });
-                    }
-
-                    transactionScope.Commit();
-
-                    return response;
+                        AttachmentId = attachment.Id,
+                        FileId = preloadedAttachment.Id
+                    });
                 }
+
+                transactionScope.Commit();
+
+                return response;
             }
+        }
 
         /// <summary>
         /// GetEmails by batchId
@@ -136,6 +136,28 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
 
             email.Status = status;
+
+            await _emailRepository.Update(email);
+        }
+
+        /// <summary>
+        /// Updates the internetmessageid, ewsid to the sent email.
+        /// </summary>
+        /// <param name="emailId">Email id</param>
+        /// <param name="internetMessageId">InternetMessageId</param>
+        /// <param name="ewsId">ewsId</param>
+        /// <returns></returns>
+        public async Task UpdateEmailInternetMessageId(Guid emailId, string internetMessageId, string ewsId)
+        {
+            Email email = await _emailRepository.GetSingle(x => x.Id == emailId);
+
+            if (email == null)
+            {
+                throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsExceptionCode.UnknownFault);
+            }
+
+            email.InternetMessageId = internetMessageId;
+            email.EwsId = ewsId;
 
             await _emailRepository.Update(email);
         }

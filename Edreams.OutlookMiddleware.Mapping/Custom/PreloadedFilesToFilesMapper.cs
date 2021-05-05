@@ -29,19 +29,24 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                     {
                         email.EwsId = preloadedFile.EwsId;
                         email.EntryId = preloadedFile.EntryId;
+                        email.EmailKind = preloadedFile.EmailKind;
+                        email.EdreamsReferenceId = preloadedFile.EdreamsReferenceId;
                         email.InternetMessageId = preloadedFile.InternetMessageId;
                         email.EmailRecipients = new List<EmailRecipient>();
-                        IEnumerable<EmailRecipientDto> emailRecipientList = emailRecipients.Where(x => x.EmailId == emailId);
-                        foreach (EmailRecipientDto emailRecipient in emailRecipientList)
+                        if (emailRecipients != null)
                         {
-                            email.EmailRecipients.Add(new EmailRecipient()
+                            IEnumerable<EmailRecipientDto> emailRecipientList = emailRecipients.Where(x => x.EmailId == emailId);
+                            foreach (EmailRecipientDto emailRecipient in emailRecipientList)
                             {
-                                Email = email,
-                                Recipient = emailRecipient.Recipient,
-                                Type = emailRecipient.Type,
-                                // ToDo: Need to remove and configure in repository.
-                                InsertedBy = "BE\\kkaredla"
-                            });
+                                email.EmailRecipients.Add(new EmailRecipient()
+                                {
+                                    Email = email,
+                                    Recipient = emailRecipient.Recipient,
+                                    Type = emailRecipient.Type,
+                                    // ToDo: Need to remove and configure in repository.
+                                    InsertedBy = "BE\\kkaredla"
+                                });
+                            }
                         }
                         files.Add(new File
                         {

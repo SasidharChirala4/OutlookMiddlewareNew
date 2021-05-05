@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Edreams.Common.Exchange.Interfaces;
 using Edreams.Common.KeyVault.Interfaces;
+using Edreams.Common.Logging.Interfaces;
 using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
@@ -14,6 +15,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         private readonly IExchangeAndKeyVaultHelper _exchangeAndKeyVaultHelper;
         private readonly ISecurityContext _securityContext;
+        private readonly IEdreamsLogger<ConfigurationManager> _logger;
 
         #endregion
 
@@ -24,12 +26,15 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// </summary>
         /// <param name="exchangeAndKeyVaultHelper">The exchange and key vault helper.</param>
         /// <param name="securityContext">The security context.</param>
+        /// <param name="logger">The logger.</param>
         public ConfigurationManager(
             IExchangeAndKeyVaultHelper exchangeAndKeyVaultHelper,
-            ISecurityContext securityContext)
+            ISecurityContext securityContext,
+            IEdreamsLogger<ConfigurationManager> logger)
         {
             _exchangeAndKeyVaultHelper = exchangeAndKeyVaultHelper;
             _securityContext = securityContext;
+            _logger = logger;
         }
 
         #endregion
@@ -46,7 +51,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
             // Use the client for EWS to resolve the email address for the current 
             string emailAddress = await exchangeClient.ResolveEmailAddress();
-
+            
             // Return a response containing the resolved email address and a correlation ID.
             return new GetSharedMailBoxResponse
             {

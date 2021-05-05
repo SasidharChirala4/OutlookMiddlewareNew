@@ -11,6 +11,7 @@ using Edreams.Common.KeyVault.Constants;
 using Edreams.Common.KeyVault.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Microsoft.Exchange.WebServices.Data;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic.Helpers
 {
