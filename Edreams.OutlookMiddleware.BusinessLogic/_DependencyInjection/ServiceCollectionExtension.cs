@@ -1,4 +1,10 @@
-﻿using Edreams.OutlookMiddleware.BusinessLogic.Factories;
+﻿using Edreams.Common.Exceptions.Factories;
+using Edreams.Common.Exceptions.Factories.Interfaces;
+using Edreams.Common.Exchange;
+using Edreams.Common.Exchange.Interfaces;
+using Edreams.Common.KeyVault;
+using Edreams.Common.KeyVault.Interfaces;
+using Edreams.OutlookMiddleware.BusinessLogic.Factories;
 using Edreams.OutlookMiddleware.BusinessLogic.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Helpers;
 using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
@@ -36,6 +42,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection
             services.AddTransient<ICategorizationManager, CategorizationManager>();
             services.AddTransient<IExchangeAndKeyVaultHelper, ExchangeAndKeyVaultHelper>();
             services.AddTransient<IBatchFactory, BatchFactory>();
+            services.AddTransient<IExchangeClientFactory, ExchangeClientFactory>();
+            services.AddTransient<IKeyVaultClientFactory, KeyVaultClientFactory>(); 
+            services.AddTransient<IExceptionFactory, ExceptionFactory>();
         }
     }
 }
