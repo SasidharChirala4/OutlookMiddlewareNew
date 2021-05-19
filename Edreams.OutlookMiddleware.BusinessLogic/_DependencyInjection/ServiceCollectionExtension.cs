@@ -1,10 +1,4 @@
-﻿using Edreams.Common.Exceptions.Factories;
-using Edreams.Common.Exceptions.Factories.Interfaces;
-using Edreams.Common.Exchange;
-using Edreams.Common.Exchange.Interfaces;
-using Edreams.Common.KeyVault;
-using Edreams.Common.KeyVault.Interfaces;
-using Edreams.OutlookMiddleware.BusinessLogic.Factories;
+﻿using Edreams.OutlookMiddleware.BusinessLogic.Factories;
 using Edreams.OutlookMiddleware.BusinessLogic.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Helpers;
 using Edreams.OutlookMiddleware.BusinessLogic.Helpers.Interfaces;
