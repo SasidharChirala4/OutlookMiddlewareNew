@@ -18,6 +18,7 @@ using Edreams.OutlookMiddleware.Model;
 using FluentAssertions;
 using Moq;
 using Xunit;
+using Task = System.Threading.Tasks.Task;
 
 // ReSharper disable once CheckNamespace
 namespace Edreams.OutlookMiddleware.Tests.BusinessLogic._TransactionQueueManager

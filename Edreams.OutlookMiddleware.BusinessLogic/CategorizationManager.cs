@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using CategorizationRequestContract = Edreams.OutlookMiddleware.DataTransferObjects.Api.CategorizationRequest;
 using CategorizationRequestEntity = Edreams.OutlookMiddleware.Model.CategorizationRequest;
 using EmailEntity = Edreams.OutlookMiddleware.Model.Email;
+using Task = System.Threading.Tasks.Task;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {

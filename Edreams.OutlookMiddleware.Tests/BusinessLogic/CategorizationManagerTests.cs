@@ -19,6 +19,7 @@ using Moq;
 using Xunit;
 using CategorizationRequest = Edreams.OutlookMiddleware.DataTransferObjects.Api.CategorizationRequest;
 using CategorizationRequestEntity = Edreams.OutlookMiddleware.Model.CategorizationRequest;
+using Task = System.Threading.Tasks.Task;
 
 namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 {

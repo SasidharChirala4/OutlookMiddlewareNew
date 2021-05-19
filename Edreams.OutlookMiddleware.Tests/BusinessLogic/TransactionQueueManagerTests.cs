@@ -20,6 +20,7 @@ using Edreams.OutlookMiddleware.Tests.Framework.Extensions;
 using FluentAssertions;
 using Moq;
 using Xunit;
+using Task = System.Threading.Tasks.Task;
 using TransactionScope = Edreams.OutlookMiddleware.BusinessLogic.Transactions.TransactionScope;
 namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 {

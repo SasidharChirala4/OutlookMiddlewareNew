@@ -12,6 +12,7 @@ using Edreams.OutlookMiddleware.DataTransferObjects.Api.Specific;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Mapping.Interfaces;
 using Edreams.OutlookMiddleware.Model;
+using Task = System.Threading.Tasks.Task;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
