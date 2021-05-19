@@ -6,11 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.3.0" />
-    <PackageReference Include="Edreams.Common" Version="2.0.7795.17395" />
-    <PackageReference Include="Edreams.Common.AzureServiceBus" Version="2.0.7795.17395" />
-    <PackageReference Include="Edreams.Common.Exchange" Version="2.0.7795.17395" />
-    <PackageReference Include="Edreams.Common.KeyVault" Version="2.0.7795.17395" />
-    <PackageReference Include="Edreams.Common.Logging" Version="2.0.7795.17395" />
+    <PackageReference Include="Edreams.Common" Version="2.0.7809.20079" />
+    <PackageReference Include="Edreams.Common.AzureServiceBus" Version="2.0.7809.20079" />
+    <PackageReference Include="Edreams.Common.Exchange" Version="2.0.7809.20079" />
+    <PackageReference Include="Edreams.Common.KeyVault" Version="2.0.7809.20079" />
+    <PackageReference Include="Edreams.Common.Logging" Version="2.0.7809.20079" />
     <PackageReference Include="Edreams.Contracts" Version="1.0.7629.29228" />
     <PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.1.0" />
     <PackageReference Include="Microsoft.Exchange.WebServices.NETStandard" Version="1.1.3" />
