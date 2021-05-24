@@ -18,7 +18,6 @@ using Edreams.OutlookMiddleware.Mapping.Interfaces;
 using Edreams.OutlookMiddleware.Model;
 using Edreams.OutlookMiddleware.Model.Interfaces;
 using Microsoft.Azure.ServiceBus;
-using Task = System.Threading.Tasks.Task;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {

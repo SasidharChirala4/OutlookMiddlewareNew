@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
 {
     [DbContext(typeof(OutlookMiddlewareDbContext))]
-    [Migration("20210519150531_Added_Task_EmailAddress_Assignedcc_Tables")]
-    partial class Added_Task_EmailAddress_Assignedcc_Tables
+    [Migration("20210524024900_Added_Task_Table")]
+    partial class Added_Task_Table
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,52 +20,6 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                 .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.AssignedCc", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("EmailAddressId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("InsertedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime>("InsertedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("SysId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<Guid?>("TaskId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id")
-                        .HasAnnotation("SqlServer:Clustered", false);
-
-                    b.HasIndex("EmailAddressId");
-
-                    b.HasIndex("SysId")
-                        .IsUnique()
-                        .HasAnnotation("SqlServer:Clustered", true);
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("AssignedCc");
-                });
 
             modelBuilder.Entity("Edreams.OutlookMiddleware.Model.Batch", b =>
                 {
@@ -227,58 +181,6 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                         .HasAnnotation("SqlServer:Clustered", true);
 
                     b.ToTable("Emails");
-                });
-
-            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.EmailAddress", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("DisplayName")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("InsertedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime>("InsertedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PrincipalName")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<long>("SysId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.HasKey("Id")
-                        .HasAnnotation("SqlServer:Clustered", false);
-
-                    b.HasIndex("SysId")
-                        .IsUnique()
-                        .HasAnnotation("SqlServer:Clustered", true);
-
-                    b.ToTable("EmailAddress");
                 });
 
             modelBuilder.Entity("Edreams.OutlookMiddleware.Model.EmailRecipient", b =>
@@ -515,16 +417,10 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                     b.ToTable("Logs");
                 });
 
-            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.Task", b =>
+            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.ProjectTask", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AssignedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AssignedToId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -534,7 +430,7 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("EmailId")
+                    b.Property<Guid>("EmailId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("InsertedBy")
@@ -546,6 +442,7 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Priority")
+                        .IsRequired()
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
@@ -568,17 +465,67 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                     b.HasKey("Id")
                         .HasAnnotation("SqlServer:Clustered", false);
 
-                    b.HasIndex("AssignedById");
-
-                    b.HasIndex("AssignedToId");
-
                     b.HasIndex("EmailId");
 
                     b.HasIndex("SysId")
                         .IsUnique()
                         .HasAnnotation("SqlServer:Clustered", true);
 
-                    b.ToTable("Tasks");
+                    b.ToTable("ProjectTasks");
+                });
+
+            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.ProjectTaskUserInvolvements", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("InsertedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime>("InsertedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PrincipalName")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<Guid?>("ProjectTaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("SysId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id")
+                        .HasAnnotation("SqlServer:Clustered", false);
+
+                    b.HasIndex("ProjectTaskId");
+
+                    b.HasIndex("SysId")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", true);
+
+                    b.ToTable("ProjectTaskUserInvolvements");
                 });
 
             modelBuilder.Entity("Edreams.OutlookMiddleware.Model.Transaction", b =>
@@ -647,17 +594,6 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                     b.ToTable("TransactionQueue");
                 });
 
-            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.AssignedCc", b =>
-                {
-                    b.HasOne("Edreams.OutlookMiddleware.Model.EmailAddress", "EmailAddress")
-                        .WithMany("AssignedCc")
-                        .HasForeignKey("EmailAddressId");
-
-                    b.HasOne("Edreams.OutlookMiddleware.Model.Task", "Task")
-                        .WithMany("AssignedCc")
-                        .HasForeignKey("TaskId");
-                });
-
             modelBuilder.Entity("Edreams.OutlookMiddleware.Model.Email", b =>
                 {
                     b.HasOne("Edreams.OutlookMiddleware.Model.Batch", "Batch")
@@ -679,19 +615,20 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                         .HasForeignKey("EmailId");
                 });
 
-            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.Task", b =>
+            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.ProjectTask", b =>
                 {
-                    b.HasOne("Edreams.OutlookMiddleware.Model.EmailAddress", "AssignedBy")
-                        .WithMany("AssignedBy")
-                        .HasForeignKey("AssignedById");
-
-                    b.HasOne("Edreams.OutlookMiddleware.Model.EmailAddress", "AssignedTo")
-                        .WithMany("AssignedTo")
-                        .HasForeignKey("AssignedToId");
-
                     b.HasOne("Edreams.OutlookMiddleware.Model.Email", "Email")
-                        .WithMany("Tasks")
-                        .HasForeignKey("EmailId");
+                        .WithMany("ProjectTasks")
+                        .HasForeignKey("EmailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.ProjectTaskUserInvolvements", b =>
+                {
+                    b.HasOne("Edreams.OutlookMiddleware.Model.ProjectTask", "ProjectTask")
+                        .WithMany("UserInvolvements")
+                        .HasForeignKey("ProjectTaskId");
                 });
 #pragma warning restore 612, 618
         }

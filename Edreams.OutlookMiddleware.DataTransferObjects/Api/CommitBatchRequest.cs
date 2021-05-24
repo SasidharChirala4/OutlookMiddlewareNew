@@ -24,5 +24,10 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
         /// Email upload option
         /// </summary>
         public EmailUploadOptions UploadOption { get; set; }
+
+        /// <summary>
+        /// Project Task Details
+        /// </summary>
+        public ProjectTaskDetailsDto ProjectTaskDetails { get; set; }
     }
 }

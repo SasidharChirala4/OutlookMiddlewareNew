@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Model;
-using Task = System.Threading.Tasks.Task;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
 {

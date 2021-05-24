@@ -6,7 +6,6 @@ using Edreams.Common.Exceptions.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Model;
-using Task = System.Threading.Tasks.Task;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {

@@ -17,9 +17,8 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<EmailRecipient> EmailRecipients { get; set; }
         public DbSet<Transaction> TransactionQueue { get; set; }
         public DbSet<HistoricTransaction> TransactionHistory { get; set; }
-        public DbSet<Task> Tasks { get; set; }
-        public DbSet<EmailAddress> EmailAddress { get; set; }
-        public DbSet<AssignedCc> AssignedCc { get; set; }
+        public DbSet<ProjectTask> ProjectTasks { get; set; }
+        public DbSet<ProjectTaskUserInvolvements> ProjectTaskUserInvolvements { get; set; }
 
         public OutlookMiddlewareDbContext(IEdreamsConfiguration configuration)
         {
@@ -156,39 +155,28 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.HasIndex(x => x.TimeStamp);
                 e.HasIndex(x => x.CorrelationId);
             });
-            modelBuilder.Entity<Task>(e =>
+            modelBuilder.Entity<ProjectTask>(e =>
             {
-                e.ToTable("Tasks");
+                e.ToTable("ProjectTasks");
                 e.HasKey(x => x.Id).IsClustered(false);
                 e.HasIndex(x => x.SysId).IsUnique().IsClustered();
                 e.Property(x => x.SysId).ValueGeneratedOnAdd();
                 e.Property(x => x.TaskName).HasMaxLength(200); 
                 e.Property(x => x.Description).HasMaxLength(300);
-                e.Property(x => x.Priority).HasMaxLength(10);
+                e.Property(x => x.Priority).HasMaxLength(10).HasConversion(new EnumToStringConverter<ProjectTaskPriority>());
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);
             });
-            modelBuilder.Entity<EmailAddress>(e =>
+            modelBuilder.Entity<ProjectTaskUserInvolvements>(e =>
             {
-                e.ToTable("EmailAddress");
+                e.ToTable("ProjectTaskUserInvolvements");
                 e.HasKey(x => x.Id).IsClustered(false);
                 e.HasIndex(x => x.SysId).IsUnique().IsClustered();
                 e.Property(x => x.SysId).ValueGeneratedOnAdd();
-                e.Property(x => x.Email).HasMaxLength(100);
                 e.Property(x => x.UserId).HasMaxLength(100);
+                e.Property(x => x.Type).HasMaxLength(10).HasConversion(new EnumToStringConverter<ProjectTaskUserInvolvementType>());
                 e.Property(x => x.PrincipalName).HasMaxLength(100);
-                e.Property(x => x.DisplayName).HasMaxLength(100);
-                e.Property(x => x.InsertedBy).IsRequired();
-                e.Property(x => x.InsertedBy).HasMaxLength(100);
-                e.Property(x => x.UpdatedBy).HasMaxLength(100);
-            });
-            modelBuilder.Entity<AssignedCc>(e =>
-            {
-                e.ToTable("AssignedCc");
-                e.HasKey(x => x.Id).IsClustered(false);
-                e.HasIndex(x => x.SysId).IsUnique().IsClustered();
-                e.Property(x => x.SysId).ValueGeneratedOnAdd();
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);
