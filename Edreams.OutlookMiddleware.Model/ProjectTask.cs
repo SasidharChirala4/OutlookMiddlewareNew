@@ -3,7 +3,6 @@ using Edreams.Common.DataAccess.Model.Interfaces;
 using Edreams.OutlookMiddleware.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Edreams.OutlookMiddleware.Model
 {

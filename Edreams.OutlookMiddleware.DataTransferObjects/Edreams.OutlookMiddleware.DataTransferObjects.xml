@@ -46,7 +46,7 @@
         </member>
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.ProjectTaskDetails">
             <summary>
-            Task Details
+            Project Task Details
             </summary>
         </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse">
