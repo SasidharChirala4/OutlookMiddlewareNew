@@ -4,6 +4,9 @@ using System.Data;
 using System.Security;
 using System.Security.Principal;
 using Edreams.Common.AzureServiceBus._DependencyInjection;
+using Edreams.Common.Exceptions._DependencyInjection;
+using Edreams.Common.Exchange._DependencyInjection;
+using Edreams.Common.KeyVault._DependencyInjection;
 using Edreams.Common.Logging._DependencyInjection;
 using Edreams.Common.Security._DependencyInjection;
 using Edreams.OutlookMiddleware.BusinessLogic;
@@ -46,6 +49,9 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
                     services.AddConfiguration(hostBuilder.Configuration);
                     services.AddServiceBus();
                     services.AddBusinessLogic();
+                    services.AddEdreamsExceptions();
+                    services.AddEdreamsKeyVaultIntegration();
+                    services.AddEdreamsExchangeIntegration();
 
                     services.AddTransient<ICategorizationEngineProcessor, CategorizationEngineProcessor>();
                     services.AddTransient<IEmailManager, EmailManager>();

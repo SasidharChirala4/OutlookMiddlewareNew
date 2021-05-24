@@ -11,7 +11,8 @@ namespace Edreams.OutlookMiddleware.Mapping
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Transaction, HistoricTransaction>();
+                cfg.CreateMap<Transaction, HistoricTransaction>()
+                    .ForMember(dest => dest.SysId, opt => opt.Ignore());
             });
 
             _mapper = config.CreateMapper();

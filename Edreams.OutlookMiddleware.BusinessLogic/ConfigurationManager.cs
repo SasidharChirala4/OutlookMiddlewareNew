@@ -15,7 +15,6 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         private readonly IExchangeAndKeyVaultHelper _exchangeAndKeyVaultHelper;
         private readonly ISecurityContext _securityContext;
-        private readonly IEdreamsLogger<ConfigurationManager> _logger;
 
         #endregion
 
@@ -26,15 +25,12 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// </summary>
         /// <param name="exchangeAndKeyVaultHelper">The exchange and key vault helper.</param>
         /// <param name="securityContext">The security context.</param>
-        /// <param name="logger">The logger.</param>
         public ConfigurationManager(
             IExchangeAndKeyVaultHelper exchangeAndKeyVaultHelper,
-            ISecurityContext securityContext,
-            IEdreamsLogger<ConfigurationManager> logger)
+            ISecurityContext securityContext)
         {
             _exchangeAndKeyVaultHelper = exchangeAndKeyVaultHelper;
             _securityContext = securityContext;
-            _logger = logger;
         }
 
         #endregion
