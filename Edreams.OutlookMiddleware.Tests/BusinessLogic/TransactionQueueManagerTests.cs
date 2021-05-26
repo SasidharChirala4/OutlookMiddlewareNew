@@ -21,6 +21,7 @@ using FluentAssertions;
 using Moq;
 using Xunit;
 using TransactionScope = Edreams.OutlookMiddleware.BusinessLogic.Transactions.TransactionScope;
+
 namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 {
     public class TransactionQueueManagerTests

@@ -20,6 +20,8 @@ namespace Edreams.OutlookMiddleware.DataAccess.DependencyInjection
             services.AddTransient<IRepository<File>, FilesRepository>();
             services.AddTransient<IRepository<EmailRecipient>, EmailRecipientsRepository>();
             services.AddTransient<IRepository<CategorizationRequest>, CategorizationRequestRepository>();
+            services.AddTransient<IRepository<ProjectTask>, ProjectTaskRepository>();
+            services.AddTransient<IRepository<File>, FilesRepository>();
             services.AddTransient<IRepository<Transaction>, TransactionsRepository>();
             services.AddTransient<IRepository<HistoricTransaction>, HistoricTransactionsRepository>();
         }

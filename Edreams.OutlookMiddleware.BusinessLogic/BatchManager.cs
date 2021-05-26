@@ -25,9 +25,11 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IRepository<Batch> _batchRepository;
         private readonly IRepository<Email> _emailRepository;
         private readonly IRepository<File> _fileRepository;
+        private readonly IRepository<ProjectTask> _projectTaskRepository;
         private readonly IBatchFactory _batchFactory;
         private readonly IEmailsToEmailDetailsMapper _emailsToEmailDetailsMapper;
         private readonly IPreloadedFilesToFilesMapper _preloadedFilesToFilesMapper;
+        private readonly IProjectTaskDetailsDtoToProjectTaskMapper _projectTaskDetailsDtoToProjectTaskMapper;
         private readonly ITransactionHelper _transactionHelper;
         private readonly IValidator _validator;
         private readonly IExceptionFactory _exceptionFactory;
@@ -37,9 +39,11 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             IRepository<Batch> batchRepository,
             IRepository<Email> emailRepository,
             IRepository<File> fileRepository,
+            IRepository<ProjectTask> projectTaskRepository,
             IBatchFactory batchFactory,
             IEmailsToEmailDetailsMapper emailsToEmailDetailsMapper,
             IPreloadedFilesToFilesMapper preloadedFilesToFilesMapper,
+            IProjectTaskDetailsDtoToProjectTaskMapper projectTaskDetailsDtoToProjectTaskMapper,
             ITransactionHelper transactionHelper,
             IValidator validator,
             IExceptionFactory exceptionFactory)
@@ -49,9 +53,11 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             _emailRepository = emailRepository;
             _fileRepository = fileRepository;
             _batchFactory = batchFactory;
+            _projectTaskRepository = projectTaskRepository;
             _emailsToEmailDetailsMapper = emailsToEmailDetailsMapper;
             _preloadedFilesToFilesMapper = preloadedFilesToFilesMapper;
             _transactionHelper = transactionHelper;
+            _projectTaskDetailsDtoToProjectTaskMapper = projectTaskDetailsDtoToProjectTaskMapper;
             _validator = validator;
             _exceptionFactory = exceptionFactory;
         }
@@ -129,6 +135,18 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 // the email references with that.
                 IList<File> files = _preloadedFilesToFilesMapper.Map(batch, preloadedFiles, request.UploadOption, request.EmailRecipients);
                 await _fileRepository.Create(files);
+
+                if(request.ProjectTaskDetails!=null)
+                {
+                    IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batch.Id);
+                    List<ProjectTask> taskDetails = new List<ProjectTask>();
+                    foreach(Email email in emails)
+                    {
+                        ProjectTask task = _projectTaskDetailsDtoToProjectTaskMapper.Map(request.ProjectTaskDetails, email);
+                        taskDetails.Add(task);
+                    }
+                    await _projectTaskRepository.Create(taskDetails);
+                }
 
 
                 // All file records for the specified batch should be marked for cleanup
