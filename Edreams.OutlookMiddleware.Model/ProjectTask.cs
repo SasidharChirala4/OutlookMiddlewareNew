@@ -1,8 +1,8 @@
-﻿using Edreams.Common.DataAccess.Model;
+﻿using System;
+using System.Collections.Generic;
+using Edreams.Common.DataAccess.Model;
 using Edreams.Common.DataAccess.Model.Interfaces;
 using Edreams.OutlookMiddleware.Enums;
-using System;
-using System.Collections.Generic;
 
 namespace Edreams.OutlookMiddleware.Model
 {
@@ -14,7 +14,6 @@ namespace Edreams.OutlookMiddleware.Model
         public ProjectTaskPriority Priority { get; set; }
         public Guid EmailId { get; set; }
         public virtual Email Email { get; set; }
-        public virtual IList<ProjectTaskUserInvolvements> UserInvolvements { get; set; }
-
+        public virtual IList<ProjectTaskUserInvolvement> UserInvolvements { get; set; }
     }
 }

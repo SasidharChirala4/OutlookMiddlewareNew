@@ -4,10 +4,10 @@ using Edreams.OutlookMiddleware.Model;
 
 namespace Edreams.OutlookMiddleware.DataAccess.Repositories
 {
-    public class ProjectTaskRepository : Repository<ProjectTask>
+    public class ProjectTaskUserInvolvementRepository : Repository<ProjectTaskUserInvolvement>
     {
-        public ProjectTaskRepository(
+        public ProjectTaskUserInvolvementRepository(
             OutlookMiddlewareDbContext dbContext, ISecurityContext securityContext)
-            : base(dbContext, dbContext.ProjectTasks, securityContext) { }
+            : base(dbContext, dbContext.ProjectTaskUserInvolvements, securityContext) { }
     }
 }

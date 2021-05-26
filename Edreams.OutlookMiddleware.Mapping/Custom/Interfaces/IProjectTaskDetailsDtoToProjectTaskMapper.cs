@@ -8,6 +8,6 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom.Interfaces
 {
     public interface IProjectTaskDetailsDtoToProjectTaskMapper
     {
-        ProjectTask Map(ProjectTaskDetailsDto projectTaskDetails,Email email);
+        ProjectTask Map(ProjectTaskDto projectTaskDetails,Email email);
     }
 }

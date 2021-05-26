@@ -18,7 +18,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<Transaction> TransactionQueue { get; set; }
         public DbSet<HistoricTransaction> TransactionHistory { get; set; }
         public DbSet<ProjectTask> ProjectTasks { get; set; }
-        public DbSet<ProjectTaskUserInvolvements> ProjectTaskUserInvolvements { get; set; }
+        public DbSet<ProjectTaskUserInvolvement> ProjectTaskUserInvolvements { get; set; }
 
         public OutlookMiddlewareDbContext(IEdreamsConfiguration configuration)
         {
@@ -168,7 +168,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);
             });
-            modelBuilder.Entity<ProjectTaskUserInvolvements>(e =>
+            modelBuilder.Entity<ProjectTaskUserInvolvement>(e =>
             {
                 e.ToTable("ProjectTaskUserInvolvements");
                 e.HasKey(x => x.Id).IsClustered(false);

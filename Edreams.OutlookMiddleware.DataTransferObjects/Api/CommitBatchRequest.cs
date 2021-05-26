@@ -28,6 +28,6 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
         /// <summary>
         /// Project Task Details
         /// </summary>
-        public ProjectTaskDetailsDto ProjectTaskDetails { get; set; }
+        public ProjectTaskDto ProjectTaskDetails { get; set; }
     }
 }

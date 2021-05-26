@@ -9,7 +9,7 @@ namespace Edreams.OutlookMiddleware.Mapping
 {
     public class ProjectTaskDetailsDtoToProjectTaskMapper : IProjectTaskDetailsDtoToProjectTaskMapper
     {
-        public ProjectTask Map(ProjectTaskDetailsDto projectTaskDetails, Email email)
+        public ProjectTask Map(ProjectTaskDto projectTaskDetails, Email email)
         {
 
             ProjectTask projectTask = new ProjectTask();
@@ -18,10 +18,10 @@ namespace Edreams.OutlookMiddleware.Mapping
             projectTask.DueDate = projectTaskDetails.DueDate;
             projectTask.EmailId = email.Id;
             projectTask.Description = projectTaskDetails.Description;
-            projectTask.UserInvolvements = new List<ProjectTaskUserInvolvements>();
-            foreach (ProjectTaskUserInvolmentsDto userInvolvement in projectTaskDetails.UserInvolvements)
+            projectTask.UserInvolvements = new List<ProjectTaskUserInvolvement>();
+            foreach (ProjectTaskUserInvolmentDto userInvolvement in projectTaskDetails.UserInvolvements)
             {
-                projectTask.UserInvolvements.Add(new ProjectTaskUserInvolvements()
+                projectTask.UserInvolvements.Add(new ProjectTaskUserInvolvement()
                 {
                     Type = userInvolvement.Type,
                     PrincipalName = userInvolvement.PrincipalName,
