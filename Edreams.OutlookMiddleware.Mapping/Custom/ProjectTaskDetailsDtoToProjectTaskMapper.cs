@@ -26,7 +26,10 @@ namespace Edreams.OutlookMiddleware.Mapping
                     Type = userInvolvement.Type,
                     PrincipalName = userInvolvement.PrincipalName,
                     UserId = userInvolvement.UserId,
+                    // ToDo: Need to remove once the johnny configured InsertedBy fileds for child tables in repository.
+                    InsertedBy = "BE\\kkaredla"
                 });
+
             }
             return projectTask;
         }
