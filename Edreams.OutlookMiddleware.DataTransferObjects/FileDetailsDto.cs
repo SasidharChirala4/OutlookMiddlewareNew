@@ -9,5 +9,6 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         public string Path { get; set; }
         public string Name { get; set; }
         public FileKind Kind { get; set; }
+        public string EmailSubject { get; set; }
     }
 }
