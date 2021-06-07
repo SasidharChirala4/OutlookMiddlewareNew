@@ -5,10 +5,8 @@ trigger:
   
 # This build pipeline will run on agents from the 'default' build agent pool
 # and will specifically target build agents that have the custom 'Build.Server'
-# capability set to the value 'BEDAC0552'.
 pool: 
-  name: default
-  demands: Build.Server -equals BEDAC0552
+  name: DSI e-DReaMS BUILDS 
 
 # This variable will make sure that automatic Azure DevOps code coverage generation is disabled.
 # For this build we are using a custom code coverage tool that generates a more extensive output.
