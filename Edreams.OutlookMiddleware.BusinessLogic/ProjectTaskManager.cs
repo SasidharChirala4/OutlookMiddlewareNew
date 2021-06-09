@@ -48,6 +48,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 //To = toRecipient.Recipient,
                 //Cc = cc,
                 //Body = (!string.IsNullOrEmpty(spModel.EmailBody) ? spModel.EmailBody : string.Empty)
+                // Email Subject is stored in file entity.
+                // Each file related to the email having same subject so taking subject from first object.
                 Subject = FormatSubject(emailDetails.Files[0].EmailSubject),
             };
 
