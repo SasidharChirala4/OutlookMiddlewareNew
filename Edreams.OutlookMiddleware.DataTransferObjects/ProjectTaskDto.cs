@@ -10,7 +10,7 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         public DateTime? DueDate { get; set; }
         public string Description { get; set; }
         public ProjectTaskPriority Priority { get; set; }
-        public List<ProjectTaskUserInvolmentDto> UserInvolvements { get; set; }
+        public List<ProjectTaskUserInvolvementDto> UserInvolvements { get; set; }
 
     }
 }

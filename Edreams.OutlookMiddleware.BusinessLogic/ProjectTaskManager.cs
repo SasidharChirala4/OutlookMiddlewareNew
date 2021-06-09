@@ -45,6 +45,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 FromUserPrincipalName = assignedBy.UserPrincipalName,
                 FromUserId = assignedBy.UserId,
                 // TODO: To,cc,Body details are filled once the metadata details are addded.
+                // This can be handled in pbi #40965
                 //To = toRecipient.Recipient,
                 //Cc = cc,
                 //Body = (!string.IsNullOrEmpty(spModel.EmailBody) ? spModel.EmailBody : string.Empty)
@@ -57,6 +58,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             return new ProjectTask()
             {
                 // TODO: ProjectId,ProjectUrl details are filled once the metadata details are addded.
+                // This can be handled in pbi #40965
                 //ProjectId = new Guid(projectTask.ProjectId),
                 //ProjectUrl = projectTask.SiteUrl,
                 Title = projectTask.TaskName,
@@ -77,10 +79,10 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         #endregion
 
         #region Private Methods
-        private List<ProjectTaskUserInvolvement> GetUserInvolvements(List<ProjectTaskUserInvolmentDto> userInvolmentDtos)
+        private List<ProjectTaskUserInvolvement> GetUserInvolvements(List<ProjectTaskUserInvolvementDto> userInvolmentDtos)
         {
             List<ProjectTaskUserInvolvement> userInvolvements = new List<ProjectTaskUserInvolvement>();
-            foreach (ProjectTaskUserInvolmentDto userInvolmentDto in userInvolmentDtos)
+            foreach (ProjectTaskUserInvolvementDto userInvolmentDto in userInvolmentDtos)
             {
                 userInvolvements.Add(new ProjectTaskUserInvolvement()
                 {
@@ -94,9 +96,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private string FormatSubject(string subject)
         {
             string result = subject;
-            if (!String.IsNullOrEmpty(subject) && subject.IndexOf(_configuration.SubjectResponse)<0)
+            if (!String.IsNullOrEmpty(subject) && subject.IndexOf(_configuration.SubjectResponse, StringComparison.OrdinalIgnoreCase) !=0)
             {
-                result = _configuration.SubjectResponse.ToString(CultureInfo.InvariantCulture) + result;
+                result = _configuration.SubjectResponse + result;
             }
             return result;
         }

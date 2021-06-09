@@ -52,11 +52,11 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
 
                 if (email.ProjectTask != null)
                 {
-                    List<ProjectTaskUserInvolmentDto> userInvolvements = new List<ProjectTaskUserInvolmentDto>();
+                    List<ProjectTaskUserInvolvementDto> userInvolvements = new List<ProjectTaskUserInvolvementDto>();
                     foreach (ProjectTaskUserInvolvement userInvolvement in email.ProjectTask.UserInvolvements)
                     {
                         userInvolvements.Add(
-                        new ProjectTaskUserInvolmentDto()
+                        new ProjectTaskUserInvolvementDto()
                         {
                             PrincipalName = userInvolvement.PrincipalName,
                             Type = userInvolvement.Type,

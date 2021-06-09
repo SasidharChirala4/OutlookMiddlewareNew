@@ -89,6 +89,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                                 // Process the file based on the file details.
                                 SharePointFile sharepointFile = await ProcessFile(emailDetails, sentEmailDetails, fileDetails);
                                 // TODO: Update absolute file URL in database as part of metadata PBI.
+                                // This can be handled in pbi #40965
                                 sharepointFileUploads.Add(sharepointFile);
                                 // Set the file status to be successfully uploaded and
                                 // increase the number of successfully uploaded files.
