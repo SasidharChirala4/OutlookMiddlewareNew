@@ -19,14 +19,17 @@ namespace Edreams.OutlookMiddleware.Mapping
             projectTask.EmailId = email.Id;
             projectTask.Description = projectTaskDetails.Description;
             projectTask.UserInvolvements = new List<ProjectTaskUserInvolvement>();
-            foreach (ProjectTaskUserInvolmentDto userInvolvement in projectTaskDetails.UserInvolvements)
+            foreach (ProjectTaskUserInvolvementDto userInvolvement in projectTaskDetails.UserInvolvements)
             {
                 projectTask.UserInvolvements.Add(new ProjectTaskUserInvolvement()
                 {
                     Type = userInvolvement.Type,
                     PrincipalName = userInvolvement.PrincipalName,
                     UserId = userInvolvement.UserId,
+                    // ToDo: Need to remove once the johnny configured InsertedBy fileds for child tables in repository.
+                    InsertedBy = "BE\\kkaredla"
                 });
+
             }
             return projectTask;
         }

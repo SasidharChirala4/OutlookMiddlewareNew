@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +15,8 @@ using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Services.Upload.Engine.Interfaces;
-
+using ProjectTask = Edreams.Contracts.Data.Extensibility.ProjectTask;
+using SharePointFile = Edreams.Contracts.Data.Common.SharePointFile;
 namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 {
     public class UploadEngineProcessor : IUploadEngineProcessor
@@ -23,6 +25,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         private readonly IEmailManager _emailManager;
         private readonly IFileManager _fileManager;
         private readonly IExtensibilityManager _extensibilityManager;
+        private readonly IProjectTaskManager _projectTaskManager;
         private readonly ITransactionQueueManager _transactionQueueManager;
         private readonly IFileHelper _fileHelper;
         private readonly IExchangeAndKeyVaultHelper _exchangeAndKeyVaultHelper;
@@ -31,7 +34,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
         public UploadEngineProcessor(
             IBatchManager batchManager, IEmailManager emailManager,
-            IFileManager fileManager, IExtensibilityManager extensibilityManager,
+            IFileManager fileManager, IExtensibilityManager extensibilityManager, IProjectTaskManager projectTaskManager,
             ITransactionQueueManager transactionQueueManager, IFileHelper fileHelper,
             IExchangeAndKeyVaultHelper exchangeAndKeyVaultHelper,
             IExceptionFactory exceptionFactory, IEdreamsLogger<UploadEngineProcessor> logger)
@@ -40,6 +43,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             _emailManager = emailManager;
             _fileManager = fileManager;
             _extensibilityManager = extensibilityManager;
+            _projectTaskManager = projectTaskManager;
             _transactionQueueManager = transactionQueueManager;
             _fileHelper = fileHelper;
             _exchangeAndKeyVaultHelper = exchangeAndKeyVaultHelper;
@@ -65,6 +69,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
                 int numberOfSuccessfullyUploadedEmails = 0;
 
+                List<SharePointFile> sharepointFileUploads = new List<SharePointFile>();
                 // Loop through all emails that are part of this batch.
                 foreach (EmailDetailsDto emailDetails in batchDetails.Emails)
                 {
@@ -82,9 +87,10 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                             if (!IsFileSkipped(emailDetails.UploadOption, fileDetails.Kind))
                             {
                                 // Process the file based on the file details.
-                                string absoluteFileUrl = await ProcessFile(emailDetails, sentEmailDetails, fileDetails);
+                                SharePointFile sharepointFile = await ProcessFile(emailDetails, sentEmailDetails, fileDetails);
                                 // TODO: Update absolute file URL in database as part of metadata PBI.
-
+                                // This can be handled in pbi #40965
+                                sharepointFileUploads.Add(sharepointFile);
                                 // Set the file status to be successfully uploaded and
                                 // increase the number of successfully uploaded files.
                                 await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
@@ -112,6 +118,13 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                         numberOfSuccessfullyUploadedEmails++;
                     }
 
+                    //Create Task
+                    if (emailDetails.ProjectTaskDto != null)
+                    {
+                        ProjectTask projectTask = _projectTaskManager.GetEdreamsProjectTask(emailDetails, sharepointFileUploads);
+                        ProjectTask newProjectTask = await _extensibilityManager.CreateEdreamsProjectTask(projectTask);
+                         _logger.LogInformation("Task created for email with ID: " + emailDetails.Id + " successfully");
+                    }
                     // Update email status based on the success rate.
                     await _emailManager.UpdateEmailStatus(emailDetails.Id, emailStatus);
                 }
@@ -187,7 +200,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             return null;
         }
 
-        private async Task<string> ProcessFile(EmailDetailsDto emailDetails, ExchangeEmail sentEmail, FileDetailsDto fileDetails)
+        private async Task<SharePointFile> ProcessFile(EmailDetailsDto emailDetails, ExchangeEmail sentEmail, FileDetailsDto fileDetails)
         {
             try
             {

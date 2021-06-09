@@ -23,6 +23,7 @@ namespace Edreams.OutlookMiddleware.Mapping.DependencyInjection
             services.AddTransient<IMapper<EmailRecipientDto, EmailRecipient>, EmailRecipientDtoToEmailRecipientMapper>();
             services.AddSingleton<IPreloadedFilesToFilesMapper, PreloadedFilesToFilesMapper>();
             services.AddSingleton<IEmailsToEmailDetailsMapper, EmailsToEmailDetailsMapper>();
+            services.AddSingleton<IProjectTaskDetailsDtoToProjectTaskMapper, ProjectTaskDetailsDtoToProjectTaskMapper>();
             services.AddSingleton<IMapper<CategorizationRequestEntity, CategorizationRequestContract>, CategorizationRequestMapper>();
         }
     }

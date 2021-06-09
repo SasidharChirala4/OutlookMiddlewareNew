@@ -49,7 +49,8 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
                 TransactionsWorkerScheduleStopTime = configuration.GetValue<TimeSpan>("TransactionsWorkerScheduleStopTime"),
                 CategorizationWorkerScheduleStartTime = configuration.GetValue<TimeSpan>("CategorizationWorkerScheduleStartTime"),
                 CategorizationWorkerScheduleStopTime = configuration.GetValue<TimeSpan>("CategorizationWorkerScheduleStopTime"),
-                CategorizationExpiryInMinutes = configuration.GetValue<int>("CategorizationExpiryInMinutes")
+                CategorizationExpiryInMinutes = configuration.GetValue<int>("CategorizationExpiryInMinutes"),
+                SubjectResponse = configuration.GetValue<string>("SubjectResponse")
             });
         }
 

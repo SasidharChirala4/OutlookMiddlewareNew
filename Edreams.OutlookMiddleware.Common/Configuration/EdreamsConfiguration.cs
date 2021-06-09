@@ -37,5 +37,6 @@ namespace Edreams.OutlookMiddleware.Common.Configuration
         public TimeSpan CategorizationWorkerScheduleStartTime { get; set; }
         public TimeSpan CategorizationWorkerScheduleStopTime { get; set; }
         public int CategorizationExpiryInMinutes { get; set; }
+        public string SubjectResponse { get; set; }
     }
 }

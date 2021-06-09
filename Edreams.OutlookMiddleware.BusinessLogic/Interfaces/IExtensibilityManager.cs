@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using Edreams.Contracts.Data.Common;
+using System.Threading.Tasks;
+using ProjectTask = Edreams.Contracts.Data.Extensibility.ProjectTask;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
 {
@@ -22,6 +24,14 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         /// <param name="folder">Url of the folder where Email/ Attachment should be uploaded.</param>
         /// <param name="fileName">Email/ Attachment Name.</param>
         /// <param name="overwrite">Flag to overwrite the file.</param>
-        Task<string> UploadFile(byte[] itemBytes, string siteUrl, string folder, string fileName, bool overwrite);
+        /// <returns>SharepointFile object of the uploaded file</returns>
+        Task<SharePointFile> UploadFile(byte[] itemBytes, string siteUrl, string folder, string fileName, bool overwrite);
+
+        /// <summary>
+        /// Creates project task in Edreams.
+        /// </summary>
+        /// <param name="projectTask">project task object</param>
+        /// <returns>Created project Task</returns>
+        Task<ProjectTask> CreateEdreamsProjectTask(ProjectTask projectTask);
     }
 }

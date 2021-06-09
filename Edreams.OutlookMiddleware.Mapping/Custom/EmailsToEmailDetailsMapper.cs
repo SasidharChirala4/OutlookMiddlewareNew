@@ -23,20 +23,56 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         Id = file.Id,
                         Name = file.FileName,
                         Path = file.TempPath,
-                        Kind = file.Kind
+                        Kind = file.Kind,
+                        EmailSubject = file.EmailSubject,
                     };
 
                     listOfFileDetails.Add(fileDetails);
                 }
-
+                
                 EmailDetailsDto emailDetails = new EmailDetailsDto
                 {
                     Id = email.Id,
                     Files = listOfFileDetails,
                     UploadOption = email.UploadOption,
                     EdreamsReferenceId = email.EdreamsReferenceId,
-                    EmailKind = email.EmailKind
+                    EmailKind = email.EmailKind,
+                    
                 };
+
+                foreach(EmailRecipient emailRecipient in email.EmailRecipients)
+                {
+                    emailDetails.EmailRecipients.Add(new EmailRecipientDto()
+                    {
+                        EmailId= emailRecipient.Email.Id ,
+                        Recipient =emailRecipient.Recipient,
+                        Type= emailRecipient.Type
+                    });
+                }
+
+                if (email.ProjectTask != null)
+                {
+                    List<ProjectTaskUserInvolvementDto> userInvolvements = new List<ProjectTaskUserInvolvementDto>();
+                    foreach (ProjectTaskUserInvolvement userInvolvement in email.ProjectTask.UserInvolvements)
+                    {
+                        userInvolvements.Add(
+                        new ProjectTaskUserInvolvementDto()
+                        {
+                            PrincipalName = userInvolvement.PrincipalName,
+                            Type = userInvolvement.Type,
+                            UserId = userInvolvement.UserId
+                        });
+                    }
+                    ProjectTaskDto projectTaskDto = new ProjectTaskDto()
+                    {
+                        Description = email.ProjectTask.Description,
+                        DueDate = email.ProjectTask.DueDate,
+                        Priority = email.ProjectTask.Priority,
+                        TaskName = email.ProjectTask.TaskName,
+                        UserInvolvements = userInvolvements
+                    };
+                    emailDetails.ProjectTaskDto = projectTaskDto;
+                }
 
                 listOfEmailDetails.Add(emailDetails);
             }

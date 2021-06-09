@@ -2,7 +2,7 @@
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects
 {
-    public class ProjectTaskUserInvolmentDto
+    public class ProjectTaskUserInvolvementDto
     {
         public string UserId { get; set; }
         public string PrincipalName { get; set; }

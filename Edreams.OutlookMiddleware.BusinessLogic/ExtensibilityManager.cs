@@ -10,6 +10,7 @@ using Edreams.OutlookMiddleware.Common.Constants;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.Common.Validation.Interface;
 using RestSharp;
+using ProjectTask = Edreams.Contracts.Data.Extensibility.ProjectTask;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
@@ -19,20 +20,23 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         private readonly IRestHelper<SuggestedSite> _suggestedSiteRestHelper;
         private readonly IRestHelper<SharePointFile> _sharePointFileRestHelper;
+        private readonly IRestHelper<ProjectTask> _projectTaskRestHelpler;
         private readonly IValidator _validator;
         private readonly IEdreamsLogger<ExtensibilityManager> _logger;
 
         #endregion
 
-        #region <| Construction |>
+        #region <| Constructor |>
 
         public ExtensibilityManager(
             IRestHelper<SuggestedSite> suggestedSiteRestHelper,
             IRestHelper<SharePointFile> sharePointFileRestHelper,
+            IRestHelper<ProjectTask> projectTaskRestHelpler,
             IValidator validator, IEdreamsLogger<ExtensibilityManager> logger)
         {
             _suggestedSiteRestHelper = suggestedSiteRestHelper;
             _sharePointFileRestHelper = sharePointFileRestHelper;
+            _projectTaskRestHelpler = projectTaskRestHelpler;
             _validator = validator;
             _logger = logger;
         }
@@ -88,8 +92,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// <param name="folder">Url of the folder where Email/ Attachment should be uploaded.</param>
         /// <param name="fileName">Email/ Attachment Name.</param>
         /// <param name="overwrite">Flag to overwrite the file.</param>
-        /// <returns>Uploaded file url</returns>
-        public async Task<string> UploadFile(byte[] itemBytes, string siteUrl, string folder, string fileName, bool overwrite)
+        /// <returns>SharepointFile object of the uploaded file</returns>
+        public async Task<SharePointFile> UploadFile(byte[] itemBytes, string siteUrl, string folder, string fileName, bool overwrite)
         {
             // Validations
             _validator.ValidateString(siteUrl, ValidationMessages.WebApi.SiteUrlRequired);
@@ -113,7 +117,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 if (response.Content != null)
                 {
                     _logger.LogInformation($"File [{fileParameter.FileName}] uploaded to site [{siteUrl}] successfully.");
-                    return response.Content.AbsoluteUrl;
+                    return response.Content;
                 }
 
                 // this scenario won't occur mostly, because we are handling all kind of exceptions in rest helper
@@ -133,5 +137,37 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 return null;
             }
         }
+
+        /// <summary>
+        /// Creates project task in Edreams.
+        /// </summary>
+        /// <param name="projectTask">project task object</param>
+        /// <returns>Created project Task</returns>
+        public async Task<ProjectTask> CreateEdreamsProjectTask(ProjectTask projectTask)
+        {
+            try
+            {
+                // create project task from rest helper .
+                var response = await _projectTaskRestHelpler.CreateNew($"/projects/{projectTask.ProjectId}/tasks", projectTask,false);
+                if (response.Content != null)
+                {
+                    _logger.LogInformation($"Project Task [{projectTask.Title}] Created successfully.");
+                    return response.Content;
+                }
+                return null;
+            }
+            catch (EdreamsException ex)
+            {
+                _logger.LogError(ex, "Error while creating Project Task.");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error occured while creating Project Task.");
+                return null;
+            }
+        }
+
+        
     }
 }
