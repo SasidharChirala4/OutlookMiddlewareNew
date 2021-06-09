@@ -25,16 +25,11 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// Method to get the edreams project task object.
         /// </summary>
         /// <param name="emailDetails">Email object</param>
-        /// <param name="sharepointFileUploads">fie upload details.</param>
-        /// <returns></returns>
+        /// <param name="sharepointFileUploads">file upload details.</param>
+        /// <returns>Created ProjectTask Object</returns>
         public ProjectTask GetEdreamsProjectTask(EmailDetailsDto emailDetails, List<SharePointFile> sharepointFileUploads)
         {
-            ProjectTaskPriority priority;
             ProjectTaskDto projectTask = emailDetails.ProjectTaskDto;
-            if (!Enum.TryParse(projectTask.Priority.ToString(), true, out priority))
-            {
-                priority = ProjectTaskPriority.Normal;
-            }
 
             //TO DO: Need to check with johnny about Email recipients
             //ToRecipient 
@@ -64,7 +59,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 //ProjectUrl = projectTask.SiteUrl,
                 Title = projectTask.TaskName,
                 Description = projectTask.Description,
-                Priority = priority,
+                Priority = Enum.Parse<ProjectTaskPriority>(projectTask.Priority.ToString(), true),
                 StartDate = DateTime.UtcNow,
                 DueDate = projectTask.DueDate.HasValue ? projectTask.DueDate.Value : (DateTime?)null,
                 UserInvolvements = userInvolvements,
@@ -97,7 +92,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private string FormatSubject(string subject)
         {
             string result = subject;
-            if (!String.IsNullOrEmpty(subject) && !subject.ToUpper().Contains(_configuration.SubjectResponse.ToString(CultureInfo.InvariantCulture)))
+            if (!String.IsNullOrEmpty(subject) && subject.IndexOf(_configuration.SubjectResponse)<0)
             {
                 result = _configuration.SubjectResponse.ToString(CultureInfo.InvariantCulture) + result;
             }

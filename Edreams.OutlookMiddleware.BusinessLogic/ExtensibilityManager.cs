@@ -92,7 +92,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// <param name="folder">Url of the folder where Email/ Attachment should be uploaded.</param>
         /// <param name="fileName">Email/ Attachment Name.</param>
         /// <param name="overwrite">Flag to overwrite the file.</param>
-        /// <returns>Uploaded file url</returns>
+        /// <returns>SharepointFile object of the uploaded file</returns>
         public async Task<SharePointFile> UploadFile(byte[] itemBytes, string siteUrl, string folder, string fileName, bool overwrite)
         {
             // Validations

@@ -53,14 +53,14 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                 if (email.ProjectTask != null)
                 {
                     List<ProjectTaskUserInvolmentDto> userInvolvements = new List<ProjectTaskUserInvolmentDto>();
-                    foreach (ProjectTaskUserInvolvement userInvlovement in email.ProjectTask.UserInvolvements)
+                    foreach (ProjectTaskUserInvolvement userInvolvement in email.ProjectTask.UserInvolvements)
                     {
                         userInvolvements.Add(
                         new ProjectTaskUserInvolmentDto()
                         {
-                            PrincipalName = userInvlovement.PrincipalName,
-                            Type = userInvlovement.Type,
-                            UserId = userInvlovement.UserId
+                            PrincipalName = userInvolvement.PrincipalName,
+                            Type = userInvolvement.Type,
+                            UserId = userInvolvement.UserId
                         });
                     }
                     ProjectTaskDto projectTaskDto = new ProjectTaskDto()
