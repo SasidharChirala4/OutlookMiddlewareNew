@@ -26,7 +26,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         #endregion
 
-        #region <| Construction |>
+        #region <| Constructor |>
 
         public ExtensibilityManager(
             IRestHelper<SuggestedSite> suggestedSiteRestHelper,
