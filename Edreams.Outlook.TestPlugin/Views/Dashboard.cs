@@ -9,6 +9,7 @@ using Edreams.Outlook.TestPlugin.Helpers;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
 using Microsoft.Office.Interop.Outlook;
+using Edreams.OutlookMiddleware.DataTransferObjects;
 
 namespace Edreams.Outlook.TestPlugin.Views
 {
@@ -142,6 +143,34 @@ namespace Edreams.Outlook.TestPlugin.Views
                     UploadOption = EmailUploadOptions.Emails,
                     //EmailRecipients = new List<EmailRecipientDto>() { new EmailRecipientDto() { EmailId=new Guid("E400B31C-BC09-4F4F-B16F-546181285D67") ,Type=EmailRecipientType.Contact,Recipient="kkaredla@deloitte.com" },
                     // new EmailRecipientDto() { EmailId=new Guid("7F6856BF-6490-4D60-A52B-FE1301C894CD") ,Type=EmailRecipientType.Contact,Recipient="bkonijeti@deloitte.com" }}
+                };
+                commitBatchRequest.ProjectTaskDetails = new ProjectTaskDto()
+                {
+                    TaskName = "Sample Task-Testing Task Details",
+                    Description = "Sample task for testing creation of task new outlookmiddleware",
+                    DueDate = System.DateTime.Now,
+                    Priority = ProjectTaskPriority.High,
+                    UserInvolvements = new List<ProjectTaskUserInvolvementDto>()
+                    {
+                        new ProjectTaskUserInvolvementDto()
+                        {
+                            PrincipalName = "kkaredla",
+                            Type= ProjectTaskUserInvolvementType.AssignedBy,
+                             UserId ="A51291C9-7165-469D-8844-8BE57E9F74F0"
+                        },
+                        new ProjectTaskUserInvolvementDto()
+                        {
+                            PrincipalName = "Bkonijeti",
+                            Type= ProjectTaskUserInvolvementType.AssignedTo,
+                             UserId ="184946A0-E943-4BDF-B5DB-1A5A04AC677B"
+                        },new ProjectTaskUserInvolvementDto()
+                        {
+                            PrincipalName = "jhooyberghs",
+                            Type= ProjectTaskUserInvolvementType.AssignedCc,
+                             UserId ="85570FD1-3246-4693-AF49-E379398E5B37"
+                        }
+
+                    }
                 };
                 await HttpHelper.CommitBatch(commitBatchRequest);
             }
