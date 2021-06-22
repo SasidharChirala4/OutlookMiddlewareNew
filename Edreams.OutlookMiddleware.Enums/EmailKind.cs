@@ -1,5 +1,4 @@
-﻿
-namespace Edreams.OutlookMiddleware.Enums
+﻿namespace Edreams.OutlookMiddleware.Enums
 {
     public enum EmailKind
     {

@@ -1,6 +1,6 @@
-﻿using Edreams.OutlookMiddleware.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Edreams.OutlookMiddleware.Enums;
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects
 {

@@ -2,7 +2,6 @@
 using Edreams.Common.DataAccess.Model.Interfaces;
 using Edreams.OutlookMiddleware.Enums;
 
-
 namespace Edreams.OutlookMiddleware.Model
 {
     public class CategorizationRequest : ModelBase, ILongSysId
