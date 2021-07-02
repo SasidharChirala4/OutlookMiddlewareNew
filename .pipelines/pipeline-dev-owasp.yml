@@ -1,0 +1,77 @@
+# YAML file in the release branch
+schedules:
+- cron: "0 1 * * Sat"
+  displayName: Every Saturday at 1:00 AM
+  branches:
+    include:
+    - dev
+    - feature-*
+  
+# This build pipeline will run on agents from the 'default' build agent pool
+# and will specifically target build agents that have the custom 'Build.Server'
+pool: 
+  name: DSI e-DReaMS BUILDS 
+
+# This variable will make sure that automatic Azure DevOps code coverage generation is disabled.
+# For this build we are using a custom code coverage tool that generates a more extensive output.
+variables:
+  - name: disable.coverage.autogenerate
+    value: 'true'
+
+# This build pipeline will run the following build steps...
+steps:
+
+  # This PowerShell script updates the build number.
+  - task: PowerShell@2
+    displayName: Set Dynamic Build Number
+    inputs:
+      targetType: 'inline'
+      script: |        
+        $today = Get-Date 
+        $midnight = Get-Date -Hour 0 -Minute 00 -Second 00
+        $referenceDate = [datetime]"01/01/2000 00:00"
+        $diffInDays = New-TimeSpan -Start $referenceDate -End $today
+        $autoBuild = [math]::Floor($diffInDays.TotalDays)
+        $diffInSeconds = New-TimeSpan -Start $midnight -End $today
+        $autoRevision = [math]::Floor($diffInSeconds.TotalSeconds / 2)
+        $buildNumber = "0.1." + $autoBuild + "." + $autoRevision
+
+        Write-Host "Current Build Number " + $env:BUILD_BUILDNUMBER
+        Write-Host "Generated Build Number " + $buildNumber
+        Write-Host "##vso[build.updatebuildnumber]$buildNumber"
+        Write-Host "Done"
+        
+  # Install the latest NuGet tool for compatibility (the default one throws
+  # a parse exception on our solution files).
+  - task: NuGetToolInstaller@1
+    inputs:
+      versionSpec: '5.x'
+
+  # Run a NuGet restore on all the solution files.
+  - task: NuGetCommand@2
+    inputs:
+      command: 'restore'
+      restoreSolution: '**/Edreams.OutlookMiddleware.sln'
+      feedsToUse: config
+      nugetConfigPath: '$(Build.SourcesDirectory)/.nuget/nuget.config'
+
+  # Run a Visual Studio build on all solution files.
+  - task: VSBuild@1
+    inputs:
+      solution: '**\*.sln'
+      configuration: Release
+
+  # Execute OWASP Dependency Check
+  - task: InfoSupport.infosupport-owasp-dependecy-checker.owasp-dependency-check.OWASPDependencyCheck@0
+    displayName: 'Execute OWASP Dependency Check'
+    inputs:
+      outputDirectory: '$(Agent.TempDirectory)/dependency-scan-results'
+      outputFormat: HTML
+      useSonarQubeIntegration: false
+  
+  # Publish OWASP Dependency Check
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish OWASP Dependency Check'
+    inputs:
+      targetPath: '$(Agent.TempDirectory)/dependency-scan-results'
+      artifact: 'OWASP-Dependency-Check-report'
