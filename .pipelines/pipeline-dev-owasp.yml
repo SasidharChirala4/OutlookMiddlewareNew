@@ -1,7 +1,11 @@
-# This build pipeline will only be triggered by changes on the 'dev and feature branches'.
-trigger:
-  - dev
-  - feature-*
+# YAML file in the release branch
+schedules:
+- cron: "0 1 * * Sat"
+  displayName: Every Saturday at 1:00 AM
+  branches:
+    include:
+    - dev
+    - feature-*
   
 # This build pipeline will run on agents from the 'default' build agent pool
 # and will specifically target build agents that have the custom 'Build.Server'
