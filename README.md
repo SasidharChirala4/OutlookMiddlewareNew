@@ -65,6 +65,10 @@ First of all, the recipients for an email will be extracted and sent as part of 
 
 ![Architecture](.documentation/databases-3.drawio.png)
 
+## ProjectTasks
+
+![Architecture](.documentation/databases-4.drawio.png)
+
 # Repository
 
 The e-DReaMS Outlook Middleware GIT repository contains a single Visual Studio solution. This solution contains all .NET Core, C# projects that represent the backend for the e-DReaMS Outlook Middleware: Database migration, WebApi and Windows Services.

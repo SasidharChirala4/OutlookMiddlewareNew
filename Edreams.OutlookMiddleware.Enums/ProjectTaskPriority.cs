@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Edreams.OutlookMiddleware.Enums
+﻿namespace Edreams.OutlookMiddleware.Enums
 {
     public enum ProjectTaskPriority
     {
