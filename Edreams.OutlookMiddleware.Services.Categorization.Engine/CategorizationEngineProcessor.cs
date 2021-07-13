@@ -16,6 +16,7 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
     public class CategorizationEngineProcessor : ICategorizationEngineProcessor
     {
         private readonly IEmailManager _emailManager;
+        private readonly IBatchManager _batchManager;
         private readonly ITransactionQueueManager _transactionQueueManager;
         // TODO : Commented temporarily which is causing dependency issue. 
         // private readonly ILogger<CategorizationEngineProcessor> _logger;
@@ -24,12 +25,14 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
 
         public CategorizationEngineProcessor(
             IEmailManager emailManager,
+            IBatchManager batchManager,
             ITransactionQueueManager transactionQueueManager,
             //ILogger<CategorizationEngineProcessor> logger,
             ICategorizationManager categorizationManager,
             IExchangeAndKeyVaultHelper exchangeAndKeyVaultHelper)
         {
             _emailManager = emailManager;
+            _batchManager = batchManager;
             _transactionQueueManager = transactionQueueManager;
            // _logger = logger;
             _categorizationManager = categorizationManager;
@@ -43,6 +46,9 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
 
             try
             {
+                // Fetch all details for the batch from the database, into a single DTO.
+                BatchDetailsDto batchDetails = await _batchManager.GetBatchDetails(batchId);
+
                 // Fetch all email details for the batch from the database.
                 IList<Email> emails = await _emailManager.GetEmails(batchId);
 
@@ -86,7 +92,7 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
                     List<string> orginalRecipients = recipients.Distinct().ToList();
 
                     //Set the categorization request type based on upload option and email status.
-                    CategorizationRequestType categorizationRequestType = GetCategorizationRequestType(email.UploadOption, email.Status);
+                    CategorizationRequestType categorizationRequestType = GetCategorizationRequestType(batchDetails.UploadOption, email.Status);
 
                     // Adding Categorizations for the emailId
                     await _categorizationManager.AddCategorizationRequest(email.InternetMessageId, orginalRecipients, categorizationRequestType);

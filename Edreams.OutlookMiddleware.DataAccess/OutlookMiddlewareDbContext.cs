@@ -48,6 +48,13 @@ namespace Edreams.OutlookMiddleware.DataAccess
                     .Property(x => x.SysId)
                     .ValueGeneratedOnAdd();
                 e
+                    .Property(x => x.UploadOption)
+                    .HasConversion(new EnumToStringConverter<EmailUploadOptions>());
+                e
+                    .Property(x => x.UploadLocationSite).HasMaxLength(200);
+                e
+                    .Property(x => x.UploadLocationFolder).HasMaxLength(200);
+                e
                     .Property(x => x.Status)
                     .HasConversion(new EnumToStringConverter<BatchStatus>());
             });
@@ -68,8 +75,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                     .HasConversion(new EnumToStringConverter<EmailStatus>());
                 e.Property(x => x.InternetMessageId)
                     .HasMaxLength(200);
-                e.Property(x => x.UploadOption)
-                    .HasConversion(new EnumToStringConverter<EmailUploadOptions>());
+                
                 e.HasIndex(x => x.InternetMessageId);
             });
 
@@ -79,6 +85,9 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.HasKey(x => x.Id).IsClustered(false);
                 e.HasIndex(x => x.SysId).IsUnique().IsClustered();
                 e.Property(x => x.SysId).ValueGeneratedOnAdd();
+                e.Property(x => x.ShouldUpload).HasDefaultValue(true);
+                e.Property(x => x.OriginalName).HasMaxLength(255);
+                e.Property(x => x.NewName).HasMaxLength(255);
                 e.Property(x => x.Kind).HasConversion(new EnumToStringConverter<FileKind>());
                 e.Property(x => x.Status).HasConversion(new EnumToStringConverter<FileStatus>());
             });

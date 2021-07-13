@@ -18,7 +18,6 @@ namespace Edreams.OutlookMiddleware.Model
         public virtual IList<File> Files { get; set; }
         public virtual IList<EmailRecipient> EmailRecipients { get; set; }
         public virtual ProjectTask ProjectTask { get; set; }
-        public EmailUploadOptions UploadOption { get; set; }
 
     }
 }

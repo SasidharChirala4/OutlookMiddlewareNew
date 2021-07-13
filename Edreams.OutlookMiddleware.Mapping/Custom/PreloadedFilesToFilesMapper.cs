@@ -20,7 +20,6 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                 {
                     Batch = batch,
                     Status = EmailStatus.ReadyToUpload,
-                    UploadOption = uploadOption
                 };
 
                 foreach (var preloadedFile in preloadedFiles)
