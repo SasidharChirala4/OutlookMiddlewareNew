@@ -34,9 +34,10 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                 {
                     Id = email.Id,
                     Files = listOfFileDetails,
-                    UploadOption = email.UploadOption,
                     EdreamsReferenceId = email.EdreamsReferenceId,
                     EmailKind = email.EmailKind,
+                    InternetMessageId = email.InternetMessageId,
+                    Status = email.Status
                     
                 };
 

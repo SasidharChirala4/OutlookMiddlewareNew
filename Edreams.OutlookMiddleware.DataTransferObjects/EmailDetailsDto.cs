@@ -12,7 +12,7 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         public Guid EdreamsReferenceId { get; set; }
         public EmailKind EmailKind { get; set; }
         public string InternetMessageId { get; set; }
-        public EmailUploadOptions UploadOption { get; set; }
+        public EmailStatus Status { get; set; }
         public ProjectTaskDto ProjectTaskDto { get; set; }
         public List<EmailRecipientDto> EmailRecipients { get; set; }
     }

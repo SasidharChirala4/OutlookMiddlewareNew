@@ -12,8 +12,10 @@ namespace Edreams.OutlookMiddleware.Model
         public string TempPath { get; set; }
         public string FileName { get; set; }
         public long Size { get; set; }
+        public bool ShouldUpload { get; set; }
+        public string OriginalName { get; set; }
+        public string NewName { get; set; }
         public FileStatus Status { get; set; }
-
         public Email Email { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Edreams.OutlookMiddleware.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects
@@ -8,6 +9,8 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         public Guid Id { get; set; }
 
         public List<EmailDetailsDto> Emails { get; set; }
+
+        public EmailUploadOptions UploadOption { get; set; }
 
     }
 }

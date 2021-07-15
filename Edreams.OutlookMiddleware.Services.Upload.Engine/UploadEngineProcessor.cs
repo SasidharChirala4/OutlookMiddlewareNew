@@ -84,7 +84,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                         try
                         {
                             // Skip the files that are not matched with upload option.
-                            if (!IsFileSkipped(emailDetails.UploadOption, fileDetails.Kind))
+                            if (!IsFileSkipped(batchDetails.UploadOption, fileDetails.Kind))
                             {
                                 // Process the file based on the file details.
                                 SharePointFile sharepointFile = await ProcessFile(emailDetails, sentEmailDetails, fileDetails);

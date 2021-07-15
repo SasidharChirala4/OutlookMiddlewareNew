@@ -84,7 +84,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             return new BatchDetailsDto
             {
                 Id = batchId,
-                Emails = emailDetails.ToList()
+                Emails = emailDetails.ToList(),
+                UploadOption = batch.UploadOption
             };
         }
 
@@ -128,6 +129,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
                 // Build a new batch and create it in the database.
                 Batch batch = _batchFactory.CreatePendingBatch();
+                batch.UploadOption = request.UploadOption;
                 batch = await _batchRepository.Create(batch);
 
                 // Map the preloaded files to a list of files with relation to email and batch.
