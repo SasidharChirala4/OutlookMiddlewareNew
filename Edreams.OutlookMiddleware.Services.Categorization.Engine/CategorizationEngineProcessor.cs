@@ -49,16 +49,13 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
                 // Fetch all details for the batch from the database, into a single DTO.
                 BatchDetailsDto batchDetails = await _batchManager.GetBatchDetails(batchId);
 
-                // Fetch all email details for the batch from the database.
-                IList<Email> emails = await _emailManager.GetEmails(batchId);
-
                 // Create a client for Azure KeyVault, authenticated using the appsettings.json settings.
                 IKeyVaultClient keyVaultClient = _exchangeAndKeyVaultHelper.CreateKeyVaultClient();
 
                 // Create a client for EWS, authenticated using data from Azure KeyVault.
                 IExchangeClient exchangeClient = await _exchangeAndKeyVaultHelper.CreateExchangeClient(keyVaultClient);
 
-                foreach (var email in emails)
+                foreach (var email in batchDetails.Emails)
                 {
                     // Fetch details of the emailRecipients by emailId from the database
                     IList<EmailRecipient> emailRecipients = await _emailManager.GetEmailRecipients(email.Id);

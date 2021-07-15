@@ -36,6 +36,8 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                     Files = listOfFileDetails,
                     EdreamsReferenceId = email.EdreamsReferenceId,
                     EmailKind = email.EmailKind,
+                    InternetMessageId = email.InternetMessageId,
+                    Status = email.Status
                     
                 };
 
