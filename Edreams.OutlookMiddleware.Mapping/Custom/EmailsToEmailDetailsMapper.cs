@@ -21,7 +21,7 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                     FileDetailsDto fileDetails = new FileDetailsDto
                     {
                         Id = file.Id,
-                        Name = file.FileName,
+                        OriginalName = file.OriginalName,
                         Path = file.TempPath,
                         Kind = file.Kind,
                         EmailSubject = file.EmailSubject,
@@ -29,7 +29,7 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
 
                     listOfFileDetails.Add(fileDetails);
                 }
-                
+
                 EmailDetailsDto emailDetails = new EmailDetailsDto
                 {
                     Id = email.Id,
@@ -38,16 +38,16 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                     EmailKind = email.EmailKind,
                     InternetMessageId = email.InternetMessageId,
                     Status = email.Status
-                    
+
                 };
 
-                foreach(EmailRecipient emailRecipient in email.EmailRecipients)
+                foreach (EmailRecipient emailRecipient in email.EmailRecipients)
                 {
                     emailDetails.EmailRecipients.Add(new EmailRecipientDto()
                     {
-                        EmailId= emailRecipient.Email.Id ,
-                        Recipient =emailRecipient.Recipient,
-                        Type= emailRecipient.Type
+                        EmailId = emailRecipient.Email.Id,
+                        Recipient = emailRecipient.Recipient,
+                        Type = emailRecipient.Type
                     });
                 }
 

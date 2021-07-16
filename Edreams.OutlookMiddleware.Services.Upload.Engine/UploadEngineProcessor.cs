@@ -123,7 +123,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                     {
                         ProjectTask projectTask = _projectTaskManager.GetEdreamsProjectTask(emailDetails, sharepointFileUploads);
                         ProjectTask newProjectTask = await _extensibilityManager.CreateEdreamsProjectTask(projectTask);
-                         _logger.LogInformation("Task created for email with ID: " + emailDetails.Id + " successfully");
+                        _logger.LogInformation("Task created for email with ID: " + emailDetails.Id + " successfully");
                     }
                     // Update email status based on the success rate.
                     await _emailManager.UpdateEmailStatus(emailDetails.Id, emailStatus);
@@ -183,16 +183,16 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         {
             if (fileDetails.Kind == FileKind.Email)
             {
-                fileDetails.Name = sentEmail.Subject;
+                fileDetails.OriginalName = sentEmail.Subject;
                 return sentEmail.Data;
             }
 
             if (fileDetails.Kind == FileKind.Attachment)
             {
-                ExchangeAttachement attachment = sentEmail.Attachments.SingleOrDefault(x => x.Name == fileDetails.Name);
+                ExchangeAttachement attachment = sentEmail.Attachments.SingleOrDefault(x => x.Name == fileDetails.OriginalName);
                 if (attachment != null)
                 {
-                    fileDetails.Name = attachment.Name;
+                    fileDetails.OriginalName = attachment.Name;
                     return attachment.Data;
                 }
             }
@@ -220,7 +220,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
                 // Upload the file to e-DReaMS.
                 // TODO: Get the site URL and folder from metadata.
-                return await _extensibilityManager.UploadFile(fileData, null, null, fileDetails.Name, true);
+                return await _extensibilityManager.UploadFile(fileData, null, null, fileDetails.NewName, true);
             }
             catch (Exception ex)
             {

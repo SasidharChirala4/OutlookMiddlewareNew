@@ -130,21 +130,23 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 // Build a new batch and create it in the database.
                 Batch batch = _batchFactory.CreatePendingBatch();
                 batch.UploadOption = request.UploadOption;
+                batch.UploadLocationSite = request.UploadLocationSite;
+                batch.UploadLocationFolder = request.UploadLocationFolder;
                 batch = await _batchRepository.Create(batch);
 
                 // Map the preloaded files to a list of files with relation to email and batch.
                 // Afterwards, create the files in the database. EF will automatically create
                 // the email references with that.
-                IList<File> files = _preloadedFilesToFilesMapper.Map(batch, preloadedFiles, request.UploadOption, request.EmailRecipients);
+                IList<File> files = _preloadedFilesToFilesMapper.Map(batch, preloadedFiles, request);
                 await _fileRepository.Create(files);
 
-                if(request.ProjectTaskDetails!=null)
+                if (request.ProjectTaskDetails != null)
                 {
                     IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batch.Id);
                     List<ProjectTask> taskDetails = new List<ProjectTask>();
-                    foreach(Email email in emails)
+                    foreach (Email email in emails)
                     {
-                        ProjectTask task = _projectTaskDetailsDtoToProjectTaskMapper.Map(request.ProjectTaskDetails, email);
+                        ProjectTask task = _projectTaskDetailsDtoToProjectTaskMapper.Map(request.ProjectTaskDetails, email, request.UploadLocationProjectId.Value);
                         taskDetails.Add(task);
                     }
                     await _projectTaskRepository.Create(taskDetails);

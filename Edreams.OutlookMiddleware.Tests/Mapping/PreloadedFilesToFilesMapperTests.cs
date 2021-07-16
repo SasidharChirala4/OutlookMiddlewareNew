@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Edreams.OutlookMiddleware.DataTransferObjects;
+using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Mapping.Custom;
 using Edreams.OutlookMiddleware.Mapping.Custom.Interfaces;
@@ -30,7 +31,6 @@ namespace Edreams.OutlookMiddleware.Tests.Mapping
 
             Guid email1Id = Guid.NewGuid();
             Guid email2Id = Guid.NewGuid();
-            EmailUploadOptions uploadOption = EmailUploadOptions.Attachments;
             IList<FilePreload> preloadedFiles = new List<FilePreload>
             {
                 new FilePreload
@@ -52,12 +52,16 @@ namespace Edreams.OutlookMiddleware.Tests.Mapping
                     EmailId = email2Id
                 }
             };
-            List<EmailRecipientDto> emailRecipients = new List<EmailRecipientDto>();
+            CommitBatchRequest request = new CommitBatchRequest
+            {
+                EmailRecipients = new List<EmailRecipientDto>(),
+                Files = new List<FileDetailsDto>()
+            };
             #endregion
 
             #region [ ACT ]
 
-            IList<File> files = mapper.Map(batch, preloadedFiles, uploadOption, emailRecipients);
+            IList<File> files = mapper.Map(batch, preloadedFiles, request);
 
             #endregion
 
