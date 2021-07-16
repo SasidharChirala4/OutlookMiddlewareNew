@@ -168,7 +168,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             Email email = new Email()
             {
                 Batch = new Batch() { Id = batchId },
-                Files = new List<File>() { new File() { FileName = "TaxDocument.doc" } },
+                Files = new List<File>() { new File() { OriginalName = "TaxDocument.doc" } },
                 InternetMessageId = "<b267a11ab00348e3aa77bd20e20e1060>"
             };
             List<Email> emails = new List<Email>() { email };
@@ -225,7 +225,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             {
                 Id = emailId,
                 Batch = new Batch() { Id = new Guid() },
-                Files = new List<File>() { new File() { FileName = "TaxDocument.doc" } },
+                Files = new List<File>() { new File() { OriginalName = "TaxDocument.doc" } },
                 InternetMessageId = "<b267a11ab00348e3aa77bd20e20e1060>"
             };
             EmailRecipient emailRecipient = new EmailRecipient()
@@ -284,7 +284,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             {
                 Id = emailId,
                 Batch = new Batch() { Id = new Guid() },
-                Files = new List<File>() { new File() { FileName = "TaxDocument.doc" } },
+                Files = new List<File>() { new File() { OriginalName = "TaxDocument.doc" } },
                 InternetMessageId = "<b267a11ab00348e3aa77bd20e20e1060>"
             };
             List<Email> emails = new List<Email>() { email };
@@ -341,7 +341,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             {
                 Id = emailId,
                 Batch = new Batch() { Id = new Guid() },
-                Files = new List<File>() { new File() { FileName = "TaxDocument.doc" } },
+                Files = new List<File>() { new File() { OriginalName = "TaxDocument.doc" } },
                 InternetMessageId = "<b267a11ab00348e3aa77bd20e20e1060>"
             };
             List<Email> emails = new List<Email>() { email };

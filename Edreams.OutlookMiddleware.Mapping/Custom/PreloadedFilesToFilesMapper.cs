@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Edreams.OutlookMiddleware.DataTransferObjects;
+using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.OutlookMiddleware.Mapping.Custom.Interfaces;
 using Edreams.OutlookMiddleware.Model;
@@ -10,7 +11,7 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
 {
     public class PreloadedFilesToFilesMapper : IPreloadedFilesToFilesMapper
     {
-        public IList<File> Map(Batch batch, IList<FilePreload> preloadedFiles, EmailUploadOptions uploadOption, List<EmailRecipientDto> emailRecipients)
+        public IList<File> Map(Batch batch, IList<FilePreload> preloadedFiles, CommitBatchRequest request)
         {
             IList<File> files = new List<File>();
             Guid[] emailIds = preloadedFiles.Select(x => x.EmailId).Distinct().ToArray();
@@ -32,9 +33,9 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         email.EdreamsReferenceId = preloadedFile.EdreamsReferenceId;
                         email.InternetMessageId = preloadedFile.InternetMessageId;
                         email.EmailRecipients = new List<EmailRecipient>();
-                        if (emailRecipients != null)
+                        if (request.EmailRecipients != null)
                         {
-                            IEnumerable<EmailRecipientDto> emailRecipientList = emailRecipients.Where(x => x.EmailId == emailId);
+                            IEnumerable<EmailRecipientDto> emailRecipientList = request.EmailRecipients.Where(x => x.EmailId == emailId);
                             foreach (EmailRecipientDto emailRecipient in emailRecipientList)
                             {
                                 email.EmailRecipients.Add(new EmailRecipient()
@@ -47,17 +48,26 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                                 });
                             }
                         }
-                        files.Add(new File
+
+                        File file = new File
                         {
                             Email = email,
                             EmailSubject = preloadedFile.EmailSubject,
-                            AttachmentId = preloadedFile.AttachmentId,
-                            FileName = preloadedFile.FileName,
+                            AttachmentId = preloadedFile.AttachmentId,                            
+                            OriginalName = preloadedFile.FileName,
                             Size = preloadedFile.Size,
                             TempPath = preloadedFile.TempPath,
                             Kind = preloadedFile.Kind,
                             Status = FileStatus.ReadyToUpload
-                        });
+                        };
+                        FileDetailsDto fileDetails = request.Files.FirstOrDefault(x => x.Id == preloadedFile.Id);
+                        if (fileDetails != null)
+                        {                            
+                            file.NewName = fileDetails.NewName;
+                            file.ShouldUpload = fileDetails.ShouldUpload;
+                        }
+
+                        files.Add(file);
                     }
                 }
             }

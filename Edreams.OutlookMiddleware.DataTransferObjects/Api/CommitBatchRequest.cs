@@ -29,5 +29,25 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
         /// Project Task Details
         /// </summary>
         public ProjectTaskDto ProjectTaskDetails { get; set; }
+
+        /// <summary>
+        /// Upload location site url
+        /// </summary>
+        public string UploadLocationSite { get; set; }
+
+        /// <summary>
+        /// Upload location folder url
+        /// </summary>
+        public string UploadLocationFolder { get; set; }
+
+        /// <summary>
+        /// Upload location project id
+        /// </summary>
+        public Guid? UploadLocationProjectId { get; set; }
+
+        /// <summary>
+        /// List of Files
+        /// </summary>
+        public List<FileDetailsDto> Files { get; set; }
     }
 }
