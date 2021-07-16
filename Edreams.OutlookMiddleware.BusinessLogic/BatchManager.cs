@@ -85,7 +85,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             {
                 Id = batchId,
                 Emails = emailDetails.ToList(),
-                UploadOption = batch.UploadOption
+                UploadOption = batch.UploadOption,
+                UploadLocationFolder = batch.UploadLocationFolder,
+                UploadLocationSite = batch.UploadLocationSite
             };
         }
 
@@ -146,7 +148,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                     List<ProjectTask> taskDetails = new List<ProjectTask>();
                     foreach (Email email in emails)
                     {
-                        ProjectTask task = _projectTaskDetailsDtoToProjectTaskMapper.Map(request.ProjectTaskDetails, email, request.UploadLocationProjectId.Value);
+                        ProjectTask task = _projectTaskDetailsDtoToProjectTaskMapper.Map(request.ProjectTaskDetails, email);
                         taskDetails.Add(task);
                     }
                     await _projectTaskRepository.Create(taskDetails);

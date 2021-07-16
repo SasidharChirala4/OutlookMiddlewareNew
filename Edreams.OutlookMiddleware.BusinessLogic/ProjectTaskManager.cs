@@ -25,9 +25,10 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// Method to get the edreams project task object.
         /// </summary>
         /// <param name="emailDetails">Email object</param>
-        /// <param name="sharepointFileUploads">file upload details.</param>
-        /// <returns>Created ProjectTask Object</returns>
-        public ProjectTask GetEdreamsProjectTask(EmailDetailsDto emailDetails, List<SharePointFile> sharepointFileUploads)
+        /// <param name="sharepointFileUploads">fie upload details.</param>
+        /// <param name="siteUrl">site url</param>
+        /// <returns>Project Task object to create</returns>
+        public ProjectTask GetEdreamsProjectTask(EmailDetailsDto emailDetails, List<SharePointFile> sharepointFileUploads, string siteUrl)
         {
             ProjectTaskDto projectTask = emailDetails.ProjectTaskDto;
 
@@ -38,7 +39,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             //Get UserInvolvements
             var userInvolvements = GetUserInvolvements(projectTask.UserInvolvements);
             ProjectTaskUserInvolvement assignedBy = userInvolvements.Where(x => x.InvolvementType == ProjectTaskUserInvolvementType.AssignedBy).FirstOrDefault();
-            
+
             // Create ProjectTaskMail Object
             var mailObject = new ProjectTaskMail
             {
@@ -54,13 +55,11 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 Subject = FormatSubject(emailDetails.Files[0].EmailSubject),
             };
 
-            //Return ProjectTask object to Create.
+            //Returns ProjectTask object to Create.
             return new ProjectTask()
             {
-                // TODO: ProjectId,ProjectUrl details are filled once the metadata details are addded.
-                // This can be handled in pbi #40965
-                //ProjectId = new Guid(projectTask.ProjectId),
-                //ProjectUrl = projectTask.SiteUrl,
+                ProjectId = projectTask.UploadLocationProjectId,
+                ProjectUrl = siteUrl,
                 Title = projectTask.TaskName,
                 Description = projectTask.Description,
                 Priority = Enum.Parse<ProjectTaskPriority>(projectTask.Priority.ToString(), true),

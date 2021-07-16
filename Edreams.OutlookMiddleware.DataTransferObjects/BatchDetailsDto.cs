@@ -11,6 +11,8 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         public List<EmailDetailsDto> Emails { get; set; }
 
         public EmailUploadOptions UploadOption { get; set; }
+        public string UploadLocationSite { get; set; }
+        public string UploadLocationFolder { get; set; }
 
     }
 }

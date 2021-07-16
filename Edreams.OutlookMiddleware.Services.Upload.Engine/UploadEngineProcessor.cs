@@ -86,15 +86,24 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                             // Skip the files that are not matched with upload option.
                             if (!IsFileSkipped(batchDetails.UploadOption, fileDetails.Kind))
                             {
-                                // Process the file based on the file details.
-                                SharePointFile sharepointFile = await ProcessFile(emailDetails, sentEmailDetails, fileDetails);
-                                // TODO: Update absolute file URL in database as part of metadata PBI.
-                                // This can be handled in pbi #40965
-                                sharepointFileUploads.Add(sharepointFile);
-                                // Set the file status to be successfully uploaded and
-                                // increase the number of successfully uploaded files.
-                                await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
-                                numberOfSuccessfullyUploadedFiles++;
+
+                                if (fileDetails.ShouldUpload)
+                                {
+                                    // Process the file based on the file details.
+                                    SharePointFile sharepointFile = await ProcessFile(emailDetails, sentEmailDetails, fileDetails, batchDetails.UploadLocationSite, batchDetails.UploadLocationFolder);
+                                    // TODO: Update absolute file URL in database as part of metadata PBI.
+                                    // This can be handled in pbi #40965
+                                    sharepointFileUploads.Add(sharepointFile);
+                                    // Set the file status to be successfully uploaded and
+                                    // increase the number of successfully uploaded files.
+                                    await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
+                                    numberOfSuccessfullyUploadedFiles++;
+                                }
+                                else
+                                {
+                                    _logger.LogInformation(string.Format("File {0} is skipped because ShouldUpload option set to false" , fileDetails.Id));
+                                    await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Skipped);
+                                }
                             }
                             else
                             {
@@ -121,7 +130,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                     //Create Task
                     if (emailDetails.ProjectTaskDto != null)
                     {
-                        ProjectTask projectTask = _projectTaskManager.GetEdreamsProjectTask(emailDetails, sharepointFileUploads);
+                        ProjectTask projectTask = _projectTaskManager.GetEdreamsProjectTask(emailDetails, sharepointFileUploads,batchDetails.UploadLocationSite);
                         ProjectTask newProjectTask = await _extensibilityManager.CreateEdreamsProjectTask(projectTask);
                         _logger.LogInformation("Task created for email with ID: " + emailDetails.Id + " successfully");
                     }
@@ -200,12 +209,11 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             return null;
         }
 
-        private async Task<SharePointFile> ProcessFile(EmailDetailsDto emailDetails, ExchangeEmail sentEmail, FileDetailsDto fileDetails)
+        private async Task<SharePointFile> ProcessFile(EmailDetailsDto emailDetails, ExchangeEmail sentEmail, FileDetailsDto fileDetails, string uploadLocationSite, string uploadLocationFolder)
         {
             try
             {
                 byte[] fileData;
-
                 // Check if the Email is sent email.
                 if (emailDetails.EmailKind == EmailKind.Sent && sentEmail != null)
                 {
@@ -219,8 +227,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 }
 
                 // Upload the file to e-DReaMS.
-                // TODO: Get the site URL and folder from metadata.
-                return await _extensibilityManager.UploadFile(fileData, null, null, fileDetails.NewName, true);
+                return await _extensibilityManager.UploadFile(fileData, uploadLocationSite, uploadLocationFolder, fileDetails.NewName, true);
             }
             catch (Exception ex)
             {

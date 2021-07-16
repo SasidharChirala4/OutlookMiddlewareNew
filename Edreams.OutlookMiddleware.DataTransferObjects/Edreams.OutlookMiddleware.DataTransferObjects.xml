@@ -59,11 +59,6 @@
             Upload location folder url
             </summary>
         </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.UploadLocationProjectId">
-            <summary>
-            Upload location project id
-            </summary>
-        </member>
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.Files">
             <summary>
             List of Files

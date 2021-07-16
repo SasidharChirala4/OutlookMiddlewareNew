@@ -14,7 +14,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         /// </summary>
         /// <param name="emailDetails">Email object</param>
         /// <param name="sharepointFileUploads">fie upload details.</param>
-        /// <returns></returns>
-        ProjectTask GetEdreamsProjectTask(EmailDetailsDto emailDetails, List<SharePointFile> sharepointFileUploads);
+        /// <param name="siteUrl">site url</param>
+        /// <returns>Project Task object to create<</returns>
+        ProjectTask GetEdreamsProjectTask(EmailDetailsDto emailDetails, List<SharePointFile> sharepointFileUploads, string siteUrl);
     }
 }
