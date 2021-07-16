@@ -1,6 +1,6 @@
 # e-DReaMS Outlook Middleware
 
-Last modified by **Johnny Hooyberghs** on **October 28th 2020**
+Last modified by **Johnny Hooyberghs** on **July 13th 2021**
 
 # Introduction
 
@@ -60,6 +60,8 @@ Metadata for emails that need to be uploaded to e-DReaMS is organized into relat
 First of all, the recipients for an email will be extracted and sent as part of committing a batch. The recipient (email-address or distribution group name) will be stored with 
 
 ![Architecture](.documentation/databases-2.drawio.png)
+
+![Architecture](.documentation/databases-5.drawio.png)
 
 ## CategorizationRequests
 
