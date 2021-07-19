@@ -329,7 +329,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             #region [ ASSERT ]
             // If file is uploaded then it shoudld return uploaded file details
             result.Should().NotBeNull();
-            result.Should().Be("eDreams/sites/Adsdrr/Defkr/AllDocuments/TaxDocument123.doc");
+            result.AbsoluteUrl.Should().Be("eDreams/sites/Adsdrr/Defkr/AllDocuments/TaxDocument123.doc");
             #endregion
         }
         

@@ -1,13 +1,11 @@
 ﻿using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Model;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Edreams.OutlookMiddleware.Mapping.Custom.Interfaces
 {
     public interface IProjectTaskDetailsDtoToProjectTaskMapper
     {
-        ProjectTask Map(ProjectTaskDto projectTaskDetails,Email email);
+        ProjectTask Map(ProjectTaskDto projectTaskDetails, Email email, Guid uploadLocationProjectId);
     }
 }

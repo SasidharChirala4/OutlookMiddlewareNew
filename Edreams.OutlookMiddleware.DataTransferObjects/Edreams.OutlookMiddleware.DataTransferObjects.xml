@@ -49,6 +49,26 @@
             Project Task Details
             </summary>
         </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.UploadLocationSite">
+            <summary>
+            Upload location site url
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.UploadLocationFolder">
+            <summary>
+            Upload location folder url
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.UploadLocationProjectId">
+            <summary>
+            Upload location project id
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.Files">
+            <summary>
+            List of Files
+            </summary>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse">
             <summary>
             Response for Created Mail
@@ -209,6 +229,46 @@
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.EmailRecipientDto.EmailId">
             <summary>
             EmailId
+            </summary>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto">
+            <summary>
+            Contract that represents File Details
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.Id">
+            <summary>
+            File id
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.Path">
+            <summary>
+            File path
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.OriginalName">
+            <summary>
+            File original name
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.NewName">
+            <summary>
+            File new name
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.ShouldUpload">
+            <summary>
+            Should this file upload or not
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.Kind">
+            <summary>
+            File kind
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.EmailSubject">
+            <summary>
+            Email subject
             </summary>
         </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.TransactionDto">

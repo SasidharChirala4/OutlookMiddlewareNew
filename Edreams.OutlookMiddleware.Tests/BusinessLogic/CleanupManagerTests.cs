@@ -413,7 +413,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             List<Email> emailsList = new List<Email>() { email };
             File file = new File()
             {
-                FileName = "TaxDocument.doc",
+                OriginalName = "TaxDocument.doc",
                 Kind = Enums.FileKind.Attachment,
                 EmailSubject = "Files Upload",
                 Status = Enums.FileStatus.ReadyToUpload

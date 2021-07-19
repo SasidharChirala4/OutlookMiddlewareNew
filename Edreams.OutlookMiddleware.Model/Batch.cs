@@ -11,8 +11,7 @@ namespace Edreams.OutlookMiddleware.Model
         public string CreatedBy { get; set; }
         public BatchStatus Status { get; set; }
         public string UploadLocationSite { get; set; }
-        public EmailUploadOptions UploadOption { get; set; }
-        public Guid?  UploadLocationProjectId { get; set; }
+        public EmailUploadOptions UploadOption { get; set; }        
         public string UploadLocationFolder { get; set; }
 
     }

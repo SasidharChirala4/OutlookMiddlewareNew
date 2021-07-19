@@ -3,22 +3,24 @@ using Edreams.OutlookMiddleware.Mapping.Custom.Interfaces;
 using Edreams.OutlookMiddleware.Model;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Edreams.OutlookMiddleware.Mapping
 {
     public class ProjectTaskDetailsDtoToProjectTaskMapper : IProjectTaskDetailsDtoToProjectTaskMapper
     {
-        public ProjectTask Map(ProjectTaskDto projectTaskDetails, Email email)
+        public ProjectTask Map(ProjectTaskDto projectTaskDetails, Email email, Guid uploadLocationProjectId)
         {
 
-            ProjectTask projectTask = new ProjectTask();
-            projectTask.TaskName = projectTaskDetails.TaskName;
-            projectTask.Priority = projectTaskDetails.Priority;
-            projectTask.DueDate = projectTaskDetails.DueDate;
-            projectTask.EmailId = email.Id;
-            projectTask.Description = projectTaskDetails.Description;
-            projectTask.UserInvolvements = new List<ProjectTaskUserInvolvement>();
+            ProjectTask projectTask = new ProjectTask
+            {
+                TaskName = projectTaskDetails.TaskName,
+                Priority = projectTaskDetails.Priority,
+                DueDate = projectTaskDetails.DueDate,
+                EmailId = email.Id,
+                Description = projectTaskDetails.Description,
+                UploadLocationProjectId = uploadLocationProjectId,
+                UserInvolvements = new List<ProjectTaskUserInvolvement>()
+            };
             foreach (ProjectTaskUserInvolvementDto userInvolvement in projectTaskDetails.UserInvolvements)
             {
                 projectTask.UserInvolvements.Add(new ProjectTaskUserInvolvement()
