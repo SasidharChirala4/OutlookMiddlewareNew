@@ -25,6 +25,8 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         Path = file.TempPath,
                         Kind = file.Kind,
                         EmailSubject = file.EmailSubject,
+                        NewName = file.NewName,
+                        ShouldUpload = file.ShouldUpload
                     };
 
                     listOfFileDetails.Add(fileDetails);

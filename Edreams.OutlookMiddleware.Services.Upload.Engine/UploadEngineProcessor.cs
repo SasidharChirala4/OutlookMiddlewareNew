@@ -74,7 +74,6 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 foreach (EmailDetailsDto emailDetails in batchDetails.Emails)
                 {
                     int numberOfSuccessfullyUploadedFiles = 0;
-
                     // Get sent email details from shared mailbox, or null if the email is not of type: "Sent".
                     ExchangeEmail sentEmailDetails = await GetSentEmailDetails(emailDetails, exchangeClient);
 
@@ -83,27 +82,19 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                     {
                         try
                         {
-                            // Skip the files that are not matched with upload option.
-                            if (!IsFileSkipped(batchDetails.UploadOption, fileDetails.Kind))
+                            // Skip the files that are not matched with upload option or shouldupload option is set to false.
+                            if (!IsFileSkipped(batchDetails.UploadOption, fileDetails))
                             {
+                                // Process the file based on the file details.
+                                SharePointFile sharepointFile = await ProcessFile(emailDetails, sentEmailDetails, fileDetails, batchDetails.UploadLocationSite, batchDetails.UploadLocationFolder);
+                                // TODO: Update absolute file URL in database as part of metadata PBI.
+                                // This can be handled in pbi #40965
+                                sharepointFileUploads.Add(sharepointFile);
+                                // Set the file status to be successfully uploaded and
+                                await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
+                                // increase the number of successfully uploaded files.
+                                numberOfSuccessfullyUploadedFiles++;
 
-                                if (fileDetails.ShouldUpload)
-                                {
-                                    // Process the file based on the file details.
-                                    SharePointFile sharepointFile = await ProcessFile(emailDetails, sentEmailDetails, fileDetails, batchDetails.UploadLocationSite, batchDetails.UploadLocationFolder);
-                                    // TODO: Update absolute file URL in database as part of metadata PBI.
-                                    // This can be handled in pbi #40965
-                                    sharepointFileUploads.Add(sharepointFile);
-                                    // Set the file status to be successfully uploaded and
-                                    // increase the number of successfully uploaded files.
-                                    await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
-                                    numberOfSuccessfullyUploadedFiles++;
-                                }
-                                else
-                                {
-                                    _logger.LogInformation(string.Format("File {0} is skipped because ShouldUpload option set to false" , fileDetails.Id));
-                                    await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Skipped);
-                                }
                             }
                             else
                             {
@@ -118,8 +109,9 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                         }
                     }
 
+                    int shouldUploadFalseCount = emailDetails.Files.Select(x => x.ShouldUpload).Count();
                     // Determine the email status by comparing the number of successful uploads and the total number of files.
-                    EmailStatus emailStatus = CalculateEmailStatus(emailDetails.Files.Count, numberOfSuccessfullyUploadedFiles);
+                    EmailStatus emailStatus = CalculateEmailStatus(emailDetails.Files.Count, numberOfSuccessfullyUploadedFiles, shouldUploadFalseCount);
 
                     // Increase the number of successfully uploaded emails if the status is successful.
                     if (emailStatus == EmailStatus.Successful)
@@ -130,7 +122,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                     //Create Task
                     if (emailDetails.ProjectTaskDto != null)
                     {
-                        ProjectTask projectTask = _projectTaskManager.GetEdreamsProjectTask(emailDetails, sharepointFileUploads,batchDetails.UploadLocationSite);
+                        ProjectTask projectTask = _projectTaskManager.GetEdreamsProjectTask(emailDetails, sharepointFileUploads, batchDetails.UploadLocationSite);
                         ProjectTask newProjectTask = await _extensibilityManager.CreateEdreamsProjectTask(projectTask);
                         _logger.LogInformation("Task created for email with ID: " + emailDetails.Id + " successfully");
                     }
@@ -236,14 +228,14 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             }
         }
 
-        private EmailStatus CalculateEmailStatus(int totalNumberOfFiles, int numberOfSuccessfullyUploadedFiles)
+        private EmailStatus CalculateEmailStatus(int totalNumberOfFiles, int numberOfSuccessfullyUploadedFiles, int shouldUploadFalseCount)
         {
             if (numberOfSuccessfullyUploadedFiles == 0)
             {
                 return EmailStatus.Failed;
             }
 
-            if (numberOfSuccessfullyUploadedFiles == totalNumberOfFiles)
+            if (numberOfSuccessfullyUploadedFiles + shouldUploadFalseCount == totalNumberOfFiles)
             {
                 return EmailStatus.Successful;
             }
@@ -267,21 +259,30 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         }
 
         /// <summary>
-        /// Specifies whether the file kind is matched with upload option.
+        /// Skips the file if file kind is matched with upload option or shouldupload is set to false.
         /// </summary>
         /// <param name="uploadOption">Email Upload Option</param>
-        /// <param name="fileKind">File Kind</param>
-        /// <returns>Boolen value specifies is file type is matched with upload option </returns>
-        private bool IsFileSkipped(EmailUploadOptions uploadOption, FileKind fileKind)
+        /// <param name="fileDetails">File Details</param>
+        /// <returns>Boolen value specifies file can be skipped or not</returns>
+        private bool IsFileSkipped(EmailUploadOptions uploadOption, FileDetailsDto fileDetails)
         {
             if (uploadOption == EmailUploadOptions.Emails)
             {
-                return fileKind != FileKind.Email;
+                _logger.LogInformation(string.Format("File {0} is skipped because file type is not matched with upload option", fileDetails.Id));
+                return fileDetails.Kind != FileKind.Email;
             }
 
             if (uploadOption == EmailUploadOptions.Attachments)
             {
-                return fileKind != FileKind.Attachment;
+                _logger.LogInformation(string.Format("File {0} is skipped because file type is not matched with upload option", fileDetails.Id));
+                return fileDetails.Kind != FileKind.Attachment;
+            }
+
+            // checks the file should upload option once the email upload option is matched with file kind.
+            if (!fileDetails.ShouldUpload)
+            {
+                _logger.LogInformation(string.Format("File {0} is skipped because ShouldUpload option set to false", fileDetails.Id));
+                return true;
             }
 
             return false;

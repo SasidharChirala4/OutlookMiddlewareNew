@@ -6,6 +6,6 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom.Interfaces
 {
     public interface IProjectTaskDetailsDtoToProjectTaskMapper
     {
-        ProjectTask Map(ProjectTaskDto projectTaskDetails, Email email, Guid uploadLocationProjectId);
+        ProjectTask Map(ProjectTaskDto projectTaskDetails, Email email);
     }
 }

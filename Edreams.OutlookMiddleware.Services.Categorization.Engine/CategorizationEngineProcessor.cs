@@ -34,7 +34,7 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
             _emailManager = emailManager;
             _batchManager = batchManager;
             _transactionQueueManager = transactionQueueManager;
-           // _logger = logger;
+            // _logger = logger;
             _categorizationManager = categorizationManager;
             _exchangeAndKeyVaultHelper = exchangeAndKeyVaultHelper;
         }
@@ -57,6 +57,12 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
 
                 foreach (var email in batchDetails.Emails)
                 {
+                    // skipping the categorization when batch upload option set to only Attachments and email doesnot have atleast one shouldupload file.
+                    if (batchDetails.UploadOption == EmailUploadOptions.Attachments && email.Files.Select(x => x.ShouldUpload).Count() == 0)
+                    {
+                        continue;
+                    }
+
                     // Fetch details of the emailRecipients by emailId from the database
                     IList<EmailRecipient> emailRecipients = await _emailManager.GetEmailRecipients(email.Id);
                     List<string> recipients = new List<string>();
@@ -94,14 +100,14 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
                     // Adding Categorizations for the emailId
                     await _categorizationManager.AddCategorizationRequest(email.InternetMessageId, orginalRecipients, categorizationRequestType);
 
-                    // Update the transaction to have a succeeded status.
-                    await _transactionQueueManager.UpdateTransactionStatusAndArchive(transactionId, TransactionStatus.ProcessingSucceeded);
                 }
+                // Update the transaction to have a succeeded status.
+                await _transactionQueueManager.UpdateTransactionStatusAndArchive(transactionId, TransactionStatus.ProcessingSucceeded);
             }
             catch (Exception ex)
             {
                 // TODO: Do better logging.
-               // _logger.LogError(ex, ex.Message);
+                // _logger.LogError(ex, ex.Message);
                 throw;
             }
         }
