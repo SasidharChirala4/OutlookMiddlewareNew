@@ -98,7 +98,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                             }
                             else
                             {
-                                // Set the file status to be skipped if file kind doesnot match with upload option.
+                                // Set the file status to be skipped if file kind doesnot match with upload option or shouldupload option is set to false.
                                 await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Skipped);
                             }
                         }
@@ -109,9 +109,9 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                         }
                     }
 
-                    int shouldUploadFalseCount = emailDetails.Files.Select(x => x.ShouldUpload).Count();
+                    int numberOfShouldUploadFalseFiles = emailDetails.Files.Select(x => x.ShouldUpload).Count();
                     // Determine the email status by comparing the number of successful uploads and the total number of files.
-                    EmailStatus emailStatus = CalculateEmailStatus(emailDetails.Files.Count, numberOfSuccessfullyUploadedFiles, shouldUploadFalseCount);
+                    EmailStatus emailStatus = CalculateEmailStatus(emailDetails.Files.Count, numberOfSuccessfullyUploadedFiles, numberOfShouldUploadFalseFiles);
 
                     // Increase the number of successfully uploaded emails if the status is successful.
                     if (emailStatus == EmailStatus.Successful)
@@ -228,14 +228,14 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             }
         }
 
-        private EmailStatus CalculateEmailStatus(int totalNumberOfFiles, int numberOfSuccessfullyUploadedFiles, int shouldUploadFalseCount)
+        private EmailStatus CalculateEmailStatus(int totalNumberOfFiles, int numberOfSuccessfullyUploadedFiles, int numberOfShouldUploadFalseFiles)
         {
             if (numberOfSuccessfullyUploadedFiles == 0)
             {
                 return EmailStatus.Failed;
             }
 
-            if (numberOfSuccessfullyUploadedFiles + shouldUploadFalseCount == totalNumberOfFiles)
+            if (numberOfSuccessfullyUploadedFiles + numberOfShouldUploadFalseFiles == totalNumberOfFiles)
             {
                 return EmailStatus.Successful;
             }
