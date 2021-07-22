@@ -39,7 +39,9 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                     EdreamsReferenceId = email.EdreamsReferenceId,
                     EmailKind = email.EmailKind,
                     InternetMessageId = email.InternetMessageId,
-                    Status = email.Status
+                    Status = email.Status,
+                    //initializing new EmailRecipientDto to avoid object reference not set to an instance of an object in the below step line no :50
+                    EmailRecipients = new List<EmailRecipientDto>()
 
                 };
 
