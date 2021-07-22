@@ -266,6 +266,13 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         /// <returns>Boolen value specifies file can be skipped or not</returns>
         private bool IsFileSkipped(EmailUploadOptions uploadOption, FileDetailsDto fileDetails)
         {
+            // checks the file should upload option.
+            if (!fileDetails.ShouldUpload)
+            {
+                _logger.LogInformation(string.Format("File {0} is skipped because ShouldUpload option set to false", fileDetails.Id));
+                return true;
+            }
+
             if (uploadOption == EmailUploadOptions.Emails)
             {
                 _logger.LogInformation(string.Format("File {0} is skipped because file type is not matched with upload option", fileDetails.Id));
@@ -278,12 +285,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 return fileDetails.Kind != FileKind.Attachment;
             }
 
-            // checks the file should upload option once the email upload option is matched with file kind.
-            if (!fileDetails.ShouldUpload)
-            {
-                _logger.LogInformation(string.Format("File {0} is skipped because ShouldUpload option set to false", fileDetails.Id));
-                return true;
-            }
+           
 
             return false;
         }
