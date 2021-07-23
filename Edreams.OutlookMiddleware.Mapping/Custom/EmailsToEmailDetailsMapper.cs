@@ -25,6 +25,8 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         Path = file.TempPath,
                         Kind = file.Kind,
                         EmailSubject = file.EmailSubject,
+                        NewName = file.NewName,
+                        ShouldUpload = file.ShouldUpload
                     };
 
                     listOfFileDetails.Add(fileDetails);
@@ -37,7 +39,9 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                     EdreamsReferenceId = email.EdreamsReferenceId,
                     EmailKind = email.EmailKind,
                     InternetMessageId = email.InternetMessageId,
-                    Status = email.Status
+                    Status = email.Status,
+                    //initializing new EmailRecipientDto to avoid object reference not set to an instance of an object in the below step line no :50
+                    EmailRecipients = new List<EmailRecipientDto>()
 
                 };
 
@@ -70,6 +74,7 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         DueDate = email.ProjectTask.DueDate,
                         Priority = email.ProjectTask.Priority,
                         TaskName = email.ProjectTask.TaskName,
+                        UploadLocationProjectId= email.ProjectTask.UploadLocationProjectId,
                         UserInvolvements = userInvolvements
                     };
                     emailDetails.ProjectTaskDto = projectTaskDto;

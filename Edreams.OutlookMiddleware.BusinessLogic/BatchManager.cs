@@ -74,8 +74,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
 
             // Fetch all emails that are related to the specified batch and include the referenced files.
-            // TODO: Need to Remove Upload Option/adjust logic
-            IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files);
+            IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files , incl=>incl.EmailRecipients);
 
             // Map the database emails and files to email details and file details.
             IList<EmailDetailsDto> emailDetails = _emailsToEmailDetailsMapper.Map(emails);
@@ -85,7 +84,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             {
                 Id = batchId,
                 Emails = emailDetails.ToList(),
-                UploadOption = batch.UploadOption
+                UploadOption = batch.UploadOption,
+                UploadLocationFolder = batch.UploadLocationFolder,
+                UploadLocationSite = batch.UploadLocationSite
             };
         }
 
@@ -146,7 +147,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                     List<ProjectTask> taskDetails = new List<ProjectTask>();
                     foreach (Email email in emails)
                     {
-                        ProjectTask task = _projectTaskDetailsDtoToProjectTaskMapper.Map(request.ProjectTaskDetails, email, request.UploadLocationProjectId.Value);
+                        ProjectTask task = _projectTaskDetailsDtoToProjectTaskMapper.Map(request.ProjectTaskDetails, email);
                         taskDetails.Add(task);
                     }
                     await _projectTaskRepository.Create(taskDetails);
