@@ -19,7 +19,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<HistoricTransaction> TransactionHistory { get; set; }
         public DbSet<ProjectTask> ProjectTasks { get; set; }
         public DbSet<ProjectTaskUserInvolvement> ProjectTaskUserInvolvements { get; set; }
-
+        public DbSet<MetaData> MetaData { get; set; }
         public OutlookMiddlewareDbContext(IEdreamsConfiguration configuration)
         {
             _configuration = configuration;
@@ -75,7 +75,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                     .HasConversion(new EnumToStringConverter<EmailStatus>());
                 e.Property(x => x.InternetMessageId)
                     .HasMaxLength(200);
-                
+
                 e.HasIndex(x => x.InternetMessageId);
             });
 
@@ -170,7 +170,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.HasKey(x => x.Id).IsClustered(false);
                 e.HasIndex(x => x.SysId).IsUnique().IsClustered();
                 e.Property(x => x.SysId).ValueGeneratedOnAdd();
-                e.Property(x => x.TaskName).HasMaxLength(200); 
+                e.Property(x => x.TaskName).HasMaxLength(200);
                 e.Property(x => x.Description).HasMaxLength(300);
                 e.Property(x => x.Priority).HasMaxLength(10).HasConversion(new EnumToStringConverter<ProjectTaskPriority>());
                 e.Property(x => x.InsertedBy).IsRequired();
@@ -186,6 +186,17 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.Property(x => x.UserId).HasMaxLength(100);
                 e.Property(x => x.Type).HasMaxLength(10).HasConversion(new EnumToStringConverter<ProjectTaskUserInvolvementType>());
                 e.Property(x => x.PrincipalName).HasMaxLength(100);
+                e.Property(x => x.InsertedBy).IsRequired();
+                e.Property(x => x.InsertedBy).HasMaxLength(100);
+                e.Property(x => x.UpdatedBy).HasMaxLength(100);
+            });
+            modelBuilder.Entity<MetaData>(e =>
+            {
+                e.ToTable("MetaData");
+                e.HasKey(x => x.Id).IsClustered(false);
+                e.HasIndex(x => x.SysId).IsUnique().IsClustered();
+                e.Property(x => x.SysId).ValueGeneratedOnAdd();
+                e.Property(x => x.PropertyName).HasMaxLength(100);
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);
