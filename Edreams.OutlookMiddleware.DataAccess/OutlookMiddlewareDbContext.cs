@@ -19,7 +19,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<HistoricTransaction> TransactionHistory { get; set; }
         public DbSet<ProjectTask> ProjectTasks { get; set; }
         public DbSet<ProjectTaskUserInvolvement> ProjectTaskUserInvolvements { get; set; }
-        public DbSet<MetaData> MetaData { get; set; }
+        public DbSet<Metadata> Metadata { get; set; }
         public OutlookMiddlewareDbContext(IEdreamsConfiguration configuration)
         {
             _configuration = configuration;
@@ -190,9 +190,9 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);
             });
-            modelBuilder.Entity<MetaData>(e =>
+            modelBuilder.Entity<Metadata>(e =>
             {
-                e.ToTable("MetaData");
+                e.ToTable("Metadata");
                 e.HasKey(x => x.Id).IsClustered(false);
                 e.HasIndex(x => x.SysId).IsUnique().IsClustered();
                 e.Property(x => x.SysId).ValueGeneratedOnAdd();

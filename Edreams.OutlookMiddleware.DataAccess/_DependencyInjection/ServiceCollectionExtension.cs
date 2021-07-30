@@ -24,7 +24,7 @@ namespace Edreams.OutlookMiddleware.DataAccess.DependencyInjection
             services.AddTransient<IRepository<File>, FilesRepository>();
             services.AddTransient<IRepository<Transaction>, TransactionsRepository>();
             services.AddTransient<IRepository<HistoricTransaction>, HistoricTransactionsRepository>();
-            services.AddTransient<IRepository<MetaData>, MetaDataRepository>();
+            services.AddTransient<IRepository<Metadata>, MetadataRepository>();
         }
     }
 }

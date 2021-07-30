@@ -16,6 +16,6 @@ namespace Edreams.OutlookMiddleware.Model
         public string NewName { get; set; }
         public FileStatus Status { get; set; }
         public Email Email { get; set; }
-        public MetaData MetaData { get; set; }
+        public Metadata Metadata { get; set; }
     }
 }

@@ -433,7 +433,7 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                     b.ToTable("Logs");
                 });
 
-            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.MetaData", b =>
+            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.Metadata", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -479,7 +479,7 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                         .IsUnique()
                         .HasAnnotation("SqlServer:Clustered", true);
 
-                    b.ToTable("MetaData");
+                    b.ToTable("Metadata");
                 });
 
             modelBuilder.Entity("Edreams.OutlookMiddleware.Model.ProjectTask", b =>
@@ -684,11 +684,11 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                         .HasForeignKey("EmailId");
                 });
 
-            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.MetaData", b =>
+            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.Metadata", b =>
                 {
                     b.HasOne("Edreams.OutlookMiddleware.Model.File", "File")
-                        .WithOne("MetaData")
-                        .HasForeignKey("Edreams.OutlookMiddleware.Model.MetaData", "FileId")
+                        .WithOne("Metadata")
+                        .HasForeignKey("Edreams.OutlookMiddleware.Model.Metadata", "FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

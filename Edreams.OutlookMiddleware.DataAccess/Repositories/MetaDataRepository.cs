@@ -4,11 +4,11 @@ using Edreams.OutlookMiddleware.Model;
 
 namespace Edreams.OutlookMiddleware.DataAccess.Repositories
 {
-    public class MetaDataRepository : Repository<MetaData>
+    public class MetadataRepository : Repository<Metadata>
     {
-        public MetaDataRepository(
+        public MetadataRepository(
           OutlookMiddlewareDbContext dbContext, ISecurityContext securityContext)
-          : base(dbContext, dbContext.MetaData, securityContext)
+          : base(dbContext, dbContext.Metadata, securityContext)
         {
 
         }

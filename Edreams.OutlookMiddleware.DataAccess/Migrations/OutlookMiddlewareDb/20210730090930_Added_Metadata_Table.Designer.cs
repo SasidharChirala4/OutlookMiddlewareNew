@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
 {
     [DbContext(typeof(OutlookMiddlewareDbContext))]
-    [Migration("20210729102638_Added_MetaData_Table")]
-    partial class Added_MetaData_Table
+    [Migration("20210730090930_Added_Metadata_Table")]
+    partial class Added_Metadata_Table
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -435,7 +435,7 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                     b.ToTable("Logs");
                 });
 
-            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.MetaData", b =>
+            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.Metadata", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -481,7 +481,7 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                         .IsUnique()
                         .HasAnnotation("SqlServer:Clustered", true);
 
-                    b.ToTable("MetaData");
+                    b.ToTable("Metadata");
                 });
 
             modelBuilder.Entity("Edreams.OutlookMiddleware.Model.ProjectTask", b =>
@@ -686,11 +686,11 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                         .HasForeignKey("EmailId");
                 });
 
-            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.MetaData", b =>
+            modelBuilder.Entity("Edreams.OutlookMiddleware.Model.Metadata", b =>
                 {
                     b.HasOne("Edreams.OutlookMiddleware.Model.File", "File")
-                        .WithOne("MetaData")
-                        .HasForeignKey("Edreams.OutlookMiddleware.Model.MetaData", "FileId")
+                        .WithOne("Metadata")
+                        .HasForeignKey("Edreams.OutlookMiddleware.Model.Metadata", "FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

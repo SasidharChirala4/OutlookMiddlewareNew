@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
 {
-    public partial class Added_MetaData_Table : Migration
+    public partial class Added_Metadata_Table : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "MetaData",
+                name: "Metadata",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -24,10 +24,10 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MetaData", x => x.Id)
+                    table.PrimaryKey("PK_Metadata", x => x.Id)
                         .Annotation("SqlServer:Clustered", false);
                     table.ForeignKey(
-                        name: "FK_MetaData_Files_FileId",
+                        name: "FK_Metadata_Files_FileId",
                         column: x => x.FileId,
                         principalTable: "Files",
                         principalColumn: "Id",
@@ -35,14 +35,14 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MetaData_FileId",
-                table: "MetaData",
+                name: "IX_Metadata_FileId",
+                table: "Metadata",
                 column: "FileId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_MetaData_SysId",
-                table: "MetaData",
+                name: "IX_Metadata_SysId",
+                table: "Metadata",
                 column: "SysId",
                 unique: true)
                 .Annotation("SqlServer:Clustered", true);
@@ -51,7 +51,7 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "MetaData");
+                name: "Metadata");
         }
     }
 }
