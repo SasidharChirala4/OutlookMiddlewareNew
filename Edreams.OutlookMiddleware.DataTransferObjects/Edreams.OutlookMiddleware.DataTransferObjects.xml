@@ -266,6 +266,26 @@
             Email subject
             </summary>
         </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.MetaData">
+            <summary>
+            List of MetaData
+            </summary>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.MetaDataDto">
+            <summary>
+            Contract that represents MetaDeta Details
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetaDataDto.PropertyName">
+            <summary>
+            MetaData Key
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetaDataDto.PropertyValue">
+            <summary>
+            MetaData Value 
+            </summary>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.TransactionDto">
             <summary>
             Contract that represents a transaction.

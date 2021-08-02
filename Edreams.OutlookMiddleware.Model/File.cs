@@ -1,6 +1,7 @@
 ﻿using Edreams.Common.DataAccess.Model;
 using Edreams.Common.DataAccess.Model.Interfaces;
 using Edreams.OutlookMiddleware.Enums;
+using System.Collections.Generic;
 
 namespace Edreams.OutlookMiddleware.Model
 {
@@ -16,6 +17,6 @@ namespace Edreams.OutlookMiddleware.Model
         public string NewName { get; set; }
         public FileStatus Status { get; set; }
         public Email Email { get; set; }
-        public Metadata Metadata { get; set; }
+        public List<Metadata> Metadata { get; set; }
     }
 }
