@@ -1,6 +1,6 @@
 # e-DReaMS Outlook Middleware
 
-Last modified by **Johnny Hooyberghs** on **July 13th 2021**
+Last modified by **Johnny Hooyberghs** on **July 29th 2021**
 
 # Introduction
 
@@ -62,6 +62,8 @@ First of all, the recipients for an email will be extracted and sent as part of 
 ![Architecture](.documentation/databases-2.drawio.png)
 
 ![Architecture](.documentation/databases-5.drawio.png)
+
+![Architecture](.documentation/databases-6.drawio.png)
 
 ## CategorizationRequests
 
