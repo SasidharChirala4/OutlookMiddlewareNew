@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Edreams.OutlookMiddleware.Enums;
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects
@@ -42,5 +43,10 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         /// Email subject
         /// </summary>
         public string EmailSubject { get; set; }
+        
+        /// <summary>
+        /// List of MetaData
+        /// </summary>
+        public List<MetaDataDto> MetaData { get; set; }
     }
 }

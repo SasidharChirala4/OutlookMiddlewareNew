@@ -4,14 +4,16 @@ using Edreams.OutlookMiddleware.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
 {
     [DbContext(typeof(OutlookMiddlewareDbContext))]
-    partial class OutlookMiddlewareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210802112048_UpdateMetaDataInFileTable")]
+    partial class UpdateMetaDataInFileTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

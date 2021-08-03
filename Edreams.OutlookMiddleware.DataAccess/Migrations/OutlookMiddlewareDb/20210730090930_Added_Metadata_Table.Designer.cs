@@ -4,14 +4,16 @@ using Edreams.OutlookMiddleware.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
 {
     [DbContext(typeof(OutlookMiddlewareDbContext))]
-    partial class OutlookMiddlewareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210730090930_Added_Metadata_Table")]
+    partial class Added_Metadata_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -472,7 +474,8 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
                     b.HasKey("Id")
                         .HasAnnotation("SqlServer:Clustered", false);
 
-                    b.HasIndex("FileId");
+                    b.HasIndex("FileId")
+                        .IsUnique();
 
                     b.HasIndex("SysId")
                         .IsUnique()
@@ -686,8 +689,8 @@ namespace Edreams.OutlookMiddleware.DataAccess.Migrations.OutlookMiddlewareDb
             modelBuilder.Entity("Edreams.OutlookMiddleware.Model.Metadata", b =>
                 {
                     b.HasOne("Edreams.OutlookMiddleware.Model.File", "File")
-                        .WithMany("Metadata")
-                        .HasForeignKey("FileId")
+                        .WithOne("Metadata")
+                        .HasForeignKey("Edreams.OutlookMiddleware.Model.Metadata", "FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
