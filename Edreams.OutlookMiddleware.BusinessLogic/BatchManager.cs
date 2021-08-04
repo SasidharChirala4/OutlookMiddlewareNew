@@ -72,10 +72,11 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             {
                 throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsOutlookMiddlewareExceptionCode.OutlookMiddlewareBatchNotFound);
             }
-
+            // Todo:include metadata here
             // Fetch all emails that are related to the specified batch and include the referenced files.
-            IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files , incl=>incl.EmailRecipients);
+            IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files  , incl=>incl.EmailRecipients);
 
+            // Todo:include metadata in mapper
             // Map the database emails and files to email details and file details.
             IList<EmailDetailsDto> emailDetails = _emailsToEmailDetailsMapper.Map(emails);
 

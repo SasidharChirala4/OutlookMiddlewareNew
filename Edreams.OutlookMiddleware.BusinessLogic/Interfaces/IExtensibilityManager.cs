@@ -1,4 +1,7 @@
 ﻿using Edreams.Contracts.Data.Common;
+using Edreams.Contracts.Data.Extensibility;
+using Edreams.OutlookMiddleware.DataTransferObjects;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ProjectTask = Edreams.Contracts.Data.Extensibility.ProjectTask;
 
@@ -33,5 +36,16 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         /// <param name="projectTask">project task object</param>
         /// <returns>Created project Task</returns>
         Task<ProjectTask> CreateEdreamsProjectTask(ProjectTask projectTask);
+
+        /// <summary>
+        /// Method to set the meta data for file in sharepoint
+        /// </summary>
+        /// <param name="siteUrl">Site Url</param>
+        /// <param name="fileUrl">File absolute url</param>
+        /// <param name="metadata">Metadata</param>
+        /// <param name="versionComment">Version comment</param>
+        /// <param name="declareAsRecord">is declared as record</param>
+        /// <returns>SharePointMetaData object</returns>
+        Task<SharePointMetaData> SetFileMetaData(string siteUrl, string fileUrl, List<MetadataDto> metadata, string versionComment, bool declareAsRecord);
     }
 }

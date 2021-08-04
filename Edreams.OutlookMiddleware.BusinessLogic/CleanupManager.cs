@@ -21,6 +21,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IRepository<Email> _emailRepository;
         private readonly IRepository<EmailRecipient> _emailRecipientRepository;
         private readonly IRepository<File> _fileRepository;
+        private readonly IRepository<Metadata> _metadataRepository;
         private readonly IFileHelper _fileHelper;
         private readonly ITransactionHelper _transactionHelper;
         private readonly IEdreamsConfiguration _configuration;
@@ -33,6 +34,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             IRepository<Email> emailRepository,
             IRepository<EmailRecipient> emailRecipientRepository,
             IRepository<File> fileRepository,
+            IRepository<Metadata> metadataRepository,
             IFileHelper fileHelper,
             ITransactionHelper transactionHelper,
             IEdreamsConfiguration configuration)
@@ -47,6 +49,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             _fileHelper = fileHelper;
             _transactionHelper = transactionHelper;
             _configuration = configuration;
+            _metadataRepository = metadataRepository;
         }
 
         public async Task<int> ExpirePreloadedFiles()
@@ -150,8 +153,16 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 // Remove the expired transaction related files from temporary path                
                 await _fileHelper.DeleteFile(files.Select(f => f.TempPath).ToList());
 
+                List<Guid> fileIds = files.Select(f => f.Id).ToList();
+                // Get list of  metadata related to fileIds
+                var metadataIds = await _metadataRepository.FindAndProject(x => fileIds.Contains(x.FileId), x => x.Id);
+
                 // Remove the expired transaction and the related
-                // batch, emails and files from the database
+                // batch, emails , files and metadata from the database
+
+                //Remove files metadata
+                _ = await _metadataRepository.Delete(metadataIds);
+
                 _ = await _fileRepository.Delete(files.Select(f => f.Id).ToList());
 
                 // Get list of all Email Recipients

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Edreams.Common.Exceptions;
 using Edreams.Common.Logging.Interfaces;
@@ -7,8 +9,10 @@ using Edreams.Contracts.Data.Enums;
 using Edreams.Contracts.Data.Extensibility;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Constants;
+using Edreams.OutlookMiddleware.Common.Helpers;
 using Edreams.OutlookMiddleware.Common.Helpers.Interfaces;
 using Edreams.OutlookMiddleware.Common.Validation.Interface;
+using Edreams.OutlookMiddleware.DataTransferObjects;
 using RestSharp;
 using ProjectTask = Edreams.Contracts.Data.Extensibility.ProjectTask;
 
@@ -20,6 +24,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         private readonly IRestHelper<SuggestedSite> _suggestedSiteRestHelper;
         private readonly IRestHelper<SharePointFile> _sharePointFileRestHelper;
+        private readonly IRestHelper<SharePointMetaData> _sharePointMetaDataRestHelper;
         private readonly IRestHelper<ProjectTask> _projectTaskRestHelpler;
         private readonly IValidator _validator;
         private readonly IEdreamsLogger<ExtensibilityManager> _logger;
@@ -31,12 +36,14 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         public ExtensibilityManager(
             IRestHelper<SuggestedSite> suggestedSiteRestHelper,
             IRestHelper<SharePointFile> sharePointFileRestHelper,
+            IRestHelper<SharePointMetaData> sharePointMetaDataRestHelper,
             IRestHelper<ProjectTask> projectTaskRestHelpler,
             IValidator validator, IEdreamsLogger<ExtensibilityManager> logger)
         {
             _suggestedSiteRestHelper = suggestedSiteRestHelper;
             _sharePointFileRestHelper = sharePointFileRestHelper;
             _projectTaskRestHelpler = projectTaskRestHelpler;
+            _sharePointMetaDataRestHelper = sharePointMetaDataRestHelper;
             _validator = validator;
             _logger = logger;
         }
@@ -148,7 +155,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             try
             {
                 // create project task from rest helper .
-                var response = await _projectTaskRestHelpler.CreateNew($"/projects/{projectTask.ProjectId}/tasks", projectTask,false);
+                var response = await _projectTaskRestHelpler.CreateNew($"/projects/{projectTask.ProjectId}/tasks", projectTask, false);
                 if (response.Content != null)
                 {
                     _logger.LogInformation($"Project Task [{projectTask.Title}] Created successfully.");
@@ -168,6 +175,51 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
         }
 
-        
+        /// <summary>
+        /// Method to set the meta data for file in sharepoint
+        /// </summary>
+        /// <param name="siteUrl">Site Url</param>
+        /// <param name="fileUrl">File absolute url</param>
+        /// <param name="metadata">Metadata</param>
+        /// <param name="versionComment">Version comment</param>
+        /// <param name="declareAsRecord">is declared as record</param>
+        /// <returns>SharePointMetaData object</returns>
+        public async Task<SharePointMetaData> SetFileMetaData(string siteUrl, string fileUrl, List<MetadataDto> metadata, string versionComment, bool declareAsRecord)
+        {
+            try
+            {
+                SharePointMetaData metaDataToSet = new SharePointMetaData
+                {
+                    MetaData = metadata.Select(x => new KeyValue { Key = x.PropertyName, Value = x.PropertyValue }).ToList()
+                };
+
+                //Add versionComment            
+                if (!string.IsNullOrEmpty(versionComment))
+                    metaDataToSet.VersionComment = versionComment;
+                List<RestParameter> restParameters = new List<RestParameter>();
+                restParameters.Add(new RestParameter() { Name = "siteUrl", Value = siteUrl, Type = ParameterType.QueryString });
+                restParameters.Add(new RestParameter() { Name = "fileUrl", Value = fileUrl, Type = ParameterType.QueryString });
+                restParameters.Add(new RestParameter() { Name = "declareAsRecord", Value = declareAsRecord, Type = ParameterType.QueryString });
+                var response = await _sharePointMetaDataRestHelper.Update($"file/metadata", restParameters, metaDataToSet, false);
+                if (response.Content != null)
+                {
+                    _logger.LogInformation($"Metadata for file [{fileUrl}] Updated successfully.");
+                    return response.Content;
+                }
+                return null;
+            }
+            catch (EdreamsException ex)
+            {
+                _logger.LogError(ex, $"Error while updating metadata for file {fileUrl}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Unexpected error occured while updating metadata for file {fileUrl}");
+                return null;
+            }
+        }
+
+
     }
 }

@@ -17,6 +17,7 @@ namespace Edreams.Outlook.TestPlugin.Views
     {
         private readonly SynchronizationContext _synchronizationContext;
         private List<MailItem> _selection;
+        private List<Guid> _fileIds;
         private Guid? _batchId;
         private bool _preloaded;
         private bool _committed;
@@ -61,7 +62,7 @@ namespace Edreams.Outlook.TestPlugin.Views
         {
             Guid batchId = Guid.NewGuid();
             Guid correlationId = Guid.NewGuid();
-
+            _fileIds = new List<Guid>();
             preloadButton.Enabled = false;
 
             int currentSelected = 0;
@@ -102,6 +103,7 @@ namespace Edreams.Outlook.TestPlugin.Views
                     using (var memoryStream = new MemoryStream(ewsEmail.Data))
                     {
                         await HttpHelper.UploadAsync(memoryStream, mail.Subject, createMailResponse.FileId);
+                        _fileIds.Add(createMailResponse.FileId);
                     }
 
                     foreach (var attachment in createMailResponse.Attachments)
@@ -111,6 +113,7 @@ namespace Edreams.Outlook.TestPlugin.Views
                         {
                             await HttpHelper.UploadAsync(memoryStream, binary.Name, attachment.FileId);
                         }
+                        _fileIds.Add(attachment.FileId);
                     }
                 }
                 catch
@@ -132,7 +135,7 @@ namespace Edreams.Outlook.TestPlugin.Views
             }, null);
         }
 
-        private async void commitButton_Click(object sender, System.EventArgs e)
+        private async void commitButton_Click(object sender, EventArgs e)
         {
             if (_preloaded && _batchId.HasValue)
             {
@@ -144,6 +147,36 @@ namespace Edreams.Outlook.TestPlugin.Views
                     //EmailRecipients = new List<EmailRecipientDto>() { new EmailRecipientDto() { EmailId=new Guid("E400B31C-BC09-4F4F-B16F-546181285D67") ,Type=EmailRecipientType.Contact,Recipient="kkaredla@deloitte.com" },
                     // new EmailRecipientDto() { EmailId=new Guid("7F6856BF-6490-4D60-A52B-FE1301C894CD") ,Type=EmailRecipientType.Contact,Recipient="bkonijeti@deloitte.com" }}
                 };
+                foreach (Guid fileId in _fileIds)
+                {
+                    commitBatchRequest.Files.Add(new FileDetailsDto()
+                    {
+                        NewName = "Test-Mail-NewName",
+                        OriginalName = "Test-Mail-OriginalName",
+                        Id = fileId,
+                        Metadata = new List<MetadataDto>()
+                        {
+                            new MetadataDto(){PropertyName ="MailHeaders_MailCc",PropertyValue ="bkonijet@deloitte.com,kkaredla@deloitte.com"  },
+                            new MetadataDto(){PropertyName ="MailHeaders_MailTo",PropertyValue ="kkaredla@deloitte.com"  },
+                            new MetadataDto(){PropertyName ="dttedrMailSubject",PropertyValue ="RE: Solenis: Sigura Water and Platinum Equity Merger - Response Requested"  },
+                            new MetadataDto(){PropertyName ="dttedrMailMessageId",PropertyValue ="DB9PR85MB029776038DE1D4E9A672E170D4F19@DB9PR85MB0297.NAMPRD85.PROD.OUTLOOK.COM"  },
+                            new MetadataDto(){PropertyName ="dttedrMailCategory",PropertyValue ="Received Mail"  },
+                            new MetadataDto(){PropertyName ="dttedrMailConversationId",PropertyValue ="090B191C3D1F4061BD36CB2F19242288"  },
+                            new MetadataDto(){PropertyName ="dttedrMailReceived",PropertyValue ="04/08/2021 02:20"  },
+                            new MetadataDto(){PropertyName ="dttedrMailIsReadReceiptRequested",PropertyValue ="False"  },
+                            new MetadataDto(){PropertyName ="MailHeaders_MailFrom",PropertyValue ="bkonijet@deloitte.com"  },
+                            new MetadataDto(){PropertyName ="dttedrMailConversationTopic",PropertyValue ="Solenis: Sigura Water and Platinum Equity Merger - Response Requested"  },
+                            new MetadataDto(){PropertyName ="dttedrYear",PropertyValue ="2021"  },
+                            new MetadataDto(){PropertyName ="dttedrMailImportance",PropertyValue ="Normal"  },
+                            new MetadataDto(){PropertyName ="dttedrMailSent",PropertyValue ="04/08/2021 02:20"  },
+                            new MetadataDto(){PropertyName ="dttedrMailHasAttachments",PropertyValue ="True"  },
+                            new MetadataDto(){PropertyName ="dttedrDataClassification",PropertyValue ="Confidential"  },
+                            new MetadataDto(){PropertyName ="dttedrRoutingInfo",PropertyValue =""  },
+
+                        }
+                    });
+                }
+
                 commitBatchRequest.ProjectTaskDetails = new ProjectTaskDto()
                 {
                     TaskName = "Sample Task-Testing Task Details",
@@ -174,7 +207,7 @@ namespace Edreams.Outlook.TestPlugin.Views
                 };
                 await HttpHelper.CommitBatch(commitBatchRequest);
             }
-
+            _fileIds = new List<Guid>();
             _synchronizationContext.Send(_ =>
             {
 

@@ -266,22 +266,22 @@
             Email subject
             </summary>
         </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.MetaData">
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.Metadata">
             <summary>
             List of MetaData
             </summary>
         </member>
-        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.MetaDataDto">
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.MetadataDto">
             <summary>
             Contract that represents MetaDeta Details
             </summary>
         </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetaDataDto.PropertyName">
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetadataDto.PropertyName">
             <summary>
             MetaData Key
             </summary>
         </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetaDataDto.PropertyValue">
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetadataDto.PropertyValue">
             <summary>
             MetaData Value 
             </summary>

@@ -8,7 +8,7 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
     /// <summary>
     /// Contract that represents MetaDeta Details
     /// </summary>
-    public class MetaDataDto
+    public class MetadataDto
     {
         /// <summary>
         /// MetaData Key

@@ -90,6 +90,13 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                                 // TODO: Update absolute file URL in database as part of metadata PBI.
                                 // This can be handled in pbi #40965
                                 sharepointFileUploads.Add(sharepointFile);
+
+                                // ToDo: Need to remove odd coded values for vertioncomment and declaredasrecord 
+                                // need to discuss with johnny or sasi
+
+                                // set metadata for file in sharepoint 
+                                await _extensibilityManager.SetFileMetaData(batchDetails.UploadLocationSite, sharepointFile.AbsoluteSiteUrl, fileDetails.Metadata, "",false);
+
                                 // Set the file status to be successfully uploaded and
                                 await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
                                 // increase the number of successfully uploaded files.
@@ -118,6 +125,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                     {
                         numberOfSuccessfullyUploadedEmails++;
                     }
+                    List<MetadataDto> emailMetadata = emailDetails.Files.First(x => x.Kind == Enums.FileKind.Email).Metadata;
 
                     //Create Task
                     if (emailDetails.ProjectTaskDto != null)
@@ -285,7 +293,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 return fileDetails.Kind != FileKind.Attachment;
             }
 
-           
+
 
             return false;
         }
