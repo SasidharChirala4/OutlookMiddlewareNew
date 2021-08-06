@@ -22,5 +22,10 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         /// EmailId
         /// </summary>
         public Guid EmailId { get; set; }
+
+        /// <summary>
+        /// EmailRecipientKind
+        /// </summary>
+        public EmailRecipientKind Kind { get; set; }
     }
 }

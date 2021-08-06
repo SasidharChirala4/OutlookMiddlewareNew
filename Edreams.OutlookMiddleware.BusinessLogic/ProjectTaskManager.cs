@@ -33,9 +33,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             ProjectTaskDto projectTask = emailDetails.ProjectTaskDto;
             List<MetadataDto> emailMetadata =emailDetails.Files.First(x => x.Kind == Enums.FileKind.Email).Metadata;
-            //TO DO: Need to check with johnny about Email recipients
-            //ToRecipient 
-            //EmailRecipientDto toRecipient = emailDetails.EmailRecipients.FirstOrDefault(x => x.Type.Equals("FROM"));
+            //ToRecipient
+            EmailRecipientDto toRecipient = emailDetails.EmailRecipients.FirstOrDefault(x => x.Kind == Enums.EmailRecipientKind.From);
 
             //Get UserInvolvements
             var userInvolvements = GetUserInvolvements(projectTask.UserInvolvements);
@@ -54,7 +53,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 FromUserPrincipalName = assignedBy.UserPrincipalName,
                 FromUserId = assignedBy.UserId,
                 Cc=cc,
-                // TODO: To,Body details need to disscuss with johnny
+                To = toRecipient?.Recipient,
+                // TODO: Body details need to disscuss with johnny
                 //To = toRecipient.Recipient,
                 //Body = (!string.IsNullOrEmpty(spModel.EmailBody) ? spModel.EmailBody : string.Empty)
                 // Email Subject is stored in file entity.

@@ -29,6 +29,16 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         ShouldUpload = file.ShouldUpload
                     };
 
+                    foreach (Metadata metaData in file.Metadata)
+                    {
+                        fileDetails.Metadata.Add(new MetadataDto()
+                        {
+                            PropertyName = metaData.PropertyName,
+                            PropertyValue = metaData.PropertyValue,
+                            FileId = metaData.FileId
+                        });
+                    }
+
                     listOfFileDetails.Add(fileDetails);
                 }
 
@@ -51,7 +61,8 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                     {
                         EmailId = emailRecipient.Email.Id,
                         Recipient = emailRecipient.Recipient,
-                        Type = emailRecipient.Type
+                        Type = emailRecipient.Type,
+                        Kind = emailRecipient.Kind
                     });
                 }
 

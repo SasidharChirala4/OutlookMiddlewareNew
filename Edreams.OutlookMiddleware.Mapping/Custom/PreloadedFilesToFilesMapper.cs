@@ -43,6 +43,7 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                                     Email = email,
                                     Recipient = emailRecipient.Recipient,
                                     Type = emailRecipient.Type,
+                                    Kind = emailRecipient.Kind,
                                     // ToDo: Need to remove and configure in repository.
                                     InsertedBy = "BE\\kkaredla"
                                 });
@@ -53,7 +54,7 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         {
                             Email = email,
                             EmailSubject = preloadedFile.EmailSubject,
-                            AttachmentId = preloadedFile.AttachmentId,                            
+                            AttachmentId = preloadedFile.AttachmentId,
                             OriginalName = preloadedFile.FileName,
                             Size = preloadedFile.Size,
                             TempPath = preloadedFile.TempPath,
@@ -62,12 +63,12 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         };
                         FileDetailsDto fileDetails = request.Files.FirstOrDefault(x => x.Id == preloadedFile.Id);
                         if (fileDetails != null)
-                        {                            
+                        {
                             file.NewName = fileDetails.NewName;
                             file.ShouldUpload = fileDetails.ShouldUpload;
                         }
 
-                        foreach (MetadataDto metaDataDto in fileDetails.Metadata) 
+                        foreach (MetadataDto metaDataDto in fileDetails.Metadata)
                         {
                             file.Metadata.Add(new Metadata()
                             {

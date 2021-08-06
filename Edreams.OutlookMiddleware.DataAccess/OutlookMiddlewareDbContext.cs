@@ -147,6 +147,8 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.Property(x => x.Recipient).HasMaxLength(200);
                 e.Property(x => x.Type).IsRequired();
                 e.Property(x => x.Type).HasConversion(new EnumToStringConverter<EmailRecipientType>());
+                e.Property(x => x.Kind).IsRequired();
+                e.Property(x => x.Kind).HasConversion(new EnumToStringConverter<EmailRecipientKind>());
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);
