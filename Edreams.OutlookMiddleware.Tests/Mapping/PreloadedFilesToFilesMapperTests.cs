@@ -55,7 +55,7 @@ namespace Edreams.OutlookMiddleware.Tests.Mapping
             CommitBatchRequest request = new CommitBatchRequest
             {
                 EmailRecipients = new List<EmailRecipientDto>(),
-                Files = new List<FileDetailsDto>()
+                Files = new List<FileDetailsDto>(),
             };
             #endregion
 
@@ -70,6 +70,41 @@ namespace Edreams.OutlookMiddleware.Tests.Mapping
             files.Count.Should().Be(preloadedFiles.Count);
             files.Select(x => x.Email).Select(x => x.Batch).Should().AllBeEquivalentTo(batch);
             files.Select(x => x.Email).Distinct().Count().Should().Be(2);
+
+            #endregion
+        }
+
+        [Fact]
+        public void PreloadedFilesMapper_Map_Should_Return_Null()
+        {
+            #region [ ARRANGE ]
+
+            IPreloadedFilesToFilesMapper mapper = new PreloadedFilesToFilesMapper();
+
+            Batch batch = new Batch
+            {
+                Id = Guid.NewGuid(),
+                Status = BatchStatus.Pending
+            };
+            IList<FilePreload> preloadedFiles = new List<FilePreload> { };
+            
+            CommitBatchRequest request = new CommitBatchRequest
+            {
+                EmailRecipients = new List<EmailRecipientDto>(),
+                Files = new List<FileDetailsDto>(),
+            };
+
+            #endregion
+
+            #region [ ACT ]
+
+            IList<File> files = mapper.Map(batch, preloadedFiles, request);
+
+            #endregion
+
+            #region [ASSERT]
+
+            files.Should().HaveCount(0);
 
             #endregion
         }

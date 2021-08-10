@@ -53,6 +53,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Tye", "0. Tye", "{D556C5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edreams.OutlookMiddleware.CA", "Edreams.OutlookMiddleware.CA\Edreams.OutlookMiddleware.CA.csproj", "{C28DFA1E-A5F7-43BD-AA30-A05226FC6218}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edreams.OutlookMiddleware.Db", "Edreams.OutlookMiddleware.Db\Edreams.OutlookMiddleware.Db.csproj", "{A61DB2E6-7A21-4882-B5CB-8568D74DFFD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,10 @@ Global
 		{C28DFA1E-A5F7-43BD-AA30-A05226FC6218}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C28DFA1E-A5F7-43BD-AA30-A05226FC6218}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C28DFA1E-A5F7-43BD-AA30-A05226FC6218}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A61DB2E6-7A21-4882-B5CB-8568D74DFFD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A61DB2E6-7A21-4882-B5CB-8568D74DFFD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A61DB2E6-7A21-4882-B5CB-8568D74DFFD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A61DB2E6-7A21-4882-B5CB-8568D74DFFD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -144,6 +150,7 @@ Global
 		{5C8EABA3-843A-43BD-BCB2-6D9783655C6A} = {6936B1E5-526F-45EC-BA61-408C1E38C8F7}
 		{AA5A8F01-43D2-41F3-83CB-F1A406D2E908} = {435724F9-0E1D-4A3A-AAFB-BF431D024805}
 		{C28DFA1E-A5F7-43BD-AA30-A05226FC6218} = {FAC21692-03EE-42C2-81C7-7E2ACD3AA395}
+		{A61DB2E6-7A21-4882-B5CB-8568D74DFFD8} = {F7A5CE55-1698-4DC9-A84D-08822462D471}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {435DC40D-8E75-47A2-AB30-CFC3A9F47946}
