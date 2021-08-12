@@ -24,7 +24,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         private readonly IRestHelper<SuggestedSite> _suggestedSiteRestHelper;
         private readonly IRestHelper<SharePointFile> _sharePointFileRestHelper;
-        private readonly IRestHelper<SharePointMetaData> _sharePointMetaDataRestHelper;
+        private readonly IRestHelper<SharePointMetaData> _sharePointMetadataRestHelper;
         private readonly IRestHelper<ProjectTask> _projectTaskRestHelpler;
         private readonly IValidator _validator;
         private readonly IEdreamsLogger<ExtensibilityManager> _logger;
@@ -36,14 +36,14 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         public ExtensibilityManager(
             IRestHelper<SuggestedSite> suggestedSiteRestHelper,
             IRestHelper<SharePointFile> sharePointFileRestHelper,
-            IRestHelper<SharePointMetaData> sharePointMetaDataRestHelper,
+            IRestHelper<SharePointMetaData> sharePointMetadataRestHelper,
             IRestHelper<ProjectTask> projectTaskRestHelpler,
             IValidator validator, IEdreamsLogger<ExtensibilityManager> logger)
         {
             _suggestedSiteRestHelper = suggestedSiteRestHelper;
             _sharePointFileRestHelper = sharePointFileRestHelper;
             _projectTaskRestHelpler = projectTaskRestHelpler;
-            _sharePointMetaDataRestHelper = sharePointMetaDataRestHelper;
+            _sharePointMetadataRestHelper = sharePointMetadataRestHelper;
             _validator = validator;
             _logger = logger;
         }
@@ -133,14 +133,12 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
             catch (EdreamsException ex)
             {
-                // TODO : Need to check with johnny/sasi about proper log message and return value
-                _logger.LogError(ex, "Error at upload file.");
+                _logger.LogError(ex, $"Error at upload file  [{fileName}]");
                 return null;
             }
             catch (Exception ex)
             {
-                // TODO : Need to check with johnny/sasi about proper log message and return value
-                _logger.LogError(ex, "Unexpected error occured while uploading file.");
+                _logger.LogError(ex, $"Unexpected error occured while uploading file [{fileName}]");
                 return null;
             }
         }
@@ -184,23 +182,23 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// <param name="versionComment">Version comment</param>
         /// <param name="declareAsRecord">is declared as record</param>
         /// <returns>SharePointMetaData object</returns>
-        public async Task<SharePointMetaData> SetFileMetaData(string siteUrl, string fileUrl, List<MetadataDto> metadata, string versionComment, bool declareAsRecord)
+        public async Task<SharePointMetaData> SetFileMetadata(string siteUrl, string fileUrl, List<MetadataDto> metadata, string versionComment, bool declareAsRecord)
         {
             try
             {
-                SharePointMetaData metaDataToSet = new SharePointMetaData
+                SharePointMetaData metadataToSet = new SharePointMetaData
                 {
                     MetaData = metadata.Select(x => new KeyValue { Key = x.PropertyName, Value = x.PropertyValue }).ToList()
                 };
 
                 //Add versionComment            
                 if (!string.IsNullOrEmpty(versionComment))
-                    metaDataToSet.VersionComment = versionComment;
+                    metadataToSet.VersionComment = versionComment;
                 List<RestParameter> restParameters = new List<RestParameter>();
                 restParameters.Add(new RestParameter() { Name = "siteUrl", Value = siteUrl, Type = ParameterType.QueryString });
                 restParameters.Add(new RestParameter() { Name = "fileUrl", Value = fileUrl, Type = ParameterType.QueryString });
                 restParameters.Add(new RestParameter() { Name = "declareAsRecord", Value = declareAsRecord, Type = ParameterType.QueryString });
-                var response = await _sharePointMetaDataRestHelper.Update($"file/metadata", restParameters, metaDataToSet, false);
+                var response = await _sharePointMetadataRestHelper.Update($"file/metadata", restParameters, metadataToSet, false);
                 if (response.Content != null)
                 {
                     _logger.LogInformation($"Metadata for file [{fileUrl}] Updated successfully.");

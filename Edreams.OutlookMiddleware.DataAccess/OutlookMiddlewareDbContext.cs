@@ -53,6 +53,8 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e
                     .Property(x => x.UploadLocationSite).HasMaxLength(200);
                 e
+                    .Property(x => x.VersionComment).HasMaxLength(255);
+                e
                     .Property(x => x.UploadLocationFolder).HasMaxLength(200);
                 e
                     .Property(x => x.Status)

@@ -64,6 +64,16 @@
             List of Files
             </summary>
         </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.VersionComment">
+            <summary>
+            Version Comment
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.DeclareAsRecord">
+            <summary>
+            Declare as Record
+            </summary>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse">
             <summary>
             Response for Created Mail
@@ -273,7 +283,7 @@
         </member>
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.Metadata">
             <summary>
-            List of MetaData
+            List of Metadata
             </summary>
         </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.MetadataDto">
@@ -283,12 +293,12 @@
         </member>
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetadataDto.PropertyName">
             <summary>
-            MetaData Key
+            Metadata Key
             </summary>
         </member>
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetadataDto.PropertyValue">
             <summary>
-            MetaData Value 
+            Metadata Value 
             </summary>
         </member>
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetadataDto.FileId">

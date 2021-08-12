@@ -29,13 +29,13 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         ShouldUpload = file.ShouldUpload
                     };
 
-                    foreach (Metadata metaData in file.Metadata)
+                    foreach (Metadata metadata in file.Metadata)
                     {
                         fileDetails.Metadata.Add(new MetadataDto()
                         {
-                            PropertyName = metaData.PropertyName,
-                            PropertyValue = metaData.PropertyValue,
-                            FileId = metaData.FileId
+                            PropertyName = metadata.PropertyName,
+                            PropertyValue = metadata.PropertyValue,
+                            FileId = file.Id
                         });
                     }
 

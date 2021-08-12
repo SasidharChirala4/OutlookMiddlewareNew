@@ -13,6 +13,8 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         public EmailUploadOptions UploadOption { get; set; }
         public string UploadLocationSite { get; set; }
         public string UploadLocationFolder { get; set; }
+        public string VersionComment { get; set; }
+        public bool DeclareAsRecord { get; set; }
 
     }
 }

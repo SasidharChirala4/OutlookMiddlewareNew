@@ -45,7 +45,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.Interfaces
         /// <param name="metadata">Metadata</param>
         /// <param name="versionComment">Version comment</param>
         /// <param name="declareAsRecord">is declared as record</param>
-        /// <returns>SharePointMetaData object</returns>
-        Task<SharePointMetaData> SetFileMetaData(string siteUrl, string fileUrl, List<MetadataDto> metadata, string versionComment, bool declareAsRecord);
+        /// <returns>SharePointMetadata object</returns>
+        Task<SharePointMetaData> SetFileMetadata(string siteUrl, string fileUrl, List<MetadataDto> metadata, string versionComment, bool declareAsRecord);
     }
 }

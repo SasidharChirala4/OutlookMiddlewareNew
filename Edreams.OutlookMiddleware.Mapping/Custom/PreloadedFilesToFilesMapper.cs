@@ -68,12 +68,12 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                             file.ShouldUpload = fileDetails.ShouldUpload;
                         }
 
-                        foreach (MetadataDto metaDataDto in fileDetails.Metadata)
+                        foreach (MetadataDto metadataDto in fileDetails.Metadata)
                         {
                             file.Metadata.Add(new Metadata()
                             {
-                                PropertyName = metaDataDto.PropertyName,
-                                PropertyValue = metaDataDto.PropertyValue
+                                PropertyName = metadataDto.PropertyName,
+                                PropertyValue = metadataDto.PropertyValue
                             });
                         }
 

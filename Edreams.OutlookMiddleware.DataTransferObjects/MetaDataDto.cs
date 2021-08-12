@@ -11,11 +11,11 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
     public class MetadataDto
     {
         /// <summary>
-        /// MetaData Key
+        /// Metadata Key
         /// </summary>
         public string PropertyName { get; set; }
         /// <summary>
-        /// MetaData Value 
+        /// Metadata Value 
         /// </summary>
         public string PropertyValue { get; set; }
         

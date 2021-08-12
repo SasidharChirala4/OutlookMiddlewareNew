@@ -45,7 +45,7 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         public string EmailSubject { get; set; }
         
         /// <summary>
-        /// List of MetaData
+        /// List of Metadata
         /// </summary>
         public List<MetadataDto> Metadata { get; set; }
     }
