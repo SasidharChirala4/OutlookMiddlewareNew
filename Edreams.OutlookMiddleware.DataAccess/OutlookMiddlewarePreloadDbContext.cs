@@ -9,6 +9,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
     public class OutlookMiddlewarePreloadDbContext : DbContext
     {
         private readonly IEdreamsConfiguration _configuration;
+        private string _connectionString;
 
         public DbSet<FilePreload> PreloadedFiles { get; set; }
 
@@ -17,10 +18,18 @@ namespace Edreams.OutlookMiddleware.DataAccess
             _configuration = configuration;
         }
 
+        public OutlookMiddlewarePreloadDbContext(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = _configuration.OutlookMiddlewarePreloadDbConnectionString;
-            optionsBuilder.UseSqlServer(connectionString);
+            if (string.IsNullOrEmpty(_connectionString))
+            {
+                _connectionString = _configuration.OutlookMiddlewarePreloadDbConnectionString;
+            }
+            optionsBuilder.UseSqlServer(_connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

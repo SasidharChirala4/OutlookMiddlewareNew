@@ -23,7 +23,7 @@ namespace Edreams.OutlookMiddleware.Common.Helpers
         {
             try
             {
-                return File.ReadAllBytesAsync(filePath);
+                return Task.FromResult(File.ReadAllBytes(filePath));
             }
             catch (ArgumentNullException)
             {
