@@ -67,7 +67,7 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                             file.NewName = fileDetails.NewName;
                             file.ShouldUpload = fileDetails.ShouldUpload;
 
-                            foreach (MetaDataDto metaDataDto in fileDetails.MetaData)
+                            foreach (MetadataDto metaDataDto in fileDetails.Metadata)
                             {
                                 file.Metadata.Add(new Metadata()
                                 {
