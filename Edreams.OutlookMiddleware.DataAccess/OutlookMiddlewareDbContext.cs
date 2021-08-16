@@ -9,6 +9,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
     public class OutlookMiddlewareDbContext : DbContext
     {
         private readonly IEdreamsConfiguration _configuration;
+        private string _connectionString;
 
         public DbSet<Batch> Batches { get; set; }
         public DbSet<Email> Emails { get; set; }
@@ -20,15 +21,24 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<ProjectTask> ProjectTasks { get; set; }
         public DbSet<ProjectTaskUserInvolvement> ProjectTaskUserInvolvements { get; set; }
         public DbSet<Metadata> Metadata { get; set; }
+
         public OutlookMiddlewareDbContext(IEdreamsConfiguration configuration)
         {
             _configuration = configuration;
         }
 
+        public OutlookMiddlewareDbContext(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = _configuration.OutlookMiddlewareDbConnectionString;
-            optionsBuilder.UseSqlServer(connectionString);
+            if (string.IsNullOrEmpty(_connectionString))
+            {
+                _connectionString = _configuration.OutlookMiddlewareDbConnectionString;
+            }
+            optionsBuilder.UseSqlServer(_connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -71,7 +81,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                     .IsClustered();
                 e.Property(x => x.SysId)
                     .ValueGeneratedOnAdd();
-                e.Property(x=>x.EmailKind)
+                e.Property(x => x.EmailKind)
                      .HasConversion(new EnumToStringConverter<EmailKind>());
                 e.Property(x => x.Status)
                     .HasConversion(new EnumToStringConverter<EmailStatus>());
