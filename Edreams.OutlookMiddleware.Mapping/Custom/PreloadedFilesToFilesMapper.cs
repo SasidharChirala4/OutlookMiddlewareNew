@@ -43,9 +43,7 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                                     Email = email,
                                     Recipient = emailRecipient.Recipient,
                                     Type = emailRecipient.Type,
-                                    Kind = emailRecipient.Kind,
-                                    // ToDo: Need to remove and configure in repository.
-                                    InsertedBy = "BE\\kkaredla"
+                                    Kind = emailRecipient.Kind
                                 });
                             }
                         }
@@ -67,12 +65,12 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                             file.NewName = fileDetails.NewName;
                             file.ShouldUpload = fileDetails.ShouldUpload;
 
-                            foreach (MetadataDto metaDataDto in fileDetails.Metadata)
+                            foreach (MetadataDto metadataDto in fileDetails.Metadata)
                             {
                                 file.Metadata.Add(new Metadata()
                                 {
-                                    PropertyName = metaDataDto.PropertyName,
-                                    PropertyValue = metaDataDto.PropertyValue
+                                    PropertyName = metadataDto.PropertyName,
+                                    PropertyValue = metadataDto.PropertyValue
                                 });
                             }
                         }
