@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Edreams.Common.DataAccess" Version="2.0.7809.20079" />
-    <PackageReference Include="Edreams.Common.DataAccess.Model" Version="2.0.7809.20079" />
-    <PackageReference Include="Edreams.Common.Security" Version="2.0.7809.20079" />
+    <PackageReference Include="Edreams.Common.DataAccess" Version="2.0.7899.23152" />
+    <PackageReference Include="Edreams.Common.DataAccess.Model" Version="2.0.7899.23152" />
+    <PackageReference Include="Edreams.Common.Security" Version="2.0.7899.23152" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9">
       <PrivateAssets>all</PrivateAssets>

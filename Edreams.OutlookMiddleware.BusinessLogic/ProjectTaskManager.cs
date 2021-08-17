@@ -1,6 +1,7 @@
 ﻿using Edreams.Contracts.Data.Common;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
+using Edreams.OutlookMiddleware.Common.Constants;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using System;
 using System.Collections.Generic;
@@ -31,24 +32,30 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         public ProjectTask GetEdreamsProjectTask(EmailDetailsDto emailDetails, List<SharePointFile> sharepointFileUploads, string siteUrl)
         {
             ProjectTaskDto projectTask = emailDetails.ProjectTaskDto;
-
-            //TO DO: Need to check with johnny about Email recipients
-            //ToRecipient 
-            //EmailRecipientDto toRecipient = emailDetails.EmailRecipients.FirstOrDefault(x => x.Type.Equals("FROM"));
+            List<MetadataDto> emailMetadata =emailDetails.Files.First(x => x.Kind == Enums.FileKind.Email).Metadata;
+            //ToRecipient
+            EmailRecipientDto toRecipient = emailDetails.EmailRecipients.FirstOrDefault(x => x.Kind == Enums.EmailRecipientKind.From);
 
             //Get UserInvolvements
             var userInvolvements = GetUserInvolvements(projectTask.UserInvolvements);
             ProjectTaskUserInvolvement assignedBy = userInvolvements.Where(x => x.InvolvementType == ProjectTaskUserInvolvementType.AssignedBy).FirstOrDefault();
 
+            string cc = string.Empty;
+            if (emailMetadata.Any())
+            {
+                MetadataDto mailCcMetadata = emailMetadata.SingleOrDefault(t =>
+                    t.PropertyName.Equals(Constants.EdrMailCc, StringComparison.OrdinalIgnoreCase));
+                cc = mailCcMetadata != null? mailCcMetadata.PropertyValue:string.Empty;
+            }
             // Create ProjectTaskMail Object
             var mailObject = new ProjectTaskMail
             {
                 FromUserPrincipalName = assignedBy.UserPrincipalName,
                 FromUserId = assignedBy.UserId,
-                // TODO: To,cc,Body details are filled once the metadata details are addded.
-                // This can be handled in pbi #40965
+                Cc=cc,
+                To = toRecipient?.Recipient,
+                // TODO: Body details need to disscuss with johnny
                 //To = toRecipient.Recipient,
-                //Cc = cc,
                 //Body = (!string.IsNullOrEmpty(spModel.EmailBody) ? spModel.EmailBody : string.Empty)
                 // Email Subject is stored in file entity.
                 // Each file related to the email having same subject so taking subject from first object.

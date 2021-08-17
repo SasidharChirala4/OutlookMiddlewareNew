@@ -64,6 +64,16 @@
             List of Files
             </summary>
         </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.VersionComment">
+            <summary>
+            Version Comment
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.DeclareAsRecord">
+            <summary>
+            Declare as Record
+            </summary>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse">
             <summary>
             Response for Created Mail
@@ -226,6 +236,11 @@
             EmailId
             </summary>
         </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.EmailRecipientDto.Kind">
+            <summary>
+            EmailRecipientKind
+            </summary>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto">
             <summary>
             Contract that represents File Details
@@ -266,24 +281,29 @@
             Email subject
             </summary>
         </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.MetaData">
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.Metadata">
             <summary>
-            List of MetaData
+            List of Metadata
             </summary>
         </member>
-        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.MetaDataDto">
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.MetadataDto">
             <summary>
             Contract that represents MetaDeta Details
             </summary>
         </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetaDataDto.PropertyName">
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetadataDto.PropertyName">
             <summary>
-            MetaData Key
+            Metadata Key
             </summary>
         </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetaDataDto.PropertyValue">
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetadataDto.PropertyValue">
             <summary>
-            MetaData Value 
+            Metadata Value 
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetadataDto.FileId">
+            <summary>
+            File Id
             </summary>
         </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.TransactionDto">

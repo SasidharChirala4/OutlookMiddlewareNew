@@ -28,13 +28,15 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var projectTaskRestHelperMock = new Mock<IRestHelper<ProjectTask>>();
+            var sharePointMetadataRestHelperMock = new Mock<IRestHelper<SharePointMetaData>>();
             var validator = new Validator();
             var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
-            ExtensibilityManager extensibilityManager = new ExtensibilityManager(suggestedSiteRestHelperMock.Object, sharePointFileRestHelperMock.Object, 
-                projectTaskRestHelperMock.Object, validator, loggerMock.Object);
+            ExtensibilityManager extensibilityManager = new ExtensibilityManager(suggestedSiteRestHelperMock.Object, sharePointFileRestHelperMock.Object,
+                sharePointMetadataRestHelperMock.Object, projectTaskRestHelperMock.Object, validator, loggerMock.Object);
+
 
             // Prepare a request to use for when calling the "SetSuggestedSites" method.
             string from = string.Empty;
@@ -64,13 +66,14 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var projectTaskRestHelperMock = new Mock<IRestHelper<ProjectTask>>();
+            var sharePointMetadataRestHelperMock = new Mock<IRestHelper<SharePointMetaData>>();
             var validator = new Validator();
             var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
             ExtensibilityManager extensibilityManager = new ExtensibilityManager(suggestedSiteRestHelperMock.Object, sharePointFileRestHelperMock.Object,
-                projectTaskRestHelperMock.Object, validator, loggerMock.Object);
+                sharePointMetadataRestHelperMock.Object, projectTaskRestHelperMock.Object, validator, loggerMock.Object);
 
             // Prepare a request to use for when calling the "SetSuggestedSites" method.
 
@@ -100,13 +103,14 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var projectTaskRestHelperMock = new Mock<IRestHelper<ProjectTask>>();
+            var sharePointMetadataRestHelperMock = new Mock<IRestHelper<SharePointMetaData>>();
             var validator = new Validator();
             var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
             ExtensibilityManager extensibilityManager = new ExtensibilityManager(suggestedSiteRestHelperMock.Object, sharePointFileRestHelperMock.Object,
-                projectTaskRestHelperMock.Object, validator, loggerMock.Object);
+                sharePointMetadataRestHelperMock.Object, projectTaskRestHelperMock.Object, validator, loggerMock.Object);
 
             // Prepare a request to use for when calling the "SetSuggestedSites" method.
 
@@ -136,13 +140,14 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var projectTaskRestHelperMock = new Mock<IRestHelper<ProjectTask>>();
+            var sharePointMetadataRestHelperMock = new Mock<IRestHelper<SharePointMetaData>>();
             var validator = new Validator();
             var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
             ExtensibilityManager extensibilityManager = new ExtensibilityManager(suggestedSiteRestHelperMock.Object, sharePointFileRestHelperMock.Object,
-                projectTaskRestHelperMock.Object, validator, loggerMock.Object);
+                sharePointMetadataRestHelperMock.Object, projectTaskRestHelperMock.Object, validator, loggerMock.Object);
 
             // Prepare a request to use for when calling the "SetSuggestedSites" method.
 
@@ -155,7 +160,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 
             // Mock the "Find" method on the "Repository" and run the predicate lambda expression on
             // an empty list of "FilePreload" objects.
-            suggestedSiteRestHelperMock.Setup(x=>x.CreateNew(It.IsAny<string>(),It.IsAny<SuggestedSite>(),false)).ReturnsAsync(new ApiResult<SuggestedSite>() { });
+            suggestedSiteRestHelperMock.Setup(x => x.CreateNew(It.IsAny<string>(), It.IsAny<SuggestedSite>(), false)).ReturnsAsync(new ApiResult<SuggestedSite>() { });
 
             #endregion
 
@@ -169,7 +174,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             suggestedSiteRestHelperMock.Verify(x => x.CreateNew(It.IsAny<string>(), It.IsAny<SuggestedSite>(), false), Times.Once);
             #endregion
         }
-        
+
         #endregion
 
         #region <| UploadFile |>
@@ -183,13 +188,14 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var projectTaskRestHelperMock = new Mock<IRestHelper<ProjectTask>>();
+            var sharePointMetadataRestHelperMock = new Mock<IRestHelper<SharePointMetaData>>();
             var validator = new Validator();
             var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
             ExtensibilityManager extensibilityManager = new ExtensibilityManager(suggestedSiteRestHelperMock.Object, sharePointFileRestHelperMock.Object,
-                projectTaskRestHelperMock.Object, validator, loggerMock.Object);
+                sharePointMetadataRestHelperMock.Object, projectTaskRestHelperMock.Object, validator, loggerMock.Object);
 
             // Prepare a request to use for when calling the "UploadFile" method.
 
@@ -202,7 +208,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 
             #region [ ACT ]
             // Call the "UploadFile" method using the prepared request.
-            EdreamsValidationException exception = await Assert.ThrowsAsync<EdreamsValidationException>(() => extensibilityManager.UploadFile(fileBytes,siteUrl,folderName,fileName, overrite));
+            EdreamsValidationException exception = await Assert.ThrowsAsync<EdreamsValidationException>(() => extensibilityManager.UploadFile(fileBytes, siteUrl, folderName, fileName, overrite));
             #endregion
 
             #region [ ASSERT ]
@@ -221,13 +227,14 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var projectTaskRestHelperMock = new Mock<IRestHelper<ProjectTask>>();
+            var sharePointMetadataRestHelperMock = new Mock<IRestHelper<SharePointMetaData>>();
             var validator = new Validator();
             var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
             ExtensibilityManager extensibilityManager = new ExtensibilityManager(suggestedSiteRestHelperMock.Object, sharePointFileRestHelperMock.Object,
-                projectTaskRestHelperMock.Object, validator, loggerMock.Object);
+                sharePointMetadataRestHelperMock.Object, projectTaskRestHelperMock.Object, validator, loggerMock.Object);
 
             // Prepare a request to use for when calling the "UploadFile" method.
             string siteUrl = "eDreams/sites/Adsdrr/Defkr";
@@ -258,13 +265,14 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var projectTaskRestHelperMock = new Mock<IRestHelper<ProjectTask>>();
+            var sharePointMetadataRestHelperMock = new Mock<IRestHelper<SharePointMetaData>>();
             var validator = new Validator();
             var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
             ExtensibilityManager extensibilityManager = new ExtensibilityManager(suggestedSiteRestHelperMock.Object, sharePointFileRestHelperMock.Object,
-                projectTaskRestHelperMock.Object, validator, loggerMock.Object);
+                sharePointMetadataRestHelperMock.Object, projectTaskRestHelperMock.Object, validator, loggerMock.Object);
 
             // Prepare a request to use for when calling the "UploadFile" method.
 
@@ -296,13 +304,14 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var projectTaskRestHelperMock = new Mock<IRestHelper<ProjectTask>>();
+            var sharePointMetadataRestHelperMock = new Mock<IRestHelper<SharePointMetaData>>();
             var validator = new Validator();
             var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
             ExtensibilityManager extensibilityManager = new ExtensibilityManager(suggestedSiteRestHelperMock.Object, sharePointFileRestHelperMock.Object,
-                projectTaskRestHelperMock.Object, validator, loggerMock.Object);
+                sharePointMetadataRestHelperMock.Object, projectTaskRestHelperMock.Object, validator, loggerMock.Object);
 
             // Prepare a request to use for when calling the "SetSuggestedSites" method.
 
@@ -317,7 +326,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
 
             // Mock the "Find" method on the "Repository" and run the predicate lambda expression on
             // an empty list of "FilePreload" objects.
-            sharePointFileRestHelperMock.Setup(x => x.CreateFile(It.IsAny<string>(), It.IsAny<RestSharp.FileParameter>(), false)).ReturnsAsync(new ApiResult<SharePointFile>() { Content = new SharePointFile() { AbsoluteUrl= "eDreams/sites/Adsdrr/Defkr/AllDocuments/TaxDocument123.doc" } });
+            sharePointFileRestHelperMock.Setup(x => x.CreateFile(It.IsAny<string>(), It.IsAny<RestSharp.FileParameter>(), false)).ReturnsAsync(new ApiResult<SharePointFile>() { Content = new SharePointFile() { AbsoluteUrl = "eDreams/sites/Adsdrr/Defkr/AllDocuments/TaxDocument123.doc" } });
 
             #endregion
 
@@ -332,8 +341,8 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             result.AbsoluteUrl.Should().Be("eDreams/sites/Adsdrr/Defkr/AllDocuments/TaxDocument123.doc");
             #endregion
         }
-        
-        [Fact(Skip ="Need to write tests  for exception cases.")]
+
+        [Fact(Skip = "Need to write tests  for exception cases.")]
         public async Task ExtensibilityManager_UploadFile_Should_Throw_Exception()
         {
             #region [ ARRANGE ]
@@ -342,13 +351,14 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var suggestedSiteRestHelperMock = new Mock<IRestHelper<SuggestedSite>>();
             var sharePointFileRestHelperMock = new Mock<IRestHelper<SharePointFile>>();
             var projectTaskRestHelperMock = new Mock<IRestHelper<ProjectTask>>();
+            var sharePointMetadataRestHelperMock = new Mock<IRestHelper<SharePointMetaData>>();
             var validator = new Validator();
             var loggerMock = new Mock<IEdreamsLogger<ExtensibilityManager>>();
 
 
             // Create an instance of the "ExtensibilityManager" using the mocked dependencies.
             ExtensibilityManager extensibilityManager = new ExtensibilityManager(suggestedSiteRestHelperMock.Object, sharePointFileRestHelperMock.Object,
-                projectTaskRestHelperMock.Object, validator, loggerMock.Object);
+                sharePointMetadataRestHelperMock.Object, projectTaskRestHelperMock.Object, validator, loggerMock.Object);
 
             // Prepare a request to use for when calling the "SetSuggestedSites" method.
 

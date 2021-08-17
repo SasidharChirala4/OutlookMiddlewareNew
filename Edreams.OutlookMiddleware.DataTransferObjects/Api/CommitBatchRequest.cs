@@ -44,5 +44,15 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
         /// List of Files
         /// </summary>
         public List<FileDetailsDto> Files { get; set; }
+
+        /// <summary>
+        /// Version Comment
+        /// </summary>
+        public string VersionComment { get; set; }
+
+        /// <summary>
+        /// Declare as Record
+        /// </summary>
+        public bool DeclareAsRecord { get; set; }
     }
 }

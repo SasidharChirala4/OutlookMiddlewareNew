@@ -55,7 +55,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         {
             Guid transactionId = transactionMessage.TransctionId;
             Guid batchId = transactionMessage.BatchId;
-
+            _logger.LogInformation($"Uploading files for batch {batchId} started");
             // Create a client for Azure KeyVault, authenticated using the appsettings.json settings.
             IKeyVaultClient keyVaultClient = _exchangeAndKeyVaultHelper.CreateKeyVaultClient();
 
@@ -70,18 +70,20 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 int numberOfSuccessfullyUploadedEmails = 0;
 
                 List<SharePointFile> sharepointFileUploads = new List<SharePointFile>();
+                _logger.LogInformation($"{batchDetails.Emails.Count} emails are ready to be uploaded to e-DReaMS!");
                 // Loop through all emails that are part of this batch.
                 foreach (EmailDetailsDto emailDetails in batchDetails.Emails)
                 {
                     int numberOfSuccessfullyUploadedFiles = 0;
                     // Get sent email details from shared mailbox, or null if the email is not of type: "Sent".
                     ExchangeEmail sentEmailDetails = await GetSentEmailDetails(emailDetails, exchangeClient);
-
+                    _logger.LogInformation($"Uploading started for email [{emailDetails.Id}] ");
                     // Loop through all the files that are part of this email.
                     foreach (FileDetailsDto fileDetails in emailDetails.Files)
                     {
                         try
                         {
+                            _logger.LogInformation($"Uploading File [{fileDetails.OriginalName}] for mail [{fileDetails.EmailSubject}]");
                             // Skip the files that are not matched with upload option or shouldupload option is set to false.
                             if (!IsFileSkipped(batchDetails.UploadOption, fileDetails))
                             {
@@ -90,6 +92,10 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                                 // TODO: Update absolute file URL in database as part of metadata PBI.
                                 // This can be handled in pbi #40965
                                 sharepointFileUploads.Add(sharepointFile);
+
+                                // set metadata for file in sharepoint 
+                                await _extensibilityManager.SetFileMetadata(batchDetails.UploadLocationSite, sharepointFile.AbsoluteUrl, fileDetails.Metadata, batchDetails.VersionComment, batchDetails.DeclareAsRecord);
+
                                 // Set the file status to be successfully uploaded and
                                 await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
                                 // increase the number of successfully uploaded files.
@@ -104,6 +110,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                         }
                         catch
                         {
+                            _logger.LogWarning($"Error occured while uploading File [{fileDetails.OriginalName}] for mail [{fileDetails.EmailSubject}]");
                             // Set the file status to failed to upload.
                             await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.FailedToUpload);
                         }
@@ -130,6 +137,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                     await _emailManager.UpdateEmailStatus(emailDetails.Id, emailStatus);
                 }
 
+                _logger.LogInformation($"{numberOfSuccessfullyUploadedEmails} emails are uploaded to e-DReaMS!");
                 // Determine the batch status by comparing the number of successful uploads and the total number of emails.
                 BatchStatus batchStatus = CalculateBatchStatus(batchDetails.Emails.Count, numberOfSuccessfullyUploadedEmails);
 
@@ -141,13 +149,16 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
                 // Update the transaction to have a succeeded status.
                 await _transactionQueueManager.UpdateTransactionStatusAndArchive(transactionId, TransactionStatus.ProcessingSucceeded);
+
+                _logger.LogInformation($"Uploading files for batch {batchId} finished");
+
             }
             catch (Exception ex)
             {
-                // TODO: Do better logging.
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, $"Error Uploading files for batch {batchId}");
                 throw;
             }
+
         }
 
         #region <| Helper Methods |>
@@ -166,7 +177,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
                     // Update internetMessageId, EwsId for email
                     await _emailManager.UpdateEmailInternetMessageId(emailDetails.Id, sentEmailDetails.InternetMessageId, sentEmailDetails.EwsId);
-
+                    _logger.LogInformation($"Email '{sentEmailDetails.Subject}' successfully found in the SharedMailBox!");
                     return sentEmailDetails;
                 }
 
@@ -218,12 +229,12 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                     fileData = await _fileHelper.LoadFileInMemory(fileDetails.Path);
                 }
 
-                // Upload the file to e-DReaMS.
+                _logger.LogInformation($"Uploading File [{fileDetails.OriginalName}] to e-DReaMS");
                 return await _extensibilityManager.UploadFile(fileData, uploadLocationSite, uploadLocationFolder, fileDetails.NewName, true);
             }
             catch (Exception ex)
             {
-                // Throw an exception.
+                _logger.LogInformation($"Uploading File [{fileDetails.OriginalName}] to e-DReaMS failed");
                 throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsOutlookMiddlewareExceptionCode.OutlookMiddlewareUploadToEdreamsFailed, ex);
             }
         }
@@ -284,8 +295,6 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 _logger.LogInformation(string.Format("File {0} is skipped because file type is not matched with upload option", fileDetails.Id));
                 return fileDetails.Kind != FileKind.Attachment;
             }
-
-           
 
             return false;
         }

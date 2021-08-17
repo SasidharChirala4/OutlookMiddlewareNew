@@ -74,7 +74,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
 
             // Fetch all emails that are related to the specified batch and include the referenced files.
-            IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files , incl=>incl.EmailRecipients);
+            IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files.Select(x => x.Metadata), incl => incl.EmailRecipients);
 
             // Map the database emails and files to email details and file details.
             IList<EmailDetailsDto> emailDetails = _emailsToEmailDetailsMapper.Map(emails);
@@ -86,7 +86,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 Emails = emailDetails.ToList(),
                 UploadOption = batch.UploadOption,
                 UploadLocationFolder = batch.UploadLocationFolder,
-                UploadLocationSite = batch.UploadLocationSite
+                UploadLocationSite = batch.UploadLocationSite,
+                DeclareAsRecord = batch.DeclareAsRecord,
+                VersionComment= batch.VersionComment
             };
         }
 
@@ -131,6 +133,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 // Build a new batch and create it in the database.
                 Batch batch = _batchFactory.CreatePendingBatch();
                 batch.UploadOption = request.UploadOption;
+                batch.VersionComment = request.VersionComment;
+                batch.DeclareAsRecord = request.DeclareAsRecord;
                 batch.UploadLocationSite = request.UploadLocationSite;
                 batch.UploadLocationFolder = request.UploadLocationFolder;
                 batch = await _batchRepository.Create(batch);
@@ -207,7 +211,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             {
                 CorrelationId = request.CorrelationId,
                 BatchId = request.BatchId,
-                NumberOfCancelledFiles = preloadedFiles.Count
+                NumberOfCancelledFiles = preloadedFiles.Count,
             };
         }
     }

@@ -9,5 +9,6 @@ namespace Edreams.OutlookMiddleware.Model
         public string Recipient { get; set; }
         public EmailRecipientType Type { get; set; }
         public Email Email { get; set; }
+        public EmailRecipientKind Kind { get; set; }
     }
 }

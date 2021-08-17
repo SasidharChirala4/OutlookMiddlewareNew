@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
 using Edreams.Common.AzureServiceBus.Contracts;
 using Edreams.Common.AzureServiceBus.Interfaces;
+using Edreams.Common.Logging.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Services.Categorization.Engine.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Edreams.Common.Logging.Interfaces;
 
 namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
 {
@@ -53,11 +53,11 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
 
             await categorizationEngineProcessor.Process(message.Data);
         }
-        private Task OnError(ServiceBusReceivedMessage serviceBusMessage, Exception ex, CancellationToken cancellationToken)
+        private Task<bool> OnError(ServiceBusReceivedMessage serviceBusMessage, ServiceBusMessage<TransactionMessage> message, Exception ex, CancellationToken cancellationToken)
         {
             _logger.LogError($"MESSAGE {serviceBusMessage.CorrelationId} THREW AN EXCEPTION '{ex.Message}' !!!");
 
-            return Task.CompletedTask;
+            return Task.FromResult(true);
         }
     }
 }

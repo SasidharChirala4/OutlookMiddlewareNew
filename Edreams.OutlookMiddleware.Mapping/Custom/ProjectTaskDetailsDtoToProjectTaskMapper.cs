@@ -1,8 +1,7 @@
-﻿using Edreams.OutlookMiddleware.DataTransferObjects;
+﻿using System.Collections.Generic;
+using Edreams.OutlookMiddleware.DataTransferObjects;
 using Edreams.OutlookMiddleware.Mapping.Custom.Interfaces;
 using Edreams.OutlookMiddleware.Model;
-using System;
-using System.Collections.Generic;
 
 namespace Edreams.OutlookMiddleware.Mapping
 {
@@ -27,9 +26,7 @@ namespace Edreams.OutlookMiddleware.Mapping
                 {
                     Type = userInvolvement.Type,
                     PrincipalName = userInvolvement.PrincipalName,
-                    UserId = userInvolvement.UserId,
-                    // ToDo: Need to remove once the johnny configured InsertedBy fileds for child tables in repository.
-                    InsertedBy = "BE\\kkaredla"
+                    UserId = userInvolvement.UserId
                 });
 
             }
