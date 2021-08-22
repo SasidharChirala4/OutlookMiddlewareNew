@@ -301,11 +301,6 @@
             Metadata Value 
             </summary>
         </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.MetadataDto.FileId">
-            <summary>
-            File Id
-            </summary>
-        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.TransactionDto">
             <summary>
             Contract that represents a transaction.

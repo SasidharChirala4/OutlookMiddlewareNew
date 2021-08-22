@@ -35,7 +35,6 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         {
                             PropertyName = metadata.PropertyName,
                             PropertyValue = metadata.PropertyValue,
-                            FileId = file.Id
                         });
                     }
 
