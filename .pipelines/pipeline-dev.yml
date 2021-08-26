@@ -40,11 +40,13 @@ steps:
   # Install the latest NuGet tool for compatibility (the default one throws
   # a parse exception on our solution files).
   - task: NuGetToolInstaller@1
+    displayName: Install NuGet 5.x on Build Agent
     inputs:
       versionSpec: '5.x'
 
   # Run a NuGet restore on all the solution files.
   - task: NuGetCommand@2
+    displayName: Restore NuGet Packages
     inputs:
       command: 'restore'
       restoreSolution: '**/Edreams.OutlookMiddleware.sln'
@@ -54,7 +56,7 @@ steps:
   # Run a Visual Studio build on all solution files.
   - task: VSBuild@1
     inputs:
-      solution: '**\*.sln'
+      restoreSolution: '**/Edreams.OutlookMiddleware.sln'
       configuration: Release
 
   # Run UnitTests

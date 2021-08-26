@@ -49,7 +49,7 @@ steps:
     displayName: Restore NuGet Packages
     inputs:
       command: 'restore'
-      restoreSolution: '**/*.sln'
+      restoreSolution: '**/Edreams.OutlookMiddleware.sln'
       feedsToUse: config
       nugetConfigPath: '$(Build.SourcesDirectory)/.nuget/nuget.config'
 
@@ -57,7 +57,7 @@ steps:
   - task: VSBuild@1
     displayName: Build Solution using Visual Studio
     inputs:
-      solution: '**\*.sln'
+      restoreSolution: '**/Edreams.OutlookMiddleware.sln'
       configuration: Release
 
   - task: CopyFiles@2
