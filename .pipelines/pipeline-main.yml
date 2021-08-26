@@ -1,7 +1,7 @@
-# This build pipeline will only be triggered by changes on the 'master branch'.
+# This build pipeline will only be triggered by changes on the 'dev and feature branches'.
 trigger:
   - master
-
+  
 # This build pipeline will run on agents from the 'default' build agent pool
 # and will specifically target build agents that have the custom 'Build.Server'
 pool: 
@@ -21,10 +21,7 @@ steps:
     displayName: Set Dynamic Build Number
     inputs:
       targetType: 'inline'
-      script: |
-        $variableGroup = "EDR Component Versions"
-        $versionVariableName = "Edreams.Outlook.Middleware.Version"
-        
+      script: |        
         $today = Get-Date 
         $midnight = Get-Date -Hour 0 -Minute 00 -Second 00
         $referenceDate = [datetime]"01/01/2000 00:00"
@@ -32,44 +29,33 @@ steps:
         $autoBuild = [math]::Floor($diffInDays.TotalDays)
         $diffInSeconds = New-TimeSpan -Start $midnight -End $today
         $autoRevision = [math]::Floor($diffInSeconds.TotalSeconds / 2)
-
-        $url = "https://tfs.be.deloitte.com/tfs/DefaultCollection/DSI/_apis/distributedtask/variablegroups"
-        Write-Host "Getting versioning info from: $url"
-        $call = Invoke-RestMethod -UseDefaultCredentials -Uri $url -Method Get
-        $value = $call.value
-        foreach($group in $call.value){
-            if($group.name -eq $VariableGroup){
-                $var = $group.variables.$versionVariableName
-                if(-not ($var -eq $null)){
-                    $majorMinor = $var.value
-                }
-            }
-        }
-
-        $buildNumber = $majorMinor + "." + $autoBuild + "." + $autoRevision
+        $buildNumber = "0.1." + $autoBuild + "." + $autoRevision
 
         Write-Host "Current Build Number " + $env:BUILD_BUILDNUMBER
         Write-Host "Generated Build Number " + $buildNumber
         Write-Host "##vso[build.updatebuildnumber]$buildNumber"
         Write-Host "Done"
-
+        
   # Install the latest NuGet tool for compatibility (the default one throws
   # a parse exception on our solution files).
   - task: NuGetToolInstaller@1
+    displayName: Install NuGet 5.x on Build Agent
     inputs:
       versionSpec: '5.x'
 
   # Run a NuGet restore on all the solution files.
   - task: NuGetCommand@2
+    displayName: Restore NuGet Packages
     inputs:
       command: 'restore'
       restoreSolution: '**/Edreams.OutlookMiddleware.sln'
+      feedsToUse: config
       nugetConfigPath: '$(Build.SourcesDirectory)/.nuget/nuget.config'
 
   # Run a Visual Studio build on all solution files.
   - task: VSBuild@1
     inputs:
-      solution: '**\*.sln'
+      restoreSolution: '**/Edreams.OutlookMiddleware.sln'
       configuration: Release
 
   # Run UnitTests
@@ -80,19 +66,129 @@ steps:
       projects: '**/*Tests.csproj'
       arguments: '--configuration Release --no-build /p:CollectCoverage=true /p:IncludeTestAssembly=true /p:CoverletOutputFormat=opencover%2ccobertura /p:CoverletOutput=coverage/'
 
-  # Run the custom report generator tool to generate a nice and extensive code coverage report.
-  #- task: Palmmedia.reportgenerator.reportgenerator-build-release-task.reportgenerator@4
-  #  displayName: ReportGenerator
-  #  inputs:
-  #    reports: '$(Build.SourcesDirectory)/EdreamsAdaptor.Index.Tests/coverage/coverage.opencover.xml'
-  #    targetdir: '$(Build.SourcesDirectory)/EdreamsAdaptor.Index.Tests/coverage/results'
-  #    reporttypes: 'HtmlInline_AzurePipelines;Cobertura;Badges'
-  #    assemblyfilters: '-xunit*'
+  # Publish Edreams.OutlookMiddleware.Services.Upload.Scheduler using the .NET Core CLI
+  - task: DotNetCoreCLI@2
+    displayName: Publish Edreams.OutlookMiddleware.Services.Upload.Scheduler using the .NET Core CLI
+    inputs:
+        command: publish
+        publishWebProjects: False
+        projects: '**/Edreams.OutlookMiddleware.Services.Upload.Scheduler.csproj'
+        arguments: '--configuration Release --output $(Build.StagingDirectory)'
+        zipAfterPublish: False
 
-  # Publish the code coverage report to as an Azure DevOps artifact.
-  #- task: PublishCodeCoverageResults@1
-  #  displayName: Publish code coverage results
-  #  inputs:
-  #    summaryFileLocation: $(Build.SourcesDirectory)/EdreamsAdaptor.Index.Tests/coverage/coverage.cobertura.xml
-  #    reportDirectory: $(Build.SourcesDirectory)/EdreamsAdaptor.Index.Tests/coverage/results
-  #    codeCoverageTool: Cobertura
+  # Zip Edreams.OutlookMiddleware.Services.Upload.Scheduler
+  - task: ArchiveFiles@2
+    displayName: Create Edreams.OutlookMiddleware.Services.Upload.Scheduler.zip archive
+    inputs:
+        rootFolderOrFile: '$(Build.StagingDirectory)\Edreams.OutlookMiddleware.Services.Upload.Scheduler'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)\zip\Edreams.OutlookMiddleware.Services.Upload.Scheduler.zip'
+        replaceExistingArchive: true
+
+  # Publish Edreams.OutlookMiddleware.Services.Upload.Engine using the .NET Core CLI
+  - task: DotNetCoreCLI@2
+    displayName: Publish Edreams.OutlookMiddleware.Services.Upload.Engine using the .NET Core CLI
+    inputs:
+        command: publish
+        publishWebProjects: False
+        projects: '**/Edreams.OutlookMiddleware.Services.Upload.Engine.csproj'
+        arguments: '--configuration Release --output $(Build.StagingDirectory)'
+        zipAfterPublish: False
+
+  # Zip Edreams.OutlookMiddleware.Services.Upload.Engine
+  - task: ArchiveFiles@2
+    displayName: Create Edreams.OutlookMiddleware.Services.Upload.Engine.zip archive
+    inputs:
+        rootFolderOrFile: '$(Build.StagingDirectory)\Edreams.OutlookMiddleware.Services.Upload.Engine'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)\zip\Edreams.OutlookMiddleware.Services.Upload.Engine.zip'
+        replaceExistingArchive: true
+
+  # Publish Edreams.OutlookMiddleware.Services.Categorization.Scheduler using the .NET Core CLI
+  - task: DotNetCoreCLI@2
+    displayName: Publish Edreams.OutlookMiddleware.Services.Categorization.Scheduler using the .NET Core CLI
+    inputs:
+        command: publish
+        publishWebProjects: False
+        projects: '**/Edreams.OutlookMiddleware.Services.Categorization.Scheduler.csproj'
+        arguments: '--configuration Release --output $(Build.StagingDirectory)'
+        zipAfterPublish: False
+
+  # Zip Edreams.OutlookMiddleware.Services.Categorization.Scheduler
+  - task: ArchiveFiles@2
+    displayName: Create Edreams.OutlookMiddleware.Services.Categorization.Scheduler.zip archive
+    inputs:
+        rootFolderOrFile: '$(Build.StagingDirectory)\Edreams.OutlookMiddleware.Services.Categorization.Scheduler'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)\zip\Edreams.OutlookMiddleware.Services.Categorization.Scheduler.zip'
+        replaceExistingArchive: true
+
+  # Publish Edreams.OutlookMiddleware.Services.Categorization.Engine using the .NET Core CLI
+  - task: DotNetCoreCLI@2
+    displayName: Publish Edreams.OutlookMiddleware.Services.Categorization.Engine using the .NET Core CLI
+    inputs:
+        command: publish
+        publishWebProjects: False
+        projects: '**/Edreams.OutlookMiddleware.Services.Categorization.Engine.csproj'
+        arguments: '--configuration Release --output $(Build.StagingDirectory)'
+        zipAfterPublish: False
+
+  # Zip Edreams.OutlookMiddleware.Services.Categorization.Engine
+  - task: ArchiveFiles@2
+    displayName: Create Edreams.OutlookMiddleware.Services.Categorization.Engine.zip archive
+    inputs:
+        rootFolderOrFile: '$(Build.StagingDirectory)\Edreams.OutlookMiddleware.Services.Categorization.Engine'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)\zip\Edreams.OutlookMiddleware.Services.Categorization.Engine.zip'
+        replaceExistingArchive: true
+
+  # Publish Edreams.OutlookMiddleware.Services.Cleanup using the .NET Core CLI
+  - task: DotNetCoreCLI@2
+    displayName: Publish Edreams.OutlookMiddleware.Services.Cleanup using the .NET Core CLI
+    inputs:
+        command: publish
+        publishWebProjects: False
+        projects: '**/Edreams.OutlookMiddleware.Services.Cleanup.csproj'
+        arguments: '--configuration Release --output $(Build.StagingDirectory)'
+        zipAfterPublish: False
+
+  # Zip Edreams.OutlookMiddleware.Services.Cleanup
+  - task: ArchiveFiles@2
+    displayName: Create Edreams.OutlookMiddleware.Services.Cleanup.zip archive
+    inputs:
+        rootFolderOrFile: '$(Build.StagingDirectory)\Edreams.OutlookMiddleware.Services.Cleanup'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)\zip\Edreams.OutlookMiddleware.Services.Cleanup.zip'
+        replaceExistingArchive: true
+
+  # Publish Edreams.OutlookMiddleware.Services.Notification using the .NET Core CLI
+  - task: DotNetCoreCLI@2
+    displayName: Publish Edreams.OutlookMiddleware.Services.Notification using the .NET Core CLI
+    inputs:
+        command: publish
+        publishWebProjects: False
+        projects: '**/Edreams.OutlookMiddleware.Services.Notification.csproj'
+        arguments: '--configuration Release --output $(Build.StagingDirectory)'
+        zipAfterPublish: False
+
+  # Zip Edreams.OutlookMiddleware.Services.Notification
+  - task: ArchiveFiles@2
+    displayName: Create Edreams.OutlookMiddleware.Services.Notification.zip archive
+    inputs:
+        rootFolderOrFile: '$(Build.StagingDirectory)\Edreams.OutlookMiddleware.Services.Notification'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)\zip\Edreams.OutlookMiddleware.Services.Notification.zip'
+        replaceExistingArchive: true
+
+  # Copy all zipped artifacts to the artifact output
+  - task: PublishBuildArtifacts@1
+    displayName: Upload Artifacts
+    inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)\zip' 
+        artifactName: 'release'

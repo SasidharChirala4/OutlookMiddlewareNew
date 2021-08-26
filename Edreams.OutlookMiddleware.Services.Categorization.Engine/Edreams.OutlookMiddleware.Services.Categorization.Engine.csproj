@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>dotnet-Edreams.OutlookMiddleware.Services.Categorization.Engine-6DD6669B-7003-41AA-BE4C-A7D64C6CB7D4</UserSecretsId>
+    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
