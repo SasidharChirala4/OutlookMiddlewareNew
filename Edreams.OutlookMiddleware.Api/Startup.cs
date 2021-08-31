@@ -36,7 +36,6 @@ namespace Edreams.OutlookMiddleware.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
-            services.AddScoped<SecurityContextMiddleware>();
             services.AddSecurityContextMiddleware();
 
             services.AddCommon();
