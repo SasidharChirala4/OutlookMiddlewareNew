@@ -17,12 +17,13 @@
             cause a negative effect on the production database that does the actual processing.
             </remarks>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.BatchesController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IBatchManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.BatchesController})">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.BatchesController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IBatchManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.BatchesController},Edreams.Common.Security.Interfaces.ISecurityContext)">
             <summary>
-            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.BatchesController"/> class.
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.BatchesController" /> class.
             </summary>
             <param name="batchManager">The batch manager.</param>
             <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.BatchesController.CommitBatch(System.Guid,Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest)">
             <summary>
@@ -60,12 +61,13 @@
             HTTP API Controller containing all mail category related operations.
             </summary>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ICategorizationManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.CategorizationController})">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ICategorizationManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.CategorizationController},Edreams.Common.Security.Interfaces.ISecurityContext)">
             <summary>
             Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController" /> class.
             </summary>
             <param name="categorizationManager">T</param>
-            <param name="logger"></param>
+            <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController.GetPendingCategories(System.String)">
             <summary>
@@ -88,12 +90,13 @@
             API controller containing Get operation of the mail resource
             </summary>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IConfigurationManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController})">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IConfigurationManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController},Edreams.Common.Security.Interfaces.ISecurityContext)">
             <summary>
             Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController" /> class.
             </summary>
             <param name="configurationManager">The configuration service.</param>
             <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController.GetSharedMailBox">
             <summary>
@@ -114,13 +117,14 @@
             Group of endpoints to handle different operations related to File(s) 
             </summary>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.FilesController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IPreloadedFileManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.FilesController},Edreams.OutlookMiddleware.Common.Configuration.Interfaces.IEdreamsConfiguration)">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.FilesController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IPreloadedFileManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.FilesController},Edreams.OutlookMiddleware.Common.Configuration.Interfaces.IEdreamsConfiguration,Edreams.Common.Security.Interfaces.ISecurityContext)">
             <summary>
             Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.FilesController" /> class.
             </summary>
-            <param name="fileManager"></param>
-            <param name="logger"></param>
-            <param name="configuration"></param>
+            <param name="fileManager">The file manager.</param>
+            <param name="logger">The logger.</param>
+            <param name="configuration">The configuration.</param>
+            <param name="securityContext">The security context.</param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.FilesController.UploadFile(System.Guid)">
             <summary>
@@ -135,10 +139,13 @@
             Group of endpoints that are helpful to Logs a specified message or error..
             </summary>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.LoggingController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ILoggingManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.LoggingController})">
-            <summary>Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.LoggingController" /> class.</summary>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.LoggingController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ILoggingManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.LoggingController},Edreams.Common.Security.Interfaces.ISecurityContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.LoggingController" /> class.
+            </summary>
             <param name="loggingManager">The logging manager.</param>
-            <param name="logger">The logger.</param>        
+            <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.LoggingController.RecordLog(Edreams.OutlookMiddleware.DataTransferObjects.Api.RecordLogRequest)">
             <summary>
@@ -161,12 +168,13 @@
             additional metadata to these emails.
             </remarks>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.MailsController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IEmailManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.MailsController})">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.MailsController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IEmailManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.MailsController},Edreams.Common.Security.Interfaces.ISecurityContext)">
             <summary>
-            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.MailsController"/> class.
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.MailsController" /> class.
             </summary>
             <param name="emailManager">The email manager.</param>
             <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.MailsController.CreateMail(Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailRequest)">
             <summary>
@@ -185,10 +193,13 @@
             Group of endpoints that are related to getting the status for this e-DReaMS Outlook Middleware HTTP API.
             </summary>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IStatusManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.StatusController})">
-            <summary>Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.StatusController" /> class.</summary>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IStatusManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.StatusController},Edreams.Common.Security.Interfaces.ISecurityContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.StatusController" /> class.
+            </summary>
             <param name="statusManager">The status manager.</param>
             <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.Status">
             <summary>
@@ -207,12 +218,13 @@
             and information about those transactions can be retrieved using these endpoints.
             </remarks>
         </member>
-        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.TransactionsController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ITransactionQueueManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.TransactionsController})">
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.TransactionsController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ITransactionQueueManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.TransactionsController},Edreams.Common.Security.Interfaces.ISecurityContext)">
             <summary>
             Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.TransactionsController" /> class.
             </summary>
             <param name="transactionQueueManager">The transaction queue manager.</param>
             <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
         </member>
         <member name="M:Edreams.OutlookMiddleware.Api.Controllers.TransactionsController.GetTransactionQueueStatistics">
             <summary>

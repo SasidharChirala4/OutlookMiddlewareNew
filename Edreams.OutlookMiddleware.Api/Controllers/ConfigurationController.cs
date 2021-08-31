@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.Common.Web;
 using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
@@ -21,8 +22,10 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="configurationManager">The configuration service.</param>
         /// <param name="logger">The logger.</param>
-        public ConfigurationController(IConfigurationManager configurationManager,
-            IEdreamsLogger<ConfigurationController> logger) : base(configurationManager, logger) { }
+        /// <param name="securityContext">The security context.</param>
+        public ConfigurationController(
+            IConfigurationManager configurationManager, IEdreamsLogger<ConfigurationController> logger, ISecurityContext securityContext) 
+            : base(configurationManager, logger, securityContext) { }
 
         /// <summary>
         /// Gets the Outlook Middleware shared mailbox.

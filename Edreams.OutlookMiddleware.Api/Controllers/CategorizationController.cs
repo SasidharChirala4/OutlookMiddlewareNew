@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.Common.Web;
 using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
@@ -20,9 +21,11 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// Initializes a new instance of the <see cref="CategorizationController" /> class.
         /// </summary>
         /// <param name="categorizationManager">T</param>
-        /// <param name="logger"></param>
-        public CategorizationController(ICategorizationManager categorizationManager,
-            IEdreamsLogger<CategorizationController> logger) : base(categorizationManager, logger) { }
+        /// <param name="logger">The logger.</param>
+        /// <param name="securityContext">The security context.</param>
+        public CategorizationController(
+            ICategorizationManager categorizationManager, IEdreamsLogger<CategorizationController> logger, ISecurityContext securityContext) 
+            : base(categorizationManager, logger, securityContext) { }
 
         /// <summary>
         /// Gets the pending email categories for the specified user.

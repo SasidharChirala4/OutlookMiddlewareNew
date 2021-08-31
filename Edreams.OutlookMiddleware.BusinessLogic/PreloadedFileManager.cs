@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Edreams.Common.DataAccess.Interfaces;
 using Edreams.Common.Exceptions;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.DataTransferObjects.Api;
 using Edreams.OutlookMiddleware.Enums;
@@ -15,14 +16,17 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
     public class PreloadedFileManager : IPreloadedFileManager
     {
         private readonly IRepository<FilePreload> _preloadedFilesRepository;
+        private readonly ISecurityContext _securityContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PreloadedFileManager" /> class.
         /// </summary>
         public PreloadedFileManager(
-            IRepository<FilePreload> preloadedFilesRepository)
+            IRepository<FilePreload> preloadedFilesRepository,
+            ISecurityContext securityContext)
         {
             _preloadedFilesRepository = preloadedFilesRepository;
+            _securityContext = securityContext;
         }
 
         /// <summary>
@@ -54,8 +58,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 preloadedFile.FileStatus = FilePreloadStatus.Ready;
                 await _preloadedFilesRepository.Update(preloadedFile);
 
-                return new UpdateFileResponse()
+                return new UpdateFileResponse
                 {
+                    CorrelationId = _securityContext.CorrelationId,
                     FileId = preloadedFile.Id,
                     FileName = preloadedFile.FileName,
                     TempPath = preloadedFile.TempPath

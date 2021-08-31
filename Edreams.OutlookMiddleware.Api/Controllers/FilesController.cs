@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.Common.Web;
 using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
@@ -25,11 +26,13 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="FilesController" /> class.
         /// </summary>
-        /// <param name="fileManager"></param>
-        /// <param name="logger"></param>
-        /// <param name="configuration"></param>
-        public FilesController(IPreloadedFileManager fileManager,
-            IEdreamsLogger<FilesController> logger, IEdreamsConfiguration configuration) : base(fileManager, logger)
+        /// <param name="fileManager">The file manager.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="securityContext">The security context.</param>
+        public FilesController(
+            IPreloadedFileManager fileManager, IEdreamsLogger<FilesController> logger, IEdreamsConfiguration configuration, ISecurityContext securityContext) 
+            : base(fileManager, logger, securityContext)
         {
             _logger = logger;
             _configuration = configuration;
@@ -52,7 +55,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
             _logger.LogTrace("[API] File uploading...");
             string storagePath = _configuration.StoragePath;
             string tempPath = Path.Combine(storagePath, $"{fileId}");
-            UpdateFileRequest request = new UpdateFileRequest()
+
+            UpdateFileRequest request = new UpdateFileRequest
             {
                 FileId = fileId,
                 TempPath = tempPath,

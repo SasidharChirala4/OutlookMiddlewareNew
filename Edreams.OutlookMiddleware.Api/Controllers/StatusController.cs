@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.Common.Web;
 using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
@@ -16,11 +17,15 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     [Route("[controller]")]
     public class StatusController : ApiController<StatusController, IStatusManager>
     {
-        /// <summary>Initializes a new instance of the <see cref="StatusController" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StatusController" /> class.
+        /// </summary>
         /// <param name="statusManager">The status manager.</param>
         /// <param name="logger">The logger.</param>
-        public StatusController(IStatusManager statusManager,
-            IEdreamsLogger<StatusController> logger) : base(statusManager, logger) { }
+        /// <param name="securityContext">The security context.</param>
+        public StatusController(
+            IStatusManager statusManager, IEdreamsLogger<StatusController> logger, ISecurityContext securityContext) 
+            : base(statusManager, logger, securityContext) { }
 
         /// <summary>
         /// Get the status for this e-DReaMS Outlook Middleware HTTP API.

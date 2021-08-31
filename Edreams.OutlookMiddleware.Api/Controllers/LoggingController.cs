@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.Common.Web;
 using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
@@ -16,11 +17,15 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     [Route("[controller]")]
     public class LoggingController : ApiController<LoggingController, ILoggingManager>
     {
-        /// <summary>Initializes a new instance of the <see cref="LoggingController" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoggingController" /> class.
+        /// </summary>
         /// <param name="loggingManager">The logging manager.</param>
-        /// <param name="logger">The logger.</param>        
-        public LoggingController(ILoggingManager loggingManager,
-            IEdreamsLogger<LoggingController> logger) : base(loggingManager, logger) { }
+        /// <param name="logger">The logger.</param>
+        /// <param name="securityContext">The security context.</param>
+        public LoggingController(
+            ILoggingManager loggingManager, IEdreamsLogger<LoggingController> logger, ISecurityContext securityContext) 
+            : base(loggingManager, logger, securityContext) { }
 
         /// <summary>
         /// Logs a specified message or error.

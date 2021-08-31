@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Edreams.Common.DataAccess.Interfaces;
 using Edreams.Common.Exceptions.Constants;
 using Edreams.Common.Exceptions.Factories.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
 using Edreams.OutlookMiddleware.Common.Constants;
@@ -24,13 +25,14 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IExceptionFactory _exceptionFactory;
         private readonly IRepository<EmailRecipient> _emailRecipientRepository;
         private readonly IRepository<Batch> _batchRepository;
+        private readonly ISecurityContext _securityContext;
 
         public EmailManager(
             IRepository<Email> emailRepository,
             IRepository<FilePreload> preloadedFilesRepository,
             IMapper<CreateMailRequest, FilePreload> createEmailRequestToFilePreloadMapper,
             ITransactionHelper transactionHelper, IExceptionFactory exceptionFactory, IRepository<EmailRecipient> emailRecipientRepository,
-            IRepository<Batch> batchRepository)
+            IRepository<Batch> batchRepository, ISecurityContext securityContext)
         {
             _emailRepository = emailRepository;
             _preloadedFilesRepository = preloadedFilesRepository;
@@ -39,6 +41,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             _exceptionFactory = exceptionFactory;
             _emailRecipientRepository = emailRecipientRepository;
             _batchRepository = batchRepository;
+            _securityContext = securityContext;
         }
 
         /// <summary>
@@ -63,7 +66,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
                 CreateMailResponse response = new CreateMailResponse
                 {
-                    CorrelationId = request.CorrelationId,
+                    CorrelationId = _securityContext.CorrelationId,
                     FileId = preloadedFile.Id
                 };
 
@@ -106,12 +109,12 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             {
                 throw _exceptionFactory.CreateEdreamsExceptionFromCode(EdreamsOutlookMiddlewareExceptionCode.OutlookMiddlewareBatchNotFound);
             }
+
             // Get a list of all related email's.
             IList<Email> emails = await _emailRepository.Find(
                 x => x.Batch.Id == batchId);
 
             return emails;
-
         }
 
         /// <summary>
@@ -123,6 +126,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             // Fetch all emails recipients that are related to the specified emails.
             IList<EmailRecipient> emailRecipients = await _emailRecipientRepository.Find(x => x.Email.Id == emailId, incl => incl.Email);
+            
             return emailRecipients;
         }
 

@@ -6,6 +6,7 @@ using Edreams.Common.DataAccess.Interfaces;
 using Edreams.Common.Exceptions;
 using Edreams.Common.Exceptions.Factories;
 using Edreams.Common.Exceptions.Factories.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions;
@@ -37,10 +38,11 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var exceptionFactoryMock = new Mock<IExceptionFactory>();
             var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "EmailManager" using the mocked dependencies.
             IEmailManager emailManager = new EmailManager(
-                emailRepositoryMock.Object, preloadedFilesRepositoryMock.Object, createEmailRequestToFilePreloadMapper, transactionHelperMock.Object, exceptionFactoryMock.Object, emailRecipientRepositoryMock.Object, batchRepositoryMock.Object);
+                emailRepositoryMock.Object, preloadedFilesRepositoryMock.Object, createEmailRequestToFilePreloadMapper, transactionHelperMock.Object, exceptionFactoryMock.Object, emailRecipientRepositoryMock.Object, batchRepositoryMock.Object, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "CreateMail" method.
             CreateMailRequest createEmailRequest = new CreateMailRequest()
@@ -102,10 +104,11 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var exceptionFactory = new ExceptionFactory();
             var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "EmailManager" using the mocked dependencies.
             IEmailManager emailManager = new EmailManager(
-                emailRepositoryMock.Object, preloadedFilesRepositoryMock.Object, createEmailRequestToFilePreloadMapper, transactionHelperMock.Object, exceptionFactory, emailRecipientRepositoryMock.Object, batchRepositoryMock.Object);
+                emailRepositoryMock.Object, preloadedFilesRepositoryMock.Object, createEmailRequestToFilePreloadMapper, transactionHelperMock.Object, exceptionFactory, emailRecipientRepositoryMock.Object, batchRepositoryMock.Object, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "GetEmails" method.
             Guid batchId = new Guid();
@@ -152,10 +155,11 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var exceptionFactory = new ExceptionFactory();
             var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "EmailManager" using the mocked dependencies.
             IEmailManager emailManager = new EmailManager(
-                emailRepositoryMock.Object, preloadedFilesRepositoryMock.Object, createEmailRequestToFilePreloadMapper, transactionHelperMock.Object, exceptionFactory, emailRecipientRepositoryMock.Object, batchRepositoryMock.Object);
+                emailRepositoryMock.Object, preloadedFilesRepositoryMock.Object, createEmailRequestToFilePreloadMapper, transactionHelperMock.Object, exceptionFactory, emailRecipientRepositoryMock.Object, batchRepositoryMock.Object, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "GetEmails" method.
             Guid batchId = new Guid("925b4ad2-d815-48a8-8f6f-b4b951b9c5d8");
@@ -214,10 +218,11 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var exceptionFactory = new ExceptionFactory();
             var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "EmailManager" using the mocked dependencies.
             IEmailManager emailManager = new EmailManager(
-                emailRepositoryMock.Object, preloadedFilesRepositoryMock.Object, createEmailRequestToFilePreloadMapper, transactionHelperMock.Object, exceptionFactory, emailRecipientRepositoryMock.Object, batchRepositoryMock.Object);
+                emailRepositoryMock.Object, preloadedFilesRepositoryMock.Object, createEmailRequestToFilePreloadMapper, transactionHelperMock.Object, exceptionFactory, emailRecipientRepositoryMock.Object, batchRepositoryMock.Object, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "GetEmailRecipients" method.
             Guid emailId = new Guid();
@@ -273,10 +278,11 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var exceptionFactory = new ExceptionFactory();
             var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "EmailManager" using the mocked dependencies.
             IEmailManager emailManager = new EmailManager(
-                emailRepositoryMock.Object, preloadedFilesRepositoryMock.Object, createEmailRequestToFilePreloadMapper, transactionHelperMock.Object, exceptionFactory, emailRecipientRepositoryMock.Object, batchRepositoryMock.Object);
+                emailRepositoryMock.Object, preloadedFilesRepositoryMock.Object, createEmailRequestToFilePreloadMapper, transactionHelperMock.Object, exceptionFactory, emailRecipientRepositoryMock.Object, batchRepositoryMock.Object, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "UpdateEmailStatus" method.
             Guid emailId = new Guid();
@@ -330,10 +336,11 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var exceptionFactory = new ExceptionFactory();
             var emailRecipientRepositoryMock = new Mock<IRepository<EmailRecipient>>();
             var batchRepositoryMock = new Mock<IRepository<Batch>>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "EmailManager" using the mocked dependencies.
             IEmailManager emailManager = new EmailManager(
-                emailRepositoryMock.Object, preloadedFilesRepositoryMock.Object, createEmailRequestToFilePreloadMapper, transactionHelperMock.Object, exceptionFactory, emailRecipientRepositoryMock.Object, batchRepositoryMock.Object);
+                emailRepositoryMock.Object, preloadedFilesRepositoryMock.Object, createEmailRequestToFilePreloadMapper, transactionHelperMock.Object, exceptionFactory, emailRecipientRepositoryMock.Object, batchRepositoryMock.Object, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "UpdateEmailStatus" method.
             Guid emailId = new Guid();

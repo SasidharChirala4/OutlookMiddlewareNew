@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.Common.Web;
 using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
@@ -27,12 +28,14 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     public class MailsController : ApiController<MailsController, IEmailManager>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MailsController"/> class.
+        /// Initializes a new instance of the <see cref="MailsController" /> class.
         /// </summary>
         /// <param name="emailManager">The email manager.</param>
         /// <param name="logger">The logger.</param>
-        public MailsController(IEmailManager emailManager,
-            IEdreamsLogger<MailsController> logger) : base(emailManager, logger) { }
+        /// <param name="securityContext">The security context.</param>
+        public MailsController(
+            IEmailManager emailManager, IEdreamsLogger<MailsController> logger, ISecurityContext securityContext) 
+            : base(emailManager, logger, securityContext) { }
 
         /// <summary>
         /// Creates an email to prepare for uploading binary data.

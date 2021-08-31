@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.Common.Web;
 using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
@@ -27,8 +28,10 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// </summary>
         /// <param name="transactionQueueManager">The transaction queue manager.</param>
         /// <param name="logger">The logger.</param>
-        public TransactionsController(ITransactionQueueManager transactionQueueManager,
-            IEdreamsLogger<TransactionsController> logger) : base(transactionQueueManager, logger) { }
+        /// <param name="securityContext">The security context.</param>
+        public TransactionsController(
+            ITransactionQueueManager transactionQueueManager, IEdreamsLogger<TransactionsController> logger, ISecurityContext securityContext)
+            : base(transactionQueueManager, logger, securityContext) { }
 
         /// <summary>
         /// Gets some statistics about the Azure ServiceBus transaction queue.
