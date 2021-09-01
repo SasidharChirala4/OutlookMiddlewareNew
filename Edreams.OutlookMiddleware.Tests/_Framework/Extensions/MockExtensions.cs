@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using Edreams.Common.DataAccess;
 using Edreams.Common.DataAccess.Interfaces;
 using Edreams.Common.DataAccess.Model;
+using Edreams.Common.Security.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Moq.Language.Flow;
@@ -14,6 +15,19 @@ namespace Edreams.OutlookMiddleware.Tests.Framework.Extensions
 {
     public static class MockExtensions
     {
+        /// <summary>
+        /// Automatically setup a mocked ISecurityContext's CorrelationId property.
+        /// </summary>
+        /// <param name="mock">The mocked ISecurityContext.</param>
+        /// <param name="correlationId">The correlation identifier to set.</param>
+        /// <returns>An object that can be used by the Moq Fluent API.</returns>
+        public static IReturnsResult<ISecurityContext> SetupCorrelationId(this Mock<ISecurityContext> mock, Guid correlationId)
+        {
+            // The find method takes a predicate (lambda expression) that should be compiled
+            // and executed on the data that acts as a data-source for the mocked repository.
+            return mock.Setup(x => x.CorrelationId).Returns(correlationId);
+        }
+
         /// <summary>
         /// Automatically setup a mocked IRepository's Find method.
         /// </summary>

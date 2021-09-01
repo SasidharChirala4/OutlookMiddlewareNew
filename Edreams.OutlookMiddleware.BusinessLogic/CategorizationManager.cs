@@ -6,6 +6,7 @@ using Edreams.Common.DataAccess;
 using Edreams.Common.DataAccess.Interfaces;
 using Edreams.Common.Exceptions;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
 using Edreams.OutlookMiddleware.Common.Constants;
@@ -34,6 +35,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IEdreamsConfiguration _configuration;
         private readonly IEdreamsLogger<CategorizationManager> _logger;
         private readonly IValidator _validator;
+        private readonly ISecurityContext _securityContext;
 
         #endregion
 
@@ -48,14 +50,16 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         /// <param name="validator"></param>
         public CategorizationManager(IRepository<CategorizationRequestEntity> categorizationRequestsRepository,
             IMapper<CategorizationRequestEntity, CategorizationRequestContract> categorizationRequestMapper,
-            IEdreamsConfiguration configuration, IEdreamsLogger<CategorizationManager> logger, IRepository<EmailEntity> emailRepository, IValidator validator)
+            IEdreamsConfiguration configuration, IEdreamsLogger<CategorizationManager> logger,
+            IRepository<EmailEntity> emailRepository, IValidator validator, ISecurityContext securityContext)
         {
             _categorizationRequestRepository = categorizationRequestsRepository;
             _categorizationRequestMapper = categorizationRequestMapper;
             _configuration = configuration;
             _logger = logger;
-            _validator = validator;
             _emailRepository = emailRepository;
+            _validator = validator;
+            _securityContext = securityContext;
         }
 
         /// <summary>
@@ -67,16 +71,21 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             try
             {
-                GetPendingCategoriesResponse getPendingCategoriesResponse = new GetPendingCategoriesResponse();
+                GetPendingCategoriesResponse response = new GetPendingCategoriesResponse
+                {
+                    CorrelationId = _securityContext.CorrelationId
+                };
+
                 Limit limit = new Limit(0, _configuration.MaxNumberPendingCategories);
 
                 IList<CategorizationRequestEntity> categorizations = await _categorizationRequestRepository.FindDescending(x =>
                                                                         x.EmailAddress.Equals(userPrincipalName) && x.Status == CategorizationRequestStatus.Pending, order => order.SysId, limit);
                 if (categorizations.Count > 0)
                 {
-                    getPendingCategoriesResponse.CategorizationRequests = _categorizationRequestMapper.Map(categorizations).ToList();
+                    response.CategorizationRequests = _categorizationRequestMapper.Map(categorizations).ToList();
                 }
-                return getPendingCategoriesResponse;
+
+                return response;
             }
             catch (Exception ex)
             {
@@ -106,7 +115,11 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
                 await _categorizationRequestRepository.Update(categorizationRequests);
 
-                return new UpdatePendingCategoriesResponse { Success = true };
+                return new UpdatePendingCategoriesResponse
+                {
+                    CorrelationId = _securityContext.CorrelationId,
+                    Success = true
+                };
             }
             catch (Exception ex)
             {

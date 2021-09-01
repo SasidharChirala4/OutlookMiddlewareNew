@@ -8,9 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.0.0" />
-    <PackageReference Include="Edreams.Common.AzureServiceBus" Version="2.0.7899.23152" />
-    <PackageReference Include="Edreams.Common.KeyVault" Version="2.0.7899.23152" />
-    <PackageReference Include="Edreams.Common.Security" Version="2.0.7899.23152" />
+    <PackageReference Include="Edreams.Common.AzureServiceBus" Version="2.0.7913.15848" />
+    <PackageReference Include="Edreams.Common.KeyVault" Version="2.0.7913.15848" />
+    <PackageReference Include="Edreams.Common.Security" Version="2.0.7913.15848" />
     <PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.1.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.9" />
     <PackageReference Include="Serilog" Version="2.10.0" />

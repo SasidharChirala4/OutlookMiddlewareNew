@@ -6,7 +6,7 @@ using Edreams.Common.Exchange._DependencyInjection;
 using Edreams.Common.KeyVault._DependencyInjection;
 using Edreams.Common.Logging._DependencyInjection;
 using Edreams.Common.Security._DependencyInjection;
-using Edreams.OutlookMiddleware.Api.Middleware;
+using Edreams.Common.Web.Middleware;
 using Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection;
 using Edreams.OutlookMiddleware.Common._DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Negotiate;
@@ -36,7 +36,7 @@ namespace Edreams.OutlookMiddleware.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
-            services.AddScoped<SecurityContextMiddleware>();
+            services.AddSecurityContextMiddleware();
 
             services.AddCommon();
             services.AddEdreamsSecurity(WindowsIdentity.GetCurrent());
@@ -82,7 +82,7 @@ namespace Edreams.OutlookMiddleware.Api
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMiddleware<SecurityContextMiddleware>();
+            app.UseSecurityContextMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

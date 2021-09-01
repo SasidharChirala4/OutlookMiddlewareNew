@@ -6,6 +6,7 @@ using Edreams.Common.DataAccess.Interfaces;
 using Edreams.Common.Exceptions;
 using Edreams.Common.Exceptions.Constants;
 using Edreams.Common.Exceptions.Factories.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Transactions.Interfaces;
@@ -33,6 +34,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly ITransactionHelper _transactionHelper;
         private readonly IValidator _validator;
         private readonly IExceptionFactory _exceptionFactory;
+        private readonly ISecurityContext _securityContext;
 
         public BatchManager(
             IRepository<FilePreload> preloadedFilesRepository,
@@ -46,7 +48,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             IProjectTaskDetailsDtoToProjectTaskMapper projectTaskDetailsDtoToProjectTaskMapper,
             ITransactionHelper transactionHelper,
             IValidator validator,
-            IExceptionFactory exceptionFactory)
+            IExceptionFactory exceptionFactory,
+            ISecurityContext securityContext)
         {
             _preloadedFilesRepository = preloadedFilesRepository;
             _batchRepository = batchRepository;
@@ -60,6 +63,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             _projectTaskDetailsDtoToProjectTaskMapper = projectTaskDetailsDtoToProjectTaskMapper;
             _validator = validator;
             _exceptionFactory = exceptionFactory;
+            _securityContext = securityContext;
         }
 
         public async Task<BatchDetailsDto> GetBatchDetails(Guid batchId)
@@ -88,7 +92,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 UploadLocationFolder = batch.UploadLocationFolder,
                 UploadLocationSite = batch.UploadLocationSite,
                 DeclareAsRecord = batch.DeclareAsRecord,
-                VersionComment= batch.VersionComment
+                VersionComment = batch.VersionComment
             };
         }
 
@@ -168,7 +172,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 transactionScope.Commit();
 
                 // Fill response object.
-                response.CorrelationId = request.CorrelationId;
+                response.CorrelationId = _securityContext.CorrelationId;
                 response.BatchId = batch.Id;
                 response.NumberOfEmails = files.Select(x => x.Email).Distinct().Count();
                 response.NumberOfFiles = preloadedFiles.Count;
@@ -209,7 +213,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // Return a response containing some information about the cancelled batch.
             return new CancelBatchResponse
             {
-                CorrelationId = request.CorrelationId,
+                CorrelationId = _securityContext.CorrelationId,
                 BatchId = request.BatchId,
                 NumberOfCancelledFiles = preloadedFiles.Count,
             };

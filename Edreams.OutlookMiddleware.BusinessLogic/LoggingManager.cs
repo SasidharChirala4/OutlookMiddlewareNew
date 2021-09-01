@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Edreams.Common.Security.Interfaces;
 using Edreams.Contracts.Data.Logging;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Constants;
@@ -19,6 +20,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IRestHelper<LogEntry> _restHelper;
         private readonly IMapper<RecordLogRequest, LogEntry> _recordLogRequestToLogEntryMapper;
         private readonly IValidator _validator;
+        private readonly ISecurityContext _securityContext;
 
         #endregion
 
@@ -26,11 +28,12 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
 
         public LoggingManager(IRestHelper<LogEntry> restHelper,
             IMapper<RecordLogRequest, LogEntry> recordLogRequestToLogEntryMapper,
-            IValidator validator)
+            IValidator validator, ISecurityContext securityContext)
         {
             _restHelper = restHelper;
             _recordLogRequestToLogEntryMapper = recordLogRequestToLogEntryMapper;
             _validator = validator;
+            _securityContext = securityContext;
         }
 
         #endregion
@@ -53,9 +56,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // Record log using Rest call
             _ = await _restHelper.CreateNew("logEntry", logEntry);
 
-            return new RecordLogResponse()
+            return new RecordLogResponse
             {
-                CorrelationId = recordLogRequest.CorrelationId
+                CorrelationId = _securityContext.CorrelationId
             };
         }
 

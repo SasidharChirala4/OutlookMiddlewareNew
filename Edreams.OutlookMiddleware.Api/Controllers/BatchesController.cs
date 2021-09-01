@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.Common.Web;
 using Edreams.Common.Web.Contracts;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
@@ -26,12 +27,14 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
     public class BatchesController : ApiController<BatchesController, IBatchManager>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BatchesController"/> class.
+        /// Initializes a new instance of the <see cref="BatchesController" /> class.
         /// </summary>
         /// <param name="batchManager">The batch manager.</param>
         /// <param name="logger">The logger.</param>
-        public BatchesController(IBatchManager batchManager,
-            IEdreamsLogger<BatchesController> logger) : base(batchManager, logger) { }
+        /// <param name="securityContext">The security context.</param>
+        public BatchesController(
+            IBatchManager batchManager, IEdreamsLogger<BatchesController> logger, ISecurityContext securityContext) 
+            : base(batchManager, logger, securityContext) { }
 
         /// <summary>
         /// Commits the specified batch of files to be processed by the Outlook Middleware.

@@ -5,6 +5,7 @@ using Edreams.Common.DataAccess;
 using Edreams.Common.DataAccess.Interfaces;
 using Edreams.Common.Exceptions;
 using Edreams.Common.Logging.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
 using Edreams.OutlookMiddleware.Common.Configuration.Interfaces;
@@ -38,11 +39,12 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
             var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
                 categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, 
-                loggerMock.Object, emailRepositoryMock.Object, validator);
+                loggerMock.Object, emailRepositoryMock.Object, validator, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "GetPendingCategories" method.
             CategorizationRequestEntity categorizationRequest = new CategorizationRequestEntity()
@@ -92,10 +94,11 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
             var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
-                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator);
+                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "CategorizationManager" method.
             CategorizationRequestEntity categorizationRequest = new CategorizationRequestEntity()
@@ -148,10 +151,11 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
             var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
-                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator);
+                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "UpdatePendingCategories" method.
             CategorizationRequestEntity categorizationRequestEntity = new CategorizationRequestEntity()
@@ -207,10 +211,11 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
             var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
-                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator);
+                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "UpdatePendingCategories" method.
             CategorizationRequestEntity categorizationRequestEntity = new CategorizationRequestEntity()
@@ -272,10 +277,11 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
             var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
-                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator);
+                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "AddCategorizationRequest" method.
             string internetMessageId = string.Empty;
@@ -307,10 +313,11 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
             var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
             ICategorizationManager categorizationManager = new CategorizationManager(
-                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator);
+                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "AddCategorizationRequest" method.
             string internetMessageId = "<b267a11ab00348e3aa77bd20e20e1060>";
@@ -341,11 +348,12 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var validator = new Validator();
             var edreamsConfigurationMock = new Mock<IEdreamsConfiguration>();
             var loggerMock = new Mock<IEdreamsLogger<CategorizationManager>>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "CategorizationManager" using the mocked dependencies.
-            
+
             ICategorizationManager categorizationManager = new CategorizationManager(
-                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator);
+                categorizationRequestsRepositoryMock.Object, categorizationRequestMapper, edreamsConfigurationMock.Object, loggerMock.Object, emailRepositoryMock.Object, validator, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "AddCategorizationRequest" method.
             Email emailEntity = new Email()

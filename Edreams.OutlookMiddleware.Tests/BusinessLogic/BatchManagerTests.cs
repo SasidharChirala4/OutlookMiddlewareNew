@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Edreams.Common.DataAccess.Interfaces;
 using Edreams.Common.Exceptions.Factories.Interfaces;
+using Edreams.Common.Security.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic;
 using Edreams.OutlookMiddleware.BusinessLogic.Factories.Interfaces;
 using Edreams.OutlookMiddleware.BusinessLogic.Interfaces;
@@ -44,13 +45,14 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var validatorMock = new Mock<IValidator>();
             var exceptionFactoryMock = new Mock<IExceptionFactory>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "Subject Under Test" using the mocked dependencies.
             IBatchManager batchManager = new BatchManager(
                 preloadedFilesRepositoryMock.Object, batchRepositoryMock.Object, emailRepositoryMock.Object,
                 fileRepositoryMock.Object, projectTaskRepositoryMock.Object, batchFactoryMock.Object,
                 emailsToEmailDetailsMapperMock.Object, preloadedFilesToFilesMapperMock.Object, projectTaskDetailsDtoToProjectTaskMapperMock.Object,
-                transactionHelperMock.Object, validatorMock.Object, exceptionFactoryMock.Object);
+                transactionHelperMock.Object, validatorMock.Object, exceptionFactoryMock.Object, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "CommitBatch" method.
             CommitBatchRequest request = new CommitBatchRequest
@@ -102,14 +104,16 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var validatorMock = new Mock<IValidator>();
             var exceptionFactoryMock = new Mock<IExceptionFactory>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "Subject Under Test" using the mocked dependencies.
             IBatchManager batchManager = new BatchManager(
                 preloadedFilesRepositoryMock.Object, batchRepositoryMock.Object, emailRepositoryMock.Object,
                 fileRepositoryMock.Object, projectTaskRepositoryMock.Object, batchFactoryMock.Object,
                 emailsToEmailDetailsMapperMock.Object, preloadedFilesToFilesMapperMock.Object, projectTaskDetailsDtoToProjectTaskMapperMock.Object,
-                transactionHelperMock.Object, validatorMock.Object, exceptionFactoryMock.Object);
+                transactionHelperMock.Object, validatorMock.Object, exceptionFactoryMock.Object, securityContextMock.Object);
 
+            Guid correlationId = Guid.NewGuid();
 
             Guid batchId = new Guid("8A3CAEB3-6906-4A9E-9125-332A03C867E5");
 
@@ -178,9 +182,10 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             batchFactoryMock.Setup(x => x.CreatePendingBatch()).Returns(batch);
             preloadedFilesToFilesMapperMock.Setup(x => x.Map(batch, preloadedFiles, request)).Returns(files);
             fileRepositoryMock.Setup(x => x.Create(It.IsAny<File>())).ReturnsAsync(file);
-             preloadedFilesRepositoryMock.Setup(x => x.Update(It.IsAny<FilePreload>())).ReturnsAsync(preloadedFile);
+            preloadedFilesRepositoryMock.Setup(x => x.Update(It.IsAny<FilePreload>())).ReturnsAsync(preloadedFile);
             // Mock the Transaction helper to mock the createscope method and returns mock trasaction scope object
             transactionHelperMock.Setup(x => x.CreateScope()).Returns(transactionScopeMock.Object);
+            securityContextMock.SetupCorrelationId(correlationId);
 
 
             #endregion
@@ -198,7 +203,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             response.BatchId.Should().Be(batch.Id);
 
             // The "CorrelationId" in the response should be equal to the "CorrelationId" in the response.
-            response.CorrelationId.Should().Be(request.CorrelationId);
+            response.CorrelationId.Should().Be(correlationId);
 
             // The "NumberOfCancelledFiles" should equal "1".
             response.NumberOfFiles.Should().Be(1);
@@ -233,13 +238,14 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var validatorMock = new Mock<IValidator>();
             var exceptionFactoryMock = new Mock<IExceptionFactory>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "Subject Under Test" using the mocked dependencies.
             IBatchManager batchManager = new BatchManager(
                 preloadedFilesRepositoryMock.Object, batchRepositoryMock.Object, emailRepositoryMock.Object,
                 fileRepositoryMock.Object, projectTaskRepositoryMock.Object, batchFactoryMock.Object,
                 emailsToEmailDetailsMapperMock.Object, preloadedFilesToFilesMapperMock.Object, projectTaskDetailsDtoToProjectTaskMapperMock.Object,
-                transactionHelperMock.Object, validatorMock.Object, exceptionFactoryMock.Object);
+                transactionHelperMock.Object, validatorMock.Object, exceptionFactoryMock.Object, securityContextMock.Object);
 
             // Prepare a request to use for when calling the "CancelBatch" method.
             CancelBatchRequest request = new CancelBatchRequest
@@ -291,13 +297,14 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             var transactionHelperMock = new Mock<ITransactionHelper>();
             var validatorMock = new Mock<IValidator>();
             var exceptionFactoryMock = new Mock<IExceptionFactory>();
+            var securityContextMock = new Mock<ISecurityContext>();
 
             // Create an instance of the "Subject Under Test" using the mocked dependencies.
             IBatchManager batchManager = new BatchManager(
                 preloadedFilesRepositoryMock.Object, batchRepositoryMock.Object, emailRepositoryMock.Object,
                 fileRepositoryMock.Object, projectTaskRepositoryMock.Object, batchFactoryMock.Object,
                 emailsToEmailDetailsMapperMock.Object, preloadedFilesToFilesMapperMock.Object, projectTaskDetailsDtoToProjectTaskMapperMock.Object,
-                transactionHelperMock.Object, validatorMock.Object, exceptionFactoryMock.Object);
+                transactionHelperMock.Object, validatorMock.Object, exceptionFactoryMock.Object, securityContextMock.Object);
 
             // Generate a unique id to use for batches.
             Guid batchId = Guid.NewGuid();
@@ -311,6 +318,8 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
                 new FilePreload { FileName = "FILE_2", BatchId = Guid.NewGuid() },
                 new FilePreload { FileName = "FILE_3", BatchId = batchId }
             };
+
+            Guid correlationId = Guid.NewGuid();
 
             // Prepare a request to use for when calling the "CancelBatch" method.
             CancelBatchRequest request = new CancelBatchRequest
@@ -326,6 +335,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             // Mock the "Find" method on the "Repository" and run the predicate lambda expression on
             // the prepared fake database of "FilePreload" objects.
             preloadedFilesRepositoryMock.SetupRepositoryFind(preloadedFiles);
+            securityContextMock.SetupCorrelationId(correlationId);
 
             #endregion
 
@@ -346,7 +356,7 @@ namespace Edreams.OutlookMiddleware.Tests.BusinessLogic
             response.BatchId.Should().Be(batchId);
 
             // The "CorrelationId" in the response should be equal to the "CorrelationId" in the response.
-            response.CorrelationId.Should().Be(request.CorrelationId);
+            response.CorrelationId.Should().Be(correlationId);
 
             // The "NumberOfCancelledFiles" should equal "2".
             response.NumberOfCancelledFiles.Should().Be(2);
