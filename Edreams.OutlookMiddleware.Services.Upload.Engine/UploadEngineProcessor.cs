@@ -89,8 +89,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                             {
                                 // Process the file based on the file details.
                                 SharePointFile sharepointFile = await ProcessFile(emailDetails, sentEmailDetails, fileDetails, batchDetails.UploadLocationSite, batchDetails.UploadLocationFolder);
-                                // TODO: Update absolute file URL in database as part of metadata PBI.
-                                // This can be handled in pbi #40965
+
                                 sharepointFileUploads.Add(sharepointFile);
 
                                 // set metadata for file in sharepoint 
@@ -100,7 +99,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                                 await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.Uploaded);
                                 // increase the number of successfully uploaded files.
                                 numberOfSuccessfullyUploadedFiles++;
-
+                                _logger.LogInformation($"File [{fileDetails.OriginalName}] for mail [{fileDetails.EmailSubject}] Uploaded successfully");
                             }
                             else
                             {
@@ -115,6 +114,8 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                             await _fileManager.UpdateFileStatus(fileDetails.Id, FileStatus.FailedToUpload);
                         }
                     }
+
+                    _logger.LogInformation($"Uploading ended for email [{emailDetails.Id}] ");
 
                     int numberOfShouldUploadFalseFiles = emailDetails.Files.Select(x => x.ShouldUpload).Count();
                     // Determine the email status by comparing the number of successful uploads and the total number of files.
@@ -137,20 +138,21 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                     await _emailManager.UpdateEmailStatus(emailDetails.Id, emailStatus);
                 }
 
-                _logger.LogInformation($"{numberOfSuccessfullyUploadedEmails} emails are uploaded to e-DReaMS!");
+                _logger.LogInformation($"{numberOfSuccessfullyUploadedEmails} out of {batchDetails.Emails.Count} emails are uploaded to e-DReaMS!");
                 // Determine the batch status by comparing the number of successful uploads and the total number of emails.
                 BatchStatus batchStatus = CalculateBatchStatus(batchDetails.Emails.Count, numberOfSuccessfullyUploadedEmails);
-
+                
                 // Update batch status based on the success rate.
                 await _batchManager.UpdateBatchStatus(batchDetails.Id, batchStatus);
 
                 // Create a new transaction to schedule the categorization process.
                 await _transactionQueueManager.CreateCategorizationTransaction(batchId);
+                _logger.LogInformation($"Created Categorization transaction for batch {batchId}");
 
                 // Update the transaction to have a succeeded status.
                 await _transactionQueueManager.UpdateTransactionStatusAndArchive(transactionId, TransactionStatus.ProcessingSucceeded);
 
-                _logger.LogInformation($"Uploading files for batch {batchId} finished");
+                _logger.LogInformation($"Uploading files for batch {batchId} finished. Batch status set to {batchStatus}.");
 
             }
             catch (Exception ex)
@@ -265,7 +267,6 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             {
                 return BatchStatus.Successful;
             }
-
             return BatchStatus.Partially;
         }
 
@@ -286,14 +287,22 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
             if (uploadOption == EmailUploadOptions.Emails)
             {
-                _logger.LogInformation(string.Format("File {0} is skipped because file type is not matched with upload option", fileDetails.Id));
-                return fileDetails.Kind != FileKind.Email;
+                if (fileDetails.Kind != FileKind.Email)
+                {
+                    _logger.LogInformation(string.Format("File {0} is skipped because file type is not matched with upload option", fileDetails.Id));
+                    return true;
+                }
+                return false;
             }
 
             if (uploadOption == EmailUploadOptions.Attachments)
             {
-                _logger.LogInformation(string.Format("File {0} is skipped because file type is not matched with upload option", fileDetails.Id));
-                return fileDetails.Kind != FileKind.Attachment;
+                if (fileDetails.Kind != FileKind.Attachment)
+                {
+                    _logger.LogInformation(string.Format("File {0} is skipped because file type is not matched with upload option", fileDetails.Id));
+                    return true;
+                }
+                return false;
             }
 
             return false;

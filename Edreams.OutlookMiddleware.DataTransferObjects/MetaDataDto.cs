@@ -19,10 +19,5 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         /// </summary>
         public string PropertyValue { get; set; }
         
-        /// <summary>
-        /// File Id
-        /// </summary>
-        public Guid FileId { get; set; }
-
     }
 }
