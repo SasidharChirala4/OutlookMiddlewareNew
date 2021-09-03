@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1;netstandard2.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\OutlookMiddlewareDb\20201211103149_Added_CategorizationRequests.cs" />
+    <Compile Remove="Migrations\OutlookMiddlewareDb\20201211103149_Added_CategorizationRequests.Designer.cs" />
+    <Compile Remove="Migrations\OutlookMiddlewareDb\20201211104810_Added_CategorizationRequests.cs" />
+    <Compile Remove="Migrations\OutlookMiddlewareDb\20201211104810_Added_CategorizationRequests.Designer.cs" />
+    <Compile Remove="Migrations\OutlookMiddlewareDb\20210729102638_Added_MetaData_Table.cs" />
+    <Compile Remove="Migrations\OutlookMiddlewareDb\20210729102638_Added_MetaData_Table.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Edreams.Common.DataAccess" Version="2.0.7913.15848" />
+    <PackageReference Include="Edreams.Common.DataAccess.Model" Version="2.0.7913.15848" />
+    <PackageReference Include="Edreams.Common.Security" Version="2.0.7913.15848" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Edreams.OutlookMiddleware.Common\Edreams.OutlookMiddleware.Common.csproj" />
+    <ProjectReference Include="..\Edreams.OutlookMiddleware.Model\Edreams.OutlookMiddleware.Model.csproj" />
+  </ItemGroup>
+
+</Project>

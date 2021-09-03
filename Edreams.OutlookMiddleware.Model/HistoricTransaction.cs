@@ -1,0 +1,29 @@
+﻿using System;
+using Edreams.Common.DataAccess.Model;
+using Edreams.Common.DataAccess.Model.Interfaces;
+using Edreams.OutlookMiddleware.Enums;
+using Edreams.OutlookMiddleware.Model.Interfaces;
+
+namespace Edreams.OutlookMiddleware.Model
+{
+    public class HistoricTransaction : ModelBase, ILongSysId, ITransaction
+    {
+        public Guid BatchId { get; set; }
+
+        public DateTime? ReleaseDate { get; set; }
+
+        public TransactionStatus Status { get; set; }
+
+        public TransactionType Type { get; set; }
+
+        public DateTime? Scheduled { get; set; }
+
+        public DateTime? ProcessingStarted { get; set; }
+
+        public DateTime? ProcessingFinished { get; set; }
+
+        public string ProcessingEngine { get; set; }
+
+        public Guid CorrelationId { get; set; }
+    }
+}

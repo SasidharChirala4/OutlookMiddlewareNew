@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>Edreams.OutlookMiddleware.DataTransferObjects.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>Edreams.OutlookMiddleware.DataTransferObjects.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Edreams.OutlookMiddleware.DataTransferObjects.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Edreams.Common.Web.Contracts" Version="2.0.7913.15848" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Edreams.OutlookMiddleware.Model\Edreams.OutlookMiddleware.Model.csproj" />
+  </ItemGroup>
+
+</Project>

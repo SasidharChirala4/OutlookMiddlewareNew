@@ -1,0 +1,252 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Edreams.OutlookMiddleware.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.BatchesController">
+            <summary>
+            Group of endpoints that work with batches.
+            </summary>
+            <remarks>
+            Batches of emails to be processed are introduced to make sure that the production database is not
+            polluted with partial uploads from the e-DReaMS Outlook Plugin. The Outlook Plugin needs multiple
+            calls to the Outlook Middleware API to set emails metadata and upload the actual binary files.
+            In this process, multiple things can go wrong or the user can stop the process in the middle. All
+            this partially uploaded email data will be stored in the pre-load database and will therefore not
+            cause a negative effect on the production database that does the actual processing.
+            </remarks>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.BatchesController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IBatchManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.BatchesController},Edreams.Common.Security.Interfaces.ISecurityContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.BatchesController" /> class.
+            </summary>
+            <param name="batchManager">The batch manager.</param>
+            <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.BatchesController.CommitBatch(System.Guid,Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest)">
+            <summary>
+            Commits the specified batch of files to be processed by the Outlook Middleware.
+            </summary>
+            <param name="batchId">
+            The unique batch identifier that is shared by file-records that have previously been prepared by calling
+            the 'mails' and 'files' endpoints.
+            </param>
+            <param name="request">Request body.</param>
+            <remarks>
+            This HTTP POST endpoint commits an open batch of files to be processed by the Outlook Middleware.
+            A batch exists in the pre-load database if there are file-records available that share the same batch-id.
+            Committing a batch moves all related file-records from the pre-load database to the production database
+            and marks them ready for processing.
+            </remarks>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.BatchesController.CancelBatch(System.Guid,Edreams.OutlookMiddleware.DataTransferObjects.Api.CancelBatchRequest)">
+            <summary>
+            Cancels the specified batch of files to be cleaned by the Outlook Middleware.
+            </summary>
+            <param name="batchId">
+            The unique batch identifier that is shared by file-records that have previously been prepared by calling
+            the 'mails' and 'files' endpoints.
+            </param>
+            <param name="request">Request body.</param>
+            <remarks>
+            This HTTP DELETE endpoint cancels an open batch of files to be cleaned by the Outlook Middleware.
+            A batch exists in the pre-load database if there are file-records available that share the same batch-id.
+            Cancelling a batch changes the state of all related file-records and marks them ready for cleanup.
+            </remarks>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController">
+            <summary>
+            HTTP API Controller containing all mail category related operations.
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ICategorizationManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.CategorizationController},Edreams.Common.Security.Interfaces.ISecurityContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController" /> class.
+            </summary>
+            <param name="categorizationManager">T</param>
+            <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController.GetPendingCategories(System.String)">
+            <summary>
+            Gets the pending email categories for the specified user.
+            </summary>
+            <param name="userPrincipalName">The UserPricipalName for whom the pending categories needs to be fetched.</param>
+            <returns>An ApiResult containing the pending categories.</returns>
+            <remarks>This HTTP GET operation lists all pending categories for the specified mail address.</remarks>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.CategorizationController.UpdatePendingCategories(Edreams.OutlookMiddleware.DataTransferObjects.Api.UpdatePendingCategoriesRequest)">
+            <summary>
+            Method to update the pending categories for the specified user.
+            </summary>
+            <param name="updatePendingCategoriesRequest">Request of UpdatePendingCategories</param>
+            <returns></returns>
+            <remarks>This HTTP POST operation updates the pending categories for the specified user.</remarks>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController">
+            <summary>
+            API controller containing Get operation of the mail resource
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IConfigurationManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController},Edreams.Common.Security.Interfaces.ISecurityContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController" /> class.
+            </summary>
+            <param name="configurationManager">The configuration service.</param>
+            <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.ConfigurationController.GetSharedMailBox">
+            <summary>
+            Gets the Outlook Middleware shared mailbox.
+            </summary>
+            <returns>
+            The Outlook Middleware shared mailbox, if available. <see cref="F:System.String.Empty"/> otherwise.
+            This endpoint should always return an HTTP 200 OK. If it doesn't, there is something wrong.
+            </returns>
+            <remarks>
+            This endpoint will return the Outlook Middleware mailbox.
+            The Outlook Middleware Web API will run using a service account
+            and this endpoint will return the corresponding mailbox identifier.
+            </remarks>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.FilesController">
+            <summary>
+            Group of endpoints to handle different operations related to File(s) 
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.FilesController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IPreloadedFileManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.FilesController},Edreams.OutlookMiddleware.Common.Configuration.Interfaces.IEdreamsConfiguration,Edreams.Common.Security.Interfaces.ISecurityContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.FilesController" /> class.
+            </summary>
+            <param name="fileManager">The file manager.</param>
+            <param name="logger">The logger.</param>
+            <param name="configuration">The configuration.</param>
+            <param name="securityContext">The security context.</param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.FilesController.UploadFile(System.Guid)">
+            <summary>
+            Method to upload file to temporary location
+            </summary>
+            <param name="fileId"></param>
+            <returns>An ApiResult containing uploaded file details.</returns>
+            <remarks>This HTTP POST operation uploads file to a temporary location.</remarks>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.LoggingController">
+            <summary>
+            Group of endpoints that are helpful to Logs a specified message or error..
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.LoggingController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ILoggingManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.LoggingController},Edreams.Common.Security.Interfaces.ISecurityContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.LoggingController" /> class.
+            </summary>
+            <param name="loggingManager">The logging manager.</param>
+            <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.LoggingController.RecordLog(Edreams.OutlookMiddleware.DataTransferObjects.Api.RecordLogRequest)">
+            <summary>
+            Logs a specified message or error.
+            </summary>
+            <remarks>This HTTP POST operation records an informational message or error to the logging infrastructure.</remarks>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.MailsController">
+            <summary>
+            Group of endpoints that work with emails.
+            </summary>
+            <remarks>
+            Emails need to be uploaded from the e-DReaMS Outlook Plugin to the Outlook Middleware. To optimize
+            the flow and performance of the Outlook Middleware processing: emails are uploaded as files using
+            a flat table in a pre-load database.
+            Binary files need to be uploaded from the Outlook Plugin to the Outlook Middleware by using HTTP
+            and binary data streaming. Because of this, email and file metadata cannot be sent as part of the
+            binary stream and this information must be set separately.
+            The email endpoints are used to prepare the pre-load database for binary data upload and to add
+            additional metadata to these emails.
+            </remarks>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.MailsController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IEmailManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.MailsController},Edreams.Common.Security.Interfaces.ISecurityContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.MailsController" /> class.
+            </summary>
+            <param name="emailManager">The email manager.</param>
+            <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.MailsController.CreateMail(Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailRequest)">
+            <summary>
+            Creates an email to prepare for uploading binary data.
+            </summary>
+            <param name="request">
+            A representation of a single email and optional attachments.
+            </param>
+            <remarks>
+            This HTTP POST endpoint creates an email in the pre-load database by storing a flat list of files.
+            Each resulting file-record has a relation to a single batch and a single email.
+            </remarks>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.StatusController">
+            <summary>
+            Group of endpoints that are related to getting the status for this e-DReaMS Outlook Middleware HTTP API.
+            </summary>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.IStatusManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.StatusController},Edreams.Common.Security.Interfaces.ISecurityContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.StatusController" /> class.
+            </summary>
+            <param name="statusManager">The status manager.</param>
+            <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.StatusController.Status">
+            <summary>
+            Get the status for this e-DReaMS Outlook Middleware HTTP API.
+            </summary>
+            <returns>This endpoint should always return an HTTP 200 OK. If it doesn't, there is something wrong.</returns>
+        </member>
+        <member name="T:Edreams.OutlookMiddleware.Api.Controllers.TransactionsController">
+            <summary>
+            Group of endpoints that work with asynchronous transactions.
+            </summary>
+            <remarks>
+            Asynchronous transactions are used by the Outlook Middleware to process long-running tasks
+            in the background. The Outlook Middleware uses Worker Services installed as Windows Services
+            to perform these long-running processes. Transactions represent these long-running processes
+            and information about those transactions can be retrieved using these endpoints.
+            </remarks>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.TransactionsController.#ctor(Edreams.OutlookMiddleware.BusinessLogic.Interfaces.ITransactionQueueManager,Edreams.Common.Logging.Interfaces.IEdreamsLogger{Edreams.OutlookMiddleware.Api.Controllers.TransactionsController},Edreams.Common.Security.Interfaces.ISecurityContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Edreams.OutlookMiddleware.Api.Controllers.TransactionsController" /> class.
+            </summary>
+            <param name="transactionQueueManager">The transaction queue manager.</param>
+            <param name="logger">The logger.</param>
+            <param name="securityContext">The security context.</param>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Controllers.TransactionsController.GetTransactionQueueStatistics">
+            <summary>
+            Gets some statistics about the Azure ServiceBus transaction queue.
+            </summary>
+            <remarks>
+            This HTTP GET endpoint connects to the configured Azure ServiceBus transaction queue and
+            retrieves statistics like number of active messages, number of scheduled messages and
+            number of dead lettered messages.
+            </remarks>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Program.BuildSerilogSqlSinkColumnOptions">
+            <summary>
+            Configure SQL table columns for serlog
+            </summary>
+            <returns>Column Options</returns>
+        </member>
+        <member name="M:Edreams.OutlookMiddleware.Api.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            ConfigureServices
+            </summary>
+            <param name="services"></param>
+        </member>
+    </members>
+</doc>
