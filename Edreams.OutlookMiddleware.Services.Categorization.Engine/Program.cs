@@ -17,6 +17,7 @@ using Edreams.OutlookMiddleware.Services.Categorization.Engine.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Context;
 using Serilog.Exceptions;
@@ -36,6 +37,13 @@ namespace Edreams.OutlookMiddleware.Services.Categorization.Engine
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+            .UseWindowsService()
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(LogLevel.Trace);
+                    logging.AddDebug();
+                })
                 .ConfigureAppConfiguration(configBuilder =>
                 {
                     configBuilder.AddEnvironmentVariables();
