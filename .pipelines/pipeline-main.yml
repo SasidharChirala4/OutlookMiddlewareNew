@@ -19,9 +19,14 @@ steps:
   # This PowerShell script updates the build number.
   - task: PowerShell@2
     displayName: Set Dynamic Build Number
+    env: 
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
     inputs:
       targetType: 'inline'
       script: |        
+        $variableGroup = "EDR Component Versions"
+        $versionVariableName = "Edreams.Outlook.Middleware.Version"
+        
         $today = Get-Date 
         $midnight = Get-Date -Hour 0 -Minute 00 -Second 00
         $referenceDate = [datetime]"01/01/2000 00:00"
@@ -29,7 +34,26 @@ steps:
         $autoBuild = [math]::Floor($diffInDays.TotalDays)
         $diffInSeconds = New-TimeSpan -Start $midnight -End $today
         $autoRevision = [math]::Floor($diffInSeconds.TotalSeconds / 2)
-        $buildNumber = "0.1." + $autoBuild + "." + $autoRevision
+
+        #Use variable from task group
+        $oauthToken = $env:SYSTEM_ACCESSTOKEN
+        $url = "https://dev.azure.com/BE-eDReaMS/DSI/_apis/distributedtask/variablegroups"
+        Write-Host "Getting versioning info from: $url"
+        $headers = @{
+          Authorization="Bearer $oauthToken"
+        }
+        $call = Invoke-RestMethod -Headers $headers -Uri $url -Method Get
+        $value = $call.value
+        foreach($group in $call.value){
+            if($group.name -eq $VariableGroup){
+                $var = $group.variables.$versionVariableName
+                if(-not ($var -eq $null)){
+                    $majorMinor = $var.value
+                }
+            }
+        }
+
+        $buildNumber = $majorMinor + "." + $autoBuild + "." + $autoRevision
 
         Write-Host "Current Build Number " + $env:BUILD_BUILDNUMBER
         Write-Host "Generated Build Number " + $buildNumber
