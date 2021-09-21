@@ -18,7 +18,7 @@ steps:
 
   # This PowerShell script updates the build number.
   - task: PowerShell@2
-   displayName: Set Dynamic Build Number
+    displayName: Set Dynamic Build Number
     env: 
       SYSTEM_ACCESSTOKEN: $(System.AccessToken)
     inputs:
