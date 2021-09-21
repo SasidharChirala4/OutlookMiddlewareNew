@@ -25,7 +25,7 @@ steps:
       targetType: 'inline'
       script: |        
         $variableGroup = "EDR Component Versions"
-        $versionVariableName = "Edreams.OutlookMiddleware.Api.Version"
+        $versionVariableName = "Edreams.Web.Api.Outlook.Middleware.Version"
         
         $today = Get-Date 
         $midnight = Get-Date -Hour 0 -Minute 00 -Second 00
