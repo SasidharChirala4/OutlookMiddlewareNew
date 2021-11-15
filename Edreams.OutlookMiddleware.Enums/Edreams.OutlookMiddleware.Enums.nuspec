@@ -1,0 +1,18 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Deloitte DSI</authors>
+    <owners>Deloitte DSI</owners>
+    <licenseUrl>http://www.deloitte.com</licenseUrl>
+    <projectUrl>http://www.deloitte.com</projectUrl>
+    <iconUrl>http://bedac5504:8000/Images/Nuget/edreams.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$id$ - built #{timestamp}#</description>
+    <releaseNotes>Initial release of the e-DReaMS Outlook Middleware Enums package.</releaseNotes>
+    <copyright>Copyright 2021</copyright>
+    <tags>e-DReaMS Outlook Middleware Enums</tags>
+  </metadata>
+</package>
