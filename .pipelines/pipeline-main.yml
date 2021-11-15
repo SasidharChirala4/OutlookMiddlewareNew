@@ -1,3 +1,5 @@
+name: 2.0.{Auto.Build}.{Auto.Revision}
+
 # This build pipeline will only be triggered by changes on the 'dev and feature branches'.
 trigger:
   - master
@@ -59,6 +61,31 @@ steps:
         Write-Host "Generated Build Number " + $buildNumber
         Write-Host "##vso[build.updatebuildnumber]$buildNumber"
         Write-Host "Done"
+      
+  - task: PowerShell@2
+    displayName: Set NUSPEC TimeStamp
+    inputs:
+      targetType: 'inline'
+      script: |
+        $timestamp = Get-Date -Format $format
+        $files = gci $Env:BUILD_SOURCESDIRECTORY -recurse -filter '*.nuspec'
+        if($files)
+        {
+            $message = [string]::Format('Will apply {0} to {1} files.', $timestamp, $files.Count)
+            Write-Host $message
+
+            foreach ($file in $files) 
+            {
+                $filecontent = Get-Content($file.FullName)
+                attrib $file -r
+                $filecontent.Replace('#{timestamp}#', $timestamp) | Set-Content $file.FullName
+                Write-Host "$file - timestamp applied"
+            }
+        }
+        else
+        {
+            Write-Host "Found no files."
+        }
         
   # Install the latest NuGet tool for compatibility (the default one throws
   # a parse exception on our solution files).
@@ -216,3 +243,23 @@ steps:
     inputs:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)\zip' 
         artifactName: 'release'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet pack'
+    inputs:
+      command: pack
+      arguments: '--configuration $(buildConfiguration)'      
+      packagesToPack: 'Edreams.OutlookMiddleware.DataTransferObjects/Edreams.OutlookMiddleware.DataTransferObjects.csproj'
+      includeReferencedProjects: true
+      versioningScheme: 'byEnvVar'
+      versionEnvVar: 'Build.BuildNumber'
+      includeSymbols: true
+  
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet push'
+    inputs:
+      command: push
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      verbosityPush: 'detailed'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: 'eDReaMS_vNext_Feed'
