@@ -249,7 +249,7 @@ steps:
     inputs:
       command: pack
       arguments: '--configuration $(buildConfiguration)'      
-      packagesToPack: 'Edreams.OutlookMiddleware.DataTransferObjects/Edreams.OutlookMiddleware.DataTransferObjects.csproj'
+      packagesToPack: 'Edreams.OutlookMiddleware.DataTransferObjects/Edreams.OutlookMiddleware.DataTransferObjects.csproj;Edreams.OutlookMiddleware.Enums/Edreams.OutlookMiddleware.Enums.csproj'
       includeReferencedProjects: true
       versioningScheme: 'byEnvVar'
       versionEnvVar: 'Build.BuildNumber'
