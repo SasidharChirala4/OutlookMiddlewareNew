@@ -38,11 +38,18 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             // is stopped, the cancellation token will be cancelled and this loop will be stopped.
             while (!stoppingToken.IsCancellationRequested)
             {
-                await _serviceBusHandler.ProcessMessagesAsync<TransactionMessage>(_configuration.ServiceBusQueueName,
-                    _configuration.ServiceBusConnectionString, OnProcessing, OnError, stoppingToken);
+                try
+                {
+                    await _serviceBusHandler.ProcessMessagesAsync<TransactionMessage>(_configuration.ServiceBusQueueName,
+                        _configuration.ServiceBusConnectionString, OnProcessing, OnError, stoppingToken);
 
-                _logger.LogInformation(string.Format("Worker running at: {0}", DateTimeOffset.Now));
-                await Task.Delay(1000, stoppingToken);
+                    _logger.LogInformation(string.Format("Worker running at: {0}", DateTimeOffset.Now));
+                    await Task.Delay(1000, stoppingToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error occured while processing!");
+                }
             }
         }
 
