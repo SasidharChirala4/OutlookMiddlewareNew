@@ -22,9 +22,10 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
         /// Unique Id of Mail
         /// </summary>
         public Guid FileId { get; set; }
+
         /// <summary>
         /// List of attachments in the Mail
         /// </summary>
-        public IList<AttachmentResponse> Attachments { get; set; }
+        public List<AttachmentResponse> Attachments { get; set; }
     }
 }
