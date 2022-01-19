@@ -27,55 +27,64 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                 {
                     if (preloadedFile.EmailId == emailId)
                     {
-                        email.EwsId = preloadedFile.EwsId;
-                        email.EntryId = preloadedFile.EntryId;
-                        email.EmailKind = preloadedFile.EmailKind;
-                        email.EdreamsReferenceId = preloadedFile.EdreamsReferenceId;
-                        email.InternetMessageId = preloadedFile.InternetMessageId;
-                        email.EmailRecipients = new List<EmailRecipient>();
-                        if (request.EmailRecipients != null)
-                        {
-                            IEnumerable<EmailRecipientDto> emailRecipientList = request.EmailRecipients.Where(x => x.EmailId == emailId);
-                            foreach (EmailRecipientDto emailRecipient in emailRecipientList)
-                            {
-                                email.EmailRecipients.Add(new EmailRecipient
-                                {
-                                    Email = email,
-                                    Recipient = emailRecipient.Recipient,
-                                    Type = emailRecipient.Type,
-                                    Kind = emailRecipient.Kind
-                                });
-                            }
-                        }
-
-                        File file = new File
-                        {
-                            Email = email,
-                            EmailSubject = preloadedFile.EmailSubject,
-                            AttachmentId = preloadedFile.AttachmentId,
-                            OriginalName = preloadedFile.FileName,
-                            Size = preloadedFile.Size,
-                            TempPath = preloadedFile.TempPath,
-                            Kind = preloadedFile.Kind,
-                            Status = FileStatus.ReadyToUpload
-                        };
                         FileDetailsDto fileDetails = request.Files.FirstOrDefault(x => x.Id == preloadedFile.Id);
-                        if (fileDetails != null)
+
+                        if (((request.UploadOption == EmailUploadOptions.Emails && preloadedFile.Kind == FileKind.Email)
+                            ||
+                            (request.UploadOption == EmailUploadOptions.Attachments && preloadedFile.Kind == FileKind.Attachment)
+                            ||
+                            (request.UploadOption == EmailUploadOptions.EmailsAndAttachments))
+                            &&
+                            fileDetails != null && fileDetails.ShouldUpload)
                         {
-                            file.NewName = fileDetails.NewName;
-                            file.ShouldUpload = fileDetails.ShouldUpload;
+                            email.EwsId = preloadedFile.EwsId;
+                            email.EntryId = preloadedFile.EntryId;
+                            email.EmailKind = preloadedFile.EmailKind;
+                            email.EdreamsReferenceId = preloadedFile.EdreamsReferenceId;
+                            email.InternetMessageId = preloadedFile.InternetMessageId;
+                            email.EmailRecipients = new List<EmailRecipient>();
+
+                            if (request.EmailRecipients != null)
+                            {
+                                IEnumerable<EmailRecipientDto> emailRecipientList = request.EmailRecipients.Where(x => x.EmailId == emailId);
+                                foreach (EmailRecipientDto emailRecipient in emailRecipientList)
+                                {
+                                    email.EmailRecipients.Add(new EmailRecipient
+                                    {
+                                        Email = email,
+                                        Recipient = emailRecipient.Recipient,
+                                        Type = emailRecipient.Type,
+                                        Kind = emailRecipient.Kind
+                                    });
+                                }
+                            }
+
+                            File file = new File
+                            {
+                                Email = email,
+                                EmailSubject = preloadedFile.EmailSubject,
+                                AttachmentId = preloadedFile.AttachmentId,
+                                OriginalName = preloadedFile.FileName,
+                                NewName = fileDetails.NewName,
+                                Size = preloadedFile.Size,
+                                TempPath = preloadedFile.TempPath,
+                                Kind = preloadedFile.Kind,
+                                Status = FileStatus.ReadyToUpload,
+                                Metadata = new List<Metadata>(),
+                                ShouldUpload = fileDetails.ShouldUpload
+                            };
 
                             foreach (MetadataDto metadataDto in fileDetails.Metadata)
                             {
-                                file.Metadata.Add(new Metadata()
+                                file.Metadata.Add(new Metadata
                                 {
                                     PropertyName = metadataDto.PropertyName,
                                     PropertyValue = metadataDto.PropertyValue
                                 });
                             }
-                        }
 
-                        files.Add(file);
+                            files.Add(file);
+                        }
                     }
                 }
             }
