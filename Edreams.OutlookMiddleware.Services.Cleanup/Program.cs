@@ -79,7 +79,7 @@ namespace Edreams.OutlookMiddleware.Services.Cleanup
                     // Write logging to SQL Server database.
                     .WriteTo.MSSqlServer(
                         hostContext.Configuration.GetConnectionString("OutlookMiddlewareDbConnectionString"),
-                        new SinkOptions
+                        new MSSqlServerSinkOptions
                         {
                             // Table creation is enforced by Entity Framework migrations.
                             AutoCreateSqlTable = false,

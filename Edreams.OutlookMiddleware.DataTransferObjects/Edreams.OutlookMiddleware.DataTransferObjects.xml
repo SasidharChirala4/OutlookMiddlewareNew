@@ -84,9 +84,14 @@
             Constructor for CreateMail response
             </summary>
         </member>
-        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse.FileId">
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse.EmailId">
             <summary>
             Unique Id of Mail
+            </summary>
+        </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse.FileId">
+            <summary>
+            Unique Id of File
             </summary>
         </member>
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse.Attachments">
