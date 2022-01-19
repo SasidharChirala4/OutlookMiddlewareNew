@@ -21,6 +21,11 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
         /// <summary>
         /// Unique Id of Mail
         /// </summary>
+        public Guid EmailId { get; set; }
+
+        /// <summary>
+        /// Unique Id of File
+        /// </summary>
         public Guid FileId { get; set; }
 
         /// <summary>

@@ -158,6 +158,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                         ProjectTask task = _projectTaskDetailsDtoToProjectTaskMapper.Map(request.ProjectTaskDetails, email);
                         taskDetails.Add(task);
                     }
+
                     await _projectTaskRepository.Create(taskDetails);
                 }
 
@@ -177,6 +178,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 response.NumberOfEmails = files.Select(x => x.Email).Distinct().Count();
                 response.NumberOfFiles = preloadedFiles.Count;
             }
+
             // Update all file records in the pre-load database.
             await _preloadedFilesRepository.Update(preloadedFiles);
 
