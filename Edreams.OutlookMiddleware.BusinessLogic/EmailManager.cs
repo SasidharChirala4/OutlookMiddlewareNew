@@ -67,7 +67,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 CreateMailResponse response = new CreateMailResponse
                 {
                     CorrelationId = _securityContext.CorrelationId,
-                    FileId = preloadedFile.Id
+                    EmailId = preloadedFile.EmailId,
+                    FileId = preloadedFile.Id,
                 };
 
                 // Extract the Attachment details of the Mail and insert in DB
@@ -126,7 +127,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             // Fetch all emails recipients that are related to the specified emails.
             IList<EmailRecipient> emailRecipients = await _emailRecipientRepository.Find(x => x.Email.Id == emailId, incl => incl.Email);
-            
+
             return emailRecipients;
         }
 

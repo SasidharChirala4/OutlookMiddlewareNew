@@ -9,7 +9,6 @@ namespace Edreams.OutlookMiddleware.Mapping
     {
         public ProjectTask Map(ProjectTaskDto projectTaskDetails, Email email)
         {
-
             ProjectTask projectTask = new ProjectTask
             {
                 TaskName = projectTaskDetails.TaskName,
@@ -20,16 +19,21 @@ namespace Edreams.OutlookMiddleware.Mapping
                 UploadLocationProjectId = projectTaskDetails.UploadLocationProjectId,
                 UserInvolvements = new List<ProjectTaskUserInvolvement>()
             };
-            foreach (ProjectTaskUserInvolvementDto userInvolvement in projectTaskDetails.UserInvolvements)
-            {
-                projectTask.UserInvolvements.Add(new ProjectTaskUserInvolvement()
-                {
-                    Type = userInvolvement.Type,
-                    PrincipalName = userInvolvement.PrincipalName,
-                    UserId = userInvolvement.UserId
-                });
 
+            if (projectTaskDetails.UserInvolvements != null)
+            {
+                foreach (ProjectTaskUserInvolvementDto userInvolvement in projectTaskDetails.UserInvolvements)
+                {
+                    projectTask.UserInvolvements.Add(new ProjectTaskUserInvolvement()
+                    {
+                        Type = userInvolvement.Type,
+                        PrincipalName = userInvolvement.PrincipalName,
+                        UserId = userInvolvement.UserId
+                    });
+
+                }
             }
+
             return projectTask;
         }
     }

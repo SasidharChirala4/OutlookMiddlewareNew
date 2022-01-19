@@ -38,7 +38,7 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                             IEnumerable<EmailRecipientDto> emailRecipientList = request.EmailRecipients.Where(x => x.EmailId == emailId);
                             foreach (EmailRecipientDto emailRecipient in emailRecipientList)
                             {
-                                email.EmailRecipients.Add(new EmailRecipient()
+                                email.EmailRecipients.Add(new EmailRecipient
                                 {
                                     Email = email,
                                     Recipient = emailRecipient.Recipient,
