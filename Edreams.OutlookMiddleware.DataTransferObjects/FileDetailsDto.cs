@@ -15,6 +15,11 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         public Guid Id { get; set; }
 
         /// <summary>
+        /// File id
+        /// </summary>
+        public Guid EmailId { get; set; }
+
+        /// <summary>
         /// File path
         /// </summary>
         public string Path { get; set; }
@@ -43,7 +48,7 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         /// Email subject
         /// </summary>
         public string EmailSubject { get; set; }
-        
+
         /// <summary>
         /// List of Metadata
         /// </summary>
