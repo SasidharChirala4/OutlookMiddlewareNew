@@ -256,6 +256,11 @@
             File id
             </summary>
         </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.EmailId">
+            <summary>
+            File id
+            </summary>
+        </member>
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.Path">
             <summary>
             File path
