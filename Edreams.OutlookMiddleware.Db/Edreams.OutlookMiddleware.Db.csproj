@@ -43,19 +43,19 @@
       <HintPath>..\packages\Azure.Security.KeyVault.Secrets.4.1.0\lib\netstandard2.0\Azure.Security.KeyVault.Secrets.dll</HintPath>
     </Reference>
     <Reference Include="Edreams.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Edreams.Common.2.0.8054.26645\lib\netstandard2.0\Edreams.Common.dll</HintPath>
+      <HintPath>..\packages\Edreams.Common.2.0.8054.31340\lib\netstandard2.0\Edreams.Common.dll</HintPath>
     </Reference>
     <Reference Include="Edreams.Common.DataAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Edreams.Common.DataAccess.2.0.8054.26645\lib\netstandard2.0\Edreams.Common.DataAccess.dll</HintPath>
+      <HintPath>..\packages\Edreams.Common.DataAccess.2.0.8054.31340\lib\netstandard2.0\Edreams.Common.DataAccess.dll</HintPath>
     </Reference>
     <Reference Include="Edreams.Common.DataAccess.Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Edreams.Common.DataAccess.Model.2.0.8054.26645\lib\netstandard2.0\Edreams.Common.DataAccess.Model.dll</HintPath>
+      <HintPath>..\packages\Edreams.Common.DataAccess.Model.2.0.8054.31340\lib\netstandard2.0\Edreams.Common.DataAccess.Model.dll</HintPath>
     </Reference>
     <Reference Include="Edreams.Common.Exceptions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Edreams.Common.Exceptions.2.0.8054.26645\lib\netstandard2.0\Edreams.Common.Exceptions.dll</HintPath>
+      <HintPath>..\packages\Edreams.Common.Exceptions.2.0.8054.31340\lib\netstandard2.0\Edreams.Common.Exceptions.dll</HintPath>
     </Reference>
     <Reference Include="Edreams.Common.Security, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Edreams.Common.Security.2.0.8054.26645\lib\netstandard2.0\Edreams.Common.Security.dll</HintPath>
+      <HintPath>..\packages\Edreams.Common.Security.2.0.8054.31340\lib\netstandard2.0\Edreams.Common.Security.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.1\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>

@@ -1,9 +1,4 @@
-﻿using Edreams.OutlookMiddleware.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Edreams.OutlookMiddleware.DataTransferObjects
+﻿namespace Edreams.OutlookMiddleware.DataTransferObjects
 {
     /// <summary>
     /// Contract that represents MetaDeta Details
@@ -18,6 +13,5 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         /// Metadata Value 
         /// </summary>
         public string PropertyValue { get; set; }
-        
     }
 }
