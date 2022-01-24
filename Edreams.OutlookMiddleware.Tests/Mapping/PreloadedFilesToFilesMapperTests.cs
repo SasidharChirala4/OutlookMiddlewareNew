@@ -52,11 +52,14 @@ namespace Edreams.OutlookMiddleware.Tests.Mapping
                     EmailId = email2Id
                 }
             };
+
             CommitBatchRequest request = new CommitBatchRequest
             {
+                UploadOption = EmailUploadOptions.EmailsAndAttachments,
                 EmailRecipients = new List<EmailRecipientDto>(),
-                Files = new List<FileDetailsDto>(),
+                Files = preloadedFiles.Select(x => new FileDetailsDto { Id = x.Id, ShouldUpload = true, Metadata = new List<MetadataDto>() }).ToList()
             };
+
             #endregion
 
             #region [ ACT ]
@@ -87,7 +90,7 @@ namespace Edreams.OutlookMiddleware.Tests.Mapping
                 Status = BatchStatus.Pending
             };
             IList<FilePreload> preloadedFiles = new List<FilePreload> { };
-            
+
             CommitBatchRequest request = new CommitBatchRequest
             {
                 EmailRecipients = new List<EmailRecipientDto>(),
