@@ -30,6 +30,7 @@ namespace Edreams.OutlookMiddleware.Api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseIISIntegration();
                 })
                 .ConfigureLogging((hostContext, loggerBuilder) =>
                 {
@@ -63,7 +64,7 @@ namespace Edreams.OutlookMiddleware.Api
                     });
                     loggerBuilder.AddSerilog();
                 });
-       
+
         /// <summary>
         /// Configure SQL table columns for serlog
         /// </summary>
