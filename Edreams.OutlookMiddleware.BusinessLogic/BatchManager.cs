@@ -29,6 +29,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IRepository<File> _fileRepository;
         private readonly IRepository<ProjectTask> _projectTaskRepository;
         private readonly IBatchFactory _batchFactory;
+        private readonly ITransactionQueueManager _transactionQueueManager;
         private readonly IEmailsToEmailDetailsMapper _emailsToEmailDetailsMapper;
         private readonly IPreloadedFilesToFilesMapper _preloadedFilesToFilesMapper;
         private readonly IProjectTaskDetailsDtoToProjectTaskMapper _projectTaskDetailsDtoToProjectTaskMapper;
@@ -44,6 +45,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             IRepository<File> fileRepository,
             IRepository<ProjectTask> projectTaskRepository,
             IBatchFactory batchFactory,
+            ITransactionQueueManager transactionQueueManager,
             IEmailsToEmailDetailsMapper emailsToEmailDetailsMapper,
             IPreloadedFilesToFilesMapper preloadedFilesToFilesMapper,
             IProjectTaskDetailsDtoToProjectTaskMapper projectTaskDetailsDtoToProjectTaskMapper,
@@ -57,6 +59,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             _emailRepository = emailRepository;
             _fileRepository = fileRepository;
             _batchFactory = batchFactory;
+            _transactionQueueManager = transactionQueueManager;
             _projectTaskRepository = projectTaskRepository;
             _emailsToEmailDetailsMapper = emailsToEmailDetailsMapper;
             _preloadedFilesToFilesMapper = preloadedFilesToFilesMapper;
@@ -170,6 +173,8 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 {
                     preloadedFile.Status = EmailPreloadStatus.Committed;
                 }
+
+                await _transactionQueueManager.CreateUploadTransaction(batch.Id);
 
                 transactionScope.Commit();
 

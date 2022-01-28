@@ -103,7 +103,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             // Find the oldest expired or cancelled preloaded file in the database.
             FilePreload preloadedFile = await _preloadedFilesRepository.GetFirstAscending(
-                x => x.Status == EmailPreloadStatus.Expired || x.Status == EmailPreloadStatus.Cancelled, o => o.PreloadedOn);
+                x => x.Status == EmailPreloadStatus.Committed || x.Status == EmailPreloadStatus.Expired || x.Status == EmailPreloadStatus.Cancelled, o => o.PreloadedOn);
 
             // If an expired preloaded file was found...
             if (preloadedFile != null)
