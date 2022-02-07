@@ -31,7 +31,7 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         /// <param name="configuration">The configuration.</param>
         /// <param name="securityContext">The security context.</param>
         public FilesController(
-            IPreloadedFileManager fileManager, IEdreamsLogger<FilesController> logger, IEdreamsConfiguration configuration, ISecurityContext securityContext) 
+            IPreloadedFileManager fileManager, IEdreamsLogger<FilesController> logger, IEdreamsConfiguration configuration, ISecurityContext securityContext)
             : base(fileManager, logger, securityContext)
         {
             _logger = logger;
@@ -54,7 +54,8 @@ namespace Edreams.OutlookMiddleware.Api.Controllers
         {
             _logger.LogTrace("[API] File uploading...");
             string storagePath = _configuration.StoragePath;
-            string tempPath = Path.Combine(storagePath, $"{fileId}");
+            string fileExtension = Path.GetExtension(Request.Form.Files[0].FileName);
+            string tempPath = Path.Combine(storagePath, $"{fileId}{fileExtension}");
 
             UpdateFileRequest request = new UpdateFileRequest
             {

@@ -117,7 +117,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
 
                     _logger.LogInformation($"Uploading ended for email [{emailDetails.Id}] ");
 
-                    int numberOfShouldUploadFalseFiles = emailDetails.Files.Select(x => x.ShouldUpload).Count();
+                    int numberOfShouldUploadFalseFiles = emailDetails.Files.Select(x => !x.ShouldUpload).Count();
                     // Determine the email status by comparing the number of successful uploads and the total number of files.
                     EmailStatus emailStatus = CalculateEmailStatus(emailDetails.Files.Count, numberOfSuccessfullyUploadedFiles, numberOfShouldUploadFalseFiles);
 
@@ -141,7 +141,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 _logger.LogInformation($"{numberOfSuccessfullyUploadedEmails} out of {batchDetails.Emails.Count} emails are uploaded to e-DReaMS!");
                 // Determine the batch status by comparing the number of successful uploads and the total number of emails.
                 BatchStatus batchStatus = CalculateBatchStatus(batchDetails.Emails.Count, numberOfSuccessfullyUploadedEmails);
-                
+
                 // Update batch status based on the success rate.
                 await _batchManager.UpdateBatchStatus(batchDetails.Id, batchStatus);
 
