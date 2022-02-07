@@ -26,7 +26,8 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         Kind = file.Kind,
                         EmailSubject = file.EmailSubject,
                         NewName = file.NewName,
-                        ShouldUpload = file.ShouldUpload
+                        ShouldUpload = file.ShouldUpload,
+                        Metadata = new List<MetadataDto>()
                     };
 
                     foreach (Metadata metadata in file.Metadata)

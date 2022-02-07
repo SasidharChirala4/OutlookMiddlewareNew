@@ -27,6 +27,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IRepository<Batch> _batchRepository;
         private readonly IRepository<Email> _emailRepository;
         private readonly IRepository<File> _fileRepository;
+        private readonly IRepository<Metadata> _metadataRepository;
         private readonly IRepository<ProjectTask> _projectTaskRepository;
         private readonly IBatchFactory _batchFactory;
         private readonly ITransactionQueueManager _transactionQueueManager;
@@ -43,6 +44,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             IRepository<Batch> batchRepository,
             IRepository<Email> emailRepository,
             IRepository<File> fileRepository,
+            IRepository<Metadata> metadataRepository,
             IRepository<ProjectTask> projectTaskRepository,
             IBatchFactory batchFactory,
             ITransactionQueueManager transactionQueueManager,
@@ -58,6 +60,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             _batchRepository = batchRepository;
             _emailRepository = emailRepository;
             _fileRepository = fileRepository;
+            _metadataRepository = metadataRepository;
             _batchFactory = batchFactory;
             _transactionQueueManager = transactionQueueManager;
             _projectTaskRepository = projectTaskRepository;
@@ -82,7 +85,21 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             }
 
             // Fetch all emails that are related to the specified batch and include the referenced files.
-            IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files.Select(x => x.Metadata), incl => incl.EmailRecipients);
+            IList<Email> emails = await _emailRepository.Find(x => x.Batch.Id == batchId, inc => inc.Files, incl => incl.EmailRecipients);
+
+            // ToDo: Following can be optimized by updating Repository helper methods on Common solution to accept multi level include
+            // Fill Metadata for all emails
+            foreach (Email email in emails)
+            {
+                foreach (File file in email.Files)
+                {
+                    IList<Metadata> metadata = await _metadataRepository.Find(x => x.FileId == file.Id);
+                    if (metadata.Any())
+                    {
+                        file.Metadata = metadata.ToList();
+                    }
+                }
+            }
 
             // Map the database emails and files to email details and file details.
             IList<EmailDetailsDto> emailDetails = _emailsToEmailDetailsMapper.Map(emails);
