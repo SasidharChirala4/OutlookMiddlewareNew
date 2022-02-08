@@ -276,6 +276,11 @@
             File new name
             </summary>
         </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.Extension">
+            <summary>
+            File extension
+            </summary>
+        </member>
         <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.FileDetailsDto.ShouldUpload">
             <summary>
             Should this file upload or not

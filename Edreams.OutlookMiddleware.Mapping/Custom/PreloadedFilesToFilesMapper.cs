@@ -66,6 +66,7 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                                 AttachmentId = preloadedFile.AttachmentId,
                                 OriginalName = preloadedFile.FileName,
                                 NewName = fileDetails.NewName,
+                                Extension = preloadedFile.FileExtension,
                                 Size = preloadedFile.Size,
                                 TempPath = preloadedFile.TempPath,
                                 Kind = preloadedFile.Kind,

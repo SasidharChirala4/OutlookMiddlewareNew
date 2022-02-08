@@ -26,6 +26,7 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         Kind = file.Kind,
                         EmailSubject = file.EmailSubject,
                         NewName = file.NewName,
+                        Extension = file.Extension,
                         ShouldUpload = file.ShouldUpload,
                         Metadata = new List<MetadataDto>()
                     };
@@ -85,7 +86,7 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         DueDate = email.ProjectTask.DueDate,
                         Priority = email.ProjectTask.Priority,
                         TaskName = email.ProjectTask.TaskName,
-                        UploadLocationProjectId= email.ProjectTask.UploadLocationProjectId,
+                        UploadLocationProjectId = email.ProjectTask.UploadLocationProjectId,
                         UserInvolvements = userInvolvements
                     };
                     emailDetails.ProjectTaskDto = projectTaskDto;
