@@ -100,6 +100,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.Property(x => x.ShouldUpload).HasDefaultValue(true);
                 e.Property(x => x.OriginalName).HasMaxLength(255);
                 e.Property(x => x.NewName).HasMaxLength(255);
+                e.Property(x => x.Extension).HasMaxLength(100);
                 e.Property(x => x.Kind).HasConversion(new EnumToStringConverter<FileKind>());
                 e.Property(x => x.Status).HasConversion(new EnumToStringConverter<FileStatus>());
             });
@@ -109,6 +110,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.ToTable("CategorizationRequest");
                 e.HasKey(x => x.Id).IsClustered(false);
                 e.HasIndex(x => x.SysId).IsUnique().IsClustered();
+                e.Property(x => x.SysId).ValueGeneratedOnAdd();
                 e.Property(x => x.EmailAddress).IsRequired();
                 e.Property(x => x.EmailAddress).HasMaxLength(200);
                 e.Property(x => x.InternetMessageId).IsRequired();
@@ -165,6 +167,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);
             });
+
             modelBuilder.Entity<Log>(e =>
             {
                 e.ToTable("Logs");
@@ -178,6 +181,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.HasIndex(x => x.TimeStamp);
                 e.HasIndex(x => x.CorrelationId);
             });
+
             modelBuilder.Entity<ProjectTask>(e =>
             {
                 e.ToTable("ProjectTasks");
@@ -191,6 +195,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);
             });
+
             modelBuilder.Entity<ProjectTaskUserInvolvement>(e =>
             {
                 e.ToTable("ProjectTaskUserInvolvements");
@@ -204,6 +209,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);
             });
+
             modelBuilder.Entity<Metadata>(e =>
             {
                 e.ToTable("Metadata");

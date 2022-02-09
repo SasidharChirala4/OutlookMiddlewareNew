@@ -35,6 +35,11 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         public string NewName { get; set; }
 
         /// <summary>
+        /// File extension
+        /// </summary>
+        public string Extension { get; set; }
+
+        /// <summary>
         /// Should this file upload or not
         /// </summary>
         public bool ShouldUpload { get; set; }

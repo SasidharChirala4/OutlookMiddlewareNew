@@ -15,6 +15,7 @@ namespace Edreams.OutlookMiddleware.Model
         public string AttachmentId { get; set; }
         public string TempPath { get; set; }
         public string FileName { get; set; }
+        public string FileExtension { get; set; }
         public long Size { get; set; }
         public string InternetMessageId { get; set; }
         public DateTime PreloadedOn { get; set; }

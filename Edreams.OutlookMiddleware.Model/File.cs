@@ -15,6 +15,7 @@ namespace Edreams.OutlookMiddleware.Model
         public bool ShouldUpload { get; set; }
         public string OriginalName { get; set; }
         public string NewName { get; set; }
+        public string Extension { get; set; }
         public FileStatus Status { get; set; }
         public Email Email { get; set; }
         public List<Metadata> Metadata { get; set; }

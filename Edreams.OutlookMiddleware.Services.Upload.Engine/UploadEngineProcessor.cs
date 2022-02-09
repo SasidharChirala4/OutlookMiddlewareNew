@@ -232,7 +232,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 }
 
                 _logger.LogInformation($"Uploading File [{fileDetails.OriginalName}] to e-DReaMS");
-                return await _extensibilityManager.UploadFile(fileData, uploadLocationSite, uploadLocationFolder, fileDetails.NewName, true);
+                return await _extensibilityManager.UploadFile(fileData, uploadLocationSite, uploadLocationFolder, $"{fileDetails.NewName}{fileDetails.Extension}", true);
             }
             catch (Exception ex)
             {
