@@ -1,11 +1,10 @@
 # YAML file in the release branch
 schedules:
-- cron: "0 1 * * Sat"
-  displayName: Every Saturday at 1:00 AM
+- cron: "0 1 * * Sun"
+  displayName: Every Sunday at 1:00 AM
   branches:
     include:
     - dev
-    - feature-*
   
 # This build pipeline will run on agents from the 'default' build agent pool
 # and will specifically target build agents that have the custom 'Build.Server'
@@ -61,6 +60,28 @@ steps:
       solution: '**\*.sln'
       configuration: Release
 
+# Run Fortify SAST Scan
+  - task: FortifyScanCentralSAST@7
+    displayName: Fortify ScanCentral SAST Assessment
+    timeoutInMinutes: 180
+    inputs:
+      scanCentralCtrlUrl: https://cs.vigilantshield.deloitte.com/scancentral-ctrl
+      scanCentralClientToken: N^Q1xkt>9i<yURq>3YTm
+      sscUrl: https://vigilantshield.deloitte.com/ssc
+      sscCiToken: e6a3123c-2408-4db0-8928-7bc387fc444a
+      uploadToSSC: true
+      applicationName: BE-DSI IT SharePoint DevOps Team
+      applicationVersion: e-DReaMS-4-OUTLOOKMWNEW-SAST
+      applicationVersionId: 19166
+      buildTool: msbuild
+      buildFile: Edreams.OutlookMiddleware.sln
+      skipBuild: true
+      excludeDisabledProjects: true
+      includeTest: false
+      includeNodeModules: false
+      email: gcasteleyn@deloitte.com
+      overwrite: false
+      quiet: false
   # Execute OWASP Dependency Check
   - task: InfoSupport.infosupport-owasp-dependecy-checker.owasp-dependency-check.OWASPDependencyCheck@0
     displayName: 'Execute OWASP Dependency Check'
