@@ -14,6 +14,7 @@ pool:
 # This variable will make sure that automatic Azure DevOps code coverage generation is disabled.
 # For this build we are using a custom code coverage tool that generates a more extensive output.
 variables:
+  - group: EDR SA Scan Variables
   - name: disable.coverage.autogenerate
     value: 'true'
 
@@ -65,10 +66,10 @@ steps:
     displayName: Fortify ScanCentral SAST Assessment
     timeoutInMinutes: 180
     inputs:
-      scanCentralCtrlUrl: https://cs.vigilantshield.deloitte.com/scancentral-ctrl
-      scanCentralClientToken: N^Q1xkt>9i<yURq>3YTm
-      sscUrl: https://vigilantshield.deloitte.com/ssc
-      sscCiToken: e6a3123c-2408-4db0-8928-7bc387fc444a
+      scanCentralCtrlUrl: $(ScanCentralCtrlUrl)
+      scanCentralClientToken: $(ScanCentralClientToken)
+      sscUrl: $(ScanCentralSSCUrl)
+      sscCiToken: $(ScanCentralCiToken)
       uploadToSSC: true
       applicationName: BE-DSI IT SharePoint DevOps Team
       applicationVersion: e-DReaMS-4-OUTLOOKMWNEW-SAST
