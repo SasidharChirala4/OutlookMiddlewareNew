@@ -73,7 +73,7 @@ steps:
       uploadToSSC: true
       applicationName: BE-DSI IT SharePoint DevOps Team
       applicationVersion: e-DReaMS-4-OUTLOOKMWNEW-SAST
-      applicationVersionId: 19166
+      applicationVersionId: 19263
       buildTool: msbuild
       buildFile: Edreams.OutlookMiddleware.sln
       skipBuild: true
