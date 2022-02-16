@@ -45,4 +45,10 @@
     <None Remove="Edreams.OutlookMiddleware.Api.xml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="web.deploy.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
