@@ -92,7 +92,7 @@ namespace Edreams.OutlookMiddleware.Api
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "e-DReaMS Outlook Middleware v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("../swagger/v1/swagger.json", "e-DReaMS Outlook Middleware v1"));
 
             app.UseRouting();
 
