@@ -54,8 +54,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 FromUserId = assignedBy.UserId,
                 Cc=cc,
                 To = toRecipient?.Recipient,
-                // TODO: Body details need to disscuss with johnny
-                //To = toRecipient.Recipient,
+                // TODO: Body details need to disscuss with johnny                
                 //Body = (!string.IsNullOrEmpty(spModel.EmailBody) ? spModel.EmailBody : string.Empty)
                 // Email Subject is stored in file entity.
                 // Each file related to the email having same subject so taking subject from first object.
