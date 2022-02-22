@@ -91,6 +91,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             // Fill Metadata for all emails
             foreach (Email email in emails)
             {
+                // Metadata
                 foreach (File file in email.Files)
                 {
                     IList<Metadata> metadata = await _metadataRepository.Find(x => x.FileId == file.Id);
@@ -99,6 +100,9 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                         file.Metadata = metadata.ToList();
                     }
                 }
+
+                //ProjectTaskUnserInvolment
+                email.ProjectTask = await _projectTaskRepository.GetFirst(x => x.EmailId == email.Id, incl => incl.UserInvolvements);
             }
 
             // Map the database emails and files to email details and file details.
