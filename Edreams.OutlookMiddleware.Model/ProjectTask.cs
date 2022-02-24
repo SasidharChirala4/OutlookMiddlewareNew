@@ -16,5 +16,6 @@ namespace Edreams.OutlookMiddleware.Model
         public virtual Email Email { get; set; }
         public virtual IList<ProjectTaskUserInvolvement> UserInvolvements { get; set; }
         public Guid UploadLocationProjectId { get; set; }
+        public string EmailBody { get; set; }
     }
 }

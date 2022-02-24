@@ -4,6 +4,9 @@ using Edreams.OutlookMiddleware.Enums;
 
 namespace Edreams.OutlookMiddleware.DataTransferObjects
 {
+    /// <summary>
+    /// Project Task Dto
+    /// </summary>
     public class ProjectTaskDto
     {
         public string TaskName { get; set; }
@@ -12,6 +15,7 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects
         public ProjectTaskPriority Priority { get; set; }
         public Guid UploadLocationProjectId { get; set; }
         public List<ProjectTaskUserInvolvementDto> UserInvolvements { get; set; }
+        public string EmailBody { get; set; }
 
     }
 }

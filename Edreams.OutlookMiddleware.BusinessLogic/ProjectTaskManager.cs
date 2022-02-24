@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using ProjectTask = Edreams.Contracts.Data.Extensibility.ProjectTask;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
@@ -32,7 +31,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         public ProjectTask GetEdreamsProjectTask(EmailDetailsDto emailDetails, List<SharePointFile> sharepointFileUploads, string siteUrl)
         {
             ProjectTaskDto projectTask = emailDetails.ProjectTaskDto;
-            List<MetadataDto> emailMetadata =emailDetails.Files.First(x => x.Kind == Enums.FileKind.Email).Metadata;
+            List<MetadataDto> emailMetadata = emailDetails.Files.First(x => x.Kind == Enums.FileKind.Email).Metadata;
             //ToRecipient
             EmailRecipientDto toRecipient = emailDetails.EmailRecipients.FirstOrDefault(x => x.Kind == Enums.EmailRecipientKind.From);
 
@@ -45,17 +44,17 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
             {
                 MetadataDto mailCcMetadata = emailMetadata.SingleOrDefault(t =>
                     t.PropertyName.Equals(Constants.EdrMailCc, StringComparison.OrdinalIgnoreCase));
-                cc = mailCcMetadata != null? mailCcMetadata.PropertyValue:string.Empty;
+                cc = mailCcMetadata != null ? mailCcMetadata.PropertyValue : string.Empty;
             }
+
             // Create ProjectTaskMail Object
             var mailObject = new ProjectTaskMail
             {
                 FromUserPrincipalName = assignedBy.UserPrincipalName,
                 FromUserId = assignedBy.UserId,
-                Cc=cc,
+                Cc = cc,
                 To = toRecipient?.Recipient,
-                // TODO: Body details need to disscuss with johnny                
-                //Body = (!string.IsNullOrEmpty(spModel.EmailBody) ? spModel.EmailBody : string.Empty)
+                Body = BuildMailBody(emailMetadata, projectTask.EmailBody),
                 // Email Subject is stored in file entity.
                 // Each file related to the email having same subject so taking subject from first object.
                 Subject = FormatSubject(emailDetails.Files[0].EmailSubject),
@@ -84,6 +83,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         #endregion
 
         #region Private Methods
+
         private List<ProjectTaskUserInvolvement> GetUserInvolvements(List<ProjectTaskUserInvolvementDto> userInvolmentDtos)
         {
             List<ProjectTaskUserInvolvement> userInvolvements = new List<ProjectTaskUserInvolvement>();
@@ -101,12 +101,58 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private string FormatSubject(string subject)
         {
             string result = subject;
-            if (!String.IsNullOrEmpty(subject) && subject.IndexOf(_configuration.SubjectResponse, StringComparison.OrdinalIgnoreCase) !=0)
+            if (!String.IsNullOrEmpty(subject) && subject.IndexOf(_configuration.SubjectResponse, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 result = _configuration.SubjectResponse + result;
             }
             return result;
         }
+
+        /// <summary>
+        /// Method to build the Mail body with the header added
+        /// </summary>
+        /// <param name="metadata"></param>
+        /// <param name="emailBody"></param>
+        /// <returns></returns>
+        public string BuildMailBody(List<MetadataDto> metadata, string emailBody)
+        {
+            string mailHeaderRow = string.Empty;
+            string mailHeaderTemplateRow = Constants.MailHeaderTemplateRow;
+            string mailHeaderTemplatePara = Constants.MailHeaderTemplatePara;
+
+            //Adding the From Address            
+            mailHeaderRow = string.Format(mailHeaderTemplateRow, Constants.MailFrom,
+                            metadata.SingleOrDefault(t => t.PropertyName.Equals(Constants.EdrMailFrom, StringComparison.OrdinalIgnoreCase)).PropertyValue);
+
+            //Adding the Sent on details
+            //Converting the MailReceived date to format - For example: Monday, 9 September, 2019 14:13
+            string mailReceivedDate = metadata.SingleOrDefault(t => t.PropertyName.Equals(Constants.EdrMailSent, StringComparison.OrdinalIgnoreCase)).PropertyValue;
+            var dateValue = DateTime.ParseExact(mailReceivedDate, Constants.EdrDateTimeFormat, CultureInfo.InvariantCulture);
+            mailHeaderRow += string.Format(mailHeaderTemplateRow, Constants.MailSent, dateValue.ToString(Constants.MailHeaderSendFormat));
+
+            //Adding the To Address
+            string toAddresses = string.Empty;
+            var property = metadata.SingleOrDefault(t =>
+                      t.PropertyName.Equals(Constants.EdrMailTo, StringComparison.OrdinalIgnoreCase));
+            toAddresses = property.PropertyValue.Replace(',', ';');
+            mailHeaderRow += string.Format(mailHeaderTemplateRow, Constants.MailTo, toAddresses);
+
+            //Adding the Cc Address            
+            string ccAddresses = string.Empty;
+            MetadataDto mailCcMetadata = metadata.SingleOrDefault(t =>
+                    t.PropertyName.Equals(Constants.EdrMailCc, StringComparison.OrdinalIgnoreCase));
+            ccAddresses = mailCcMetadata != null ? mailCcMetadata.PropertyValue.Replace(',', ';') : string.Empty;
+            mailHeaderRow += string.Format(mailHeaderTemplateRow, Constants.MailCc, ccAddresses);
+
+            //Adding the Subject
+            string subject = metadata.SingleOrDefault(t =>
+                     t.PropertyName.Equals(Constants.EdrMailSubject, StringComparison.OrdinalIgnoreCase)).PropertyValue;
+            mailHeaderRow += string.Format(mailHeaderTemplateRow, Constants.MailSubject, subject);
+
+            //Returning the combined string having the Header of the mail and the actual mail body
+            return (string.Format(mailHeaderTemplatePara, mailHeaderRow) + emailBody);
+        }
+
         #endregion
     }
 }
