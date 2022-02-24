@@ -316,6 +316,11 @@
             Metadata Value 
             </summary>
         </member>
+        <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.ProjectTaskDto">
+            <summary>
+            Project Task Dto
+            </summary>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.TransactionDto">
             <summary>
             Contract that represents a transaction.

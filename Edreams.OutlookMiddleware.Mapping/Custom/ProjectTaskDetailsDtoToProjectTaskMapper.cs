@@ -15,6 +15,7 @@ namespace Edreams.OutlookMiddleware.Mapping
                 Priority = projectTaskDetails.Priority,
                 DueDate = projectTaskDetails.DueDate,
                 EmailId = email.Id,
+                EmailBody = projectTaskDetails.EmailBody,
                 Description = projectTaskDetails.Description,
                 UploadLocationProjectId = projectTaskDetails.UploadLocationProjectId,
                 UserInvolvements = new List<ProjectTaskUserInvolvement>()
