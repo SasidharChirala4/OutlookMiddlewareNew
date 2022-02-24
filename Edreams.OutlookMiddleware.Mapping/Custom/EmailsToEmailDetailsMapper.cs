@@ -86,6 +86,7 @@ namespace Edreams.OutlookMiddleware.Mapping.Custom
                         DueDate = email.ProjectTask.DueDate,
                         Priority = email.ProjectTask.Priority,
                         TaskName = email.ProjectTask.TaskName,
+                        EmailBody = email.ProjectTask.EmailBody,
                         UploadLocationProjectId = email.ProjectTask.UploadLocationProjectId,
                         UserInvolvements = userInvolvements
                     };
