@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="Edreams.Contracts" Version="1.0.7629.29228" />
+    <PackageReference Include="Edreams.Contracts" Version="1.0.8025.31313" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.9" />
   </ItemGroup>
 

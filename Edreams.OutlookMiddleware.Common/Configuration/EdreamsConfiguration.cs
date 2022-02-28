@@ -38,5 +38,9 @@ namespace Edreams.OutlookMiddleware.Common.Configuration
         public TimeSpan CategorizationWorkerScheduleStopTime { get; set; }
         public int CategorizationExpiryInMinutes { get; set; }
         public string SubjectResponse { get; set; }
+        public string EmailOutgoingSmtpAddress { get; set; }
+        public string EmailOutgoingFromAddress { get; set; }
+        public string ErrorMessage { get; set; }
+        public string EmailErrorSubject { get; set; }
     }
 }

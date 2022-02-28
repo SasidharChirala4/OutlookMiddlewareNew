@@ -50,7 +50,7 @@ namespace Edreams.OutlookMiddleware.Services.Notification
                 {
                     using IServiceScope scope = _serviceScopeFactory.CreateScope();
                     INotificationManager notificationLogic = scope.ServiceProvider.GetService<INotificationManager>();
-                    await notificationLogic.ProcessNotification();
+                    await notificationLogic.ProcessNotifications();
 
                     _logger.LogInformation($"All pending Notifications processed in {stopwatch.ElapsedMilliseconds}ms!");
                 }

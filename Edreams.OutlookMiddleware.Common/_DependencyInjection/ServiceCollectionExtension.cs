@@ -50,7 +50,11 @@ namespace Edreams.OutlookMiddleware.Common._DependencyInjection
                 CategorizationWorkerScheduleStartTime = configuration.GetValue<TimeSpan>("CategorizationWorkerScheduleStartTime"),
                 CategorizationWorkerScheduleStopTime = configuration.GetValue<TimeSpan>("CategorizationWorkerScheduleStopTime"),
                 CategorizationExpiryInMinutes = configuration.GetValue<int>("CategorizationExpiryInMinutes"),
-                SubjectResponse = configuration.GetValue<string>("SubjectResponse")
+                SubjectResponse = configuration.GetValue<string>("SubjectResponse"),
+                EmailOutgoingSmtpAddress = configuration.GetValue<string>("EmailOutgoingSmtpAddress"),
+                EmailOutgoingFromAddress = configuration.GetValue<string>("EmailOutgoingFromAddress"),
+                ErrorMessage = configuration.GetValue<string>("ErrorMessage"),
+                EmailErrorSubject = configuration.GetValue<string>("EmailErrorSubject")
             });
         }
 

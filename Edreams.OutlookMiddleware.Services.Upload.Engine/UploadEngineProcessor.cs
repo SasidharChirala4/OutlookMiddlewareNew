@@ -27,6 +27,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         private readonly IExtensibilityManager _extensibilityManager;
         private readonly IProjectTaskManager _projectTaskManager;
         private readonly ITransactionQueueManager _transactionQueueManager;
+        private readonly INotificationManager _notificationManager;
         private readonly IFileHelper _fileHelper;
         private readonly IExchangeAndKeyVaultHelper _exchangeAndKeyVaultHelper;
         private readonly IExceptionFactory _exceptionFactory;
@@ -35,7 +36,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
         public UploadEngineProcessor(
             IBatchManager batchManager, IEmailManager emailManager,
             IFileManager fileManager, IExtensibilityManager extensibilityManager, IProjectTaskManager projectTaskManager,
-            ITransactionQueueManager transactionQueueManager, IFileHelper fileHelper,
+            ITransactionQueueManager transactionQueueManager, INotificationManager notificationManager, IFileHelper fileHelper,
             IExchangeAndKeyVaultHelper exchangeAndKeyVaultHelper,
             IExceptionFactory exceptionFactory, IEdreamsLogger<UploadEngineProcessor> logger)
         {
@@ -45,6 +46,7 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
             _extensibilityManager = extensibilityManager;
             _projectTaskManager = projectTaskManager;
             _transactionQueueManager = transactionQueueManager;
+            _notificationManager = notificationManager;
             _fileHelper = fileHelper;
             _exchangeAndKeyVaultHelper = exchangeAndKeyVaultHelper;
             _exceptionFactory = exceptionFactory;
@@ -148,6 +150,12 @@ namespace Edreams.OutlookMiddleware.Services.Upload.Engine
                 // Create a new transaction to schedule the categorization process.
                 await _transactionQueueManager.CreateCategorizationTransaction(batchId);
                 _logger.LogInformation($"Created Categorization transaction for batch {batchId}");
+
+                // If the upload failed, Create email notification
+                if (batchStatus != BatchStatus.Successful)
+                {
+                    await _notificationManager.CreateNotification(batchId);
+                }
 
                 // Update the transaction to have a succeeded status.
                 await _transactionQueueManager.UpdateTransactionStatusAndArchive(transactionId, TransactionStatus.ProcessingSucceeded);
