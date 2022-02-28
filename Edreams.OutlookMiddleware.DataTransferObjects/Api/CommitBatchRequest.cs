@@ -54,5 +54,11 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
         /// Declare as Record
         /// </summary>
         public bool DeclareAsRecord { get; set; }
+
+        /// <summary>
+        /// PrincipalName
+        /// </summary>
+        public string PrincipalName { get; set; }
+
     }
 }

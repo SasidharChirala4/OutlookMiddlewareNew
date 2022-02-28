@@ -63,6 +63,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 preloadedFile.Status = EmailPreloadStatus.Pending;
                 preloadedFile.InternetMessageId = request.InternetMessageId;
                 preloadedFile.FileExtension = ".msg";
+                preloadedFile.PrincipalName = preloadedFile.PrincipalName;
                 preloadedFile = await _preloadedFilesRepository.Create(preloadedFile);
 
                 CreateMailResponse response = new CreateMailResponse

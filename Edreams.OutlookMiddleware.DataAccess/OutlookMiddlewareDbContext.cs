@@ -23,6 +23,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<ProjectTaskUserInvolvement> ProjectTaskUserInvolvements { get; set; }
         public DbSet<Metadata> Metadata { get; set; }
 
+         
         public OutlookMiddlewareDbContext(IEdreamsConfiguration configuration)
         {
             _configuration = configuration;
@@ -67,6 +68,8 @@ namespace Edreams.OutlookMiddleware.DataAccess
                     .Property(x => x.VersionComment).HasMaxLength(255);
                 e
                     .Property(x => x.UploadLocationFolder).HasMaxLength(200);
+                e
+                    .Property(x => x.PrincipalName).HasMaxLength(100);
                 e
                     .Property(x => x.Status)
                     .HasConversion(new EnumToStringConverter<BatchStatus>());

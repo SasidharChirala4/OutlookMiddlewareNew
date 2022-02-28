@@ -20,6 +20,7 @@ namespace Edreams.OutlookMiddleware.DataTransferObjects.Api
         public Guid EdreamsReferenceId { get; set; }
         public EmailKind EmailKind { get; set; }
         public string InternetMessageId { get; set; }
+        public string PrincipalName { get; set; }
 
         public IList<Attachment> Attachments { get; set; }
     }

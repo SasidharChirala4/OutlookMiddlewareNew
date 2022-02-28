@@ -74,6 +74,11 @@
             Declare as Record
             </summary>
         </member>
+        <member name="P:Edreams.OutlookMiddleware.DataTransferObjects.Api.CommitBatchRequest.PrincipalName">
+            <summary>
+            PrincipalName
+            </summary>
+        </member>
         <member name="T:Edreams.OutlookMiddleware.DataTransferObjects.Api.CreateMailResponse">
             <summary>
             Response for Created Mail

@@ -15,6 +15,7 @@ namespace Edreams.OutlookMiddleware.Model
         public string UploadLocationFolder { get; set; }
         public string VersionComment { get; set; }
         public bool DeclareAsRecord { get; set; }
+        public string PrincipalName { get; set; }
 
 
     }

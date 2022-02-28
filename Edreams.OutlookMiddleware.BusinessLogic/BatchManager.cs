@@ -166,6 +166,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 batch.DeclareAsRecord = request.DeclareAsRecord;
                 batch.UploadLocationSite = request.UploadLocationSite;
                 batch.UploadLocationFolder = request.UploadLocationFolder;
+                batch.PrincipalName = request.PrincipalName;
                 batch = await _batchRepository.Create(batch);
 
                 // Map the preloaded files to a list of files with relation to email and batch.
