@@ -55,7 +55,7 @@ namespace Edreams.OutlookMiddleware.Services.Notification
                     services.AddEdreamsKeyVaultIntegration();
                     services.AddEdreamsExchangeIntegration();
 
-                    services.AddHostedService<Worker>();
+                    services.AddHostedService<NotificationWorker>();
                 }).ConfigureLogging((hostContext, loggerBuilder) =>
                 {
                     Log.Logger = new LoggerConfiguration()

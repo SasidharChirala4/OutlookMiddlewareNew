@@ -16,6 +16,7 @@ namespace Edreams.OutlookMiddleware.DataAccess
         public DbSet<File> Files { get; set; }
         public DbSet<CategorizationRequest> CategorizationRequests { get; set; }
         public DbSet<EmailRecipient> EmailRecipients { get; set; }
+        public DbSet<EmailNotification> EmailNotifications { get; set; }
         public DbSet<Transaction> TransactionQueue { get; set; }
         public DbSet<HistoricTransaction> TransactionHistory { get; set; }
         public DbSet<ProjectTask> ProjectTasks { get; set; }
@@ -163,6 +164,18 @@ namespace Edreams.OutlookMiddleware.DataAccess
                 e.Property(x => x.Type).HasConversion(new EnumToStringConverter<EmailRecipientType>());
                 e.Property(x => x.Kind).IsRequired();
                 e.Property(x => x.Kind).HasConversion(new EnumToStringConverter<EmailRecipientKind>());
+                e.Property(x => x.InsertedBy).IsRequired();
+                e.Property(x => x.InsertedBy).HasMaxLength(100);
+                e.Property(x => x.UpdatedBy).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<EmailNotification>(e =>
+            {
+                e.ToTable("EmailNotifications");
+                e.HasKey(x => x.Id).IsClustered(false);
+                e.HasIndex(x => x.SysId).IsUnique().IsClustered();
+                e.Property(x => x.SysId).ValueGeneratedOnAdd();
+                e.HasIndex(x => x.NotificationSent);
                 e.Property(x => x.InsertedBy).IsRequired();
                 e.Property(x => x.InsertedBy).HasMaxLength(100);
                 e.Property(x => x.UpdatedBy).HasMaxLength(100);
