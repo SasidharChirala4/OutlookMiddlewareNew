@@ -37,6 +37,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic.DependencyInjection
             services.AddTransient<IExchangeAndKeyVaultHelper, ExchangeAndKeyVaultHelper>();
             services.AddTransient<IBatchFactory, BatchFactory>();
             services.AddTransient<IProjectTaskManager, ProjectTaskManager>();
+            services.AddTransient<INotificationManager, NotificationManager>();
         }
     }
 }

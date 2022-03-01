@@ -71,7 +71,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             try
             {
-                var pendingNotifications = await _emailNotificationRepository.Find(i => i.NotificationSent == false);
+                var pendingNotifications = await _emailNotificationRepository.Find(i => i.NotificationSent == false, incl => incl.Batch);
                 if (pendingNotifications.Count > 0)
                 {
                     _logger.LogInformation($"{pendingNotifications.Count} notifications are ready to process!");
@@ -95,13 +95,11 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                 EmailUtility emailUtility = new EmailUtility();
                 foreach (EmailNotification notification in notifications)
                 {
-                    Batch batch = await _batchRepository.GetFirst(x => x.Id == notification.Batch.Id);
-
-                    string body = await CreateHTMLBodyMessage(batch.Id, batch.UploadLocationFolder);
+                    string body = await CreateHTMLBodyMessage(notification.Batch.Id, notification.Batch.UploadLocationFolder);
 
                     MailMessage message = new MailMessage
                     {
-                        //To = batch.PrincipalName;
+                        To = notification.Batch.PrincipalName,
                         From = _configuration.EmailOutgoingFromAddress,
                         Subject = _configuration.EmailErrorSubject,
                         HtmlBody = body
@@ -110,7 +108,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                     await emailUtility.SendEmail(message, _configuration.EmailOutgoingSmtpAddress);
                     notification.NotificationSent = true;
                     await _emailNotificationRepository.Update(notification);
-                    //await _logger.LogInformation($"Notification sent to user {batch.PrincipalName} for batch:{batch.Id}");
+                    _logger.LogInformation($"Notification sent to user {notification.Batch.PrincipalName} for batch:{notification.Batch.Id}");
                 }
             }
             catch (Exception ex)
