@@ -7,11 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Edreams.Core.Common.Utilities;
 using Aspose.Email;
 using System.Text;
 using Edreams.OutlookMiddleware.Enums;
 using Edreams.Common.Exceptions;
+using Edreams.Common.Email.Interfaces;
 
 namespace Edreams.OutlookMiddleware.BusinessLogic
 {
@@ -23,6 +23,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         private readonly IRepository<Batch> _batchRepository;
         private readonly IRepository<Email> _emailRepository;
         private readonly IRepository<EmailNotification> _emailNotificationRepository;
+        private readonly IEmailUtility _emailUtility;
         private readonly IEdreamsConfiguration _configuration;
         private readonly IEdreamsLogger<NotificationManager> _logger;
 
@@ -31,12 +32,13 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         #region <| Construction |>
 
         public NotificationManager(IRepository<Batch> batchRepository, IRepository<Email> emailRepository,
-            IRepository<EmailNotification> emailNotificationRepository,
+            IRepository<EmailNotification> emailNotificationRepository, IEmailUtility emailUtility,
             IEdreamsConfiguration configuration, IEdreamsLogger<NotificationManager> logger)
         {
             _batchRepository = batchRepository;
             _emailRepository = emailRepository;
             _emailNotificationRepository = emailNotificationRepository;
+            _emailUtility = emailUtility;
             _configuration = configuration;
             _logger = logger;
         }
@@ -92,7 +94,6 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
         {
             try
             {
-                EmailUtility emailUtility = new EmailUtility();
                 foreach (EmailNotification notification in notifications)
                 {
                     string body = await CreateHTMLBodyMessage(notification.Batch.Id, notification.Batch.UploadLocationFolder);
@@ -105,7 +106,7 @@ namespace Edreams.OutlookMiddleware.BusinessLogic
                         HtmlBody = body
                     };
 
-                    await emailUtility.SendEmail(message, _configuration.EmailOutgoingSmtpAddress);
+                    await _emailUtility.SendEmail(message, _configuration.EmailOutgoingSmtpAddress);
                     notification.NotificationSent = true;
                     await _emailNotificationRepository.Update(notification);
                     _logger.LogInformation($"Notification sent to user {notification.Batch.PrincipalName} for batch:{notification.Batch.Id}");

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Security.Principal;
+using Edreams.Common.Email._DependencyInjection;
 using Edreams.Common.Exceptions._DependencyInjection;
 using Edreams.Common.Exchange._DependencyInjection;
 using Edreams.Common.KeyVault._DependencyInjection;
@@ -54,6 +55,7 @@ namespace Edreams.OutlookMiddleware.Services.Notification
                     services.AddEdreamsExceptions();
                     services.AddEdreamsKeyVaultIntegration();
                     services.AddEdreamsExchangeIntegration();
+                    services.AddEdreamsEmailIntegration();
 
                     services.AddHostedService<NotificationWorker>();
                 }).ConfigureLogging((hostContext, loggerBuilder) =>
